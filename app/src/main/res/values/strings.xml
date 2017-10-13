@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CIA</string>
+    <string name="title_activity_filter_events">FilterEventsActivity</string>
+</resources>
