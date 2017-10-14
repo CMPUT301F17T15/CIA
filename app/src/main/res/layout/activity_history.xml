@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cmput301.cia.HistoryActivity">
+
+    <ListView
+        android:id="@+id/historyList"
+        android:layout_width="351dp"
+        android:layout_height="415dp"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/filterStaticText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="38dp"
+        android:layout_marginLeft="16dp"
+        android:text="FILTER"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <EditText
+        android:id="@+id/filterEditText"
+        android:layout_width="155dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="26dp"
+        android:layout_marginLeft="69dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/historyEventFilterButton"
+        android:layout_width="79dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginRight="16dp"
+        android:text="EVENTS"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="289dp" />
+
+    <Button
+        android:id="@+id/historyReturnButton"
+        android:layout_width="79dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_marginRight="16dp"
+        android:text="Return"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

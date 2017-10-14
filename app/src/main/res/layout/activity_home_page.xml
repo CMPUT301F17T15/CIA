@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cmput301.cia.HomePageActivity">
+	
+	<ImageButton
+        android:id="@+id/mainHistoryButton"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="232dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@android:drawable/presence_video_online" />
+
+    <Button
+        android:id="@+id/mainAddButton"
+        android:layout_width="77dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:onClick="addCounterClicked"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="460dp" />
+
+    <ListView
+        android:id="@+id/mainHabitsList"
+        android:layout_width="352dp"
+        android:layout_height="355dp"
+        android:layout_marginBottom="140dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/amountDynamicText"
+        android:layout_width="37dp"
+        android:layout_height="21dp"
+        android:layout_marginBottom="61dp"
+        android:layout_marginRight="100dp"
+        android:text="0"
+        android:textAlignment="textEnd"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/amountStaticText"
+        android:layout_width="77dp"
+        android:layout_height="21dp"
+        android:layout_marginBottom="61dp"
+        android:layout_marginRight="16dp"
+        android:text="habits"
+        android:textAlignment="viewStart"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageButton
+        android:id="@+id/mainFollowersButton"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="103dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+    <ImageButton
+        android:id="@+id/mainMapButton"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="146dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+    <ImageButton
+        android:id="@+id/mainDailyHabitsButton"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="189dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@android:drawable/presence_away" />
+
+</android.support.constraint.ConstraintLayout>
