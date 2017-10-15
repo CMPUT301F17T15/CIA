@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 public abstract class OfflineEvent implements Serializable {
 
+    /**
+     * What this event does when it is synchronized with the server
+     */
     public abstract void handle();
 
 }
