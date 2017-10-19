@@ -9,16 +9,17 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.cmput301.cia.activities.MainActivity;
 
 /**
- * Created by Adil on Oct 14 2017.
+ * Created by Adil on Oct 18 2017.
  */
 
-public class ProfileUnitTests extends ActivityInstrumentationTestCase2 {
+public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
 
-    public ProfileUnitTests() {
+    public OfflineUnitTests() {
         super(MainActivity.class);
     }
 
     public void test_one(){
 
     }
+
 }

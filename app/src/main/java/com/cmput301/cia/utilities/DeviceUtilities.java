@@ -3,7 +3,11 @@ package com.cmput301.cia.utilities;
 import android.location.Location;
 
 /**
- * Created by Adil on Oct 13 2017.
+ * Version 1
+ * Author: Adil Malik
+ * Date: Oct 13 2017
+ *
+ * Contains various device related utility functions accessibly anywhere
  */
 
 public class DeviceUtilities {

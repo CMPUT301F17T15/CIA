@@ -1,4 +1,8 @@
-package com.cmput301.cia;
+/*
+ * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+ */
+
+package com.cmput301.cia.models;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,21 +12,27 @@ import java.util.List;
  * Version 2
  * Author: Adil Malik
  * Date: Oct 14 2017
+ *
+ * This class represents a habit that a user has created
+ * Keeps track of all habit events the user has completed/missed related to the habit
  */
 
 public class Habit {
 
+    // Constants for days of the week
     public static final int MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4, THURSDAY = 5, FRIDAY = 6, SATURDAY = 7, SUNDAY = 1;
 
     private String title;
     private String reason;
     private Date startDate;
+    // Successfully completed events
     private List<HabitEvent> events;
 
     // The days of the week this habit should occur on
     private List<Integer> daysOfWeek;
 
-    private int timesMissed;
+    // The dates this event was missed on
+    private List<Date> missedDates;
 
     /**
 
@@ -38,7 +48,7 @@ public class Habit {
         this.startDate = startDate;
         events = new ArrayList<>();
         daysOfWeek = days;
-        timesMissed = 0;
+        missedDates = new ArrayList<>();
     }
 
     /**
@@ -108,7 +118,7 @@ public class Habit {
      * @return the number of times this habit was missed
      */
     public int getTimesMissed() {
-        return timesMissed;
+        return missedDates.size();
     }
 
     /**
@@ -120,9 +130,10 @@ public class Habit {
 
     /**
      * Increase the number of times this habit was missed
+     * @param date is the date the event was missed on
      */
-    public void miss(){
-        timesMissed++;
+    public void miss(Date date){
+        missedDates.add(date);
     }
 
     /**
@@ -132,6 +143,22 @@ public class Habit {
         if (events.size() == 0)
             return null;
         return events.get(events.size() - 1);
+    }
+
+    /**
+     * @return the dates that this habit was missed
+     */
+    public List<Date> getMissedDates(){
+        return missedDates;
+    }
+
+    /**
+     * @return the last date this habit was succesfully completed on (null if there was none)
+     */
+    public Date getLastCompletionDate(){
+        if (events.size() == 0)
+            return null;
+        return events.get(events.size() - 1).getDate();
     }
 
 }

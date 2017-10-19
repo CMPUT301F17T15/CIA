@@ -1,17 +1,24 @@
-package com.cmput301.cia;
+/*
+ * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+ */
+
+package com.cmput301.cia.models;
 
 import android.location.Location;
 import android.media.Image;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Version 1
  * Author: Adil Malik
  * Date: Oct 13 2017
+ *
+ * Represents a habit event that the user has successfully completed
  */
 
-public class HabitEvent {
+public class HabitEvent implements Serializable {
 
     private String comment;
     private Image photo;

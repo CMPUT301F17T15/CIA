@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.FilterEventsActivity">
+    tools:context="com.cmput301.cia.activities.FilterEventsActivity">
 
 </android.support.constraint.ConstraintLayout>

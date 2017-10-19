@@ -17,7 +17,11 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Created by Adil on Oct 13 2017.
+ * Version 1
+ * Author: Adil Malik
+ * Date: Oct 13 2017
+ *
+ * Contains utilities for searching from the ElasticSearch database
  */
 
 

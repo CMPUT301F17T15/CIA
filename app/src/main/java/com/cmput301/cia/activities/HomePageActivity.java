@@ -1,4 +1,8 @@
-package com.cmput301.cia;
+/*
+ * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+ */
+
+package com.cmput301.cia.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.R;
+
+import java.util.ArrayList;
+
+/**
+ * Version 2
+ * Author: Adil Malik
+ * Date: Oct 18 2017
+ *
+ * Repressents the home page the user sees after signing in
+ * Keeps track of the user's information, and handles results
+ * from other activities
+ */
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -20,7 +38,6 @@ public class HomePageActivity extends AppCompatActivity {
     public static final String ID_USERNAME = "User";
 
     // A list of all counter objects used for serialization
-    private List<Habit> counters;
     private ListView countersList;
     // Adapter used to update countersList
     private ArrayAdapter<Habit> counterArrayAdapter;
@@ -58,14 +75,14 @@ public class HomePageActivity extends AppCompatActivity {
         });*/
 
         countersAmountText = (TextView)findViewById(R.id.amountDynamicText);
-        countersAmountText.setText(String.valueOf(counters.size()));
+        countersAmountText.setText(String.valueOf(user.getHabitsCount()));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         counterArrayAdapter = new ArrayAdapter<Habit>(this,
-                R.layout.list_item, counters);
+                R.layout.list_item, new ArrayList<Habit>());//counters);
         countersList.setAdapter(counterArrayAdapter);
     }
 
