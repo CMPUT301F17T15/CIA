@@ -2,12 +2,13 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia;
+package com.cmput301.cia.models;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -111,9 +112,18 @@ public class Profile {
     /**
      * @return a list of habits that need to be done today
      */
-    public List<Habit> getTodaysHabits(){
+    public List<Habit> getTodaysHabits() {
+        return getTodaysHabits(new Date());
+    }
+
+    /**
+     * @param date is the day that habits need to be done on
+     * @return a list of habits that need to be done on the specified day
+     */
+    public List<Habit> getTodaysHabits(Date date){
         List<Habit> list = new ArrayList<>();
         Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
         int today = calendar.get(Calendar.DAY_OF_WEEK);
 
         for (Habit habit : habits){
@@ -212,6 +222,23 @@ public class Profile {
             });
         }
         return list;
+    }
+
+    /**
+     * @return the number of habits this profile has
+     */
+    public int getHabitsCount(){
+        return habits.size();
+    }
+
+    /**
+     * After a day is finished, update the status of all uncompleted habits
+     * @param endingDay is the day that ended
+     */
+    public void onDayEnd(Date endingDay){
+        // TODO
+        // look through all uncompleted habits on endingDay (use getTodaysHabits(endingDay))
+        // make sure to account for start daet later than current date
     }
 
 }

@@ -11,19 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HistoryActivity" />
+        <activity android:name=".activities.HistoryActivity" />
         <activity
-            android:name=".FilterEventsActivity"
+            android:name=".activities.FilterEventsActivity"
             android:label="@string/title_activity_filter_events"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".HomePageActivity"></activity>
+        <activity android:name=".activities.HomePageActivity"></activity>
     </application>
 
 </manifest>
