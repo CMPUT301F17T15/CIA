@@ -19,6 +19,11 @@ import java.util.List;
 
 /**
  * Created by gsp on 2017-10-20.
+ * Version 1.1
+ * Last Modified on 2017-10-21
+ *
+ * This is the unit testing class for class Habit.
+ * All the methods and constructor implemented in class Habit has been tested here.
  */
 
 public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
@@ -218,8 +223,61 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         List<Integer> days = Arrays.asList(1,2,3);
         Habit habit = new Habit(title, reason, date, days);
         String comment1 = "Event1";
-        HabitEvent event1 = new HabitEvent(comment1);
+        HabitEvent event1 = new HabitEvent(comment1, date);
         habit.addHabitEvent(event1);
         assertTrue(habit.getLastCompletionDate() == date);
+        /**
+         * Using "date" here just for testing purposes.
+         */
+    }
+
+    public void testGetType(){
+        String type = "type1";
+        String title = "Habit1";
+        String reason = "Reason1";
+        String comment = "Habit comment";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days, type, comment);
+        assertEquals(habit.getType(), type);
+    }
+
+    public void testSetType(){
+        String type = "type1";
+        String type2 = "type2";
+        String title = "Habit1";
+        String reason = "Reason1";
+        String comment = "Habit comment";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days, type, comment);
+        assertEquals(habit.getType(), type);
+        habit.setType(type2);
+        assertEquals(habit.getType(), type2);
+    }
+
+    public void testGetComment(){
+        String type = "type1";
+        String title = "Habit1";
+        String reason = "Reason1";
+        String comment = "Habit comment";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days, type, comment);
+        assertEquals(habit.getComment(), comment);
+    }
+
+    public void testSetComment(){
+        String type = "type1";
+        String title = "Habit1";
+        String reason = "Reason1";
+        String comment = "Habit comment";
+        String comment1 = "Habit comment1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days, type, comment);
+        habit.setComment(comment1);
+        assertEquals(habit.getComment(), comment1);
+
     }
 }

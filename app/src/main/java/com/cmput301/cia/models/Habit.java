@@ -54,6 +54,17 @@ public class Habit {
         missedDates = new ArrayList<>();
     }
 
+    public Habit(String title, String reason, Date startDate, List<Integer> days, String type, String comment) {
+        this.type = type;
+        this.comment = comment;
+        this.title = title;
+        this.reason = reason;
+        this.startDate = startDate;
+        events = new ArrayList<>();
+        daysOfWeek = days;
+        missedDates = new ArrayList<>();
+    }
+
     /**
      * @return the days of the week this habit occurs on
      */
