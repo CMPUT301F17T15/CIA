@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:design:26.+'
     androidTestCompile 'junit:junit:4.12'
     compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
+    testCompile 'org.testng:testng:6.9.6'
 }
