@@ -67,7 +67,6 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getEvents().isEmpty());
         habit.getEvents().add(event);
         assertFalse(habit.getEvents().isEmpty());
-
     }
 
     public void testAddHabitEvent(){
@@ -81,10 +80,81 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getEvents().isEmpty());
         habit.addHabitEvent(event);
         assertTrue(habit.getEvents().contains(event));
-
-
-
     }
 
+    public void testRemoveHabitEvent(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        String comment = "New event";
+        HabitEvent event = new HabitEvent(comment);
+        habit.addHabitEvent(event);
+        assertFalse(habit.getEvents().isEmpty());
+        habit.removeHabitEvent(event);
+        assertTrue(habit.getEvents().isEmpty());
+    }
+
+    public void testGetTitle(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(habit.getTitle() == title);
+    }
+
+    public void testSetTitle(){
+        String title = "Habit1";
+        String newTitle = "Habit2";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        habit.setTitle(newTitle);
+        assertTrue(habit.getTitle() == newTitle);
+    }
+
+    public void testSetReason(){
+        String title = "Habit1";
+        String newReason = "Reason2";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        habit.setReason(newReason);
+        assertTrue(habit.getReason() == newReason);
+    }
+
+    public void testGetReason(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(habit.getReason() == reason);
+    }
+
+    public void testGetStartDate(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(habit.getStartDate() == date);
+    }
+
+    public void testSetStartDate(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        Date newDate = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(date != newDate);
+        habit.setStartDate(newDate);
+        assertTrue(habit.getStartDate() == newDate);
+    }
 
 }
