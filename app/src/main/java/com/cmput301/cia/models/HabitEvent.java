@@ -40,6 +40,13 @@ public class HabitEvent implements Serializable {
         location = null;
     }
 
+    public HabitEvent(String comment, Date date){
+        this.comment = comment;
+        photo = null;
+        this.date = date;
+        location = null;
+    }
+
     public HabitEvent(String comment, Image image){
         this.comment = comment;
         photo = image;

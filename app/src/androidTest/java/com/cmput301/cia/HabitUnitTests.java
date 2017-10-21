@@ -157,4 +157,69 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getStartDate() == newDate);
     }
 
+    public void testOccursOn(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(habit.occursOn(1) == true);
+        assertTrue(habit.occursOn(2) == true);
+        assertTrue(habit.occursOn(3) == true);
+        assertFalse(habit.occursOn(4) == true);
+        assertFalse(habit.occursOn(5) == true);
+    }
+
+    public void testGetTimesMissed(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        Date missDate = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        assertTrue(habit.getTimesMissed() == 0);
+        assertNotSame(date, missDate);
+        habit.miss(missDate);
+        habit.miss(date);
+        assertTrue(habit.getTimesMissed() == 2);
+    }
+
+    public void testGetTimesCompleted(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        String comment = "New event";
+        HabitEvent event = new HabitEvent(comment);
+        habit.addHabitEvent(event);
+        assertTrue(habit.getTimesCompleted() == 1);
+    }
+
+    public void testGetMostRecentEvent(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        String comment1 = "Event1";
+        HabitEvent event1 = new HabitEvent(comment1);
+        habit.addHabitEvent(event1);
+        String comment2 = "Event2";
+        HabitEvent event2 = new HabitEvent(comment2);
+        habit.addHabitEvent(event2);
+        assertEquals(habit.getMostRecentEvent(), event2);
+    }
+
+    public void testGetLastCompletionDate(){
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days);
+        String comment1 = "Event1";
+        HabitEvent event1 = new HabitEvent(comment1);
+        habit.addHabitEvent(event1);
+        assertTrue(habit.getLastCompletionDate() == date);
+    }
 }
