@@ -7,6 +7,8 @@ package com.cmput301.cia.models;
 import android.location.Location;
 import android.media.Image;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,6 +33,13 @@ public class HabitEvent implements Serializable {
      * @param comment the optional habit comment (not null)
      * @param image a photo of the event
      */
+    public HabitEvent(String comment){
+        this.comment = comment;
+        photo = null;
+        date = new Date();
+        location = null;
+    }
+
     public HabitEvent(String comment, Image image){
         this.comment = comment;
         photo = image;
