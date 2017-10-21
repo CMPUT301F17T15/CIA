@@ -22,6 +22,9 @@ public class Habit {
     // Constants for days of the week
     public static final int MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4, THURSDAY = 5, FRIDAY = 6, SATURDAY = 7, SUNDAY = 1;
 
+    private String type; //edit by guanfang
+    private String comment;//edit by guanfang
+
     private String title;
     private String reason;
     private Date startDate;
@@ -160,5 +163,17 @@ public class Habit {
             return null;
         return events.get(events.size() - 1).getDate();
     }
+
+    public void setType(String typeStr){ //edit by guanfang
+        this.type = typeStr;
+    }
+
+    public String getType(){return this.type;}//edit by guanfang
+
+    public void setComment(String CommentStr){ //edit by guanfang
+        this.comment = CommentStr;
+    }
+
+    public String getComment(){return this.comment;}//edit by guanfang
 
 }
