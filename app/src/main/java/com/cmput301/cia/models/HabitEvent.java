@@ -13,8 +13,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Version 1
+ * Version 1.2
  * Author: Adil Malik
+ * Modified by: Jessica Prieto
  * Date: Oct 13 2017
  *
  * Represents a habit event that the user has successfully completed
@@ -23,7 +24,7 @@ import java.util.Date;
 public class HabitEvent implements Serializable {
 
     private String comment;
-    private Image photo;
+    private String base64EncodedPhoto;
     private Date date;
 
     private Location location;
@@ -31,47 +32,24 @@ public class HabitEvent implements Serializable {
     /**
      * Construct a new habit event
      * @param comment the optional habit comment (not null)
+     * @param image a base64 encoded photo of the event
      */
-    public HabitEvent(String comment){
+    public HabitEvent(String comment, String image){
         this.comment = comment;
-        photo = null;
+        base64EncodedPhoto = image;
         date = new Date();
         location = null;
     }
 
     /**
      * Construct a new habit event
-     * @param comment the optional habit comment (not null)
+     * @param comment the optional habit comment
+     * @param image a base64 encoded photo of the event
      * @param date the date the event occurred on
      */
-    public HabitEvent(String comment, Date date){
+    public HabitEvent(String comment, String image, Date date){
         this.comment = comment;
-        photo = null;
-        this.date = date;
-        location = null;
-    }
-
-    /**
-     * Construct a new habit event
-     * @param comment the optional habit comment (not null)
-     * @param image a photo of the event
-     */
-    public HabitEvent(String comment, Image image){
-        this.comment = comment;
-        photo = image;
-        date = new Date();
-        location = null;
-    }
-
-    /**
-     * Construct a new habit event
-     * @param comment the optional habit comment (not null)
-     * @param image a photo of the event
-     * @param date the date the event occurred on (not null)
-     */
-    public HabitEvent(String comment, Image image, Date date){
-        this.comment = comment;
-        photo = image;
+        base64EncodedPhoto = image;
         this.date = date;
         location = null;
     }
@@ -79,14 +57,14 @@ public class HabitEvent implements Serializable {
     /**
      *
      * Construct a new habit event
-     * @param comment the optional habit comment (not null)
-     * @param photo a photo of the event
-     * @param date the date the event occurred on (not null)
+     * @param comment the optional habit comment
+     * @param image a base64EncodedPhoto of the event
+     * @param date the date the event occurred on
      * @param location the location where the event occurred
      */
-    public HabitEvent(String comment, Image photo, Date date, Location location) {
+    public HabitEvent(String comment, String image, Date date, Location location) {
         this.comment = comment;
-        this.photo = photo;
+        this.base64EncodedPhoto = image;
         this.date = date;
         this.location = location;
     }
@@ -99,12 +77,12 @@ public class HabitEvent implements Serializable {
         this.comment = comment;
     }
 
-    public Image getPhoto() {
-        return photo;
+    public String getBase64EncodedPhoto() {
+        return base64EncodedPhoto;
     }
 
-    public void setPhoto(Image photo) {
-        this.photo = photo;
+    public void setBase64EncodedPhoto(String base64EncodedPhoto) {
+        this.base64EncodedPhoto = base64EncodedPhoto;
     }
 
     public Date getDate() {
