@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
  * Version 1.0
  *
  * tests for the HabitEvent class
- *   Note: this test involves testing with the Location and Image classes which are
+ *   Note: this test involves testing with the Location class which is
  *   part of the android package. That's why this test is included in the androidTest
  *   and not the local JUnit test
  *
