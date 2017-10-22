@@ -22,6 +22,8 @@ public class Habit {
     // Constants for days of the week
     public static final int MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4, THURSDAY = 5, FRIDAY = 6, SATURDAY = 7, SUNDAY = 1;
 
+    private String type; //edit by guanfang
+
     private String title;
     private String reason;
     private Date startDate;
@@ -43,6 +45,16 @@ public class Habit {
      * @param days the days of the week the event should occur on (Sunday = 1, Saturday = 7)
      */
     public Habit(String title, String reason, Date startDate, List<Integer> days) {
+        this.title = title;
+        this.reason = reason;
+        this.startDate = startDate;
+        events = new ArrayList<>();
+        daysOfWeek = days;
+        missedDates = new ArrayList<>();
+    }
+
+    public Habit(String title, String reason, Date startDate, List<Integer> days, String type) {
+        this.type = type;
         this.title = title;
         this.reason = reason;
         this.startDate = startDate;
@@ -160,5 +172,11 @@ public class Habit {
             return null;
         return events.get(events.size() - 1).getDate();
     }
+
+    public void setType(String typeStr){ //edit by guanfang
+        this.type = typeStr;
+    }
+
+    public String getType(){return this.type;}//edit by guanfang
 
 }

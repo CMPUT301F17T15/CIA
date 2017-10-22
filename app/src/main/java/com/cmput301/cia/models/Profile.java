@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import com.cmput301.cia.utilities.DeviceUtilities;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,6 +46,7 @@ public class Profile {
         habits = new ArrayList<>();
         following = new ArrayList<>();
         followRequests = new ArrayList<>();
+        pendingEvents = new ArrayList<>();
     }
 
     public String getName() {
@@ -239,6 +242,30 @@ public class Profile {
         // TODO
         // look through all uncompleted habits on endingDay (use getTodaysHabits(endingDay))
         // make sure to account for start daet later than current date
+    }
+
+    /**
+     * Saves all pending events to the database.
+     * Call this when this user is signed in and regains connection to the internet.
+     */
+    public void synchronize(){
+        if (DeviceUtilities.isOnline()){
+            for (OfflineEvent event : pendingEvents){
+                event.handle();
+            }
+            pendingEvents.clear();
+        }
+    }
+
+    /**
+     * Edit/delete an existing habit event, or add a new one
+     * @param event represents the object that handles what needs to be done
+     */
+    public void tryHabitEvent(OfflineEvent event){
+        if (DeviceUtilities.isOnline())
+            event.handle();
+        else
+            pendingEvents.add(event);
     }
 
 }

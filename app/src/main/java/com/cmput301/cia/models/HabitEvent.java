@@ -7,6 +7,8 @@ package com.cmput301.cia.models;
 import android.location.Location;
 import android.media.Image;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 
