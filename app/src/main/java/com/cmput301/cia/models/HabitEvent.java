@@ -31,7 +31,6 @@ public class HabitEvent implements Serializable {
     /**
      * Construct a new habit event
      * @param comment the optional habit comment (not null)
-     * @param image a photo of the event
      */
     public HabitEvent(String comment){
         this.comment = comment;
@@ -40,6 +39,11 @@ public class HabitEvent implements Serializable {
         location = null;
     }
 
+    /**
+     * Construct a new habit event
+     * @param comment the optional habit comment (not null)
+     * @param date the date the event occurred on
+     */
     public HabitEvent(String comment, Date date){
         this.comment = comment;
         photo = null;
@@ -47,6 +51,11 @@ public class HabitEvent implements Serializable {
         location = null;
     }
 
+    /**
+     * Construct a new habit event
+     * @param comment the optional habit comment (not null)
+     * @param image a photo of the event
+     */
     public HabitEvent(String comment, Image image){
         this.comment = comment;
         photo = image;
@@ -56,9 +65,9 @@ public class HabitEvent implements Serializable {
 
     /**
      * Construct a new habit event
-     * @param comment the optional habit comment
+     * @param comment the optional habit comment (not null)
      * @param image a photo of the event
-     * @param date the date the event occurred on
+     * @param date the date the event occurred on (not null)
      */
     public HabitEvent(String comment, Image image, Date date){
         this.comment = comment;
@@ -70,9 +79,9 @@ public class HabitEvent implements Serializable {
     /**
      *
      * Construct a new habit event
-     * @param comment the optional habit comment
+     * @param comment the optional habit comment (not null)
      * @param photo a photo of the event
-     * @param date the date the event occurred on
+     * @param date the date the event occurred on (not null)
      * @param location the location where the event occurred
      */
     public HabitEvent(String comment, Image photo, Date date, Location location) {

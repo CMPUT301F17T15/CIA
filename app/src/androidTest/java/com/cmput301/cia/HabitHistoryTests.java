@@ -8,6 +8,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 
 import java.util.Arrays;
@@ -67,12 +68,10 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile(name);
         // We add to the new profile.
         profile.addHabit(habit);
-        List<Habit>habitList=profile.getHabits();
-        HistoryActivity historyActivity = new HistoryActivity();
         // We find the missing days.
-        List<Date>missDates= historyActivity.getMissedDates(habitList);
+        List<Date> missDates= habit.getMissedDates();
         // We compared to say there is any missing dates.
-        assertNotNull(missDates);
+        assert(missDates.size() > 0);
     }
 
     public void testSort(){
@@ -94,13 +93,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         // We add them to the new profile.
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<Habit>habitList=profile.getHabits();
-        HistoryActivity historyActivity = new HistoryActivity();
-        List<Habit>sortedHabits;
-        // We saw them by the days increasing.
-        sortedHabits =  historyActivity.sortByDate(habitList);
+        List<HabitEvent>habitList = profile.getHabitHistory();
         // We check true or not.
-        assertTrue(sortedHabits.get(0).getStartDate().getTime()>sortedHabits.get(1).getStartDate().getTime());
+        assertTrue(habitList.get(0).getDate().getTime()>habitList.get(1).getDate().getTime());
     }
 
     public void testFilterByType(){
@@ -124,10 +119,10 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile(name);
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<Habit>habitList=profile.getHabits();
+        List<Habit>habitList = profile.getHabits();
         HistoryActivity historyActivity = new HistoryActivity();
         // We filt them by type.
-        List<Habit>habitsOnlyOneType =historyActivity.filterByType(habitList,"1");
+        List<Habit>habitsOnlyOneType = historyActivity.filterByType(habitList,"1");
         // We assert there is true or not.
         assertTrue(habitsOnlyOneType.size()==1);
     }
@@ -146,18 +141,15 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         List<Integer> days2 = Arrays.asList(1,2,3);
         Habit habit2 = new Habit(title2, reason2, date2, days2);
         // We set comments
-        habit.setComment("1");
-        habit2.setComment("2");
+        habit.setReason("1");
+        habit2.setReason("2");
         String name = "Test1";
         Profile profile = new Profile(name);
         // We add to new profile,
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<Habit>habitList=profile.getHabits();
-        HistoryActivity historyActivity = new HistoryActivity();
-        // we filt them
-        List<Habit>filteredList = historyActivity.filterByComment(habitList,"1");
-        assertTrue(filteredList.size()==1);
+        List<HabitEvent> habitList = profile.getHabitHistory("1");
+        assertTrue(habitList.size()==1);
     }
 
 }

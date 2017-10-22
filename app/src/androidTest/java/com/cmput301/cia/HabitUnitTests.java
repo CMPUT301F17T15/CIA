@@ -238,7 +238,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String comment = "Habit comment";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type, comment);
+        Habit habit = new Habit(title, reason, date, days, type);
         assertEquals(habit.getType(), type);
     }
 
@@ -247,10 +247,9 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String type2 = "type2";
         String title = "Habit1";
         String reason = "Reason1";
-        String comment = "Habit comment";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type, comment);
+        Habit habit = new Habit(title, reason, date, days, type);
         assertEquals(habit.getType(), type);
         habit.setType(type2);
         assertEquals(habit.getType(), type2);
@@ -263,21 +262,20 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String comment = "Habit comment";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type, comment);
-        assertEquals(habit.getComment(), comment);
+        Habit habit = new Habit(title, reason, date, days, type);
+        assertEquals(habit.getReason(), comment);
     }
 
     public void testSetComment(){
         String type = "type1";
         String title = "Habit1";
         String reason = "Reason1";
-        String comment = "Habit comment";
         String comment1 = "Habit comment1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type, comment);
-        habit.setComment(comment1);
-        assertEquals(habit.getComment(), comment1);
-
+        Habit habit = new Habit(title, reason, date, days, type);
+        habit.setReason(comment1);
+        assertEquals(habit.getReason(), comment1);
     }
+
 }

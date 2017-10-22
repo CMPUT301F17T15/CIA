@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 
 import org.w3c.dom.ls.LSException;
 
@@ -35,21 +36,21 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     // giving habits and sort by date, unfinished.
-    public List<Habit> sortByDate(List<Habit> habits){
-        List<Habit>habit=habits;
+    /*public List<HabitEvent> sortByDate(List<HabitEvent> habits){
+        List<HabitEvent>habit=habits;
         return habit;
     }
     // giving habits and filter by type, unfinished.
-    public List<Habit> filterByType(List<Habit> habits, String type){
-        List<Habit>habitfilterByTypeList=habits;
+    public List<HabitEvent> filterByType(List<HabitEvent> habits, String type){
+        List<HabitEvent>habitfilterByTypeList=habits;
         return habitfilterByTypeList;
     }
     // giving habits and get the missdate, unfinished.
-    public List<Date> getMissedDates(List<Habit> habits) {
+    public List<Date> getMissedDates(List<HabitEvent> habits) {
         int size = habits.size();
         int a = 0;
         while (a < size) {
-            Habit testHabit = habits.get(a);
+            HabitEvent testHabit = habits.get(a);
             this.missDates.add(testHabit.getMissedDates().get(0));
             a = a + 1;
         }
@@ -62,11 +63,11 @@ public class HistoryActivity extends AppCompatActivity {
         int a = 0;
         while (a < size) {
             Habit testHabit = habits.get(a);
-            if (testHabit.getComment()==comment) {
+            if (testHabit.getD()==comment) {
                 this.filterByCommentList.add(testHabit);
             }
             a = a + 1;
         }
         return this.filterByCommentList;
-    }
+    }*/
 }
