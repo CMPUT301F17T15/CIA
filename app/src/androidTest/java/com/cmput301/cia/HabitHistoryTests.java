@@ -119,12 +119,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile(name);
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<Habit>habitList = profile.getHabits();
-        HistoryActivity historyActivity = new HistoryActivity();
-        // We filt them by type.
-        List<Habit>habitsOnlyOneType = historyActivity.filterByType(habitList,"1");
+        List<HabitEvent> habitList = profile.getHabitHistory(habit);
         // We assert there is true or not.
-        assertTrue(habitsOnlyOneType.size()==1);
+        assertTrue(habitList.size()==1);
     }
 
     public void testFilterByComment(){
