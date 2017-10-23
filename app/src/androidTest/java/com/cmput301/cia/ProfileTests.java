@@ -81,7 +81,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>()));
         profile.getHabits().get(0).addHabitEvent(new HabitEvent("XYZ"));
         eventList = request.getFollowedHabitHistory();
-        assertTrue(eventList.size() == 0);
+        assertTrue(eventList.size() == 1);
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
     }
 
