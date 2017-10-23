@@ -20,6 +20,11 @@ import java.util.Date;
 
 /**
  * Created by Adil on Oct 18 2017.
+ * Version 1
+ *
+ * Tests the offline events that will be synchronized with the database when the user
+ * regains connectivity.
+ *
  */
 
 public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
