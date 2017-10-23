@@ -32,7 +32,30 @@ public class HabitEvent implements Serializable {
     /**
      * Construct a new habit event
      * @param comment the optional habit comment (not null)
-     * @param image a base64 encoded photo of the event
+     */
+    public HabitEvent(String comment){
+        this.comment = comment;
+        base64EncodedPhoto = "";
+        date = new Date();
+        location = null;
+    }
+
+    /**
+     * Construct a new habit event
+     * @param comment the optional habit comment (not null)
+     * @param date the date the event occurred on (not null)
+     */
+    public HabitEvent(String comment, Date date){
+        this.comment = comment;
+        base64EncodedPhoto = "";
+        this.date = date;
+        location = null;
+    }
+
+    /**
+     * Construct a new habit event
+     * @param comment the optional habit comment (not null)
+     * @param image a base64 encoded photo of the event (not null)
      */
     public HabitEvent(String comment, String image){
         this.comment = comment;
@@ -43,9 +66,9 @@ public class HabitEvent implements Serializable {
 
     /**
      * Construct a new habit event
-     * @param comment the optional habit comment
-     * @param image a base64 encoded photo of the event
-     * @param date the date the event occurred on
+     * @param comment the optional habit comment (not null)
+     * @param image a base64 encoded photo of the event (not null)
+     * @param date the date the event occurred on (not null)
      */
     public HabitEvent(String comment, String image, Date date){
         this.comment = comment;
@@ -57,9 +80,9 @@ public class HabitEvent implements Serializable {
     /**
      *
      * Construct a new habit event
-     * @param comment the optional habit comment
-     * @param image a base64EncodedPhoto of the event
-     * @param date the date the event occurred on
+     * @param comment the optional habit comment (not null)
+     * @param image a base64EncodedPhoto of the event (not null)
+     * @param date the date the event occurred on (not null)
      * @param location the location where the event occurred
      */
     public HabitEvent(String comment, String image, Date date, Location location) {
