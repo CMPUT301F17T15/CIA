@@ -3,7 +3,6 @@ package com.cmput301.cia.utilities;
 import com.searchly.jestdroid.JestDroidClient;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -112,11 +111,11 @@ public class ElasticSearchUtilities {
                 if (result.isSucceeded()) {
                     return result;
                 } else {
-                    Log.i("Error", "the search query failed to find any tweets that matched");
+                    //Log.i("Error", "the search query failed to find any tweets that matched");
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                //Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return null;

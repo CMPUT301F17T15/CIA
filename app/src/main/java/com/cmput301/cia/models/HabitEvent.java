@@ -21,7 +21,7 @@ import java.util.Date;
  * Represents a habit event that the user has successfully completed
  */
 
-public class HabitEvent implements Serializable {
+public class HabitEvent extends ElasticSearchable implements Serializable {
 
     private String comment;
     private String base64EncodedPhoto;
@@ -122,5 +122,29 @@ public class HabitEvent implements Serializable {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    /**
+     * @return the object's template type id
+     */
+    @Override
+    public String getTypeId() {
+        return "HabitEvent";
+    }
+
+    /**
+     * Serialize this object to the ElasticSearch server
+     */
+    @Override
+    public void save() {
+        // TODO
+    }
+
+    /**
+     * Synchronize this object from the ElasticSearch server
+     */
+    @Override
+    public void load() {
+        // TODO
     }
 }
