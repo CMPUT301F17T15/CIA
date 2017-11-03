@@ -1,5 +1,6 @@
 package com.cmput301.cia.utilities;
 
+import com.cmput301.cia.models.ElasticSearchable;
 import com.searchly.jestdroid.JestDroidClient;
 
 import android.os.AsyncTask;
@@ -146,7 +147,7 @@ public class ElasticSearchUtilities {
      * @param <T> generic representing the java type corresponding to that type ID
      * @return list of all records matching that type ID
      */
-    public static <T> List<T> getList(String typeId, Class<T> tempClass){
+    public static <T extends ElasticSearchable> List<T> getList(String typeId, Class<T> tempClass){
         SearchResult result = search(typeId, "");
         if (result.isSucceeded()) {
             // TODO: try get hits?
