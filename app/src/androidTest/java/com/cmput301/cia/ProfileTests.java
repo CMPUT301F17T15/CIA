@@ -10,7 +10,6 @@ import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.models.Request;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,27 +22,6 @@ import java.util.List;
 public class ProfileTests extends ActivityInstrumentationTestCase2 {
     public ProfileTests() {super(MainActivity.class); }
 
-    public void testUser(){
-        String username = "name";
-        Profile user = new Profile(username);
-        assertEquals(user.getName(), username);
-    }
-
-    public void testFollowUser(){
-        Profile requestTest = new Profile("name");
-        Profile test = new Profile("name");
-        requestTest.getFollowing();
-    }
-    /**
-     * share
-     */
-    public void testShareUser(){
-        Profile requestTest = new Profile("name");
-        Profile test = new Profile("name");
-        requestTest.getFollowing();
-
-    }
-
     /**
      * following
      */
@@ -51,15 +29,16 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
         profile.addFollowRequest(profile);
-        assertTrue(profile.hasFollowRequest(profile));
+        assertTrue(profile.hasFollowRequest(request));
+        assertFalse(request.hasFollowRequest(profile));
     }
 
     public void testRemoveRequest(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
-        profile.addFollowRequest(profile);
-        profile.removeFollowRequest(profile);
-        assertFalse(profile.hasFollowRequest(profile));
+        profile.addFollowRequest(request);
+        profile.removeFollowRequest(request);
+        assertFalse(profile.hasFollowRequest(request));
     }
 
     public void testFollowing(){
@@ -67,7 +46,9 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         Profile request = new Profile("Mike");
         profile.addFollowRequest(request);
         request.follow(profile);
-        assertFalse(profile.hasFollowRequest(profile));
+        assertFalse(profile.hasFollowRequest(request));
+        assertTrue(request.isFollowing(profile));
+        assertFalse(request.hasFollowRequest(profile));
     }
 
     public void testFollowedHistory(){
@@ -84,11 +65,5 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertTrue(eventList.size() == 1);
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
     }
-
-
-
-
-
-
 
 }
