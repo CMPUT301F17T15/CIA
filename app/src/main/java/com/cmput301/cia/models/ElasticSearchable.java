@@ -42,6 +42,8 @@ public abstract class ElasticSearchable {
     /**
      * Serialize this object to the ElasticSearch server
      */
+    // TODO: this might be the exact same for all objects
+    // if it is, make this non abstract and implement it here
     public abstract void save();
 
     /**
