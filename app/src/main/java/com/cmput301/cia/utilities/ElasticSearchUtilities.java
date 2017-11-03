@@ -127,7 +127,7 @@ public class ElasticSearchUtilities {
      * Execute a search with ElasticSearch
      * @param typeId the type template id all results must match
      * @param query the query to execute
-     * @return the search result from the query
+     * @return the search result from the query if results were found, or null otherwise
      */
     public static SearchResult search(String typeId, String query){
         try {
@@ -145,7 +145,7 @@ public class ElasticSearchUtilities {
      * @param typeId the type template id all results must match
      * @param tempClass the java class of the generic type T
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return list of all records matching that type ID
+     * @return the list of all records matching that type ID
      */
     public static <T extends ElasticSearchable> List<T> getList(String typeId, Class<T> tempClass){
         SearchResult result = search(typeId, "");
