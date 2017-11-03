@@ -147,4 +147,12 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     public void load() {
         // TODO
     }
+
+    /**
+     * Delete this object from the ElasticSearch server
+     */
+    @Override
+    public void delete() {
+        // TODO
+    }
 }

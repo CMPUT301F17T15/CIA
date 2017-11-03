@@ -205,4 +205,12 @@ public class Habit extends ElasticSearchable {
     public void load() {
         // TODO
     }
+
+    /**
+     * Delete this object from the ElasticSearch server
+     */
+    @Override
+    public void delete() {
+        // TODO
+    }
 }

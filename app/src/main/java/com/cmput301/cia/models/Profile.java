@@ -22,9 +22,6 @@ import java.util.List;
 
 public class Profile extends ElasticSearchable {
 
-    // The file where offline events will be stored
-    private static final String OFFLINE_EVENTS_FILE = "events.sav";
-
     private String name;
     private List<Habit> habits;
 
@@ -282,6 +279,8 @@ public class Profile extends ElasticSearchable {
      */
     public void save(){
         // TODO
+
+        // TODO: save pending events to getOfflineEventsFile()
     }
 
     /**
@@ -290,6 +289,22 @@ public class Profile extends ElasticSearchable {
     @Override
     public void load() {
         // TODO
+
+        // TODO: load pending events from getOfflineEventsFile()
     }
 
+    /**
+     * Delete this object from the ElasticSearch server
+     */
+    @Override
+    public void delete() {
+        // TODO
+    }
+
+    /**
+     * @return the name of the file containing this user's pending events
+     */
+    private String getOfflineEventsFile(){
+        return name + "events.sav";
+    }
 }
