@@ -20,7 +20,7 @@ import java.util.List;
  * Date: Oct 14 2017
  */
 
-public class Profile {
+public class Profile extends ElasticSearchable {
 
     // The file where offline events will be stored
     private static final String OFFLINE_EVENTS_FILE = "events.sav";
@@ -103,13 +103,6 @@ public class Profile {
      */
     public void removeFollowRequest(Profile profile){
         followRequests.remove(profile);
-    }
-
-    /**
-     * Save this profile to the database
-     */
-    public void save(){
-        // TODO
     }
 
     /**
@@ -274,6 +267,29 @@ public class Profile {
      */
     public boolean isFollowing(Profile profile){
         return following.contains(profile);
+    }
+
+    /**
+     * @return the object's template type id
+     */
+    @Override
+    public String getTypeId() {
+        return "Profile";
+    }
+
+    /**
+     * Save this profile to the database
+     */
+    public void save(){
+        // TODO
+    }
+
+    /**
+     * Synchronize this object from the ElasticSearch server
+     */
+    @Override
+    public void load() {
+        // TODO
     }
 
 }

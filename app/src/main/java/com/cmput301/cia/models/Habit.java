@@ -17,7 +17,7 @@ import java.util.List;
  * Keeps track of all habit events the user has completed/missed related to the habit
  */
 
-public class Habit {
+public class Habit extends ElasticSearchable {
 
     // Constants for days of the week
     public static final int SUNDAY = 1, MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4, THURSDAY = 5, FRIDAY = 6, SATURDAY = 7;
@@ -179,4 +179,27 @@ public class Habit {
 
     public String getType(){return this.type;}//edit by guanfang
 
+    /**
+     * @return the object's template type id
+     */
+    @Override
+    public String getTypeId() {
+        return "Habit";
+    }
+
+    /**
+     * Serialize this object to the ElasticSearch server
+     */
+    @Override
+    public void save() {
+        // TODO
+    }
+
+    /**
+     * Synchronize this object from the ElasticSearch server
+     */
+    @Override
+    public void load() {
+        // TODO
+    }
 }

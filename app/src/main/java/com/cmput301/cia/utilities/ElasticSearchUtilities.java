@@ -1,9 +1,9 @@
 package com.cmput301.cia.utilities;
 
+import com.cmput301.cia.models.ElasticSearchable;
 import com.searchly.jestdroid.JestDroidClient;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
@@ -112,11 +112,11 @@ public class ElasticSearchUtilities {
                 if (result.isSucceeded()) {
                     return result;
                 } else {
-                    Log.i("Error", "the search query failed to find any tweets that matched");
+                    //Log.i("Error", "the search query failed to find any tweets that matched");
                 }
             }
             catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                //Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
             }
 
             return null;
@@ -127,7 +127,7 @@ public class ElasticSearchUtilities {
      * Execute a search with ElasticSearch
      * @param typeId the type template id all results must match
      * @param query the query to execute
-     * @return the search result from the query
+     * @return the search result from the query if results were found, or null otherwise
      */
     public static SearchResult search(String typeId, String query){
         try {
@@ -145,9 +145,9 @@ public class ElasticSearchUtilities {
      * @param typeId the type template id all results must match
      * @param tempClass the java class of the generic type T
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return list of all records matching that type ID
+     * @return the list of all records matching that type ID
      */
-    public static <T> List<T> getList(String typeId, Class<T> tempClass){
+    public static <T extends ElasticSearchable> List<T> getList(String typeId, Class<T> tempClass){
         SearchResult result = search(typeId, "");
         if (result.isSucceeded()) {
             // TODO: try get hits?
