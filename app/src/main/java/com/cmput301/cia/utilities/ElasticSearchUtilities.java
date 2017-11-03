@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -30,69 +31,13 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchUtilities {
 
     // The index used to access the database
-    private static final String INDEX = "CMPUT301F17T15";
+    private static final String INDEX = "cmput301f17t15";
+    // Maximum number of search results per query
+    private static final int MAX_RESULTS = 1000;
+    // The default ElasticSearch object ID
+    private static final String DEFAULT_ID = "";
 
     private static JestDroidClient client;
-
-    // Adds tweets to elastic search
-    // Get=NormalTweet, Progress=Void, Result=Void
-    /*public static class AddTweetsTask extends AsyncTask<NormalTweet, Void, Void> {
-
-        @Override
-        protected Void doInBackground(NormalTweet... tweets) {
-            verifySettings();
-
-            for (NormalTweet tweet : tweets) {
-                Index index = new Index.Builder(tweet).index("testing").type("tweet").build();
-
-                try {
-                    // where is the client?
-                    DocumentResult execute = client.execute(index);
-                    if (execute.isSucceeded()){
-                        tweet.setId(execute.getId());
-                    }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the tweets");
-                }
-
-            }
-            return null;
-        }
-    }
-
-    // Gets tweets from elastic search
-    public static class GetTweetsTask extends AsyncTask<String, Void, ArrayList<NormalTweet>> {
-        @Override
-        protected ArrayList<NormalTweet> doInBackground(String... search_parameters) {
-            verifySettings();
-
-            ArrayList<NormalTweet> tweets = new ArrayList<NormalTweet>();
-
-            // Build the query
-
-            String query = "{\n" +
-                    "    \"query\": {\"term\": {\"message\":\"" + search_parameters[0] + "\"}}\n" + "}";
-
-
-            Search search = new Search.Builder(query).addIndex("testing").addType("tweet").build();
-
-            try {
-                SearchResult result = client.execute(search);
-                if (result.isSucceeded()) {
-                    List<NormalTweet> foundTweets = result.getSourceAsObjectList(NormalTweet.class);
-                    tweets.addAll(foundTweets);
-                } else {
-                    Log.i("Error", "the search query failed to find any tweets that matched");
-                }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
-            return tweets;
-        }
-    }*/
 
     private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Void> {
 
@@ -101,7 +46,14 @@ public class ElasticSearchUtilities {
             verifySettings();
 
             for (ElasticSearchable obj : objects) {
-                Index index = new Index.Builder(obj).index(INDEX).type(obj.getTypeId()).build();
+                Index.Builder builder = new Index.Builder(obj).index(INDEX).type(obj.getTypeId());
+
+                // update instead of this object is already in the database
+                if (obj.getId() != DEFAULT_ID){  // TODO: != null instead?
+                    builder.id(obj.getId());
+                }
+
+                Index index = builder.build();
 
                 try {
                     DocumentResult execute = client.execute(index);
@@ -131,6 +83,8 @@ public class ElasticSearchUtilities {
             //String query = "{\n" +
             //        "    \"query\": {\"term\": {\"message\":\"" + search_parameters[0] + "\"}}\n" + "}";
 
+
+            //"{ \"size\" : " + MAX_RESULTS +" } "
 
             Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
 
@@ -174,6 +128,28 @@ public class ElasticSearchUtilities {
                 } else {
                     Log.i("Error", "the search query failed to find any objects that matched");
                 }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return null;
+        }
+    }
+
+    private static class DeleteTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
+            verifySettings();
+
+            String typeId = search_parameters[0];
+            String objectId = search_parameters[1];
+            String query = search_parameters[2];
+
+            Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).id(objectId).build();
+
+            try {
+                client.execute(delete);
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
@@ -259,6 +235,23 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Delete an object from the database
+     * @param typeId the type template id of the result
+     * @param objId the id of the object to search for
+     */
+    public static void delete(String typeId, String objId) {
+        new DeleteTask().execute(typeId, objId, "");
+    }
+
+    /**
+     * Delete an object from the database
+     * @param object the object to delete
+     */
+    public static void delete(ElasticSearchable object) {
+        new DeleteTask().execute(object.getTypeId(), object.getId(), "");
+    }
+
+    /**
      * Validate that the client is initialized
      */
     private static void verifySettings() {
@@ -271,8 +264,16 @@ public class ElasticSearchUtilities {
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
         }
+
         // TODO: if index has not been built
         // create it and also create the templates for Habit, HabitEvent, Profile
+        /**
+         * type: properties
+         *
+         * habit: ProfileID (creator), HabitID
+         * habitevent: HabitID (base), HabitEventID
+         * profile: ProfileID
+         */
     }
 
 }
