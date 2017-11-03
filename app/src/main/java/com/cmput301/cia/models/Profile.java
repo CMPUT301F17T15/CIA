@@ -274,7 +274,7 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public String getTypeId() {
-        return "Profile";
+        return "profile";
     }
 
     /**

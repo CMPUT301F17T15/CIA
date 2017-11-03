@@ -129,7 +129,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      */
     @Override
     public String getTypeId() {
-        return "HabitEvent";
+        return "habitevent";
     }
 
     /**

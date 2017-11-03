@@ -186,7 +186,7 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public String getTypeId() {
-        return "Habit";
+        return "habit";
     }
 
     /**
