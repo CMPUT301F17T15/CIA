@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -192,6 +194,7 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void save() {
+        ElasticSearchUtilities.save(this);
         // TODO
     }
 
