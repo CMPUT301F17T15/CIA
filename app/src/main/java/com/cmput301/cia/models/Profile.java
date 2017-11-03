@@ -268,4 +268,12 @@ public class Profile {
             pendingEvents.add(event);
     }
 
+    /**
+     * @param profile the user that is being checked to see if this user follows
+     * @return whether this user is following the specified profile
+     */
+    public boolean isFollowing(Profile profile){
+        return following.contains(profile);
+    }
+
 }
