@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">CIA</string>
     <string name="title_activity_filter_events">FilterEventsActivity</string>
+    <string name="habitType">Habit Type</string>
 </resources>

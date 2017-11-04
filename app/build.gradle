@@ -24,11 +24,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'ca.antonious:materialdaypicker:0.2.1'
+    compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.+'
-    androidTestCompile 'junit:junit:4.12'
-    compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
     testCompile 'org.testng:testng:6.9.6'
+    androidTestCompile 'junit:junit:4.12'
     compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
 }
