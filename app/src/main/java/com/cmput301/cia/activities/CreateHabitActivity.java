@@ -17,7 +17,6 @@ import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitController;
-import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DatePickerUtilities;
 
 import java.util.ArrayList;
@@ -60,12 +59,12 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
      *
      * TODO: take into account the habit type
      */
-    public void CreateHabit(View v) {
+    public void createHabit(View v) {
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
 
-        CreateHabitController.CreateHabit(
-                habitName.toString(),
-                reason.toString(),
+        CreateHabitController.onSaveClicked(
+                habitName.getText().toString(),
+                reason.getText().toString(),
                 chooseStartDate,
                 getPickedDates(daysSelected)
         );

@@ -14,14 +14,11 @@ import java.util.List;
  */
 
 public class CreateHabitController {
-    public static void onSaveClicked() {
+    public static void onSaveClicked(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek) {
         // TODO: save the habit on elastic search/serializable
-
-    }
-
-    public static void CreateHabit(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek) {
+        // TODO: handle when user also inputs habit type
 
         Habit habit = new Habit(habitName, reason, startDate, daysOfTheWeek);
-        onSaveClicked();
+        habit.save();
     }
 }
