@@ -20,9 +20,12 @@ import com.cmput301.cia.controller.CreateHabitController;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DatePickerUtilities;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /** activity for creating a new habit by letting the user input:
  *      - habit name
@@ -49,13 +52,32 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     public void CreateHabit(View v) {
         EditText habitName = (EditText) findViewById(R.id.habitName);
         EditText reason = (EditText) findViewById(R.id.reason);
+        MaterialDayPicker dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
+
+        List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
 
         CreateHabitController.CreateHabit(
                 habitName.toString(),
                 reason.toString(),
                 chooseStartDate,
-
+                getPickedDates(daysSelected)
         );
+    }
+
+    /**
+     * converts the List<MaterialDayPicker.Weekday> the expected format for dates: LIst<Integer>
+     * MaterialDayPicker.Weekday has Monday = 1, ... so this method also fixes the offset
+     *
+     * @param pickedDates
+     * @return
+     */
+    public List<Integer> getPickedDates(List<MaterialDayPicker.Weekday> pickedDates) {
+        List<Integer> outputDatesList = new ArrayList<Integer>();
+        for (MaterialDayPicker.Weekday weekday : pickedDates) {
+            outputDatesList.add(weekday.ordinal() + 1);
+        }
+
+        return outputDatesList;
     }
 
     /**

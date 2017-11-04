@@ -14,12 +14,12 @@ import java.util.List;
  */
 
 public class CreateHabitController {
-    public void onSaveClicked() {
+    public static void onSaveClicked() {
         // TODO: save the habit on elastic search/serializable
 
     }
 
-    public void CreateHabit(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek) {
+    public static void CreateHabit(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek) {
 
         Habit habit = new Habit(habitName, reason, startDate, daysOfTheWeek);
         onSaveClicked();
