@@ -45,7 +45,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_habit);
-        
+
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
         reason = (EditText) findViewById(R.id.reason);
@@ -57,6 +57,8 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     /**
      * method for creating a habit from the layout by getting the user's inputs
      * @param v: the layout that it's coming from
+     *
+     * TODO: take into account the habit type
      */
     public void CreateHabit(View v) {
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
@@ -73,6 +75,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         habitName.setText("");
         reason.setText("");
         startDate.setText("");
+        dayPicker.clearSelection();
     }
 
     /**
