@@ -49,6 +49,7 @@
                     android:id="@+id/habitName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLength="20"
                     android:ems="10"
                     android:inputType="textPersonName" />
 
@@ -68,6 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLength="30"
                     android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
