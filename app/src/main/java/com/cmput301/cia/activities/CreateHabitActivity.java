@@ -34,14 +34,23 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  *      - frequency (days of the week to do the habit)
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
-    Date chooseStartDate = new Date();
+    Date chooseStartDate;
+
+    EditText habitName;
+    EditText reason;
+    EditText startDate;
+    MaterialDayPicker dayPicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_habit);
-
-        EditText startDate = (EditText) findViewById(R.id.startDate);
+        
+        chooseStartDate = new Date();
+        habitName = (EditText) findViewById(R.id.habitName);
+        reason = (EditText) findViewById(R.id.reason);
+        startDate = (EditText) findViewById(R.id.startDate);
+        dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
         startDate.setText(chooseStartDate.toString());
     }
 
@@ -50,10 +59,6 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
      * @param v: the layout that it's coming from
      */
     public void CreateHabit(View v) {
-        EditText habitName = (EditText) findViewById(R.id.habitName);
-        EditText reason = (EditText) findViewById(R.id.reason);
-        MaterialDayPicker dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
-
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
 
         CreateHabitController.CreateHabit(
@@ -62,6 +67,12 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                 chooseStartDate,
                 getPickedDates(daysSelected)
         );
+    }
+
+    public void clearInputFields(View v) {
+        habitName.setText("");
+        reason.setText("");
+        startDate.setText("");
     }
 
     /**
@@ -99,7 +110,6 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
      */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        EditText startDate = (EditText) findViewById(R.id.startDate);
         final Calendar calendar = Calendar.getInstance();
 
         calendar.set(Calendar.YEAR, year);
