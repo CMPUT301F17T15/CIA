@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 /**
  * Version 2
@@ -59,8 +61,11 @@ public class MainActivity extends AppCompatActivity {
         duplicateNameText.setVisibility(View.INVISIBLE);
 
         String name = userName.getText().toString();
-        // TODO: if valid name
-        if (true){
+        Profile dummy = new Profile("dummy");
+
+        // TODO: query using name
+        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        if (profile != null){
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
             startActivity(intent);
@@ -78,8 +83,11 @@ public class MainActivity extends AppCompatActivity {
         invalidNameText.setVisibility(View.INVISIBLE);
 
         String name = userName.getText().toString();
-        // TODO: if used name
-        if (true){
+        Profile dummy = new Profile("dummy");
+
+        // TODO: query using name
+        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        if (profile != null){
             duplicateNameText.setVisibility(View.VISIBLE);
         } else {
             Intent intent = new Intent(this, HomePageActivity.class);

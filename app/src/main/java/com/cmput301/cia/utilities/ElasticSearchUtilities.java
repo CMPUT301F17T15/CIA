@@ -183,6 +183,7 @@ public class ElasticSearchUtilities {
      * @param id the id of the object to search for
      * @return the search result from the query if it was found, or null otherwise
      */
+    // TODO: generate a query using a Map<String, String> where key=parameter and value=required record value for that parameter
     public static SearchResult search(String typeId, String query, String id){
         try {
             return new IDSearchTask().execute(typeId, id, query).get();
