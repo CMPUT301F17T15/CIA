@@ -22,7 +22,9 @@ import java.util.List;
 public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
 
     public HabitHistoryTests(){super (HistoryActivity.class);}
-
+    /** testing method(s): Part of ViewHabitHistory, It will
+     * test will a new profile has been created.
+     */
     public void testProfile(){
         // create a new habit
         String title = "Habit1";
@@ -39,6 +41,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         assertNotNull(profile);
     }
 
+    /** testing method(s): Part of ViewHabitHistory, It will
+     * test will a new habit list has been created
+     */
     public void testCollectHabits(){
         // We create new habit,
         String title = "Habit1";
@@ -55,6 +60,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         assertNotNull(habitList);
     }
 
+    /** testing method(s): Part of ViewHabitHistory(), It will
+     * test can we find the missing date?
+     */
     public void testFindMissing(){
         //We create a new habit.
         String title = "Habit1";
@@ -74,6 +82,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         assert(missDates.size() > 0);
     }
 
+    /** testing method(s): part of HabitFilterByType(), It will
+     * test can we filter habits by time?
+     */
     public void testSort(){
         // We create two new habits.
         String title = "Habit1";
@@ -98,6 +109,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habitList.get(0).getDate().getTime()>habitList.get(1).getDate().getTime());
     }
 
+    /** testing method(s): part of HabitFilterByType(), It will
+     * test can we filter habits by type?
+     */
     public void testFilterByType(){
         // We create two new habits.
         String title = "Habit1";
@@ -124,6 +138,9 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habitList.size()==1);
     }
 
+    /** testing method(s): part of HabitFilterByType(), It will
+     * test can we filter habits by comment?
+     */
     public void testFilterByComment(){
         //We create two new habits,
         String title = "Habit1";
