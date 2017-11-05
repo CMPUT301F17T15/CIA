@@ -242,20 +242,24 @@ public class Profile extends ElasticSearchable {
      */
     public void synchronize(){
         if (DeviceUtilities.isOnline()){
+            List<OfflineEvent> unsuccessful = new ArrayList<>();
             for (OfflineEvent event : pendingEvents){
-                event.handle();
+                if (!event.handle()){
+                    unsuccessful.add(event);
+                }
             }
-            pendingEvents.clear();
+            pendingEvents = unsuccessful;
         }
     }
 
     /**
-     * Edit/delete an existing habit event, or add a new one
+     * Attempt to edit/delete an existing habit event, or add a new one
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        if (DeviceUtilities.isOnline())
-            event.handle();
+        if (DeviceUtilities.isOnline() && event.handle()){
+            // do nothing
+        }
         else
             pendingEvents.add(event);
     }

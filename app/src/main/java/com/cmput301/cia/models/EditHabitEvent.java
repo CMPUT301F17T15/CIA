@@ -13,7 +13,6 @@ public class EditHabitEvent extends OfflineEvent {
     private HabitEvent oldData;
     private HabitEvent newData;
 
-
     public EditHabitEvent(HabitEvent old, HabitEvent newEvent){
         oldData = old;
         newData = newEvent;
@@ -21,10 +20,13 @@ public class EditHabitEvent extends OfflineEvent {
 
     /**
      * What this event does when it is synchronized with the server
+     * @return whether the event was handled successfully or not
      */
     @Override
-    public void handle() {
+    public boolean handle() {
         // TODO: copy newData into oldData
+
+        return true;
     }
 
 }
