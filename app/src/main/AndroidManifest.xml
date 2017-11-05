@@ -23,7 +23,9 @@
             android:name=".activities.FilterEventsActivity"
             android:label="@string/title_activity_filter_events"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.HomePageActivity"></activity>
+        <activity android:name=".activities.HomePageActivity" />
+        <activity android:name=".activities.CreateHabitActivity">
+        </activity>
     </application>
 
 </manifest>
