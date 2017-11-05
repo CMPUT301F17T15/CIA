@@ -15,6 +15,9 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Version 2
  * Author: Adil Malik
@@ -63,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
         String name = userName.getText().toString();
         Profile dummy = new Profile("dummy");
 
-        // TODO: query using name
-        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        Map<String, String> searchTerms = new HashMap<String, String>();
+        searchTerms.put("name", name);
+        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, searchTerms);
         if (profile != null){
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
@@ -80,20 +84,27 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void onCreateProfileButtonClicked(View view){
-        invalidNameText.setVisibility(View.INVISIBLE);
 
         String name = userName.getText().toString();
+        if (name.length() != 0){
+            invalidNameText.setVisibility(View.INVISIBLE);
+        } else {
+            invalidNameText.setVisibility(View.VISIBLE);
+            return;
+        }
+
         Profile dummy = new Profile("dummy");
 
-        // TODO: query using name
-        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        Map<String, String> searchTerms = new HashMap<String, String>();
+        searchTerms.put("name", name);
+        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, searchTerms);
         if (profile != null){
             duplicateNameText.setVisibility(View.VISIBLE);
         } else {
-            Intent intent = new Intent(this, HomePageActivity.class);
+            duplicateNameText.setVisibility(View.INVISIBLE);
+            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
             startActivity(intent);
-            duplicateNameText.setVisibility(View.INVISIBLE);
         }
 
     }

@@ -36,6 +36,7 @@
         android:layout_height="49dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="117dp"
+        android:onClick="onLoginButtonClicked"
         android:text="Login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="64dp"
         android:layout_marginTop="117dp"
+        android:onClick="onCreateProfileButtonClicked"
         android:text="Create Profile"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
