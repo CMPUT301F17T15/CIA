@@ -22,6 +22,8 @@ import java.util.List;
 
 public class Profile extends ElasticSearchable {
 
+    public static final String TYPE_ID = "profile";
+
     private String name;
     private List<Habit> habits;
 
@@ -271,7 +273,7 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public String getTypeId() {
-        return "profile";
+        return TYPE_ID;
     }
 
     /**

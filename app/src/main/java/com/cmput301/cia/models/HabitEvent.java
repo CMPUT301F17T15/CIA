@@ -23,6 +23,8 @@ import java.util.Date;
 
 public class HabitEvent extends ElasticSearchable implements Serializable {
 
+    public static final String TYPE_ID = "habitevent";
+
     private String comment;
     private String base64EncodedPhoto;
     private Date date;
@@ -129,7 +131,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      */
     @Override
     public String getTypeId() {
-        return "habitevent";
+        return TYPE_ID;
     }
 
     /**

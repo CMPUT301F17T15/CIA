@@ -15,8 +15,12 @@ import android.widget.TextView;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Version 2
@@ -47,13 +51,20 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
-        // TODO: if could not find a profile for the specified name
-        if (true){
-            user = new Profile(name);
-            user.save();
-        } else {
 
+        Profile dummy = new Profile(name);
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
+        if (user == null){
+            user = dummy;
+            user.save();
         }
+
+        values.clear();
+        values.put("user", user.getId());
+        List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
+        // TODO: initialize ...
 
         /*countersList = (ListView)findViewById(R.id.mainHabitsList);
         countersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
