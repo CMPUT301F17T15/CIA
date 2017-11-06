@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cmput301.cia.activities.CreateHabitEventActivity">
+
+    <TextView
+        android:id="@+id/cheCommentStaticText"
+        android:layout_width="88dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="206dp"
+        android:text="Comment"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chePhotoText"
+        android:layout_width="62dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="248dp"
+        android:text="Photo"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cheLocationDynamicText"
+        android:layout_width="148dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="202dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="165dp"
+        android:text="NONE"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cheLocationStaticText"
+        android:layout_width="73dp"
+        android:layout_height="26dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="165dp"
+        android:text="Location"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cheEventTitleText"
+        android:layout_width="156dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="114dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cheHabitNameText"
+        android:layout_width="130dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="127dp"
+        android:layout_marginTop="55dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cheDateStaticText"
+        android:layout_width="59dp"
+        android:layout_height="26dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="123dp"
+        android:text="Date"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/cheDateEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="106dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageButton
+        android:id="@+id/cheAttachLocationButton"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="114dp"
+        android:layout_marginTop="165dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
+    <EditText
+        android:id="@+id/cheCommentEditText"
+        android:layout_width="220dp"
+        android:layout_height="38dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:maxLength="20"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="281dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/cheImageView"
+        android:layout_width="194dp"
+        android:layout_height="150dp"
+        app:srcCompat="@android:color/darker_gray"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="113dp" />
+
+    <Button
+        android:id="@+id/cheSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginLeft="65dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp" />
+
+    <Button
+        android:id="@+id/cheCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="209dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
