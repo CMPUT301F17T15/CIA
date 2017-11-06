@@ -7,6 +7,8 @@ package com.cmput301.cia.models;
 import android.location.Location;
 import android.media.Image;
 
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
+
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.Serializable;
@@ -94,34 +96,62 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.location = location;
     }
 
+    /**
+     * @return the comment about this event
+     */
     public String getComment(){
         return comment;
     }
 
+    /**
+     * Set the event's description
+     * @param comment the event's new description
+     */
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    /**
+     * @return the image about the event encoded in base64
+     */
     public String getBase64EncodedPhoto() {
         return base64EncodedPhoto;
     }
 
+    /**
+     * Set the image about this event
+     * @param base64EncodedPhoto the image about the event encoded in base64
+     */
     public void setBase64EncodedPhoto(String base64EncodedPhoto) {
         this.base64EncodedPhoto = base64EncodedPhoto;
     }
 
+    /**
+     * @return the date this event occurred on
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Set the date this event occurred on
+     * @param date the date this event occurred on
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     * @return the location this event occurred at if it exists, or null otherwise
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * Set the location this event occurred at
+     * @param location the location it occurred at (can be null)
+     */
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -139,7 +169,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      */
     @Override
     public void save() {
-        // TODO
+        ElasticSearchUtilities.save(this);
     }
 
     /**
@@ -147,7 +177,10 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      */
     @Override
     public void load() {
-        // TODO
+        HabitEvent found = ElasticSearchUtilities.getObject(getTypeId(), HabitEvent.class, getId());
+        if (found != null){
+            // TODO: copy
+        }
     }
 
     /**
@@ -155,6 +188,6 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      */
     @Override
     public void delete() {
-        // TODO
+        ElasticSearchUtilities.delete(this);
     }
 }

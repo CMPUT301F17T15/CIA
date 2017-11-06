@@ -52,26 +52,47 @@ public class Profile extends ElasticSearchable {
         pendingEvents = new ArrayList<>();
     }
 
+    /**
+     * @return the profile's unique name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the profile's unique name
+     * @param name the new name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @return the user's list of habits
+     */
     public List<Habit> getHabits() {
         return habits;
     }
 
+    /**
+     * @return list of all users this user is following
+     */
     public List<Profile> getFollowing() {
         return following;
     }
 
+    /**
+     * Add a new habit to the user's list of habits
+     * @param habit the habit to add
+     */
     public void addHabit(Habit habit){
         habits.add(habit);
     }
 
+    /**
+     * Remove a habit from the user's list of habits
+     * @param habit the habit to remove
+     */
     public void removeHabit(Habit habit){
         habits.remove(habit);
     }
