@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Version 2
  * Author: Guanfang Dong
- * Date: Oct 21 2017
+ * Date: Nov 5 2017
  *
  * This is history activity.
  *  User allows to view their history habits and filter by date and comment.
@@ -119,7 +119,7 @@ public class HistoryActivity extends AppCompatActivity {
                 filteredList.add(habitList.get(counter));
             }
         }
-        return sortedList;
+        return filteredList;
     }
 
 
