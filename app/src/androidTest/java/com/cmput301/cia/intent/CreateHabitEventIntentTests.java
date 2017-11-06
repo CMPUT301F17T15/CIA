@@ -4,16 +4,12 @@
 
 package com.cmput301.cia.intent;
 
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.CreateHabitEventActivity;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.robotium.solo.Solo;
 
 /**
@@ -40,8 +36,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
     public void testCommentLength(){
         solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
         // max length = 20
-        assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 1000));
-        assertTrue(solo.waitForText("@@@@@@@@@@@@@@@@@Y@@", 1, 1000));
+        assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
+        assertTrue(((EditText) solo.getView(R.id.cheCommentEditText)).getText().toString().length() == 20);
     }
 
     public void testFinish(){
@@ -57,7 +53,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.clickOnButton("Create");
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
-        solo.clickOnButton("Finish");
+        solo.clickOnButton("Save");
 
         // TODO: assert new habit events count is old+1
         assertTrue(false);
