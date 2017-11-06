@@ -1,6 +1,7 @@
 package com.cmput301.cia.utilities;
 
 import com.cmput301.cia.models.ElasticSearchable;
+import com.google.common.collect.Iterables;
 import com.searchly.jestdroid.JestDroidClient;
 
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import com.searchly.jestdroid.JestClientFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
@@ -32,7 +34,7 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchUtilities {
 
     // The index used to access the database
-    private static final String INDEX = "cmput301f17t15";
+    private static final String INDEX = "cmput301f17t15_cia";
     // Maximum number of search results per query
     private static final int MAX_RESULTS = 1000;
     private static JestDroidClient client;
@@ -74,17 +76,23 @@ public class ElasticSearchUtilities {
             verifySettings();
 
             String typeId = search_parameters[0];
+
+            StringBuilder builder = new StringBuilder();
+            builder.append("{\n\"query\": {\"term\":{");
             String query = search_parameters[1];
+            builder.append(query);
+            builder.append("}}\n}");
+
+            String finalQuery = builder.toString();
 
             // Build the query
             // TODO
-            //String query = "{\n" +
-            //        "    \"query\": {\"term\": {\"message\":\"" + search_parameters[0] + "\"}}\n" + "}";
+            //
 
 
             //"{ \"size\" : " + MAX_RESULTS +" } "
 
-            Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
+            Search search = new Search.Builder(finalQuery).addIndex(INDEX).addType(typeId).build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -316,8 +324,14 @@ public class ElasticSearchUtilities {
      */
     private static String getQueryFromMap(Map<String, String> values){
         StringBuilder query = new StringBuilder();
-        for (String key : values.keySet()){
-            query.append(key + ":" + values.get(key) + "\n");
+
+        Set<String> keyset = values.keySet();
+        String last = Iterables.getLast(keyset);
+        for (String key : keyset){
+            // TODO: test when there are multiple parameters
+            query.append("\""+key+"\"" + ":" + "\""+values.get(key)+"\"");
+            if (key != last)
+                query.append(",\n");
         }
         return query.toString();
     }
