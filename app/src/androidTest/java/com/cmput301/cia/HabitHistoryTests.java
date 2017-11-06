@@ -13,7 +13,6 @@ import com.cmput301.cia.models.Profile;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -90,35 +89,24 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         // We create two new habits.
         String title = "Habit1";
         String reason = "Reason1";
+        Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, new Date(), days);
+        Habit habit = new Habit(title, reason, date, days);
         String title2 = "Habit2";
         String reason2 = "Reason2";
+        Date date2 = new Date();
         // We set one is earlier than another
-
+        date2.setYear(1856);
         List<Integer> days2 = Arrays.asList(1,2,3);
-        Habit habit2 = new Habit(title2, reason2, new Date(), days2);
+        Habit habit2 = new Habit(title2, reason2, date2, days2);
         String name = "Test1";
         Profile profile = new Profile(name);
         // We add them to the new profile.
         profile.addHabit(habit);
         profile.addHabit(habit2);
         List<HabitEvent>habitList = profile.getHabitHistory();
-        assertTrue(habitList.size() == 0);
-
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(1856, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz", calendar.getTime()));
-        calendar.set(2105, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz2", calendar.getTime()));
-        calendar.set(2085, 1, 9);
-        habit.addHabitEvent(new HabitEvent("xyz21", calendar.getTime()));
-        habit.addHabitEvent(new HabitEvent("xyz1"));
-        habit2.addHabitEvent(new HabitEvent("1"));
-
-        habitList = profile.getHabitHistory();
         // We check true or not.
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+        assertTrue(habitList.get(0).getDate().getTime()>habitList.get(1).getDate().getTime());
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
@@ -147,25 +135,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         profile.addHabit(habit2);
         List<HabitEvent> habitList = profile.getHabitHistory(habit);
         // We assert there is true or not.
-        assertTrue(habitList.size() == 0);
-
-        Date date3 = new Date();
-        date3.setYear(2105);
-
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(1856, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz", calendar.getTime()));
-        calendar.set(2105, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz2", calendar.getTime()));
-        calendar.set(2085, 1, 9);
-        habit.addHabitEvent(new HabitEvent("xyz21", calendar.getTime()));
-        habit.addHabitEvent(new HabitEvent("xyz1"));
-        habit2.addHabitEvent(new HabitEvent("1"));
-
-        habitList = profile.getHabitHistory(habit);
-        assertTrue(habitList.size() == 4);
-        assertTrue(profile.getHabitHistory(habit2).size() == 1);
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+        assertTrue(habitList.size()==1);
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
@@ -181,31 +151,19 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String title2 = "Habit2";
         String reason2 = "Reason2";
         Date date2 = new Date();
-        date2.setYear(2100);
+        date2.setYear(1856);
         List<Integer> days2 = Arrays.asList(1,2,3);
         Habit habit2 = new Habit(title2, reason2, date2, days2);
         // We set comments
         habit.setReason("1");
         habit2.setReason("2");
-
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(1856, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz", calendar.getTime()));
-        calendar.set(2105, 1, 1);
-        habit.addHabitEvent(new HabitEvent("xyz2", calendar.getTime()));
-        calendar.set(2085, 1, 9);
-        habit.addHabitEvent(new HabitEvent("xyz21", calendar.getTime()));
-        habit.addHabitEvent(new HabitEvent("xyz1"));
-        habit2.addHabitEvent(new HabitEvent("1"));
         String name = "Test1";
         Profile profile = new Profile(name);
         // We add to new profile,
         profile.addHabit(habit);
         profile.addHabit(habit2);
         List<HabitEvent> habitList = profile.getHabitHistory("1");
-        assertTrue(habitList.size() == 3);
-        assertTrue(profile.getHabitHistory("o").size() == 0);
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+        assertTrue(habitList.size()==1);
     }
 
 }
