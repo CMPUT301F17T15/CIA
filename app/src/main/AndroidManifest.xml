@@ -39,6 +39,9 @@
 
         <activity android:name=".activities.CreateHabitActivity">
         </activity>
+
+        <activity android:name=".activities.CreateHabitEventActivity"></activity>
+
     </application>
 
 </manifest>

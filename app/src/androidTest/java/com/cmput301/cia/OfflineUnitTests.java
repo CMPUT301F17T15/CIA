@@ -33,6 +33,7 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
         super(MainActivity.class);
     }
 
+    // TODO: find way to force device offline and then integrate ElasticSearch
     public void testOfflineEditEvent(){
         Profile profile = new Profile("Name");
         HabitEvent old = new HabitEvent("XYZ", new Date());

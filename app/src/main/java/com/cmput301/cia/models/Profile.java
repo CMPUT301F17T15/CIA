@@ -130,6 +130,15 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
+     * Accept a follow request from the specified user
+     * @param profile the user sending the request
+     */
+    public void acceptFollowRequest(Profile profile){
+        profile.follow(this);
+        removeFollowRequest(profile);
+    }
+
+    /**
      * @return a list of habits that need to be done today
      */
     public List<Habit> getTodaysHabits() {
@@ -165,7 +174,7 @@ public class Profile extends ElasticSearchable {
         Collections.sort(list, new Comparator<HabitEvent>() {
             @Override
             public int compare(HabitEvent event, HabitEvent t1) {
-                return event.getDate().compareTo(t1.getDate());     // TODO: test correctness
+                return -1 * event.getDate().compareTo(t1.getDate());
             }
         });
         return list;
@@ -186,7 +195,7 @@ public class Profile extends ElasticSearchable {
         Collections.sort(list, new Comparator<HabitEvent>() {
             @Override
             public int compare(HabitEvent event, HabitEvent t1) {
-                return event.getDate().compareTo(t1.getDate());     // TODO: test correctness
+                return -1 * event.getDate().compareTo(t1.getDate());
             }
         });
         return list;
@@ -206,7 +215,7 @@ public class Profile extends ElasticSearchable {
                 Collections.sort(list, new Comparator<HabitEvent>() {
                     @Override
                     public int compare(HabitEvent event, HabitEvent t1) {
-                        return event.getDate().compareTo(t1.getDate());     // TODO: test correctness
+                        return -1 * event.getDate().compareTo(t1.getDate());
                     }
                 });
 
