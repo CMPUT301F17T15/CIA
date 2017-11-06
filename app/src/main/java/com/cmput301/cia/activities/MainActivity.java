@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userName = (EditText) findViewById(R.id.loginNameEdit);
+        SerializableUtilities.initializeFilesDir(getFilesDir().getPath());
     }
 
     @Override

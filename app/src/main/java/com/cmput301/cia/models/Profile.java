@@ -5,6 +5,8 @@
 package com.cmput301.cia.models;
 
 import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +14,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Version 2
@@ -284,9 +288,11 @@ public class Profile extends ElasticSearchable {
      * Save this profile to the database
      */
     public void save(){
-        // TODO
-
-        // TODO: save pending events to getOfflineEventsFile()
+        ElasticSearchUtilities.save(this);
+        for (Habit habit : habits){
+            ElasticSearchUtilities.save(habit);
+        }
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
     }
 
     /**
@@ -294,9 +300,18 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public void load() {
-        // TODO
+        Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
+        if (found != null){
+            Map<String, String> params = new HashMap<>();
+            params.put("creator", getId());
+            List<Habit> foundHabits = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, params);
 
-        // TODO: load pending events from getOfflineEventsFile()
+            // TODO: copy from vars into this
+        }
+
+        List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
+        if (loaded != null)
+            pendingEvents = loaded;
     }
 
     /**
@@ -304,7 +319,9 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public void delete() {
-        // TODO
+        for (Habit habit : habits)
+            ElasticSearchUtilities.delete(habit);
+        ElasticSearchUtilities.delete(this);
     }
 
     /**

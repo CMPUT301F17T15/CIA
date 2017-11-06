@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Version 1
@@ -23,25 +24,35 @@ import java.io.Serializable;
 
 public class SerializableUtilities {
 
+    private static String DIR;
+
+    /**
+     * Initialize the directory files are stored in
+     * Call this once when the program starts
+     * @param dir the directory where files will be stored
+     */
+    public static void initializeFilesDir(String dir){
+        if (DIR == null)
+            DIR = dir;
+    }
+
     /**
      * Save a serializable object
      * @param fileName the name of the file containing the object
-     * @param filesDir the directory of the file (use this.getFilesDir() when calling from an Activity class)
      * @param s the object to save
      * @return whether the object was successfully saved or not
      */
-    public static boolean save(String fileName, String filesDir, Serializable s){
-        return save(new File(filesDir, fileName), s);
+    public static <T extends Serializable> boolean save(String fileName, List<T> s){
+        return save(new File(DIR, fileName), s);
     }
 
     /**
      * Load a serializable object
      * @param fileName the name of the file containing the object
-     * @param filesDir the directory of the file (use this.getFilesDir() when calling from an Activity class)
      * @return the object if successful, or null otherwise
      */
-    public static <T extends Serializable> T load(String fileName, String filesDir){
-        Serializable value = load(new File(filesDir, fileName));
+    public static <T extends Serializable> T load(String fileName){
+        Serializable value = load(new File(DIR, fileName));
         if (value != null)
             return (T)value;
         return null;
@@ -53,7 +64,7 @@ public class SerializableUtilities {
      * @param s the object to save
      * @return whether the object was saved successfully
      */
-    private static boolean save(File file, Serializable s){
+    private static <T extends Serializable> boolean save(File file, List<T> s){
         boolean success = false;
         try {
             FileOutputStream os = new FileOutputStream(file);

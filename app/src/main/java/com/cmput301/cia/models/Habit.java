@@ -5,10 +5,13 @@
 package com.cmput301.cia.models;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Version 2
@@ -196,8 +199,15 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void save() {
+        // TODO: for saving, maybe do it in Profile and then loop through each Habit stored in
+        // the database and assign it's 'creator' parameter to the profile's getId() result
+
+        // TODO: save the user who created it's ID as 'creator'
         ElasticSearchUtilities.save(this);
-        // TODO
+
+        // TODO: save the event's 'base' parameter as getId()
+        for (HabitEvent event : events)
+            ElasticSearchUtilities.save(event);
     }
 
     /**
@@ -205,7 +215,14 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void load() {
-        // TODO
+
+        Habit found = ElasticSearchUtilities.getObject(getTypeId(), Habit.class, getId());
+        if (found != null){
+            Map<String, String> params = new HashMap<>();
+            params.put("base", getId());
+            List<HabitEvent> foundEvents = ElasticSearchUtilities.getListOf(HabitEvent.TYPE_ID, HabitEvent.class, params);
+            // TODO: copy from vars into this
+        }
     }
 
     /**
@@ -213,6 +230,8 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void delete() {
-        // TODO
+        for (HabitEvent event : events)
+            ElasticSearchUtilities.delete(event);
+        ElasticSearchUtilities.delete(this);
     }
 }
