@@ -17,13 +17,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
         <activity android:name=".activities.HistoryActivity" />
+
         <activity
             android:name=".activities.FilterEventsActivity"
             android:label="@string/title_activity_filter_events"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.HomePageActivity" />
+
+        <activity
+            android:name=".activities.HomePageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".activities.CreateHabitActivity">
         </activity>
     </application>
