@@ -301,6 +301,12 @@ public class ElasticSearchUtilities {
          * habitevent: HabitID (base), HabitEventID
          * profile: ProfileID
          */
+
+        // TODO: check if other properties need to be created in the templates as well
+        // ex:
+        /**
+         * profile: following (list of profile id's), follow requests from (list of profile id's)
+         */
     }
 
     /**
