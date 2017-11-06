@@ -8,12 +8,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorFilter;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.HabitEvent;
@@ -68,8 +70,7 @@ public class CreateHabitEventActivity extends AppCompatActivity {
         String habitName = intent.getStringExtra(ID_HABIT);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
         imageView = (ImageView)findViewById(R.id.cheImageView);
-        //habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, habitId);
-
+        Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -145,10 +146,11 @@ public class CreateHabitEventActivity extends AppCompatActivity {
      * Update the image view
      */
     private void updateImage(){
+        // TODO: try setImageBitmap(null)
         if (image != null)
             imageView.setImageBitmap(image);
         else
-            imageView.setImageAlpha(255);
+            imageView.setImageAlpha(0);
     }
 
 }

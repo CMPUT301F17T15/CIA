@@ -20,6 +20,7 @@ import java.util.List;
  */
 
 public class ProfileTests extends ActivityInstrumentationTestCase2 {
+    
     public ProfileTests() {super(MainActivity.class); }
 
     /**
@@ -28,7 +29,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
     public void testAddRequest(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
-        profile.addFollowRequest(profile);
+        profile.addFollowRequest(request);
         assertTrue(profile.hasFollowRequest(request));
         assertFalse(request.hasFollowRequest(profile));
     }
@@ -45,7 +46,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
         profile.addFollowRequest(request);
-        request.follow(profile);
+        profile.acceptFollowRequest(request);
         assertFalse(profile.hasFollowRequest(request));
         assertTrue(request.isFollowing(profile));
         assertFalse(request.hasFollowRequest(profile));
@@ -55,11 +56,12 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
         profile.addFollowRequest(request);
-        request.follow(profile);
+        profile.acceptFollowRequest(request);
         List<HabitEvent> eventList = request.getFollowedHabitHistory();
         assertTrue(eventList.size() == 0);
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
         profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>()));
+        assertTrue(request.getFollowedHabitHistory().size() == 1);
         profile.getHabits().get(0).addHabitEvent(new HabitEvent("XYZ"));
         eventList = request.getFollowedHabitHistory();
         assertTrue(eventList.size() == 1);

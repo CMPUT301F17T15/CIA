@@ -66,4 +66,12 @@ public abstract class ElasticSearchable {
      */
     public abstract void delete();
 
+    @Override
+    public boolean equals(Object other){
+        if (other instanceof ElasticSearchable){
+            return getId() == ((ElasticSearchable) other).getId() && hasValidId() && ((ElasticSearchable) other).hasValidId();
+        }
+        return false;
+    }
+
 }
