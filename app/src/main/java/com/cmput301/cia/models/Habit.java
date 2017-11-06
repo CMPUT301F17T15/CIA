@@ -85,38 +85,70 @@ public class Habit extends ElasticSearchable {
         this.daysOfWeek = daysOfWeek;
     }
 
+    /**
+     * Add a new habit event to the list of successfully completed ones for this habit
+     * @param event the event to add
+     */
     public void addHabitEvent(HabitEvent event){
         events.add(event);
     }
 
+    /**
+     * Remove a successfully completed habit event
+     * @param event the event to remove
+     */
     public void removeHabitEvent(HabitEvent event){
         events.remove(event);
     }
 
+    /**
+     * @return the habit's name
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Set the habit's name
+     * @param title the new name for the habit
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * @return the reason for creating this habit
+     */
     public String getReason() {
         return reason;
     }
 
+    /**
+     * Set the reason for creating this habit
+     * @param reason reason for creating this habit
+     */
     public void setReason(String reason) {
         this.reason = reason;
     }
 
+    /**
+     * @return the date at which this habit should be started
+     */
     public Date getStartDate() {
         return startDate;
     }
 
+    /**
+     * Set the date at which this habit should be started
+     * @param startDate the new start date
+     */
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
+    /**
+     * @return all successfully completed events falling under this habit
+     */
     public List<HabitEvent> getEvents() {
         return events;
     }
@@ -180,10 +212,18 @@ public class Habit extends ElasticSearchable {
         return events.get(events.size() - 1).getDate();
     }
 
+    // TODO: create a HabitType object instead (unless this is scrapped)
+    /**
+     * Set the habit's type category
+     * @param typeStr the category
+     */
     public void setType(String typeStr){ //edit by guanfang
         this.type = typeStr;
     }
 
+    /**
+     * @return the habit's type category
+     */
     public String getType(){return this.type;}//edit by guanfang
 
     /**
