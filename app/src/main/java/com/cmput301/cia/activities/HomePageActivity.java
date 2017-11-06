@@ -63,7 +63,7 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
         values.clear();
-        values.put("user", user.getId());
+        values.put("creator", user.getId());
         List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
         // TODO: initialize ...
 
