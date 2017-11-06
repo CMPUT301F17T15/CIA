@@ -6,11 +6,4 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.HomePageActivity">
 
-    <include
-        layout="@layout/app_toolbar"
-        android:id="@+id/app_toolbar">
-    </include>
-
-
-
 </android.support.constraint.ConstraintLayout>

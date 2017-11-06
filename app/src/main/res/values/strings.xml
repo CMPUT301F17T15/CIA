@@ -2,13 +2,4 @@
     <string name="app_name">CIA</string>
     <string name="title_activity_filter_events">FilterEventsActivity</string>
     <string name="habitType">Habit Type</string>
-    <string name="menu_Menu">Menu</string>
-    <string name="menu_MyProfile">My Profile</string>
-    <string name="menu_AddNewHabit">Add a New Habit</string>
-    <string name="menu_Statistic">Statistic</string>
-    <string name="menu_HabitHistory">Habit History</string>
-    <string name="menu_Notification">Notification</string>
-    <string name="menu_WOW">WOW!</string>
-    <string name="menu_MyFollowing">My Following</string>
-
 </resources>
