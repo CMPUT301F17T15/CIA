@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 public class ProfileTests extends ActivityInstrumentationTestCase2 {
-    
+
     public ProfileTests() {super(MainActivity.class); }
 
     /**
@@ -61,7 +61,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertTrue(eventList.size() == 0);
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
         profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>()));
-        assertTrue(request.getFollowedHabitHistory().size() == 1);
+        assertTrue(request.getFollowedHabitHistory().size() == 0);
         profile.getHabits().get(0).addHabitEvent(new HabitEvent("XYZ"));
         eventList = request.getFollowedHabitHistory();
         assertTrue(eventList.size() == 1);
