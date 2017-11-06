@@ -25,9 +25,12 @@ public class AddHabitEvent extends OfflineEvent {
 
     /**
      * What this event does when it is synchronized with the server
+     * @return whether the event was handled successfully or not
      */
     @Override
-    public void handle() {
+    public boolean handle() {
         // TODO: get profile from name, then add this event to the habit with matching name
+
+        return true;
     }
 }

@@ -18,7 +18,8 @@ public abstract class OfflineEvent implements Serializable {
 
     /**
      * What this event does when it is synchronized with the server
+     * @return whether the event was handled successfully or not
      */
-    public abstract void handle();
+    public abstract boolean handle();
 
 }

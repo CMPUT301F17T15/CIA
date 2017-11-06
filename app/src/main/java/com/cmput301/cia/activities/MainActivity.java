@@ -10,10 +10,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SerializableUtilities;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Version 2
@@ -28,19 +33,12 @@ public class MainActivity extends AppCompatActivity {
     // The text displaying the total number of counters
     private EditText userName;
 
-    // The error message for when the user tries to create a new profile with a name that already exists
-    private TextView duplicateNameText;
-
-    // The error message for when the user tries to login with an invalid profile name
-    private TextView invalidNameText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userName = (EditText) findViewById(R.id.loginNameEdit);
-        duplicateNameText = (TextView)findViewById(R.id.loginErrorDuplicate);
-        invalidNameText = (TextView)findViewById(R.id.loginErrorInvalid);
+        SerializableUtilities.initializeFilesDir(getFilesDir().getPath());
     }
 
     @Override
@@ -58,19 +56,18 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void onLoginButtonClicked(View view){
-        duplicateNameText.setVisibility(View.INVISIBLE);
 
         String name = userName.getText().toString();
-        Profile dummy = new Profile("dummy");
 
-        // TODO: query using name
-        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        Map<String, String> searchTerms = new HashMap<String, String>();
+        searchTerms.put("name", name);
+        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
         if (profile != null){
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
             startActivity(intent);
         } else {
-            invalidNameText.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "There exists no user with that name", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -80,20 +77,22 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void onCreateProfileButtonClicked(View view){
-        invalidNameText.setVisibility(View.INVISIBLE);
 
         String name = userName.getText().toString();
-        Profile dummy = new Profile("dummy");
+        if (name.length() == 0){
+            Toast.makeText(this, "This name is invalid", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // TODO: query using name
-        Profile profile = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, "");
+        Map<String, String> searchTerms = new HashMap<String, String>();
+        searchTerms.put("name", name);
+        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
         if (profile != null){
-            duplicateNameText.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(this, HomePageActivity.class);
+            Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
             startActivity(intent);
-            duplicateNameText.setVisibility(View.INVISIBLE);
         }
 
     }

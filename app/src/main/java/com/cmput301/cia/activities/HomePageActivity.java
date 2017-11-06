@@ -11,12 +11,17 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Version 2
@@ -37,34 +42,33 @@ public class HomePageActivity extends AppCompatActivity {
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
 
-    // A list of all counter objects used for serialization
-    private ListView countersList;
-    // Adapter used to update countersList
-    private ArrayAdapter<Habit> counterArrayAdapter;
-
-    // The text displaying the total number of counters
-    private TextView countersAmountText;
-
     // Profile of the signed in user
     private Profile user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home_page);
 
-        String name = getIntent().getStringExtra(ID_USERNAME);
-        // TODO: if could not find a profile for the specified name
-        if (true){
-            user = new Profile(name);
+        Intent intent = getIntent();
+        String name = intent.getStringExtra(ID_USERNAME);
+
+        Profile dummy = new Profile(name);
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
+        if (user == null){
+            user = dummy;
             user.save();
-        } else {
-
         }
 
-        loadCounters();
-        countersList = (ListView)findViewById(R.id.mainHabitsList);
-        /*countersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        values.clear();
+        values.put("user", user.getId());
+        List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
+        // TODO: initialize ...
+
+        /*countersList = (ListView)findViewById(R.id.mainHabitsList);
+        countersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, CounterDetailsActivity.class);
@@ -72,18 +76,18 @@ public class HomePageActivity extends AppCompatActivity {
                 intent.putExtra(CounterDetailsActivity.ID_INDEX, position);
                 startActivityForResult(intent, DETAILS_CODE);
             }
-        });*/
+        });
 
         countersAmountText = (TextView)findViewById(R.id.amountDynamicText);
-        countersAmountText.setText(String.valueOf(user.getHabitsCount()));
+        countersAmountText.setText(String.valueOf(user.getHabitsCount()));*/
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        counterArrayAdapter = new ArrayAdapter<Habit>(this,
+        /*counterArrayAdapter = new ArrayAdapter<>(this,
                 R.layout.list_item, new ArrayList<Habit>());//counters);
-        countersList.setAdapter(counterArrayAdapter);
+        countersList.setAdapter(counterArrayAdapter);*/
     }
 
     @Override
@@ -99,44 +103,6 @@ public class HomePageActivity extends AppCompatActivity {
     public void addCounterClicked(View view){
         //Intent intent = new Intent(this, NewCounterActivity.class);
         //startActivityForResult(intent, NEW_REQUEST_CODE);
-    }
-
-    /**
-     * Load all counters from the file containing them
-     */
-    private void loadCounters(){
-        /*try {
-            FileInputStream is = new FileInputStream(new File(this.getFilesDir(), COUNTERS_FILE));
-            ObjectInputStream objectInputStream = new ObjectInputStream(is);
-            counters = (ArrayList<Counter>)objectInputStream.readObject();
-            objectInputStream.close();
-            is.close();
-        } catch (FileNotFoundException e) {
-            counters = new ArrayList<Habit>();
-        } catch (ClassNotFoundException e) {
-            counters = new ArrayList<Habit>();
-        } catch (IOException e) {
-            counters = new ArrayList<Habit>();
-        }*/
-
-    }
-
-    /**
-     * Save all counters to a file containing them
-     */
-    private void saveCounters(){
-        /*try {
-            FileOutputStream os = new FileOutputStream(new File(this.getFilesDir(), COUNTERS_FILE));
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(os);
-            objectOutputStream.writeObject(counters);
-            objectOutputStream.close();
-            os.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
     }
 
     @Override
@@ -194,8 +160,8 @@ public class HomePageActivity extends AppCompatActivity {
                 counter.setCurrentValue(currentValue);
             counter.setName(name);
             counter.setComment(desc);
-        }*/
+        }
         counterArrayAdapter.notifyDataSetChanged();
-        saveCounters();
+        saveCounters();*/
     }
 }

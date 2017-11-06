@@ -36,6 +36,7 @@
         android:layout_height="49dp"
         android:layout_marginLeft="60dp"
         android:layout_marginTop="117dp"
+        android:onClick="onLoginButtonClicked"
         android:text="Login"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,41 +47,9 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="64dp"
         android:layout_marginTop="117dp"
+        android:onClick="onCreateProfileButtonClicked"
         android:text="Create Profile"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/loginErrorDuplicate"
-        android:layout_width="279dp"
-        android:layout_height="46dp"
-        android:layout_marginBottom="191dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="8dp"
-        android:text="This name is already being used"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/loginErrorInvalid"
-        android:layout_width="240dp"
-        android:layout_height="31dp"
-        android:layout_marginBottom="252dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="8dp"
-        android:text="Invalid name selected"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

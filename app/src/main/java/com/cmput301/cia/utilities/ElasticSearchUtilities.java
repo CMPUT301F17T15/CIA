@@ -11,6 +11,7 @@ import com.searchly.jestdroid.JestClientFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import io.searchbox.core.Delete;
@@ -34,9 +35,6 @@ public class ElasticSearchUtilities {
     private static final String INDEX = "cmput301f17t15";
     // Maximum number of search results per query
     private static final int MAX_RESULTS = 1000;
-    // The default ElasticSearch object ID
-    private static final String DEFAULT_ID = "";
-
     private static JestDroidClient client;
 
     private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Void> {
@@ -49,7 +47,7 @@ public class ElasticSearchUtilities {
                 Index.Builder builder = new Index.Builder(obj).index(INDEX).type(obj.getTypeId());
 
                 // update instead of this object is already in the database
-                if (obj.getId() != DEFAULT_ID){  // TODO: != null instead?
+                if (obj.hasValidId()){
                     builder.id(obj.getId());
                 }
 
@@ -183,7 +181,6 @@ public class ElasticSearchUtilities {
      * @param id the id of the object to search for
      * @return the search result from the query if it was found, or null otherwise
      */
-    // TODO: generate a query using a Map<String, String> where key=parameter and value=required record value for that parameter
     public static SearchResult search(String typeId, String query, String id){
         try {
             return new IDSearchTask().execute(typeId, id, query).get();
@@ -196,14 +193,26 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Execute a search for a specific object with ElasticSearch
+     * @param typeId the type template id all results must match
+     * @param values map where key=parameter and value=required record value for that parameter
+     * @param id the id of the object to search for
+     * @return the search result from the query if it was found, or null otherwise
+     */
+    public static SearchResult search(String typeId, Map<String, String> values, String id){
+        return search(typeId, getQueryFromMap(values), id);
+    }
+
+    /**
      * Search for all records with the specified type ID
      * @param typeId the type template id that all results must match
      * @param tempClass the java class of the generic type T
+     * @param values map where key=parameter and value=required record value for that parameter
      * @param <T> generic representing the java type corresponding to that type ID
      * @return the list of all records matching that type ID
      */
-    public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass){
-        SearchResult result = search(typeId, "");   // TODO: query
+    public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, Map<String, String> values){
+        SearchResult result = search(typeId, getQueryFromMap(values));
         if (result != null && result.isSucceeded()) {
             // TODO: try get hits?
             return result.getSourceAsObjectList(tempClass);
@@ -215,11 +224,28 @@ public class ElasticSearchUtilities {
      * Search for the record with the specified ID
      * @param typeId the type template id of the result
      * @param tempClass the java class of the generic type T
+     * @param id the id an object must have to be considered a match
      * @param <T> generic representing the java type corresponding to that type ID
      * @return the record if found, or null otherwise
      */
     public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, String id){
-        SearchResult result = search(typeId, "", id);   // TODO: query
+        SearchResult result = search(typeId, "", id);
+        if (result != null && result.isSucceeded()) {
+            return result.getSourceAsObject(tempClass);
+        }
+        return null;
+    }
+
+    /**
+     * Search for the record with the specified ID
+     * @param typeId the type template id of the result
+     * @param tempClass the java class of the generic type T
+     * @param values map where key=parameter and value=required record value for that parameter
+     * @param <T> generic representing the java type corresponding to that type ID
+     * @return the record if found, or null otherwise
+     */
+    public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, Map<String, String> values){
+        SearchResult result = search(typeId, getQueryFromMap(values));
         if (result != null && result.isSucceeded()) {
             return result.getSourceAsObject(tempClass);
         }
@@ -275,6 +301,19 @@ public class ElasticSearchUtilities {
          * habitevent: HabitID (base), HabitEventID
          * profile: ProfileID
          */
+    }
+
+    /**
+     * Convert a map of parameters to a query
+     * @param values map where key=parameter and value=required record value for that parameter
+     * @return the map as a string representing a query
+     */
+    private static String getQueryFromMap(Map<String, String> values){
+        StringBuilder query = new StringBuilder();
+        for (String key : values.keySet()){
+            query.append(key + ":" + values.get(key) + "\n");
+        }
+        return query.toString();
     }
 
 }

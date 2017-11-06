@@ -5,6 +5,8 @@
 package com.cmput301.cia.models;
 
 import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +14,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Version 2
@@ -21,6 +25,8 @@ import java.util.List;
  */
 
 public class Profile extends ElasticSearchable {
+
+    public static final String TYPE_ID = "profile";
 
     private String name;
     private List<Habit> habits;
@@ -240,20 +246,24 @@ public class Profile extends ElasticSearchable {
      */
     public void synchronize(){
         if (DeviceUtilities.isOnline()){
+            List<OfflineEvent> unsuccessful = new ArrayList<>();
             for (OfflineEvent event : pendingEvents){
-                event.handle();
+                if (!event.handle()){
+                    unsuccessful.add(event);
+                }
             }
-            pendingEvents.clear();
+            pendingEvents = unsuccessful;
         }
     }
 
     /**
-     * Edit/delete an existing habit event, or add a new one
+     * Attempt to edit/delete an existing habit event, or add a new one
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        if (DeviceUtilities.isOnline())
-            event.handle();
+        if (DeviceUtilities.isOnline() && event.handle()){
+            // do nothing
+        }
         else
             pendingEvents.add(event);
     }
@@ -271,16 +281,18 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public String getTypeId() {
-        return "profile";
+        return TYPE_ID;
     }
 
     /**
      * Save this profile to the database
      */
     public void save(){
-        // TODO
-
-        // TODO: save pending events to getOfflineEventsFile()
+        ElasticSearchUtilities.save(this);
+        for (Habit habit : habits){
+            ElasticSearchUtilities.save(habit);
+        }
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
     }
 
     /**
@@ -288,9 +300,18 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public void load() {
-        // TODO
+        Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
+        if (found != null){
+            Map<String, String> params = new HashMap<>();
+            params.put("creator", getId());
+            List<Habit> foundHabits = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, params);
 
-        // TODO: load pending events from getOfflineEventsFile()
+            // TODO: copy from vars into this
+        }
+
+        List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
+        if (loaded != null)
+            pendingEvents = loaded;
     }
 
     /**
@@ -298,7 +319,9 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public void delete() {
-        // TODO
+        for (Habit habit : habits)
+            ElasticSearchUtilities.delete(habit);
+        ElasticSearchUtilities.delete(this);
     }
 
     /**
