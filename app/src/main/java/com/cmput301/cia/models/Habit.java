@@ -5,7 +5,6 @@
 package com.cmput301.cia.models;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
-import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.ArrayList;
 import java.util.Date;
