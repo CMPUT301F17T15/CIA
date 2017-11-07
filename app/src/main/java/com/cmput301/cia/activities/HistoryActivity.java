@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
- */
+ * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license. */
 
 package com.cmput301.cia.activities;
 
@@ -10,8 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.EditText;import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
@@ -19,22 +17,21 @@ import com.cmput301.cia.models.HabitEvent;
 
 import org.w3c.dom.ls.LSException;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.ArrayList;import java.util.Date;
 import java.util.List;
-/**
- * Version 2
- * Author: Guanfang Dong
+    /** * Version 2 * Author: Guanfang Dong
  * Date: Nov 5 2017
  *
  * This is history activity.
- *  User allows to view their history habits and filter by date and comment.
+
+*  User allows to view their history habits and filter by date and comment.
  */
 public class HistoryActivity extends AppCompatActivity {
     // global variables
     private ArrayList<HabitEvent> habitList;
     private ArrayList<HabitEvent> habitsShowOnScreen;
     private ArrayAdapter<HabitEvent> habitsShowOnScreen_adapter;
+
     private ArrayList<HabitEvent> filterByTime;
     private ArrayList<HabitEvent> filterByTypeList;
     private ArrayList<HabitEvent> filterByCommentList;
@@ -45,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity {
 //    private Button historyEventFilterButton;
 //    private Button historyReturnButton;
 
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +59,19 @@ public class HistoryActivity extends AppCompatActivity {
         Button filterByType = (Button) findViewById(R.id.filterByType);
         Button filterByComment = (Button) findViewById(R.id.filterByComment);
 
-
+/*
+Added date list descending order, not sure if correct 
+Dinesh
+ */
+        ArrayList<HabitEvent> datedList = new ArrayList<HabitEvent>();
+        Collections.sort(datedList, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent o1, HabitEvent o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+        habitsShowOnScreen = datedList;
+        habitsShowOnScreen_adapter.notifyDataSetChanged();    
 
         filterByType.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
