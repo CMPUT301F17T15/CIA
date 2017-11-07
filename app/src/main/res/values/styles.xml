@@ -2,10 +2,16 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        </style>
+    <!-- Customize your theme here. -->
+    <style name="CustomToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/colorToolBarBackground</item>
+    </style>
+        <!-- Customize popup style. -->
+    <style name="PopupToolBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@color/colorToolBarButton</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownHorizontalOffset">-4dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
