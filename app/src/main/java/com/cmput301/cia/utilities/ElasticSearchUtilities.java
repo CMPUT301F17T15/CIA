@@ -76,21 +76,7 @@ public class ElasticSearchUtilities {
             verifySettings();
 
             String typeId = search_parameters[0];
-
-            StringBuilder builder = new StringBuilder();
-            builder.append("{\n\"query\": {\"term\":{");
-            String query = search_parameters[1];
-            builder.append(query);
-            builder.append("}}\n}");
-
-            String finalQuery = builder.toString();
-
-            // Build the query
-            // TODO
-            //
-
-
-            //"{ \"size\" : " + MAX_RESULTS +" } "
+            String finalQuery = getCompleteQuery(search_parameters[1]);
 
             Search search = new Search.Builder(finalQuery).addIndex(INDEX).addType(typeId).build();
 
@@ -117,13 +103,12 @@ public class ElasticSearchUtilities {
 
             String typeId = search_parameters[0];
             String objectId = search_parameters[1];
-            String query = search_parameters[2];
+            String query = search_parameters[2];        // TODO: is this parameter even necessary?
 
             // Build the query
-            // TODO
+            // TODO: do this
             //String query = "{\n" +
             //        "    \"query\": {\"term\": {\"message\":\"" + search_parameters[0] + "\"}}\n" + "}";
-
 
             Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
 
@@ -204,11 +189,10 @@ public class ElasticSearchUtilities {
      * Execute a search for a specific object with ElasticSearch
      * @param typeId the type template id all results must match
      * @param values map where key=parameter and value=required record value for that parameter
-     * @param id the id of the object to search for
      * @return the search result from the query if it was found, or null otherwise
      */
-    public static SearchResult search(String typeId, Map<String, String> values, String id){
-        return search(typeId, getQueryFromMap(values), id);
+    public static SearchResult search(String typeId, Map<String, String> values){
+        return search(typeId, getQueryFromMap(values));
     }
 
     /**
@@ -334,6 +318,22 @@ public class ElasticSearchUtilities {
                 query.append(",\n");
         }
         return query.toString();
+    }
+
+    /**
+     * Get a complete ElasticSearch query
+     * @param parameters the match parameters that results must have
+     * @return the completed query
+     */
+    private static String getCompleteQuery(String parameters){
+        StringBuilder builder = new StringBuilder();
+        builder.append("{\n\"query\": {\"term\":{");
+        builder.append(parameters);
+        builder.append("}}\n}");
+
+        // TODO: any number of results (unless this isn't necessary?)
+        //"{ \"size\" : " + MAX_RESULTS +" } "
+        return builder.toString();
     }
 
 }
