@@ -17,7 +17,10 @@ import com.cmput301.cia.models.HabitEvent;
 
 import org.w3c.dom.ls.LSException;
 
-import java.util.ArrayList;import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
     /** * Version 2 * Author: Guanfang Dong
  * Date: Nov 5 2017

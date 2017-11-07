@@ -10,4 +10,5 @@
     <string name="menu_Notification">Notification</string>
     <string name="menu_WOW">WOW!</string>
     <string name="menu_MyFollowing">My Following</string>
+    <string name="TodayTask">Today\'s Task</string>
 </resources>

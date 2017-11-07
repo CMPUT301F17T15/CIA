@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,13 +50,21 @@ public class HomePageActivity extends AppCompatActivity {
     // Profile of the signed in user
     private Profile user;
 
+    //ExpandableListView for displaying habit types as parent and habits as childs
+    ExpandableListView expandableListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
+        //linking expandableListView
+        expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
+        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
+        expandableListView.setAdapter(adapter);
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
