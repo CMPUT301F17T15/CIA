@@ -19,26 +19,41 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Oct 14 2017
+ * Date: Nov 07 2017
  */
 
 public class Profile extends ElasticSearchable {
 
     public static final String TYPE_ID = "profile";
 
+    // The absolute maximum value for any user's powerPoints attribute
+    private static final int MAX_PP = 1000;
+
+    // The user's unique name
     private String name;
+
+    // The user's list of created habits
     private List<Habit> habits;
 
-    // list of users this user is following (unique)
+    // List of users this user is following (all elements are unique)
     private List<Profile> following;
 
-    // users that have requested to follow this user (unique)
+    // Users that have requested to follow this user (all elements are unique)
     private List<Profile> followRequests;
 
     // Events that will be synchronized when the user signs in on a valid connection
     private List<OfflineEvent> pendingEvents;
+
+    // The habit categories that the user has created
+    private List<String> habitCategories;
+
+    // Points received for consecutively completing all habits in a week
+    private int powerPoints;
+
+    // Points received for completing a habit
+    private int habitPoints;
 
     /**
      * Construct a new user profile object
@@ -50,6 +65,9 @@ public class Profile extends ElasticSearchable {
         following = new ArrayList<>();
         followRequests = new ArrayList<>();
         pendingEvents = new ArrayList<>();
+        habitCategories = new ArrayList<>();
+        powerPoints = 0;
+        habitPoints = 0;
     }
 
     /**
@@ -156,7 +174,7 @@ public class Profile extends ElasticSearchable {
         int today = calendar.get(Calendar.DAY_OF_WEEK);
 
         for (Habit habit : habits){
-            if (habit.occursOn(today))
+            if (habit.occursOn(today) && !date.before(habit.getStartDate()))
                 list.add(habit);
         }
 
@@ -233,23 +251,37 @@ public class Profile extends ElasticSearchable {
      */
     public List<HabitEvent> getFollowedHabitHistory(){
         List<HabitEvent> list = new ArrayList<>();
+        // map (event -> [user name of creator, habit title])
+        final Map<HabitEvent, String[]> eventDetailsMap = new HashMap<>();
 
         for (Profile followee : following) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
-                if (event != null)
+                if (event != null) {
                     list.add(event);
-            }
-
-            // TODO: an efficient algorithm that works
-            // maybe use List<Tuple<String, String, HabitEvent>> and then extract the HabitEvent
-            Collections.sort(list, new Comparator<HabitEvent>() {
-                @Override
-                public int compare(HabitEvent event, HabitEvent t1) {
-                    return event.getDate().compareTo(t1.getDate());
+                    eventDetailsMap.put(event, new String[]{followee.getName(), habit.getTitle()});
                 }
-            });
+            }
         }
+
+        // TODO: test
+        Collections.sort(list, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent eventOne, HabitEvent eventTwo) {
+
+                String[] oneKeys = eventDetailsMap.get(eventOne);
+                String[] twoKeys = eventDetailsMap.get(eventTwo);
+
+                // Attempt to compare based on username
+                int nameComp = oneKeys[0].compareTo(twoKeys[0]);
+                if (nameComp != 0){
+                    return nameComp;
+                }
+
+                // Compare based on habit title
+                return oneKeys[1].compareTo(twoKeys[1]);
+            }
+        });
         return list;
     }
 
@@ -264,10 +296,33 @@ public class Profile extends ElasticSearchable {
      * After a day is finished, update the status of all uncompleted habits
      * @param endingDay is the day that ended
      */
+    // TODO: test
     public void onDayEnd(Date endingDay){
-        // TODO
-        // look through all uncompleted habits on endingDay (use getTodaysHabits(endingDay))
-        // make sure to account for start daet later than current date
+        List<Habit> toComplete = getTodaysHabits(endingDay);
+
+        // whether a habit was missed this week
+        boolean missedEvent = false;
+        // how many events were completed successfully this week
+        int completedEvents = 0;
+
+        for (Habit habit : toComplete){
+            Date date = habit.getLastCompletionDate();
+            if (date == null || date.before(endingDay)){
+                habit.miss(endingDay);
+                powerPoints = 0;
+                missedEvent = true;
+            } else {
+                ++completedEvents;
+            }
+        }
+
+        if (!missedEvent){
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(endingDay);
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (day == Calendar.SUNDAY)
+                setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
+        }
     }
 
     /**
@@ -278,7 +333,7 @@ public class Profile extends ElasticSearchable {
         if (DeviceUtilities.isOnline()){
             List<OfflineEvent> unsuccessful = new ArrayList<>();
             for (OfflineEvent event : pendingEvents){
-                if (!event.handle()){
+                if (!event.handle(this)){
                     unsuccessful.add(event);
                 }
             }
@@ -291,7 +346,7 @@ public class Profile extends ElasticSearchable {
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        if (DeviceUtilities.isOnline() && event.handle()){
+        if (DeviceUtilities.isOnline() && event.handle(this)){
             // do nothing
         }
         else
@@ -360,4 +415,66 @@ public class Profile extends ElasticSearchable {
     private String getOfflineEventsFile(){
         return name + "events.sav";
     }
+
+    /**
+     * Add a new habit type to the user's list of habit categories
+     * @param category the type to add
+     */
+    // TODO: potentially make unit tests for these two below functions (is there really a point though?)
+    public void addHabitCategory(String category){
+        habitCategories.add(category);
+    }
+
+    /**
+     * @return the list of habit categories the user has created
+     */
+    public List<String> getHabitCategories(){
+        return habitCategories;
+    }
+
+    /**
+     * Get a habit by it's unique ID
+     * @param habitId the id of the habit
+     * @return the habit if found, or null otherwise
+     */
+    public Habit getHabitById(String habitId){
+        for (Habit habit : habits){
+            if (habit.getId().equals(habitId))
+                return habit;
+        }
+        return null;
+    }
+
+    /**
+     * @return the points representing the user's power ranking score
+     */
+    public int getPowerPoints() {
+        return powerPoints;
+    }
+
+    /**
+     * Set the user's power ranking score
+     * @param powerPoints the new score
+     */
+    public void setPowerPoints(int powerPoints) {
+        if (powerPoints > MAX_PP)
+            powerPoints = MAX_PP;
+        this.powerPoints = powerPoints;
+    }
+
+    /**
+     * @return the points representing how many habit events the user has completed
+     */
+    public int getHabitPoints() {
+        return habitPoints;
+    }
+
+    /**
+     * Set the user's habit points
+     * @param habitPoints the new habit points
+     */
+    public void setHabitPoints(int habitPoints) {
+        this.habitPoints = habitPoints;
+    }
+
 }

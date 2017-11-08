@@ -19,12 +19,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +47,7 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    // NEW_REQUEST_CODE = NewCounterActivity, DETAILS_CODE = CounterDetailsActivity
-    private static final int NEW_REQUEST_CODE = 1, DETAILS_CODE = 2;
+    private static final int NEW_EVENT = 1;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -64,6 +67,25 @@ public class HomePageActivity extends AppCompatActivity {
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra(ID_USERNAME);
+        Profile dummy = new Profile(name);
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
+        if (user == null){
+            user = dummy;
+            user.save();
+        }
+
+        values.clear();
+        values.put("creator", user.getId());
+        List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
+        /*habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>()));
+        habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
+        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>()));*/
+        // TODO: initialize ...
 
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
@@ -91,49 +113,29 @@ public class HomePageActivity extends AppCompatActivity {
         String[] items = {"10km Running", "100 push-up", "100 sit-up", "100 squats"};
         ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        ArrayAdapter<String> lvc_adapter = new ArrayAdapter<String>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
+        ArrayAdapter<String> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
         checkable.setAdapter(lvc_adapter);
 
         //Onclick display toast, show congratulation on complete.
+
+        // TODO: prevent the box from being unchecked, and make it automatically checked if
+        // getLastCompletionDate() is today's date
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String checkedItems = ((TextView)view).getText().toString();
-                Toast.makeText(HomePageActivity.this, "Congratulation! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
+                // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
+                //user.getHabitIdByTitle(checkedItems)
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                startActivityForResult(intent, NEW_EVENT);
+
             }
         });
 
-
-        Intent intent = getIntent();
-        String name = intent.getStringExtra(ID_USERNAME);
-
-        Profile dummy = new Profile(name);
-        Map<String, String> values = new HashMap<>();
-        values.put("name", name);
-        user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
-        if (user == null){
-            user = dummy;
-            user.save();
-        }
-
-        values.clear();
-        values.put("creator", user.getId());
-        List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
-        // TODO: initialize ...
-
-        /*countersList = (ListView)findViewById(R.id.mainHabitsList);
-        countersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, CounterDetailsActivity.class);
-                intent.putExtra(CounterDetailsActivity.ID_COUNTER, counters.get(position));
-                intent.putExtra(CounterDetailsActivity.ID_INDEX, position);
-                startActivityForResult(intent, DETAILS_CODE);
-            }
-        });
-
-        countersAmountText = (TextView)findViewById(R.id.amountDynamicText);
-        countersAmountText.setText(String.valueOf(user.getHabitsCount()));*/
     }
     //button on activity_home_page bridge to activity_create_habit
     public void newHabit(View view){
@@ -191,41 +193,26 @@ public class HomePageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /**
-     * Event called when the add new counter button is clicked
-     * Starts a new activity where the user will be able to create a new counter
-     * @param view
-     */
-    public void addCounterClicked(View view){
-        //Intent intent = new Intent(this, NewCounterActivity.class);
-        //startActivityForResult(intent, NEW_REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // When a new counter is created
-        if (requestCode == NEW_REQUEST_CODE) {
+        // When a new habit event is created
+        if (requestCode == NEW_EVENT) {
             if (resultCode == RESULT_OK) {
 
-                /*String counterName = data.getStringExtra(NewCounterActivity.ID_NAME);
-                long value = data.getLongExtra(NewCounterActivity.ID_VALUE, 0);
-                String description = data.getStringExtra(NewCounterActivity.ID_DESC);
-
-                Counter counter = new Counter(counterName, value, description);
-                counters.add(counter);
-                counterArrayAdapter.notifyDataSetChanged();
-                saveCounters();
-                countersAmountText.setText(String.valueOf(counters.size()));*/
-
+                HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
+                String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
+                OfflineEvent addEvent = new AddHabitEvent(habitId, event);
+                user.tryHabitEvent(addEvent);
+                user.save();
             }
 
             // When the details of an existing counter are being viewed
-        } else if (requestCode == DETAILS_CODE){
+        }/* else if (requestCode == DETAILS_CODE){
             if (resultCode == RESULT_OK){
                 returnFromDetails(data);
             }
-        }
+        }*/
     }
 
     /**

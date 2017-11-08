@@ -39,7 +39,6 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
         HabitEvent old = new HabitEvent("XYZ", new Date());
         HabitEvent newEvent = new HabitEvent("DBZ", new Date());
         OfflineEvent event = new EditHabitEvent(old, newEvent);
-
         profile.tryHabitEvent(event);
         assertFalse(old.getComment().equals(newEvent.getComment()));
         profile.synchronize();
@@ -49,9 +48,9 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
     public void testOfflineAddEvent(){
         Profile profile = new Profile("Name");
         HabitEvent old = new HabitEvent("XYZ", new Date());
-        OfflineEvent event = new AddHabitEvent("Name", "Habit", old);
-        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>()));
-
+        OfflineEvent event = new AddHabitEvent("Habit", old);
+        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
+        profile.getHabits().get(0).setId("Habit");
         profile.tryHabitEvent(event);
         assertFalse(profile.getHabits().get(0).getTimesCompleted() == 1);
         profile.synchronize();
@@ -61,8 +60,9 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
     public void testOfflineDeleteEvent(){
         Profile profile = new Profile("Name");
         HabitEvent old = new HabitEvent("XYZ", new Date());
-        OfflineEvent event = new DeleteHabitEvent("Name", "Habit", old);
-        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>()));
+        OfflineEvent event = new DeleteHabitEvent("Habit", old);
+        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
+        profile.getHabits().get(0).setId("Habit");
         profile.getHabits().get(0).addHabitEvent(old);
 
         profile.tryHabitEvent(event);

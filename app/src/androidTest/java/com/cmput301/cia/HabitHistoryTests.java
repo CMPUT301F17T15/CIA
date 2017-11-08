@@ -32,7 +32,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String name = "Test1";
         // create a new profile
         Profile profile = new Profile(name);
@@ -51,7 +51,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String name = "Test1";
         // We create a new profile,
         Profile profile = new Profile(name);
@@ -70,7 +70,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         // We give it a missing date.
         habit.miss(date);
         String name = "Test1";
@@ -91,13 +91,13 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String title = "Habit1";
         String reason = "Reason1";
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, new Date(), days);
+        Habit habit = new Habit(title, reason, new Date(), days, "");
         String title2 = "Habit2";
         String reason2 = "Reason2";
         // We set one is earlier than another
 
         List<Integer> days2 = Arrays.asList(1,2,3);
-        Habit habit2 = new Habit(title2, reason2, new Date(), days2);
+        Habit habit2 = new Habit(title2, reason2, new Date(), days2, "");
         String name = "Test1";
         Profile profile = new Profile(name);
         // We add them to the new profile.
@@ -130,13 +130,13 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String title2 = "Habit2";
         String reason2 = "Reason2";
         Date date2 = new Date();
         date2.setYear(1856);
         List<Integer> days2 = Arrays.asList(1,2,3);
-        Habit habit2 = new Habit(title2, reason2, date2, days2);
+        Habit habit2 = new Habit(title2, reason2, date2, days2, "");
         // We set types,
         habit.setType("1");
         habit2.setType("2");
@@ -177,13 +177,13 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String title2 = "Habit2";
         String reason2 = "Reason2";
         Date date2 = new Date();
         date2.setYear(2100);
         List<Integer> days2 = Arrays.asList(1,2,3);
-        Habit habit2 = new Habit(title2, reason2, date2, days2);
+        Habit habit2 = new Habit(title2, reason2, date2, days2, "");
         // We set comments
         habit.setReason("1");
         habit2.setReason("2");

@@ -7,9 +7,9 @@ package com.cmput301.cia.models;
 import java.io.Serializable;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Oct 13 2017
+ * Date: Nov 07 2017
  *
  * Represents a pending event that will be synchronized with the server when the user gains connectivity
  */
@@ -18,8 +18,21 @@ public abstract class OfflineEvent implements Serializable {
 
     /**
      * What this event does when it is synchronized with the server
+     * @param profile the user who this event is being handled for
      * @return whether the event was handled successfully or not
      */
-    public abstract boolean handle();
+    public final boolean handle(Profile profile){
+        handleImpl(profile);
+        profile.save();
+        // TODO: return true only if profile saved successfully
+        return true;
+    }
+
+    /**
+     * Implementation for what even does when it synchronizes with server
+     * @param profile the user who this event is being handled for
+     * @return whether the event was handled successfully or not
+     */
+    public abstract void handleImpl(Profile profile);
 
 }

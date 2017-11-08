@@ -28,7 +28,8 @@ public class Habit extends ElasticSearchable {
     // Constants for days of the week
     public static final int SUNDAY = 1, MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4, THURSDAY = 5, FRIDAY = 6, SATURDAY = 7;
 
-    private String type; //edit by guanfang
+    // What category this habit falls under
+    private String type;
 
     private String title;
     private String reason;
@@ -49,16 +50,8 @@ public class Habit extends ElasticSearchable {
      * @param reason the reason prompting the habit (not null)
      * @param startDate the date the user wants to start the habit (not null)
      * @param days the days of the week the event should occur on (Sunday = 1, Saturday = 7)
+     * @param type the habit type category this habit falls under
      */
-    public Habit(String title, String reason, Date startDate, List<Integer> days) {
-        this.title = title;
-        this.reason = reason;
-        this.startDate = startDate;
-        events = new ArrayList<>();
-        daysOfWeek = days;
-        missedDates = new ArrayList<>();
-    }
-
     public Habit(String title, String reason, Date startDate, List<Integer> days, String type) {
         this.type = type;
         this.title = title;
@@ -211,7 +204,6 @@ public class Habit extends ElasticSearchable {
         return events.get(events.size() - 1).getDate();
     }
 
-    // TODO: create a HabitType object instead (unless this is scrapped)
     /**
      * Set the habit's type category
      * @param typeStr the category
@@ -223,7 +215,7 @@ public class Habit extends ElasticSearchable {
     /**
      * @return the habit's type category
      */
-    public String getType(){return this.type;}//edit by guanfang
+    public String getType(){return this.type;}
 
     /**
      * @return the object's template type id
@@ -272,5 +264,10 @@ public class Habit extends ElasticSearchable {
         for (HabitEvent event : events)
             ElasticSearchUtilities.delete(event);
         ElasticSearchUtilities.delete(this);
+    }
+
+    @Override
+    public String toString(){
+        return title;
     }
 }
