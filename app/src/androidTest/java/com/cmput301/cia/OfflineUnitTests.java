@@ -50,7 +50,7 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("Name");
         HabitEvent old = new HabitEvent("XYZ", new Date());
         OfflineEvent event = new AddHabitEvent("Name", "Habit", old);
-        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>()));
+        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
 
         profile.tryHabitEvent(event);
         assertFalse(profile.getHabits().get(0).getTimesCompleted() == 1);
@@ -62,7 +62,7 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
         Profile profile = new Profile("Name");
         HabitEvent old = new HabitEvent("XYZ", new Date());
         OfflineEvent event = new DeleteHabitEvent("Name", "Habit", old);
-        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>()));
+        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).addHabitEvent(old);
 
         profile.tryHabitEvent(event);

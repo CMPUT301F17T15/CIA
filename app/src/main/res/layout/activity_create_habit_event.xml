@@ -10,6 +10,24 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.CreateHabitEventActivity">
 
+    <Button
+        android:id="@+id/cheCalendarButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_date_range_black_24px"
+        android:onClick="datePickerDialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.283"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22" />
+
     <TextView
         android:id="@+id/cheCommentStaticText"
         android:layout_width="88dp"
@@ -59,11 +77,11 @@
 
     <TextView
         android:id="@+id/cheEventTitleText"
-        android:layout_width="156dp"
-        android:layout_height="27dp"
-        android:layout_marginLeft="114dp"
+        android:layout_width="219dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="83dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="Create Habit Event"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -92,17 +110,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/cheDateEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="106dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent" />
-
     <ImageButton
         android:id="@+id/cheAttachLocationButton"
         android:layout_width="27dp"
@@ -129,21 +136,23 @@
         android:id="@+id/cheImageView"
         android:layout_width="194dp"
         android:layout_height="150dp"
-        app:srcCompat="@android:color/darker_gray"
+        android:layout_marginBottom="113dp"
         android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:onClick="onImageClicked"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="113dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:color/darker_gray" />
 
     <Button
         android:id="@+id/cheSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:layout_marginBottom="30dp"
         android:layout_marginLeft="65dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:onClick="onSaveClicked"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="30dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/cheCancelButton"
@@ -151,8 +160,31 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="209dp"
+        android:onClick="onCancelClicked"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/cheResetImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onResetImageClicked"
+        android:text="Reset Image"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteX="52dp"
+        tools:layout_editor_absoluteY="318dp" />
+
+    <TextView
+        android:id="@+id/cheDateTextView"
+        android:layout_width="163dp"
+        android:layout_height="37dp"
+        android:layout_marginLeft="153dp"
+        android:layout_marginTop="112dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -37,7 +37,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertNotNull(habit);
     }
 
@@ -46,7 +46,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.getDaysOfWeek() == days);
     }
 
@@ -56,7 +56,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
         List<Integer> newDays = Arrays.asList(1,2,3,4);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         habit.setDaysOfWeek(newDays);
         assertTrue(habit.getDaysOfWeek() == newDays);
     }
@@ -66,7 +66,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment = "New event";
         HabitEvent event = new HabitEvent(comment);
         assertTrue(habit.getEvents().isEmpty());
@@ -79,7 +79,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment = "New event";
         HabitEvent event = new HabitEvent(comment);
         assertTrue(habit.getEvents().isEmpty());
@@ -92,7 +92,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment = "New event";
         HabitEvent event = new HabitEvent(comment);
         habit.addHabitEvent(event);
@@ -106,7 +106,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.getTitle() == title);
     }
 
@@ -116,7 +116,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         habit.setTitle(newTitle);
         assertTrue(habit.getTitle() == newTitle);
     }
@@ -127,7 +127,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         habit.setReason(newReason);
         assertTrue(habit.getReason() == newReason);
     }
@@ -137,7 +137,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.getReason() == reason);
     }
 
@@ -146,7 +146,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.getStartDate() == date);
     }
 
@@ -156,7 +156,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         Date date = new Date();
         Date newDate = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(date != newDate);
         habit.setStartDate(newDate);
         assertTrue(habit.getStartDate() == newDate);
@@ -167,7 +167,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.occursOn(1) == true);
         assertTrue(habit.occursOn(2) == true);
         assertTrue(habit.occursOn(3) == true);
@@ -181,7 +181,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         Date date = new Date();
         Date missDate = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         assertTrue(habit.getTimesMissed() == 0);
         assertNotSame(date, missDate);
         habit.miss(missDate);
@@ -194,7 +194,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment = "New event";
         HabitEvent event = new HabitEvent(comment);
         habit.addHabitEvent(event);
@@ -206,7 +206,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment1 = "Event1";
         HabitEvent event1 = new HabitEvent(comment1);
         habit.addHabitEvent(event1);
@@ -221,7 +221,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         String reason = "Reason1";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days);
+        Habit habit = new Habit(title, reason, date, days, "");
         String comment1 = "Event1";
         HabitEvent event1 = new HabitEvent(comment1, date);
         habit.addHabitEvent(event1);
