@@ -155,7 +155,7 @@ public class HomePageActivity extends AppCompatActivity {
 
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
-                OfflineEvent addEvent = new AddHabitEvent(user.getId(), habitId, event);
+                OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
             }
