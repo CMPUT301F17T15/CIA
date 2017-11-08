@@ -24,6 +24,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
+import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -31,6 +32,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+// TODO: place picker
 
 /**
  * Version 2
@@ -202,6 +205,15 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     public void onResetImageClicked(View view){
         image = null;
         updateImage();
+    }
+
+    /**
+     * When the attach location button is clicked
+     * @param view
+     */
+    public void onAttachLocationClicked(View view){
+        // TODO: place picker
+        location = DeviceUtilities.getLocation();
     }
 
     /**

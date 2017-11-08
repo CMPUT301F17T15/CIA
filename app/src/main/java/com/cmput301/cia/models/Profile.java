@@ -28,6 +28,9 @@ public class Profile extends ElasticSearchable {
 
     public static final String TYPE_ID = "profile";
 
+    // The absolute maximum value for any user's powerPoints attribute
+    private static final int MAX_PP = 1000;
+
     // The user's unique name
     private String name;
 
@@ -46,6 +49,12 @@ public class Profile extends ElasticSearchable {
     // The habit categories that the user has created
     private List<String> habitCategories;
 
+    // Points received for consecutively completing all habits in a week
+    private int powerPoints;
+
+    // Points received for completing a habit
+    private int habitPoints;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -57,6 +66,8 @@ public class Profile extends ElasticSearchable {
         followRequests = new ArrayList<>();
         pendingEvents = new ArrayList<>();
         habitCategories = new ArrayList<>();
+        powerPoints = 0;
+        habitPoints = 0;
     }
 
     /**
@@ -288,11 +299,29 @@ public class Profile extends ElasticSearchable {
     // TODO: test
     public void onDayEnd(Date endingDay){
         List<Habit> toComplete = getTodaysHabits(endingDay);
+
+        // whether a habit was missed this week
+        boolean missedEvent = false;
+        // how many events were completed successfully this week
+        int completedEvents = 0;
+
         for (Habit habit : toComplete){
             Date date = habit.getLastCompletionDate();
             if (date == null || date.before(endingDay)){
                 habit.miss(endingDay);
+                powerPoints = 0;
+                missedEvent = true;
+            } else {
+                ++completedEvents;
             }
+        }
+
+        if (!missedEvent){
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(endingDay);
+            int day = calendar.get(Calendar.DAY_OF_WEEK);
+            if (day == Calendar.SUNDAY)
+                setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
         }
     }
 
@@ -414,6 +443,38 @@ public class Profile extends ElasticSearchable {
                 return habit;
         }
         return null;
+    }
+
+    /**
+     * @return the points representing the user's power ranking score
+     */
+    public int getPowerPoints() {
+        return powerPoints;
+    }
+
+    /**
+     * Set the user's power ranking score
+     * @param powerPoints the new score
+     */
+    public void setPowerPoints(int powerPoints) {
+        if (powerPoints > MAX_PP)
+            powerPoints = MAX_PP;
+        this.powerPoints = powerPoints;
+    }
+
+    /**
+     * @return the points representing how many habit events the user has completed
+     */
+    public int getHabitPoints() {
+        return habitPoints;
+    }
+
+    /**
+     * Set the user's habit points
+     * @param habitPoints the new habit points
+     */
+    public void setHabitPoints(int habitPoints) {
+        this.habitPoints = habitPoints;
     }
 
 }
