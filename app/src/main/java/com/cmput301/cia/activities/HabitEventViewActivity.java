@@ -12,7 +12,8 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 
 /**
- * created by Tinghui
+ * created by Tinghui.
+ * on 11/8/2017.
  */
 
 public class HabitEventViewActivity extends AppCompatActivity {
@@ -26,6 +27,8 @@ public class HabitEventViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit_event_view);
         habitEventName = (EditText) findViewById(R.id.EditHabitEventName);
         habitEventType = (EditText) findViewById(R.id.EditHabitEventType);
+
+
         Bundle bundle = getIntent().getExtras();
         habitEventType.setText(bundle.getString("HabitEventType"));
         habitEventName.setText(bundle.getString("HabitEventName"));
