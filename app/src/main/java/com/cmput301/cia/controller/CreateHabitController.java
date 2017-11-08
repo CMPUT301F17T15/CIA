@@ -18,7 +18,7 @@ public class CreateHabitController {
         // TODO: save the habit on elastic search/serializable
         // TODO: handle when user also inputs habit type
 
-        Habit habit = new Habit(habitName, reason, startDate, daysOfTheWeek);
+        Habit habit = new Habit(habitName, reason, startDate, daysOfTheWeek, "");
         habit.save();
     }
 }

@@ -28,17 +28,23 @@ public class Profile extends ElasticSearchable {
 
     public static final String TYPE_ID = "profile";
 
+    // The user's unique name
     private String name;
+
+    // The user's list of created habits
     private List<Habit> habits;
 
-    // list of users this user is following (unique)
+    // List of users this user is following (all elements are unique)
     private List<Profile> following;
 
-    // users that have requested to follow this user (unique)
+    // Users that have requested to follow this user (all elements are unique)
     private List<Profile> followRequests;
 
     // Events that will be synchronized when the user signs in on a valid connection
     private List<OfflineEvent> pendingEvents;
+
+    // The habit categories that the user has created
+    private List<String> habitCategories;
 
     /**
      * Construct a new user profile object
@@ -50,6 +56,7 @@ public class Profile extends ElasticSearchable {
         following = new ArrayList<>();
         followRequests = new ArrayList<>();
         pendingEvents = new ArrayList<>();
+        habitCategories = new ArrayList<>();
     }
 
     /**
@@ -360,4 +367,21 @@ public class Profile extends ElasticSearchable {
     private String getOfflineEventsFile(){
         return name + "events.sav";
     }
+
+    /**
+     * Add a new habit type to the user's list of habit categories
+     * @param category the type to add
+     */
+    // TODO: potentially make unit tests for these two below functions (is there really a point though?)
+    public void addHabitCategory(String category){
+        habitCategories.add(category);
+    }
+
+    /**
+     * @return the list of habit categories the user has created
+     */
+    public List<String> getHabitCategories(){
+        return habitCategories;
+    }
+
 }

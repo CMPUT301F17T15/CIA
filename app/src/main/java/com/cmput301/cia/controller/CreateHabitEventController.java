@@ -5,7 +5,6 @@
 package com.cmput301.cia.controller;
 
 import android.content.Intent;
-
 import com.cmput301.cia.activities.CreateHabitEventActivity;
 
 /**
@@ -18,6 +17,10 @@ import com.cmput301.cia.activities.CreateHabitEventActivity;
 
 public class CreateHabitEventController {
 
+    /**
+     * Start an activity where the user selects an image
+     * @param activity the activity that started the new one
+     */
     public static void clickImage(CreateHabitEventActivity activity){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
