@@ -68,10 +68,10 @@ public abstract class ElasticSearchable {
 
     @Override
     public boolean equals(Object other){
-        if (other instanceof ElasticSearchable){
-            return getId() == ((ElasticSearchable) other).getId() && hasValidId() && ((ElasticSearchable) other).hasValidId();
+        if (other instanceof ElasticSearchable && hasValidId() && ((ElasticSearchable) other).hasValidId()){
+            return getId() == ((ElasticSearchable) other).getId();
         }
-        return false;
+        return super.equals(other);
     }
 
 }
