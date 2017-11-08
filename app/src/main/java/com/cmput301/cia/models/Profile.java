@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Oct 14 2017
+ * Date: Nov 07 2017
  */
 
 public class Profile extends ElasticSearchable {
@@ -163,7 +163,7 @@ public class Profile extends ElasticSearchable {
         int today = calendar.get(Calendar.DAY_OF_WEEK);
 
         for (Habit habit : habits){
-            if (habit.occursOn(today))
+            if (habit.occursOn(today) && !date.before(habit.getStartDate()))
                 list.add(habit);
         }
 
@@ -240,23 +240,37 @@ public class Profile extends ElasticSearchable {
      */
     public List<HabitEvent> getFollowedHabitHistory(){
         List<HabitEvent> list = new ArrayList<>();
+        // map (event -> [user name of creator, habit title])
+        final Map<HabitEvent, String[]> eventDetailsMap = new HashMap<>();
 
         for (Profile followee : following) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
-                if (event != null)
+                if (event != null) {
                     list.add(event);
-            }
-
-            // TODO: an efficient algorithm that works
-            // maybe use List<Tuple<String, String, HabitEvent>> and then extract the HabitEvent
-            Collections.sort(list, new Comparator<HabitEvent>() {
-                @Override
-                public int compare(HabitEvent event, HabitEvent t1) {
-                    return event.getDate().compareTo(t1.getDate());
+                    eventDetailsMap.put(event, new String[]{followee.getName(), habit.getTitle()});
                 }
-            });
+            }
         }
+
+        // TODO: test
+        Collections.sort(list, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent eventOne, HabitEvent eventTwo) {
+
+                String[] oneKeys = eventDetailsMap.get(eventOne);
+                String[] twoKeys = eventDetailsMap.get(eventTwo);
+
+                // Attempt to compare based on username
+                int nameComp = oneKeys[0].compareTo(twoKeys[0]);
+                if (nameComp != 0){
+                    return nameComp;
+                }
+
+                // Compare based on habit title
+                return oneKeys[1].compareTo(twoKeys[1]);
+            }
+        });
         return list;
     }
 
@@ -271,10 +285,15 @@ public class Profile extends ElasticSearchable {
      * After a day is finished, update the status of all uncompleted habits
      * @param endingDay is the day that ended
      */
+    // TODO: test
     public void onDayEnd(Date endingDay){
-        // TODO
-        // look through all uncompleted habits on endingDay (use getTodaysHabits(endingDay))
-        // make sure to account for start daet later than current date
+        List<Habit> toComplete = getTodaysHabits(endingDay);
+        for (Habit habit : toComplete){
+            Date date = habit.getLastCompletionDate();
+            if (date == null || date.before(endingDay)){
+                habit.miss(endingDay);
+            }
+        }
     }
 
     /**
@@ -285,7 +304,7 @@ public class Profile extends ElasticSearchable {
         if (DeviceUtilities.isOnline()){
             List<OfflineEvent> unsuccessful = new ArrayList<>();
             for (OfflineEvent event : pendingEvents){
-                if (!event.handle()){
+                if (!event.handle(this)){
                     unsuccessful.add(event);
                 }
             }
@@ -298,7 +317,7 @@ public class Profile extends ElasticSearchable {
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        if (DeviceUtilities.isOnline() && event.handle()){
+        if (DeviceUtilities.isOnline() && event.handle(this)){
             // do nothing
         }
         else
@@ -382,6 +401,19 @@ public class Profile extends ElasticSearchable {
      */
     public List<String> getHabitCategories(){
         return habitCategories;
+    }
+
+    /**
+     * Get a habit by it's unique ID
+     * @param habitId the id of the habit
+     * @return the habit if found, or null otherwise
+     */
+    public Habit getHabitById(String habitId){
+        for (Habit habit : habits){
+            if (habit.getId().equals(habitId))
+                return habit;
+        }
+        return null;
     }
 
 }

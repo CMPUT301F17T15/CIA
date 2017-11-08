@@ -5,9 +5,12 @@
 package com.cmput301.cia.models;
 
 /**
- * Created by Adil on Oct 14 2017.
+ * Version 2
+ * Author: Adil Malik
+ * Date: Nov 07 2017
+ *
+ * Represents an event that overwrites the old information of a habit event with new info
  */
-
 public class EditHabitEvent extends OfflineEvent {
 
     private HabitEvent oldData;
@@ -23,10 +26,13 @@ public class EditHabitEvent extends OfflineEvent {
      * @return whether the event was handled successfully or not
      */
     @Override
-    public boolean handle() {
+    public void handleImpl(Profile profile) {
         // TODO: copy newData into oldData
 
-        return true;
+        // TODO: probably better to do this in a function oldData.copyFrom(newData)
+        /*oldData.setBase64EncodedPhoto(newData.getBase64EncodedPhoto());
+        oldData.setLocation(newData.getLocation());
+        */
     }
 
 }

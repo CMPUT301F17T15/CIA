@@ -5,22 +5,20 @@
 package com.cmput301.cia.models;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Oct 18 2017
+ * Date: Nov 07 2017
  * This class represents a pending event to delete a user's habit event
  */
 
 public class DeleteHabitEvent extends OfflineEvent {
 
     private HabitEvent toDelete;
-    private String profileName;
-    private String habitName;
+    private String habitId;
 
-    public DeleteHabitEvent(String userName, String habitName, HabitEvent event){
+    public DeleteHabitEvent(String habitId, HabitEvent event){
         toDelete = event;
-        profileName = userName;
-        this.habitName = habitName;
+        this.habitId = habitId;
     }
 
     /**
@@ -28,9 +26,9 @@ public class DeleteHabitEvent extends OfflineEvent {
      * @return whether the event was handled successfully or not
      */
     @Override
-    public boolean handle() {
-        // TODO: get profile from name, then delete this event from the habit with matching name
+    public void handleImpl(Profile profile) {
+        // TODO: delete this event from the habit with matching id
 
-        return true;
+        //profile.getHabitById(habitId).removeEvent(toDelete);
     }
 }
