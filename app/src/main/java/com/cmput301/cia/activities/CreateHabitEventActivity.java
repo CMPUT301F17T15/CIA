@@ -33,8 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-// TODO: place picker
-
 /**
  * Version 2
  * Author: Adil Malik
@@ -42,6 +40,8 @@ import java.util.Date;
  *
  * This class represents the activity for creating a new habit event
  */
+
+// TODO: location name on the TextView for it
 
 public class CreateHabitEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -193,6 +193,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
+        // TODO: prevent date from being after today's date by using new Date().before(calendar.getTime())
         eventDate = calendar.getTime();
         setDateText();
     }
@@ -212,8 +213,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * @param view
      */
     public void onAttachLocationClicked(View view){
-        // TODO: place picker
-        location = DeviceUtilities.getLocation();
+        location = DeviceUtilities.getLocation(this);
     }
 
     /**
