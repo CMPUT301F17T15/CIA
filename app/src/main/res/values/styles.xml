@@ -9,7 +9,8 @@
     </style>
         <!-- Customize popup style. -->
     <style name="PopupToolBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:background">@color/colorToolBarButton</item>
+        <item name="android:actionMenuTextColor">@color/colorMenuText</item>
+        <item name="android:background">@color/colorMenuBackground</item>
         <item name="overlapAnchor">false</item>
         <item name="android:dropDownHorizontalOffset">-4dp</item>
     </style>

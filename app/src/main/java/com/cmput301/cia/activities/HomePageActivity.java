@@ -58,6 +58,7 @@ public class HomePageActivity extends AppCompatActivity {
     //ExpandableListView for displaying habit types as parent and habits as childs
     ExpandableListView expandableListView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +89,24 @@ public class HomePageActivity extends AppCompatActivity {
 
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
+        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
         expandableListView.setAdapter(adapter);
+        //activity for expandablelistview
+        //data hard coded need to change to serialized data
+        final String[] HabitTypes = adapter.getHabitTypes();
+        final String[][] Habits = adapter.getHabits();
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
+                Toast.makeText(HomePageActivity.this,"Habit "+Habits[i][i1] + " Clicked from types "+ HabitTypes[i],
+                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
+                intent.putExtra("HabitName", Habits[i][i1]);
+                intent.putExtra("HabitType", HabitTypes[i]);
+                startActivity(intent);
+                return false;
+            }
+        });
 
         //Checkable listView
         //String array for testing, needed to be replaced by serialized data.
@@ -120,6 +137,11 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
     }
+    //button on activity_home_page bridge to activity_create_habit
+    public void newHabit(View view){
+        Intent intent = new Intent(this, CreateHabitActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,8 +150,33 @@ public class HomePageActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    //Menu item onclick bridge to specific activity.
+    //use startActivityForResult instead of startActivity for return value or refresh home page.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_button_My_Profile:
+                Intent intent_My_Profile = new Intent(this, CreateHabitActivity.class);
+                startActivity(intent_My_Profile);
+                return true;
+            case R.id.menu_button_Add_New_Habit:
+                Intent intent_new_Habit = new Intent(this, CreateHabitActivity.class);
+                startActivity(intent_new_Habit);
+                return true;
+            case R.id.menu_button_Statistic:
+                Intent intent_Statistic = new Intent(this, StatisticActivity.class);
+                startActivity(intent_Statistic);
+                return true;
+            case R.id.menu_button_Habit_History:
+                Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
+                startActivity(intent_Habit_History);
+                return true;
+            case R.id.menu_button_My_Following:
+                Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
+                startActivity(intent_My_Following);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
