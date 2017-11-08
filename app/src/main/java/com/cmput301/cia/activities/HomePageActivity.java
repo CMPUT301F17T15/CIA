@@ -25,6 +25,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,32 +65,8 @@ public class HomePageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
 
-        //linking expandableListView
-        expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
-        expandableListView.setAdapter(adapter);
-
-        //Checkable listView
-        //String array for testing, needed to be replaced by serialized data.
-        String[] items = {"10km Running", "100 push-up", "100 sit-up", "100 squats"};
-        ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
-        checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        ArrayAdapter<String> lvc_adapter = new ArrayAdapter<String>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
-        checkable.setAdapter(lvc_adapter);
-
-        //Onclick display toast, show congratulation on complete.
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String checkedItems = ((TextView)view).getText().toString();
-                Toast.makeText(HomePageActivity.this, "Congratulation! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
-
         Profile dummy = new Profile(name);
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
@@ -102,21 +79,33 @@ public class HomePageActivity extends AppCompatActivity {
         values.clear();
         values.put("creator", user.getId());
         List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
+        /*habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>()));
+        habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
+        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>()));*/
         // TODO: initialize ...
 
-        /*countersList = (ListView)findViewById(R.id.mainHabitsList);
-        countersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //linking expandableListView
+        expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
+        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
+        expandableListView.setAdapter(adapter);
+
+        //Checkable listView
+        //String array for testing, needed to be replaced by serialized data.
+        String[] items = {"10km Running", "100 push-up", "100 sit-up", "100 squats"};
+        ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
+        checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        ArrayAdapter<String> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
+        checkable.setAdapter(lvc_adapter);
+
+        //Onclick display toast, show congratulation on complete.
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, CounterDetailsActivity.class);
-                intent.putExtra(CounterDetailsActivity.ID_COUNTER, counters.get(position));
-                intent.putExtra(CounterDetailsActivity.ID_INDEX, position);
-                startActivityForResult(intent, DETAILS_CODE);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String checkedItems = ((TextView)view).getText().toString();
+                Toast.makeText(HomePageActivity.this, "Congratulation! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
             }
         });
 
-        countersAmountText = (TextView)findViewById(R.id.amountDynamicText);
-        countersAmountText.setText(String.valueOf(user.getHabitsCount()));*/
     }
 
     @Override
