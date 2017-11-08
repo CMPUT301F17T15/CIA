@@ -19,7 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -44,8 +47,7 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    // NEW_REQUEST_CODE = NewCounterActivity, DETAILS_CODE = CounterDetailsActivity
-    private static final int NEW_REQUEST_CODE = 1, DETAILS_CODE = 2;
+    private static final int NEW_EVENT = 1;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -98,11 +100,22 @@ public class HomePageActivity extends AppCompatActivity {
         checkable.setAdapter(lvc_adapter);
 
         //Onclick display toast, show congratulation on complete.
+
+        // TODO: prevent the box from being unchecked, and make it automatically checked if
+        // getLastCompletionDate() is today's date
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String checkedItems = ((TextView)view).getText().toString();
-                Toast.makeText(HomePageActivity.this, "Congratulation! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
+                // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
+                //user.getHabitIdByTitle(checkedItems)
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                startActivityForResult(intent, NEW_EVENT);
+
             }
         });
 
@@ -133,41 +146,26 @@ public class HomePageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /**
-     * Event called when the add new counter button is clicked
-     * Starts a new activity where the user will be able to create a new counter
-     * @param view
-     */
-    public void addCounterClicked(View view){
-        //Intent intent = new Intent(this, NewCounterActivity.class);
-        //startActivityForResult(intent, NEW_REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // When a new counter is created
-        if (requestCode == NEW_REQUEST_CODE) {
+        // When a new habit event is created
+        if (requestCode == NEW_EVENT) {
             if (resultCode == RESULT_OK) {
 
-                /*String counterName = data.getStringExtra(NewCounterActivity.ID_NAME);
-                long value = data.getLongExtra(NewCounterActivity.ID_VALUE, 0);
-                String description = data.getStringExtra(NewCounterActivity.ID_DESC);
-
-                Counter counter = new Counter(counterName, value, description);
-                counters.add(counter);
-                counterArrayAdapter.notifyDataSetChanged();
-                saveCounters();
-                countersAmountText.setText(String.valueOf(counters.size()));*/
-
+                HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
+                String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
+                OfflineEvent addEvent = new AddHabitEvent(user.getId(), habitId, event);
+                user.tryHabitEvent(addEvent);
+                user.save();
             }
 
             // When the details of an existing counter are being viewed
-        } else if (requestCode == DETAILS_CODE){
+        }/* else if (requestCode == DETAILS_CODE){
             if (resultCode == RESULT_OK){
                 returnFromDetails(data);
             }
-        }
+        }*/
     }
 
     /**
