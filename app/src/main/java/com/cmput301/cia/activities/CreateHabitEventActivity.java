@@ -12,12 +12,14 @@ import android.graphics.ColorFilter;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.ImageUtilities;
 
@@ -34,6 +36,8 @@ import java.util.Date;
  *
  * This class represents the activity for creating a new habit event
  */
+
+// TODO: a better way to enter the date
 
 public class CreateHabitEventActivity extends AppCompatActivity {
 
@@ -122,15 +126,14 @@ public class CreateHabitEventActivity extends AppCompatActivity {
      * Permalink to specific comment:
      * https://stackoverflow.com/a/5309965
      */
-    public void selectImage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, SELECT_IMAGE_CODE);
+    public void onImageClicked(View view) {
+        CreateHabitEventController.clickImage(this);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        // TODO: put an image on the emulator and test choosing it
         if (requestCode == SELECT_IMAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
             try {
 
@@ -153,7 +156,7 @@ public class CreateHabitEventActivity extends AppCompatActivity {
      * Update the image view
      */
     private void updateImage(){
-        // TODO: try setImageBitmap(null)
+        // TODO: try setImageBitmap(null) to see if it works fine
         if (image != null)
             imageView.setImageBitmap(image);
         else
