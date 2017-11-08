@@ -273,4 +273,9 @@ public class Habit extends ElasticSearchable {
             ElasticSearchUtilities.delete(event);
         ElasticSearchUtilities.delete(this);
     }
+
+    @Override
+    public String toString(){
+        return title;
+    }
 }
