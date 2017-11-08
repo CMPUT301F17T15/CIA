@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorToolBarBackground">#aabca57e</color>
-    <color name="colorToolBarButton">#aacbdbf4</color>
+    <color name="colorMenuBackground">#aaaac2ea</color>
+    <color name="colorMenuText">#aa0f1b2e</color>
 </resources>

@@ -6,30 +6,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/DropDownMenu"
-        android:title="@string/menu_Menu"
+        android:id="@+id/menu_button_My_Profile"
+        android:title="@string/menu_My_Profile"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_button1"
+        android:id="@+id/menu_button_Add_New_Habit"
         android:title="@string/menu_AddNewHabit"
         />
     <item
-        android:id="@+id/menu_button2"
+        android:id="@+id/menu_button_Statistic"
         android:title="@string/menu_Statistic"
         />
     <item
-        android:id="@+id/menu_button3"
+        android:id="@+id/menu_button_Habit_History"
         android:title="@string/menu_HabitHistory"
         />
     <item
-        android:id="@+id/menu_button4"
+        android:id="@+id/menu_button_Notification"
         android:checkable="true"
         android:title="@string/menu_Notification" />
     <item
-        android:id="@+id/menu_button5"
+        android:id="@+id/menu_button_WOW"
+        android:checkable="true"
         android:title="@string/menu_WOW" />
     <item
-        android:id="@+id/menu_button6"
+        android:id="@+id/menu_button_My_Following"
         android:title="@string/menu_MyFollowing" />
 
 

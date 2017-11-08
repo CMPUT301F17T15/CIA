@@ -26,13 +26,19 @@
 
         <activity
             android:name=".activities.HomePageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:parentActivityName=".activities.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.HabitViewActivity"
+            android:parentActivityName=".activities.HomePageActivity"></activity>
+        <activity android:name=".activities.StatisticActivity"
+            android:parentActivityName=".activities.HomePageActivity"></activity>
 
         <activity android:name=".activities.CreateHabitActivity"></activity>
         <activity android:name=".activities.CreateHabitEventActivity"></activity>
