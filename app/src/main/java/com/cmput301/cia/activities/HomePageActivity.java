@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -29,9 +30,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Oct 18 2017
+ * Modified by: Shipin Guan
+ * Date: Nov 7 2017
  *
  * Repressents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
@@ -61,10 +63,29 @@ public class HomePageActivity extends AppCompatActivity {
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(toolbar);
+
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
         expandableListView.setAdapter(adapter);
+
+        //Checkable listView
+        //String array for testing, needed to be replaced by serialized data.
+        String[] items = {"10km Running", "100 push-up", "100 sit-up", "100 squats"};
+        ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
+        checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        ArrayAdapter<String> lvc_adapter = new ArrayAdapter<String>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
+        checkable.setAdapter(lvc_adapter);
+
+        //Onclick display toast, show congratulation on complete.
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String checkedItems = ((TextView)view).getText().toString();
+                Toast.makeText(HomePageActivity.this, "Congratulation! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
