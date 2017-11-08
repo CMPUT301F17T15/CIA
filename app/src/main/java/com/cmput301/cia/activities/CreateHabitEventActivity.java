@@ -38,7 +38,7 @@ import java.util.Date;
 public class CreateHabitEventActivity extends AppCompatActivity {
 
     // The name of the intent data representing the owning habit's name
-    public static final String ID_HABIT = "Habit";
+    public static final String ID_HABIT_NAME = "Habit", ID_HABIT_HASH = "HabitID";
 
     // Intent returned ID for the habit event
     public static final String RETURNED_HABIT = "HabitEvent";
@@ -58,6 +58,9 @@ public class CreateHabitEventActivity extends AppCompatActivity {
     // The view displaying the image
     private ImageView imageView;
 
+    // The unique ID of the habit this event is being created for
+    private String habitId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +70,12 @@ public class CreateHabitEventActivity extends AppCompatActivity {
         image = null;
 
         Intent intent = getIntent();
-        String habitName = intent.getStringExtra(ID_HABIT);
+        String habitName = intent.getStringExtra(ID_HABIT_NAME);
+        habitId = intent.getStringExtra(ID_HABIT_HASH);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
+
         imageView = (ImageView)findViewById(R.id.cheImageView);
+
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
 
@@ -104,6 +110,7 @@ public class CreateHabitEventActivity extends AppCompatActivity {
         }
 
         intent.putExtra(RETURNED_HABIT, event);
+        intent.putExtra(ID_HABIT_HASH, habitId);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
