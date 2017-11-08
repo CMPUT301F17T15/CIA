@@ -5,6 +5,7 @@
 package com.cmput301.cia.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         this.context = context;
     }
 
+    public String[] getHabitTypes(){return habitTypes;}
+    public String[][] getHabits(){return habits;}
     @Override
     public int getGroupCount() {
         return habitTypes.length;
@@ -80,21 +83,25 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final TextView textView = new TextView(context);
         textView.setText(habits[i][i1]);
-        textView.setPadding(150, 0, 0, 0);
+        textView.setPadding(200, 30, 30, 0);
         textView.setTextColor(Color.DKGRAY);
         textView.setTextSize(20);
 
-        textView.setOnClickListener(new View.OnClickListener(){
+        /*textView.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Toast.makeText(context, textView.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Habit " + textView.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
+
             }
-        });
+        });*/
+
+
+
 
         return textView;
     }
 
     @Override
     public boolean isChildSelectable(int i, int i1) {
-        return false;
+        return true;
     }
 }
