@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import android.location.Location;
+
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SerializableUtilities;
@@ -475,6 +477,31 @@ public class Profile extends ElasticSearchable {
      */
     public void setHabitPoints(int habitPoints) {
         this.habitPoints = habitPoints;
+    }
+
+    /**
+     * @param location the user's current location
+     * @return a list of all habit events (by this user and the most recent event of each type from followers) within 5km of the user's current location
+     */
+    // TODO: test if distance is correct
+    public List<HabitEvent> getNearbyEvents(Location location){
+        List<HabitEvent> nearbyEvents = new ArrayList<>();
+
+        if (location != null) {
+            final float MAX_DISTANCE = 5000.0f;
+
+            List<HabitEvent> allEvents = getHabitHistory();
+            allEvents.addAll(getFollowedHabitHistory());
+
+            for (HabitEvent event : allEvents) {
+                Location eventLoc = event.getLocation();
+                if (eventLoc != null && eventLoc.distanceTo(location) <= MAX_DISTANCE) {
+                    nearbyEvents.add(event);
+                }
+            }
+        }
+
+        return nearbyEvents;
     }
 
 }
