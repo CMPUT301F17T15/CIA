@@ -72,7 +72,7 @@ public class HabitEventTest {
         String testBase64Image = getMockImage();
         Location testLocation = getMockLocation();
 
-        HabitEvent habitEvent = new HabitEvent("comment", testBase64Image, testDate, testLocation);
+        HabitEvent habitEvent = new HabitEvent("comment", testBase64Image, testDate, testLocation.getLatitude(), testLocation.getLongitude());
 
         assertEquals("wrong comment", "comment", habitEvent.getComment());
         assertEquals("wrong image", testBase64Image, habitEvent.getBase64EncodedPhoto());

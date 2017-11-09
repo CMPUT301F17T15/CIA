@@ -63,6 +63,9 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     // The view displaying the event date in text format
     private TextView dateText;
 
+    // The view displaying the location's name
+    private TextView locationText;
+
     // The button that resets the selected image when clicked
     private Button resetImageButton;
 
@@ -96,6 +99,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         dateText = (TextView) findViewById(R.id.cheDateTextView);
         setDateText();
         resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
+        locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
 
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
@@ -193,8 +197,14 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        // TODO: prevent date from being after today's date by using new Date().before(calendar.getTime())
-        eventDate = calendar.getTime();
+        Date date = calendar.getTime();
+        Date currentDate = new Date();
+
+        // Prevent the event's date from being a date in the future
+        if (currentDate.before(date))
+            date = currentDate;
+
+        eventDate = date;
         setDateText();
     }
 
@@ -214,6 +224,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      */
     public void onAttachLocationClicked(View view){
         location = DeviceUtilities.getLocation(this);
+        locationText.setText(DeviceUtilities.getLocationName(this, location));
     }
 
     /**
