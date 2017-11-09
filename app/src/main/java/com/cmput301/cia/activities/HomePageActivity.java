@@ -118,8 +118,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         //Onclick display toast, show congratulation on complete.
 
-        // TODO: prevent the box from being unchecked, and make it automatically checked if
-        // getLastCompletionDate() is today's date
+        // TODO: prevent the box from being unchecked, and make it automatically checked if getLastCompletionDate() is today's date
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -3,11 +3,12 @@
     <string name="title_activity_filter_events">FilterEventsActivity</string>
     <string name="habitType">Habit Type</string>
     <string name="menu_My_Profile">My Profile</string>
-    <string name="menu_AddNewHabit">Add a New Habit</string>
-    <string name="menu_Statistic">Statistic</string>
+    <string name="menu_AddNewHabit">Add Habit</string>
+    <string name="menu_Statistic">Statistics</string>
     <string name="menu_HabitHistory">Habit History</string>
-    <string name="menu_Notification">Notification</string>
-    <string name="menu_WOW">WOW!</string>
-    <string name="menu_MyFollowing">My Following</string>
+    <string name="menu_Notification">Notifications</string>
+    <string name="menu_WOW">Power Rankings</string>
+    <string name="menu_HabitRankings">Overall Rankings</string>
+    <string name="menu_MyFollowing">Followed Users</string>
     <string name="TodayTask">Today\'s Task</string>
 </resources>
