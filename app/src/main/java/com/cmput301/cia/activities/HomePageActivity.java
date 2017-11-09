@@ -83,10 +83,15 @@ public class HomePageActivity extends AppCompatActivity {
         values.put("creator", user.getId());
         final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
         habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-        /*habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
-        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>()));*/
+        habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>(),"type1"));
+        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>(),"type1"));
         // TODO: initialize ...
-
+        /*
+        for (int i = 0; i< habitList.length(); i++)(
+                //adapter.add(habitList[i].gettype());
+                //adapter.addhabit()
+                array.add
+                )*/
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);

@@ -14,6 +14,11 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmput301.cia.models.Habit;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by gsp on 2017/11/6.
  * Adapter for expandable list view for habit type
@@ -24,10 +29,13 @@ import android.widget.Toast;
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     //Those data should be obtained from java serialization
+    //List<String> x = new ArrayList<>();
     String[] habitTypes = {"Fitness", "Thankful", "Diet"};
     String[][] habits = {{"10km Running", "100 push-up", "100 sit-up", "100 squats"},{"Happiness"},
             {"No burger", "No coke", "No frise"}};
+    //List <Habit> habit;
     Context context;
+
     public ExpandableListViewAdapter(Context context){
         this.context = context;
     }
