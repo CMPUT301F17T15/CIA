@@ -10,4 +10,7 @@
     <string name="menu_WOW">WOW!</string>
     <string name="menu_MyFollowing">My Following</string>
     <string name="TodayTask">Today\'s Task</string>
+    <string name="HabitNameText">Habit Name:</string>
+    <string name="HabitTypeText">Habit Type:</string>
+    <string name="HabitReasonText">Habit Reason:</string>
 </resources>

@@ -142,7 +142,7 @@ public class HomePageActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateHabitActivity.class);
         startActivity(intent);
     }
-
+    //Crate the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

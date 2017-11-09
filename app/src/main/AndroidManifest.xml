@@ -26,6 +26,7 @@
 
         <activity
             android:name=".activities.HomePageActivity"
+            android:label="Home of Habits"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:parentActivityName=".activities.MainActivity">
 
@@ -36,9 +37,16 @@
         </activity>
 
         <activity android:name=".activities.HabitViewActivity"
-            android:parentActivityName=".activities.HomePageActivity"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:label="Habit Details">
+
+        </activity>
+
         <activity android:name=".activities.StatisticActivity"
-            android:parentActivityName=".activities.HomePageActivity"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:parentActivityName=".activities.HomePageActivity">
+
+        </activity>
 
         <activity android:name=".activities.CreateHabitActivity"></activity>
         <activity android:name=".activities.CreateHabitEventActivity"></activity>
