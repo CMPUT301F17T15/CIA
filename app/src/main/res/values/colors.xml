@@ -6,4 +6,5 @@
     <color name="colorToolBarBackground">#aabca57e</color>
     <color name="colorMenuBackground">#aaaac2ea</color>
     <color name="colorMenuText">#aa0f1b2e</color>
+    <color name="colorDelete">#B22222</color>
 </resources>

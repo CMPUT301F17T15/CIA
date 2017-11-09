@@ -81,9 +81,9 @@ public class HomePageActivity extends AppCompatActivity {
 
         values.clear();
         values.put("creator", user.getId());
-        List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
-        /*habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>()));
-        habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
+        final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
+        habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
+        /*habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
         habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>()));*/
         // TODO: initialize ...
 
@@ -91,7 +91,7 @@ public class HomePageActivity extends AppCompatActivity {
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
         expandableListView.setAdapter(adapter);
-        //activity for expandablelistview
+        //activity for expandableListView
         //data hard coded need to change to serialized data
         final String[] HabitTypes = adapter.getHabitTypes();
         final String[][] Habits = adapter.getHabits();
@@ -101,8 +101,10 @@ public class HomePageActivity extends AppCompatActivity {
                 Toast.makeText(HomePageActivity.this,"Habit "+Habits[i][i1] + " Clicked from types "+ HabitTypes[i],
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
-                intent.putExtra("HabitName", Habits[i][i1]);
-                intent.putExtra("HabitType", HabitTypes[i]);
+                intent.putExtra("HabitName", habitList.get(0).getTitle());
+                intent.putExtra("HabitType", habitList.get(0).getType());
+                intent.putExtra("HabitReason", habitList.get(0).getReason());
+                intent.putExtra("StartingDate", habitList.get(0).getStartDate());
                 startActivity(intent);
                 return false;
             }

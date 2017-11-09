@@ -6,5 +6,8 @@
 <resources>
     <string-array name="habit_types">
         <item>Choose a habit type</item>
+        <item>Habit Type 1</item>
+        <item>Habit Type 2</item>
+        <item>Habit Type 3</item>
     </string-array>
 </resources>
