@@ -5,6 +5,7 @@
 package com.cmput301.cia.models;
 
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -25,13 +26,16 @@ import java.util.Date;
 
 public class HabitEvent extends ElasticSearchable implements Serializable {
 
+    private static final double INVALID_LATLONG = -999999999999999.259;
+
     public static final String TYPE_ID = "habitevent";
 
     private String comment;
     private String base64EncodedPhoto;
     private Date date;
 
-    private Location location;
+    private double latitude;
+    private double longitude;
 
     /**
      * Construct a new habit event
@@ -41,7 +45,8 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.comment = comment;
         base64EncodedPhoto = "";
         date = new Date();
-        location = null;
+        latitude = INVALID_LATLONG;
+        longitude = INVALID_LATLONG;
     }
 
     /**
@@ -53,7 +58,8 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.comment = comment;
         base64EncodedPhoto = "";
         this.date = date;
-        location = null;
+        latitude = INVALID_LATLONG;
+        longitude = INVALID_LATLONG;
     }
 
     /**
@@ -65,7 +71,8 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.comment = comment;
         base64EncodedPhoto = image;
         date = new Date();
-        location = null;
+        latitude = INVALID_LATLONG;
+        longitude = INVALID_LATLONG;
     }
 
     /**
@@ -78,7 +85,8 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.comment = comment;
         base64EncodedPhoto = image;
         this.date = date;
-        location = null;
+        latitude = INVALID_LATLONG;
+        longitude = INVALID_LATLONG;
     }
 
     /**
@@ -87,13 +95,15 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      * @param comment the optional habit comment (not null)
      * @param image a base64EncodedPhoto of the event (not null)
      * @param date the date the event occurred on (not null)
-     * @param location the location where the event occurred
+     * @param latitude the latitude of the location where the event occurred
+     * @param longitude the longitude of the location where the event occurred
      */
-    public HabitEvent(String comment, String image, Date date, Location location) {
+    public HabitEvent(String comment, String image, Date date, double latitude, double longitude) {
         this.comment = comment;
         this.base64EncodedPhoto = image;
         this.date = date;
-        this.location = location;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -145,6 +155,14 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      * @return the location this event occurred at if it exists, or null otherwise
      */
     public Location getLocation() {
+
+        if (latitude == INVALID_LATLONG)
+            return null;
+
+        Location location = new Location(LocationManager.GPS_PROVIDER);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+
         return location;
     }
 
@@ -153,7 +171,15 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
      * @param location the location it occurred at (can be null)
      */
     public void setLocation(Location location) {
-        this.location = location;
+
+        if (location == null){
+            latitude = INVALID_LATLONG;
+            longitude = INVALID_LATLONG;
+            return;
+        }
+
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
     }
 
     /**
