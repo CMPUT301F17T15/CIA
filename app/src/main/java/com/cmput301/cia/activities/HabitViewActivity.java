@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.cmput301.cia.R;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by gsp on 2017/11/7.
  */
@@ -24,6 +26,8 @@ public class HabitViewActivity extends AppCompatActivity{
     //ToDo display detail of selected habit
     private TextView habitName;
     private TextView habitType;
+    private TextView habitReason;
+    private TextView habitStartDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -31,16 +35,20 @@ public class HabitViewActivity extends AppCompatActivity{
         setContentView(R.layout.activity_display_habit_detail);
 
         //Create custom tool bar
-        Toolbar HB_toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
-        setSupportActionBar(HB_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
+        setSupportActionBar(toolbar);
 
 
-        habitName = (EditText) findViewById(R.id.EditHabitName);
-        habitType = (EditText) findViewById(R.id.EditHabitType);
+        habitName = (TextView) findViewById(R.id.EditHabitName);
+        habitType = (TextView) findViewById(R.id.EditHabitType);
+        habitReason = (TextView) findViewById(R.id.EditHabitReason);
+        habitStartDate = (TextView) findViewById(R.id.StartingDate);
 
         Bundle bundle = getIntent().getExtras();
         habitType.setText(bundle.getString("HabitType"));
         habitName.setText(bundle.getString("HabitName"));
+        habitReason.setText(bundle.getString("HabitReason"));
+        habitStartDate.setText(bundle.getString("StartingDate"));
 
     }
 
@@ -51,7 +59,6 @@ public class HabitViewActivity extends AppCompatActivity{
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     //Menu item onclick bridge to specific activity.
     //use startActivityForResult instead of startActivity for return value or refresh home page.

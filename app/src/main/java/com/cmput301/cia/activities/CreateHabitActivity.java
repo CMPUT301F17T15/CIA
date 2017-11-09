@@ -9,11 +9,16 @@
 package com.cmput301.cia.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitController;
@@ -34,12 +39,11 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     Date chooseStartDate;
-
     EditText habitName;
     EditText reason;
     EditText startDate;
     MaterialDayPicker dayPicker;
-
+    private Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +55,29 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         startDate = (EditText) findViewById(R.id.startDate);
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
         startDate.setText(chooseStartDate.toString());
+
+        //ToDo fix spinner activity
+        //spinner activity, could be placed in another activity file for better practice
+        spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
+        List<String> type = new ArrayList<String>();
+        type.add("Habit type 1");
+        type.add("Habit type 2");
+        type.add("Habit type 3");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        //spinner finished
+
     }
 
     /**
@@ -68,6 +95,8 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                 chooseStartDate,
                 getPickedDates(daysSelected)
         );
+        Intent intent = new Intent(this, HomePageActivity.class);
+        startActivity(intent);
     }
 
     public void clearInputFields(View v) {
