@@ -48,6 +48,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
     private static final int NEW_EVENT = 1;
+    private static final int CREAT_HABIT_EVENT = 2;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -79,17 +80,32 @@ public class HomePageActivity extends AppCompatActivity {
             user.save();
         }
 
+
+
         values.clear();
         values.put("creator", user.getId());
         final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
         habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-        /*habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>(), "type2"));
-        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>(), "type2"));*/
-        // TODO: initialize ...
+        HashMap<String, List<String>> types = new HashMap<String, List<String>>();
+        for(Habit h : user.getHabits()) {
+            if(types.containsKey(h.getType())){
+                types.get(h.getType()).add(h.getTitle());
+            }else{
+                types.put(h.getType(), new ArrayList<String>());
+                types.get(h.getType()).add(h.getTitle());
+            }
+        }
 
+        // TODO: initialize ...
+        /*
+        for (int i = 0; i< habitList.length(); i++)(
+                //adapter.add(habitList[i].gettype());
+                //adapter.addhabit()
+                array.add
+                )*/
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this);
+        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
         expandableListView.setAdapter(adapter);
         //activity for expandableListView
         //data hard coded need to change to serialized data
@@ -105,7 +121,7 @@ public class HomePageActivity extends AppCompatActivity {
                 intent.putExtra("HabitType", habitList.get(0).getType());
                 intent.putExtra("HabitReason", habitList.get(0).getReason());
                 intent.putExtra("StartingDate", habitList.get(0).getStartDate());
-                startActivity(intent);
+                startActivityForResult(intent,2);
                 return false;
             }
         });
@@ -143,7 +159,7 @@ public class HomePageActivity extends AppCompatActivity {
     //button on activity_home_page bridge to activity_create_habit
     public void newHabit(View view){
         Intent intent = new Intent(this, CreateHabitActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 2);
     }
     //Crate the menu object
     @Override
@@ -165,7 +181,7 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Add_New_Habit:
                 Intent intent_new_Habit = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_new_Habit);
+                startActivityForResult(intent_new_Habit, 2);
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
@@ -217,6 +233,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Toast.makeText(this, "In onActivityResult", Toast.LENGTH_SHORT).show();
+
         // When a new habit event is created
         if (requestCode == NEW_EVENT) {
             if (resultCode == RESULT_OK) {
@@ -240,7 +258,31 @@ public class HomePageActivity extends AppCompatActivity {
             }
         }*/
 
+        else if(requestCode == CREAT_HABIT_EVENT) {
+            if(resultCode == RESULT_OK) {
+                Habit habit = (Habit) data.getSerializableExtra("Habit");
+                user.addHabit(habit);
+                user.save();
+
+                HashMap<String, List<String>> types = new HashMap<String, List<String>>();
+                for(Habit h : user.getHabits()) {
+                    if(types.containsKey(h.getType())){
+                        types.get(h.getType()).add(h.getTitle());
+                    }else{
+                        types.put(h.getType(), new ArrayList<String>());
+                        types.get(h.getType()).add(h.getTitle());
+                    }
+                }
+                expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
+                final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
+                expandableListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+
         //adapter.notifyDataSetChanged();
     }
 
-}
+

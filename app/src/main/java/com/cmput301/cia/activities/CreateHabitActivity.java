@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitController;
+import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DatePickerUtilities;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT);
+                Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -89,14 +90,20 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     public void createHabit(View v) {
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
 
-        CreateHabitController.onSaveClicked(
+        Habit habit = CreateHabitController.onSaveClicked(
                 habitName.getText().toString(),
                 reason.getText().toString(),
                 chooseStartDate,
-                getPickedDates(daysSelected)
+                getPickedDates(daysSelected),
+                spinner.getSelectedItem().toString()
         );
-        Intent intent = new Intent(this, HomePageActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HomePageActivity.class);
+//        startActivity(intent);
+        //Toast.makeText(this, "In onActivityResult", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("Habit", habit);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     public void clearInputFields(View v) {
