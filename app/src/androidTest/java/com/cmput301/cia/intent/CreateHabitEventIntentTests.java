@@ -10,7 +10,11 @@ import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.CreateHabitEventActivity;
+import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
+
+import java.lang.reflect.Field;
 
 /**
  * Version 1
@@ -18,14 +22,15 @@ import com.robotium.solo.Solo;
  * Date: Nov 5 2017
  *
  * This class tests the UI for creating habit events
+ * NOTE: some of these tests require an internet connection (for saving in the ElasticSearch database)
  */
 
-public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<CreateHabitEventActivity> {
+public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
 
     private Solo solo;
 
     public CreateHabitEventIntentTests() {
-        super(com.cmput301.cia.activities.CreateHabitEventActivity.class);
+        super(com.cmput301.cia.activities.HomePageActivity.class);
     }
 
     public void setUp() throws Exception{
@@ -34,54 +39,56 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
     }
 
     public void testCommentLength(){
+        solo.clickInList(1, 1);
         solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
         // max length = 20
         assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
         assertTrue(((EditText) solo.getView(R.id.cheCommentEditText)).getText().toString().length() == 20);
     }
 
-    public void testFinish(){
+    public void testFinish() throws NoSuchFieldException, IllegalAccessException {
+        // Select the 1st option in the second list (the "today's tasks" list)
+        solo.clickInList(1, 1);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        solo.clickOnButton("Finish");
+        solo.clickOnButton("Save");
 
-        // TODO: previous activity
-        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        // TODO: get habit events count from class
-        int habitEvents = 0;
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
+        field.setAccessible(true);
+        Profile user = (Profile) field.get(solo.getCurrentActivity());
+        int habitEvents = user.getHabitHistory().size();
 
-        // TODO: button text for getting back to create habit event activity
-        solo.clickOnButton("Create");
+        solo.clickInList(1, 1);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Save");
 
-        // TODO: assert new habit events count is old+1
-        assertTrue(false);
+        // assert that a new event was added
+        assertTrue(user.getHabitHistory().size() == habitEvents + 1);
     }
 
-    public void testCancel(){
+    public void testCancel() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickInList(1, 1);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
         solo.clickOnButton("Cancel");
 
-        // TODO: previous activity
-        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        // TODO: get habit events count from class
-        int habitEvents = 0;
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
+        field.setAccessible(true);
+        Profile user = (Profile) field.get(solo.getCurrentActivity());
+        int habitEvents = user.getHabitHistory().size();
 
-        // TODO: button text for getting back to create habit event activity
-        solo.clickOnButton("Create");
+        solo.clickInList(1, 1);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Cancel");
 
-        // TODO: assert new habit events count is equal to old
-        assertTrue(false);
-
+        // assert new habit events count is equal to old
+        assertTrue(user.getHabitHistory().size() == habitEvents);
     }
 
     public void testSelectImage(){
-
-        // TODO: index?
+        solo.clickInList(1, 1);
         solo.clickOnImage(0);
 
         // TODO: test picking image
@@ -89,7 +96,6 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         //Bitmap image = ((CreateHabitEventActivity)solo.getCurrentActivity());
 
         // TODO: assert image size <= CreateHabitEventActivity.MAX_IMAGE_SIZE
-
     }
 
     /*public void testStart() throws Exception {
