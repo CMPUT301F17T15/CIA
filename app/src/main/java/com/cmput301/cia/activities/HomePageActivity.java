@@ -83,8 +83,8 @@ public class HomePageActivity extends AppCompatActivity {
         values.put("creator", user.getId());
         final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
         habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-        /*habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>()));
-        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>()));*/
+        /*habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>(), "type2"));
+        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>(), "type2"));*/
         // TODO: initialize ...
 
         //linking expandableListView
@@ -116,6 +116,8 @@ public class HomePageActivity extends AppCompatActivity {
         ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayAdapter<String> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
+        // TODO: replace above line with the below one after habits are saved in profile
+        //ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
         checkable.setAdapter(lvc_adapter);
 
         //Onclick display toast, show congratulation on complete.
