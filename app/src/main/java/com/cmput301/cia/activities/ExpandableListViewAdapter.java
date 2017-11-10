@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.cmput301.cia.models.Habit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,31 +36,35 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             {"No burger", "No coke", "No frise"}};
     //List <Habit> habit;
     Context context;
+    HashMap<String, List<String>> map;
 
-    public ExpandableListViewAdapter(Context context){
+    public ExpandableListViewAdapter(Context context, HashMap<String, List<String>> map){
         this.context = context;
+        this.map = map;
     }
 
     public String[] getHabitTypes(){return habitTypes;}
     public String[][] getHabits(){return habits;}
     @Override
     public int getGroupCount() {
-        return habitTypes.length;
+        return map.size();
     }
 
     @Override
     public int getChildrenCount(int i) {
-        return habits[i].length;
+        String key = map.keySet().toArray()[i].toString();
+        return map.get(key).size();
     }
 
     @Override
     public Object getGroup(int i) {
-        return habitTypes[i];
+        return map.keySet().toArray()[i].toString();
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        return habits[i][i1];  //i = habitType position, i1 = habits position
+        String key = map.keySet().toArray()[i].toString();
+        return map.get(key).get(i1);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup parent) {
         TextView textView = new TextView(context);
-        textView.setText(habitTypes[i]);
+        textView.setText(map.keySet().toArray()[i].toString());
         textView.setPadding(100, 0, 0, 0);
         textView.setTextColor(Color.BLACK);
         textView.setTextSize(30);
@@ -90,7 +95,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final TextView textView = new TextView(context);
-        textView.setText(habits[i][i1]);
+        String key = map.keySet().toArray()[i].toString();
+        textView.setText(map.get(key).get(i1));
         textView.setPadding(200, 30, 30, 0);
         textView.setTextColor(Color.DKGRAY);
         textView.setTextSize(20);

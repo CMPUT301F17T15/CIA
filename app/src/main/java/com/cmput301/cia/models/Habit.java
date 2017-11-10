@@ -6,6 +6,7 @@ package com.cmput301.cia.models;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Keeps track of all habit events the user has completed/missed related to the habit
  */
 
-public class Habit extends ElasticSearchable {
+public class Habit extends ElasticSearchable implements Serializable {
 
     public static final String TYPE_ID = "habit";
 
