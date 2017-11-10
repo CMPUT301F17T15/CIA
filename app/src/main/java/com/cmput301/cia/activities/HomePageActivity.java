@@ -171,6 +171,7 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
+                intent_Habit_History.putExtra("ID", user.getId());
                 startActivity(intent_Habit_History);
                 return true;
             case R.id.menu_button_My_Following:
