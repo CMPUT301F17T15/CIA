@@ -97,8 +97,8 @@ public class HomePageActivity extends AppCompatActivity {
         final String[][] Habits = adapter.getHabits();
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
-                Toast.makeText(HomePageActivity.this,"Habit "+Habits[i][i1] + " Clicked from types "+ HabitTypes[i],
+            public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
+                Toast.makeText(HomePageActivity.this,"Habit "+Habits[group][child] + " Clicked from types "+ HabitTypes[group],
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("HabitName", habitList.get(0).getTitle());
@@ -132,8 +132,8 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
                 // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
-                //user.getHabitIdByTitle(checkedItems)
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
                 startActivityForResult(intent, NEW_EVENT);
 
             }
@@ -209,6 +209,11 @@ public class HomePageActivity extends AppCompatActivity {
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
+            } else {
+                int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
+
+                // TODO: uncheck the box that was selected
+                expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
             }
 
             // When the details of an existing counter are being viewed
