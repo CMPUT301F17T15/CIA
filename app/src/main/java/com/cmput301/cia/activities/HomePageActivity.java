@@ -226,7 +226,7 @@ public class HomePageActivity extends AppCompatActivity {
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
-            } else {
+            } else if (data != null){
                 int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
 
                 // TODO: uncheck the box that was selected

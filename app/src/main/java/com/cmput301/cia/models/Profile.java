@@ -5,7 +5,6 @@
 package com.cmput301.cia.models;
 
 import android.location.Location;
-import android.util.ArraySet;
 
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -24,10 +23,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Version 3
+ * Version 4
  * Author: Adil Malik
- * Date: Nov 07 2017
+ * Date: Nov 09 2017
  */
+
+// TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent from habithistory, and account for EditHabitEvent
 
 public class Profile extends ElasticSearchable {
 
