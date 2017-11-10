@@ -22,6 +22,7 @@ import java.util.Date;
  * Version 1
  *
  * Tests the geolocation aspects of habit events
+ * NOTE: assumes device is connected to the internet. Will not succeed if it isn't.
  */
 
 public class GelocationUnitTests extends ActivityInstrumentationTestCase2 {

@@ -17,14 +17,18 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Version 3
+ * Version 4
  * Author: Adil Malik
- * Date: Nov 07 2017
+ * Date: Nov 09 2017
  */
+
+// TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent from habithistory, and account for EditHabitEvent
 
 public class Profile extends ElasticSearchable {
 
@@ -48,9 +52,6 @@ public class Profile extends ElasticSearchable {
     // Events that will be synchronized when the user signs in on a valid connection
     private List<OfflineEvent> pendingEvents;
 
-    // The habit categories that the user has created
-    private List<String> habitCategories;
-
     // Points received for consecutively completing all habits in a week
     private int powerPoints;
 
@@ -67,7 +68,6 @@ public class Profile extends ElasticSearchable {
         following = new ArrayList<>();
         followRequests = new ArrayList<>();
         pendingEvents = new ArrayList<>();
-        habitCategories = new ArrayList<>();
         powerPoints = 0;
         habitPoints = 0;
     }
@@ -415,23 +415,18 @@ public class Profile extends ElasticSearchable {
      * @return the name of the file containing this user's pending events
      */
     private String getOfflineEventsFile(){
-        return name + "events.sav";
-    }
-
-    /**
-     * Add a new habit type to the user's list of habit categories
-     * @param category the type to add
-     */
-    // TODO: potentially make unit tests for these two below functions (is there really a point though?)
-    public void addHabitCategory(String category){
-        habitCategories.add(category);
+        return name + ".sav";
     }
 
     /**
      * @return the list of habit categories the user has created
      */
-    public List<String> getHabitCategories(){
-        return habitCategories;
+    public Set<String> getHabitCategories(){
+        Set<String> categories = new HashSet<>();
+        for (Habit habit : habits){
+            categories.add(habit.getType());
+        }
+        return categories;
     }
 
     /**
@@ -502,6 +497,22 @@ public class Profile extends ElasticSearchable {
         }
 
         return nearbyEvents;
+    }
+
+    /**
+     * @param category the category all returned habits must fall under
+     * @return list of all habits falling under the specified category
+     */
+    public List<Habit> getHabitsInCategory(String category){
+        List<Habit> list = new ArrayList<>();
+
+        for (Habit habit : habits){
+            if (habit.getType().equals(category)){
+                list.add(habit);
+            }
+        }
+
+        return list;
     }
 
 }

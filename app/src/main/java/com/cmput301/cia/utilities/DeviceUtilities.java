@@ -2,6 +2,7 @@ package com.cmput301.cia.utilities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -9,8 +10,12 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 /*import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -20,16 +25,22 @@ import com.google.android.gms.tasks.Task;
 */
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Oct 13 2017
+ * Date: Nov 09 2017
  *
  * Contains various device related utility functions accessibly anywhere
  */
 
 public class DeviceUtilities {
+
+    private static Context context;
 
     private static LocationListenerImpl listener = new LocationListenerImpl();
 
@@ -59,10 +70,39 @@ public class DeviceUtilities {
     }
 
     /**
+     * Execute an asynchronous task to determine whether the device is connected to the internet or not
+     */
+    private static class CheckConnectionTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                URL url = new URL("http://cmput301.softwareprocess.es:8080/");
+                Scanner scanner = new Scanner(url.openStream());
+                boolean hasNext = scanner.hasNext();
+                scanner.close();
+                return hasNext;
+            } catch (MalformedURLException e) {
+                Log.d("Error Connection", e.getMessage());
+            } catch (IOException e) {
+                Log.d("Error Connection", e.getMessage());
+            }
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
      * @return whether the user is connected to the internet or not
      */
+    // TODO: testing when offline
     public static boolean isOnline() {
-        return true;
+        try {
+            return new CheckConnectionTask().execute().get();
+        } catch (InterruptedException e) {
+            Log.d("Error isOnline()", e.getMessage());
+        } catch (ExecutionException e) {
+            Log.d("Error isOnline()", e.getMessage());
+        }
+        return false;
     }
 
     /**
@@ -79,6 +119,7 @@ public class DeviceUtilities {
         // Request permissions for the GPS service if not granted
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return null;
         }
 
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
@@ -95,7 +136,7 @@ public class DeviceUtilities {
                 // non-null location
                 if (task.isSuccessful()) {
                     location[0] = task.getResult();
-                    System.out.println("LOCLOCLOCLOC= " + location[0].toString());
+                    System.out.println("lc= " + location[0].toString());
                 }
             }
         });*/

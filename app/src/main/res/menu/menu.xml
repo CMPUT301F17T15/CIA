@@ -26,7 +26,7 @@
         android:checkable="true"
         android:title="@string/menu_Notification" />
     <item
-        android:id="@+id/menu_button_WOW"
+        android:id="@+id/menu_button_PowerRankings"
         android:checkable="false"
         android:title="@string/menu_WOW" />
     <item

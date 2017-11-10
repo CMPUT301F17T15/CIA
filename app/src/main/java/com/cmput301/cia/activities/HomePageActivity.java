@@ -34,10 +34,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 3
+ * Version 4
  * Author: Adil Malik
  * Modified by: Shipin Guan
- * Date: Nov 7 2017
+ * Date: Nov 9 2017
  *
  * Repressents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
@@ -86,8 +86,6 @@ public class HomePageActivity extends AppCompatActivity {
         values.put("creator", user.getId());
         final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
         habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-        habitList.add(new Habit("100 push-up", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-        habitList.add(new Habit("100 sit-up", "dg", new Date(), new ArrayList<Integer>(),"type1"));
         HashMap<String, List<String>> types = new HashMap<String, List<String>>();
         for(Habit h : user.getHabits()) {
             if(types.containsKey(h.getType())){
@@ -97,6 +95,7 @@ public class HomePageActivity extends AppCompatActivity {
                 types.get(h.getType()).add(h.getTitle());
             }
         }
+
         // TODO: initialize ...
         /*
         for (int i = 0; i< habitList.length(); i++)(
@@ -114,8 +113,8 @@ public class HomePageActivity extends AppCompatActivity {
         final String[][] Habits = adapter.getHabits();
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int i, int i1, long l) {
-                Toast.makeText(HomePageActivity.this,"Habit "+Habits[i][i1] + " Clicked from types "+ HabitTypes[i],
+            public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
+                Toast.makeText(HomePageActivity.this,"Habit "+Habits[group][child] + " Clicked from types "+ HabitTypes[group],
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("HabitName", habitList.get(0).getTitle());
@@ -133,6 +132,8 @@ public class HomePageActivity extends AppCompatActivity {
         ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         ArrayAdapter<String> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, items);
+        // TODO: replace above line with the below one after habits are saved in profile
+        //ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
         checkable.setAdapter(lvc_adapter);
 
         //Onclick display toast, show congratulation on complete.
@@ -147,8 +148,8 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
                 // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
-                //user.getHabitIdByTitle(checkedItems)
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
                 startActivityForResult(intent, NEW_EVENT);
 
             }
@@ -188,11 +189,20 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
+                intent_Habit_History.putExtra("ID", user.getId());
                 startActivity(intent_Habit_History);
                 return true;
             case R.id.menu_button_My_Following:
                 Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
                 startActivity(intent_My_Following);
+                return true;
+            case R.id.menu_button_PowerRankings:
+                Intent intentPR = new Intent(this, CreateHabitActivity.class);
+                startActivity(intentPR);
+                return true;
+            case R.id.menu_button_OverallRankings:
+                Intent intentOR = new Intent(this, CreateHabitActivity.class);
+                startActivity(intentOR);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -201,6 +211,9 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
+
         /*counterArrayAdapter = new ArrayAdapter<>(this,
                 R.layout.list_item, new ArrayList<Habit>());//counters);
         countersList.setAdapter(counterArrayAdapter);*/
@@ -211,6 +224,12 @@ public class HomePageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    /**
+     * Handle the results of an activity that has finished
+     * @param requestCode the activity's identifying code
+     * @param resultCode the result status of the finished activity
+     * @param data the activity's returned intent information
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -225,6 +244,11 @@ public class HomePageActivity extends AppCompatActivity {
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
+            } else if (data != null){
+                int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
+
+                // TODO: uncheck the box that was selected
+                expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
             }
 
             // When the details of an existing counter are being viewed
@@ -233,6 +257,7 @@ public class HomePageActivity extends AppCompatActivity {
                 returnFromDetails(data);
             }
         }*/
+
         else if(requestCode == CREAT_HABIT_EVENT) {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
@@ -256,36 +281,8 @@ public class HomePageActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Call this after successfully returning from viewing details about a counter
-     * @param data is the activity's results
-     */
-    private void returnFromDetails(Intent data){
-        // whether the counter was deleted or not
-        /*boolean deleted = data.getBooleanExtra(CounterDetailsActivity.ID_DELETED, false);
 
-        String name = data.getStringExtra(CounterDetailsActivity.ID_COUNTER_NAME);
-        int index = data.getIntExtra(CounterDetailsActivity.ID_INDEX, 0);
-
-        // The counter that was being viewed
-        Counter counter = counters.get(index);
-
-        if (deleted){
-            counters.remove(counter);
-            countersAmountText.setText(String.valueOf(counters.size()));
-        } else {
-            long value = data.getLongExtra(CounterDetailsActivity.ID_COUNTER_VALUE, 0);
-            String desc = data.getStringExtra(CounterDetailsActivity.ID_COUNTER_DESC);
-            long currentValue = data.getLongExtra(CounterDetailsActivity.ID_COUNTER_CVALUE, 0);
-
-            if (counter.getInitialValue() != value)
-                counter.setInitialValue(value);
-            if (counter.getCurrentValue() != currentValue)
-                counter.setCurrentValue(currentValue);
-            counter.setName(name);
-            counter.setComment(desc);
-        }
-        counterArrayAdapter.notifyDataSetChanged();
-        saveCounters();*/
+        //adapter.notifyDataSetChanged();
     }
-}
+
+

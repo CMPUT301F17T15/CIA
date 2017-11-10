@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import org.w3c.dom.ls.LSException;
 
@@ -31,19 +33,14 @@ import java.util.List;
  */
 public class HistoryActivity extends AppCompatActivity {
     // global variables
-    private ArrayList<HabitEvent> habitList;
-    private ArrayList<HabitEvent> habitsShowOnScreen;
+    private List<HabitEvent> habitList;
+    private List<HabitEvent> habitsShowOnScreen;
     private ArrayAdapter<HabitEvent> habitsShowOnScreen_adapter;
 
-    private ArrayList<HabitEvent> filterByTime;
-    private ArrayList<HabitEvent> filterByTypeList;
-    private ArrayList<HabitEvent> filterByCommentList;
-
     private ListView historyList;
-//    private TextView filterStaticText;
+    private String ID;
     private EditText filterEditText;
-//    private Button historyEventFilterButton;
-//    private Button historyReturnButton;
+    private Profile user;
 
     
 
@@ -51,9 +48,18 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        ID = getIntent().getExtras().getString("ID");
+        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, ID);
+        habitList = user.getHabitHistory();
         historyList = (ListView) findViewById(R.id.historyList);
         TextView filterStaticText;
+        habitsShowOnScreen_adapter = new ArrayAdapter<HabitEvent>(this,
+                R.layout.list_item,habitsShowOnScreen);
+        historyList.setAdapter(habitsShowOnScreen_adapter);
+
+
+
+
         filterEditText = (EditText) findViewById(R.id.filterEditText);
 
 
@@ -66,7 +72,7 @@ public class HistoryActivity extends AppCompatActivity {
 Added date list descending order, not sure if correct 
 Dinesh
  */
-        ArrayList<HabitEvent> datedList = new ArrayList<HabitEvent>();
+        List<HabitEvent> datedList = new ArrayList<HabitEvent>();
         Collections.sort(datedList, new Comparator<HabitEvent>() {
             @Override
             public int compare(HabitEvent o1, HabitEvent o2) {
@@ -80,8 +86,7 @@ Dinesh
             public void onClick(View v) {
                 String type = new String();
                 type = filterEditText.getText().toString();
-                filterByTypeList = filterByTypeFunction(habitList, type);
-                habitsShowOnScreen = filterByTypeList;
+                habitsShowOnScreen = filterByTypeFunction(habitList, type);
                 habitsShowOnScreen_adapter.notifyDataSetChanged();
             }
         });
@@ -91,8 +96,7 @@ Dinesh
             public void onClick(View v) {
                 String comment = new String();
                 comment = filterEditText.getText().toString();
-                filterByCommentList = filterByCommentFunction(habitList, comment);
-                habitsShowOnScreen = filterByCommentList;
+                habitsShowOnScreen = filterByCommentFunction(habitList, comment);
                 habitsShowOnScreen_adapter.notifyDataSetChanged();
             }
         });
@@ -101,69 +105,35 @@ Dinesh
     }
 
 
-    // giving habits and sort by date, too hard!!!
-//    public ArrayList<HabitEvent> sortByDate(ArrayList<HabitEvent> habitList){
-//        int size = habitList.size();
-//
-//    }
 
 
     // giving habits and filter by type
-    public ArrayList<HabitEvent> filterByTypeFunction(ArrayList<HabitEvent> habitList, String type){
-        ArrayList<HabitEvent> sortedList = new ArrayList<HabitEvent>();
+    public List<HabitEvent> filterByTypeFunction(List<HabitEvent> habitList, String type){
+        List<HabitEvent> sortedList = new ArrayList<HabitEvent>();
         int size = habitList.size();
         int counter = 0;
         while (counter<size){
             if (habitList.get(counter).getTypeId() == type){
                 sortedList.add(habitList.get(counter));
             }
+            counter++;
         }
         return sortedList;
     }
 
 
     // giving habits and filter by comment
-    public ArrayList<HabitEvent> filterByCommentFunction(ArrayList<HabitEvent> habitList, String comment){
-        ArrayList<HabitEvent> filteredList = new ArrayList<HabitEvent>();
+    public List<HabitEvent> filterByCommentFunction(List<HabitEvent> habitList, String comment){
+        List<HabitEvent> filteredList = new ArrayList<HabitEvent>();
         int size = habitList.size();
         int counter = 0;
         while (counter<size){
-            if (habitList.get(counter).getComment()==comment){  //May Wrong, wait for class function
+            if (habitList.get(counter).getComment()==comment){
                 filteredList.add(habitList.get(counter));
             }
+            counter++;
         }
         return filteredList;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // giving habits and get the missdate, unfinished.
-//    public List<Date> getMissedDates(List<HabitEvent> habits) {
-//        int size = habits.size();
-//        int a = 0;
-//        while (a < size) {
-//            HabitEvent testHabit = habits.get(a);
-//            this.missDates.add(testHabit.getMissedDates().get(0));
-//            a = a + 1;
-//        }
-//        return this.missDates;
-//    }
-
-    // giving habits and filter by comment, unfinished.
 
 }
