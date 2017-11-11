@@ -147,8 +147,7 @@ public class HomePageActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());//habitList.get(i).getId());
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
                 startActivityForResult(intent, CREATE_EVENT);
 
@@ -156,6 +155,7 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
     }
+
     //button on activity_home_page bridge to activity_create_habit
     public void newHabit(View view){
         Intent intent = new Intent(this, CreateHabitActivity.class);
@@ -211,6 +211,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        user.synchronize();
 
         // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
 

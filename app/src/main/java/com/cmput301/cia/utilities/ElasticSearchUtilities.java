@@ -2,6 +2,9 @@ package com.cmput301.cia.utilities;
 
 import com.cmput301.cia.models.ElasticSearchable;
 import com.google.common.collect.Iterables;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.searchly.jestdroid.JestDroidClient;
 
 import android.os.AsyncTask;
@@ -9,6 +12,10 @@ import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +46,9 @@ public class ElasticSearchUtilities {
     private static final int MAX_RESULTS = 1000;
     private static JestDroidClient client;
 
+    /**
+     * Asynchronous Task for inserting/updating an object into the database
+     */
     private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Void> {
 
         @Override
@@ -48,7 +58,7 @@ public class ElasticSearchUtilities {
             for (ElasticSearchable obj : objects) {
                 Index.Builder builder = new Index.Builder(obj).index(INDEX).type(obj.getTypeId());
 
-                // update instead of this object is already in the database
+                // update instead if this object is already in the database
                 if (obj.hasValidId()){
                     builder.id(obj.getId());
                 }
@@ -70,6 +80,9 @@ public class ElasticSearchUtilities {
         }
     }
 
+    /**
+     * Asynchronous Task for searching for an object in the database through parameters in the source
+     */
     private static class SearchTask extends AsyncTask<String, Void, SearchResult> {
         @Override
         protected SearchResult doInBackground(String... search_parameters) {
@@ -96,6 +109,9 @@ public class ElasticSearchUtilities {
         }
     }
 
+    /**
+     * Asynchronous Task for searching for an object in the database using it's unique ID
+     */
     private static class IDSearchTask extends AsyncTask<String, Void, SearchResult> {
         @Override
         protected SearchResult doInBackground(String... search_parameters) {
@@ -103,12 +119,7 @@ public class ElasticSearchUtilities {
 
             String typeId = search_parameters[0];
             String objectId = search_parameters[1];
-            String query = search_parameters[2];        // TODO: is this parameter even necessary?
-
-            // Build the query
-            // TODO: do this
-            //String query = "{\n" +
-            //        "    \"query\": {\"term\": {\"message\":\"" + search_parameters[0] + "\"}}\n" + "}";
+            String query = "{\"query\":{\"match\":{\"id\":\"" + objectId + "\"}}}}";
 
             Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
 
@@ -128,6 +139,9 @@ public class ElasticSearchUtilities {
         }
     }
 
+    /**
+     * Asynchronous Task for deleting an object from the database with it's unique ID
+     */
     private static class DeleteTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... search_parameters) {
@@ -140,6 +154,7 @@ public class ElasticSearchUtilities {
             Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).id(objectId).build();
 
             try {
+                // TODO: test success
                 client.execute(delete);
             }
             catch (Exception e) {
@@ -196,7 +211,7 @@ public class ElasticSearchUtilities {
     }
 
     /**
-     * Search for all records with the specified type ID
+     * Search for all records with the specified type parameter values
      * @param typeId the type template id that all results must match
      * @param tempClass the java class of the generic type T
      * @param values map where key=parameter and value=required record value for that parameter
@@ -206,9 +221,24 @@ public class ElasticSearchUtilities {
     public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, Map<String, String> values){
         SearchResult result = search(typeId, getQueryFromMap(values));
         if (result != null && result.isSucceeded()) {
-            // TODO: try get hits?
-            return result.getSourceAsObjectList(tempClass);
+
+            List<T> found = result.getSourceAsObjectList(tempClass);
+
+            // transform result into json
+            JsonObject jo = result.getJsonObject();
+
+            // get array of only the records in the database, and not the other parts of the result object
+            JsonArray array = jo.get("hits").getAsJsonObject().get("hits").getAsJsonArray();
+
+            // look at each record individually
+            for (int i = 0; i < array.size(); ++i){
+                JsonObject record = array.get(i).getAsJsonObject();
+                // set the id of this object since jest does not do it automatically
+                found.get(i).setId(record.get("_id").getAsString());
+            }
+            return found;
         }
+
         return new ArrayList<>();
     }
 
@@ -223,13 +253,18 @@ public class ElasticSearchUtilities {
     public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, String id){
         SearchResult result = search(typeId, "", id);
         if (result != null && result.isSucceeded()) {
-            return result.getSourceAsObject(tempClass);
+
+            // TODO: verify that the object is the first item in the hits array
+            T object = result.getSourceAsObject(tempClass);
+            // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
+            object.setId(id);
+            return object;
         }
         return null;
     }
 
     /**
-     * Search for the record with the specified ID
+     * Search for the record with the specified parameter values
      * @param typeId the type template id of the result
      * @param tempClass the java class of the generic type T
      * @param values map where key=parameter and value=required record value for that parameter
@@ -239,7 +274,23 @@ public class ElasticSearchUtilities {
     public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, Map<String, String> values){
         SearchResult result = search(typeId, getQueryFromMap(values));
         if (result != null && result.isSucceeded()) {
-            return result.getSourceAsObject(tempClass);
+
+            List<SearchResult.Hit<T, Void>> hits = result.getHits(tempClass);
+
+            JsonObject jo = result.getJsonObject();
+
+            // array of all of the records that match the search parameters
+            JsonArray array = jo.get("hits").getAsJsonObject().get("hits").getAsJsonArray();
+            if (array.size() == 0)
+                return null;
+
+            String foundId = array.get(array.size() - 1).getAsJsonObject().get("_id").getAsString();
+
+            // use the last object as the source
+            T obj = result.getSourceAsObjectList(tempClass).get(array.size() - 1);//result.getSourceAsObject(tempClass);
+            // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
+            obj.setId(foundId);
+            return obj;
         }
         return null;
     }
@@ -283,22 +334,6 @@ public class ElasticSearchUtilities {
             factory.setDroidClientConfig(config);
             client = (JestDroidClient) factory.getObject();
         }
-
-        // TODO: if index has not been built
-        // create it and also create the templates for Habit, HabitEvent, Profile
-        /**
-         * type: properties
-         *
-         * habit: ProfileID (creator), HabitID
-         * habitevent: HabitID (base), HabitEventID
-         * profile: ProfileID
-         */
-
-        // TODO: check if other properties need to be created in the templates as well
-        // ex:
-        /**
-         * profile: following (list of profile id's), follow requests from (list of profile id's)
-         */
     }
 
     /**
@@ -307,6 +342,10 @@ public class ElasticSearchUtilities {
      * @return the map as a string representing a query
      */
     private static String getQueryFromMap(Map<String, String> values){
+
+        if (values.size() == 0)
+            return "";
+
         StringBuilder query = new StringBuilder();
 
         Set<String> keyset = values.keySet();
@@ -327,12 +366,20 @@ public class ElasticSearchUtilities {
      */
     private static String getCompleteQuery(String parameters){
         StringBuilder builder = new StringBuilder();
-        builder.append("{\n\"query\": {\"term\":{");
-        builder.append(parameters);
-        builder.append("}}\n}");
 
-        // TODO: any number of results (unless this isn't necessary?)
-        //"{ \"size\" : " + MAX_RESULTS +" } "
+        // TODO: handle case when there is more than max results
+        builder.append("{\"size\": " + MAX_RESULTS + ",");
+
+        // find all
+        if (parameters.equals("")){
+            builder.append("\n\"query\": {\"match_all\": {}");
+            builder.append("}}\n}");
+        } else {
+            builder.append("\n\"query\": {\"term\":{");
+            builder.append(parameters);
+            builder.append("}}\n}");
+        }
+
         return builder.toString();
     }
 
