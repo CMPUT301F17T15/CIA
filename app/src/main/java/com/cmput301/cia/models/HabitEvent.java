@@ -217,11 +217,4 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         ElasticSearchUtilities.delete(this);
     }
 
-    /**
-     * toString, guanfang add
-     */
-    @Override
-    public String toString(){
-        return "complete ";
-    }
 }
