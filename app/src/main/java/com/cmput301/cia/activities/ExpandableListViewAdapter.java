@@ -5,20 +5,16 @@
 package com.cmput301.cia.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.SetUtilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by gsp on 2017/11/6.
@@ -29,34 +25,51 @@ import java.util.List;
 
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
-    Context context;
-    HashMap<String, List<String>> map;
+    private Context context;
+    private Profile user;
 
-    public ExpandableListViewAdapter(Context context, HashMap<String, List<String>> map){
+    private Set<String> categories;
+
+    public ExpandableListViewAdapter(Context context, Profile user){
         this.context = context;
-        this.map = map;
+        this.user = user;
+        refresh();
     }
 
     @Override
     public int getGroupCount() {
-        return map.size();
+        return categories.size();
     }
 
     @Override
     public int getChildrenCount(int i) {
-        String key = map.keySet().toArray()[i].toString();
-        return map.get(key).size();
+
+        int index = 0;
+        for (String value : categories){
+            if (index == i)
+                return user.getHabitsInCategory(value).size();
+            ++index;
+        }
+
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
     public Object getGroup(int i) {
-        return map.keySet().toArray()[i].toString();
+        return SetUtilities.getItemAtIndex(categories, i);
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        String key = map.keySet().toArray()[i].toString();
-        return map.get(key).get(i1);
+
+        int index = 0;
+        for (String value : categories){
+            if (index == i)
+                return user.getHabitsInCategory(value).get(i1).getTitle();
+            ++index;
+        }
+
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
@@ -77,7 +90,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup parent) {
         TextView textView = new TextView(context);
-        textView.setText(map.keySet().toArray()[i].toString());
+        textView.setText((String)getGroup(i));
         textView.setPadding(100, 0, 0, 0);
         textView.setTextColor(Color.BLACK);
         textView.setTextSize(30);
@@ -87,8 +100,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final TextView textView = new TextView(context);
-        String key = map.keySet().toArray()[i].toString();
-        textView.setText(map.get(key).get(i1));
+        textView.setText((String)getChild(i, i1));
         textView.setPadding(200, 30, 30, 0);
         textView.setTextColor(Color.DKGRAY);
         textView.setTextSize(20);
@@ -99,10 +111,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
             }
         });*/
-
-
-
-
         return textView;
     }
 
@@ -110,4 +118,13 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int i, int i1) {
         return true;
     }
+
+    /**
+     * Refresh the user's habit categories list
+     */
+    // TODO: call this whenever returning to the home screen
+    public void refresh(){
+        categories = user.getHabitCategories();
+    }
+
 }

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         if (profile != null){
             Intent intent = new Intent(this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
+            intent.putExtra(HomePageActivity.ID_NEW_ACCOUNT, false);
             startActivity(intent);
         } else {
             Toast.makeText(this, "There exists no user with that name", Toast.LENGTH_SHORT).show();
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_USERNAME, name);
+            intent.putExtra(HomePageActivity.ID_NEW_ACCOUNT, true);
             startActivity(intent);
         }
 

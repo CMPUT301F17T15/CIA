@@ -210,7 +210,7 @@ public class ElasticSearchUtilities {
      * @param tempClass the java class of the generic type T
      * @param values map where key=parameter and value=required record value for that parameter
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return the list of all records matching that type ID
+     * @return the list of all records matching that type ID with the required parameter values
      */
     public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, Map<String, String> values){
         SearchResult result = search(typeId, getQueryFromMap(values));
