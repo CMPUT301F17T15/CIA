@@ -48,6 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
         ID = getIntent().getExtras().getString("ID");
         user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, ID);
         habitList = user.getHabitHistory();
@@ -76,7 +77,12 @@ Dinesh
                 return o1.getDate().compareTo(o2.getDate());
             }
         });
-        habitsShowOnScreen = datedList;
+
+        // the next 4 lines wrong
+        habitsShowOnScreen_adapter=new ArrayAdapter<HabitEvent>(this,R.layout.list_item, habitsShowOnScreen);
+        historyList.setAdapter(habitsShowOnScreen_adapter);
+        habitsShowOnScreen = habitList;
+        habitsShowOnScreen_adapter.notifyDataSetChanged();
 
         filterByType.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -97,11 +103,14 @@ Dinesh
             }
         });
 
-        habitsShowOnScreen_adapter = new ArrayAdapter<HabitEvent>(this,
-                R.layout.list_item,habitsShowOnScreen);
-
-        historyList.setAdapter(habitsShowOnScreen_adapter);
+        historyReturnButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(HistoryActivity.this, HomePageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
 
 
