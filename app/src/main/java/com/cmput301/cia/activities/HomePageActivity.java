@@ -47,8 +47,9 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    private static final int NEW_EVENT = 1;
-    private static final int CREATE_HABIT_EVENT = 2;
+
+    private static final int CREATE_EVENT = 1;
+    private static final int CREATE_HABIT = 2;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -116,7 +117,7 @@ public class HomePageActivity extends AppCompatActivity {
                 finder: //In case there are duplicate habits. find the habit by name.
                 for(Habit habit : user.getHabits()){
                     if (habit.getTitle() == adapter.getChild(group, child)){
-                        Toast.makeText(HomePageActivity.this, " Viewing Habit:\n" + adapter.getChild(group, child) + "'s detail. ",
+                        Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ",
                                 Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                         intent.putExtra("Habit", habit);
@@ -144,10 +145,11 @@ public class HomePageActivity extends AppCompatActivity {
                 Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());//habitList.get(i).getId());
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
-                startActivityForResult(intent, NEW_EVENT);
+
+                startActivityForResult(intent, CREATE_EVENT);
+
             }
         });
     }
@@ -208,6 +210,8 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        user.synchronize();
+
         // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
 
         /*counterArrayAdapter = new ArrayAdapter<>(this,
@@ -230,7 +234,7 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // When a new habit event is created
-        if (requestCode == NEW_EVENT) {
+        if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
 
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
@@ -248,7 +252,8 @@ public class HomePageActivity extends AppCompatActivity {
 
         }
         //Read result from create habit activity
-        else if(requestCode == CREATE_HABIT_EVENT) {
+
+        else if(requestCode == CREATE_HABIT) {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
