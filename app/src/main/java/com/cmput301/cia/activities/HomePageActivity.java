@@ -47,8 +47,8 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    private static final int NEW_EVENT = 1;
-    private static final int CREAT_HABIT_EVENT = 2;
+    private static final int CREATE_EVENT = 1;
+    private static final int CREATE_HABIT = 2;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -150,7 +150,7 @@ public class HomePageActivity extends AppCompatActivity {
                 // TODO: a way of getting the habit's unique ID (from the user, probably using habit's title)
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, "");//habitList.get(i).getId());
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
-                startActivityForResult(intent, NEW_EVENT);
+                startActivityForResult(intent, CREATE_EVENT);
 
             }
         });
@@ -236,7 +236,7 @@ public class HomePageActivity extends AppCompatActivity {
         Toast.makeText(this, "In onActivityResult", Toast.LENGTH_SHORT).show();
 
         // When a new habit event is created
-        if (requestCode == NEW_EVENT) {
+        if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
 
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
@@ -258,7 +258,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         }*/
 
-        else if(requestCode == CREAT_HABIT_EVENT) {
+        else if(requestCode == CREATE_HABIT) {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);

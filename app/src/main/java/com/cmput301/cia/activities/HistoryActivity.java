@@ -53,9 +53,6 @@ public class HistoryActivity extends AppCompatActivity {
         habitList = user.getHabitHistory();
         historyList = (ListView) findViewById(R.id.historyList);
         TextView filterStaticText;
-        habitsShowOnScreen_adapter = new ArrayAdapter<HabitEvent>(this,
-                R.layout.list_item,habitsShowOnScreen);
-        historyList.setAdapter(habitsShowOnScreen_adapter);
 
 
 
@@ -80,7 +77,6 @@ Dinesh
             }
         });
         habitsShowOnScreen = datedList;
-        habitsShowOnScreen_adapter.notifyDataSetChanged();    
 
         filterByType.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -101,7 +97,10 @@ Dinesh
             }
         });
 
+        habitsShowOnScreen_adapter = new ArrayAdapter<HabitEvent>(this,
+                R.layout.list_item,habitsShowOnScreen);
 
+        historyList.setAdapter(habitsShowOnScreen_adapter);
     }
 
 
