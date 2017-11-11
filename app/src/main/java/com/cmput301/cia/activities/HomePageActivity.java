@@ -26,11 +26,9 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SetUtilities;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +37,7 @@ import java.util.Map;
  * Modified by: Shipin Guan
  * Date: Nov 9 2017
  *
- * Repressents the home page the user sees after signing in
+ * Represents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
  * from other activities
  */
@@ -47,19 +45,18 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-
     private static final int CREATE_EVENT = 1;
-    private static final int CREATE_HABIT = 2;
+    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3;
 
     // Intent extra data identifier for the name of the user who signed in
-    public static final String ID_USERNAME = "User";
+    public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
 
     // Profile of the signed in user
     private Profile user;
 
     //ExpandableListView for displaying habit types as parent and habits as childs
-    ExpandableListView expandableListView;
-
+    private ExpandableListView expandableListView;
+    private ExpandableListViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,59 +69,40 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
+        boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, false);
+
         Profile dummy = new Profile(name);
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
         if (user == null){
+
+            if (!newAccount){
+                Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+
             user = dummy;
             user.save();
         }
 
-        values.clear();
-        values.put("creator", user.getId());
-        final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
-        habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-
-        /**
-        HashMap function:
-         key = habit type.
-         value = habits with the specific habit type.
-         purpose of this HashMap is to fit in the ExpandableListView structure requirement.
-         Simple ExpandableListView Structure:
-         List[] = key
-         LIst[][] = values
-         */
-        final HashMap<String, List<String>> types = new HashMap<String, List<String>>();
-        for(Habit h : user.getHabits()) {
-            if(types.containsKey(h.getType())){
-                types.get(h.getType()).add(h.getTitle());
-            }else{
-                types.put(h.getType(), new ArrayList<String>());
-                types.get(h.getType()).add(h.getTitle());
-            }
-        }
-
         //linking expandableListView
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
+        adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
-        //activity for expandableListView
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
-                finder: //In case there are duplicate habits. find the habit by name.
-                for(Habit habit : user.getHabits()){
-                    if (habit.getTitle() == adapter.getChild(group, child)){
-                        Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
-                        intent.putExtra("Habit", habit);
-                        startActivityForResult(intent, 2);
-                        break finder;
-                    }
-                }
+
+                String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
+                Habit habit = user.getHabitsInCategory(category).get(child);
+                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ",
+                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
+                intent.putExtra("Habit", habit);
+                startActivityForResult(intent, VIEW_HABIT);
                 return false;
             }
         });
@@ -211,6 +189,8 @@ public class HomePageActivity extends AppCompatActivity {
         super.onStart();
 
         user.synchronize();
+        adapter.refresh();
+        adapter.notifyDataSetChanged();
 
         // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
 
@@ -258,31 +238,10 @@ public class HomePageActivity extends AppCompatActivity {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
-
-                /**
-                 HashMap function:
-                 key = habit type.
-                 value = habits with the specific habit type.
-                 purpose of this HashMap is to fit in the ExpandableListView structure requirement.
-                 Simple ExpandableListView Structure:
-                 List[] = key
-                 LIst[][] = values
-                 */
-
-                HashMap<String, List<String>> types = new HashMap<String, List<String>>();
-                for(Habit h : user.getHabits()) {
-                    if(types.containsKey(h.getType())){
-                        types.get(h.getType()).add(h.getTitle());
-                    }else{
-                        types.put(h.getType(), new ArrayList<String>());
-                        types.get(h.getType()).add(h.getTitle());
-                    }
-                }
-                //Refresh expandableListView
-                expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-                final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
-                expandableListView.setAdapter(adapter);
+                adapter.refresh();
                 adapter.notifyDataSetChanged();
+
+                // TODO: is below necessary
                 //Refresh checkableListView
                 ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
                 checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -290,6 +249,10 @@ public class HomePageActivity extends AppCompatActivity {
                 checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
 
+            }
+        } else if (requestCode == VIEW_HABIT){
+            if (resultCode == RESULT_OK) {
+                // TODO: handle if habit was deleted
             }
         }
     }
