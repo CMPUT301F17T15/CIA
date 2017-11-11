@@ -376,7 +376,7 @@ public class Profile extends ElasticSearchable {
      */
     public void save(){
         for (Habit habit : habits){
-            ElasticSearchUtilities.save(habit);
+            habit.save();
         }
         ElasticSearchUtilities.save(this);
         SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
