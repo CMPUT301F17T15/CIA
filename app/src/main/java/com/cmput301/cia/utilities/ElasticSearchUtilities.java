@@ -3,7 +3,6 @@ package com.cmput301.cia.utilities;
 import com.cmput301.cia.models.ElasticSearchable;
 import com.google.common.collect.Iterables;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.searchly.jestdroid.JestDroidClient;
 
@@ -12,10 +11,6 @@ import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +31,6 @@ import io.searchbox.core.SearchResult;
  *
  * Contains utilities for searching from the ElasticSearch database
  */
-
 
 public class ElasticSearchUtilities {
 
@@ -257,6 +251,7 @@ public class ElasticSearchUtilities {
             // TODO: verify that the object is the first item in the hits array
             T object = result.getSourceAsObject(tempClass);
             // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
+            // appears to be fixed
             object.setId(id);
             return object;
         }
@@ -275,8 +270,6 @@ public class ElasticSearchUtilities {
         SearchResult result = search(typeId, getQueryFromMap(values));
         if (result != null && result.isSucceeded()) {
 
-            List<SearchResult.Hit<T, Void>> hits = result.getHits(tempClass);
-
             JsonObject jo = result.getJsonObject();
 
             // array of all of the records that match the search parameters
@@ -289,6 +282,7 @@ public class ElasticSearchUtilities {
             // use the last object as the source
             T obj = result.getSourceAsObjectList(tempClass).get(array.size() - 1);//result.getSourceAsObject(tempClass);
             // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
+            // appears to be fixed
             obj.setId(foundId);
             return obj;
         }

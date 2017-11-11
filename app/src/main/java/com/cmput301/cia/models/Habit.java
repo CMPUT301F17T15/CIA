@@ -44,6 +44,8 @@ public class Habit extends ElasticSearchable implements Serializable {
     // The dates this event was missed on
     private List<Date> missedDates;
 
+    private String creator;
+
     /**
 
      * Construct a new habit object
@@ -61,6 +63,7 @@ public class Habit extends ElasticSearchable implements Serializable {
         events = new ArrayList<>();
         daysOfWeek = days;
         missedDates = new ArrayList<>();
+        creator = "";
     }
 
     /**
@@ -234,12 +237,13 @@ public class Habit extends ElasticSearchable implements Serializable {
         // TODO: for saving, maybe do it in Profile and then loop through each Habit stored in
         // the database and assign it's 'creator' parameter to the profile's getId() result
 
-        // TODO: save the user who created it's ID as 'creator'
-        ElasticSearchUtilities.save(this);
-
         // TODO: save the event's 'base' parameter as getId()
         for (HabitEvent event : events)
             ElasticSearchUtilities.save(event);
+
+        // TODO: save the user who created it's ID as 'creator'
+        ElasticSearchUtilities.save(this);
+
     }
 
     /**
@@ -271,4 +275,14 @@ public class Habit extends ElasticSearchable implements Serializable {
     public String toString(){
         return title;
     }
+
+
+    /**
+     * Set the ID of the profile that created this habit
+     * @param creator the id of the creator's profile
+     */
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
 }
