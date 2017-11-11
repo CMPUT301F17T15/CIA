@@ -62,6 +62,9 @@ public class HomePageActivity extends AppCompatActivity {
     private ListView checkable;
     private ArrayAdapter<Habit> lvc_adapter;
 
+    // the habits the user must do today
+    private List<Habit> todaysHabits;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,7 @@ public class HomePageActivity extends AppCompatActivity {
         boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, false);
 
         Profile dummy = new Profile(name);
+        // search for the user by their name
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
@@ -111,7 +115,7 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         // the habits the user needs to do today
-        List<Habit> todaysHabits = user.getTodaysHabits();
+        todaysHabits = user.getTodaysHabits();
 
         //Checkable listView
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
@@ -120,28 +124,14 @@ public class HomePageActivity extends AppCompatActivity {
         checkable.setAdapter(lvc_adapter);
 
         // automatically check the events that have already been completed today
-        for (int index = 0; index < todaysHabits.size(); ++index) {
+        /*for (int index = 0; index < todaysHabits.size(); ++index) {
             if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
                 checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
             }
-        }
+        }*/
 
         // TODO: prevent the box from being unchecked
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String checkedItems = ((TextView)view).getText().toString();
-                //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
-
-                startActivityForResult(intent, CREATE_EVENT);
-
-            }
-        });
 
     }
 
@@ -210,8 +200,9 @@ public class HomePageActivity extends AppCompatActivity {
         // TODO: resetting the adapter results in all clicked boxes being unclicked --> find a way around this (probably have member variable
         // for users habits today)
 
-        //lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-        //checkable.setAdapter(lvc_adapter);
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+        checkable.setAdapter(lvc_adapter);
+        checkCompletedEvents();
 
     }
 
@@ -232,20 +223,12 @@ public class HomePageActivity extends AppCompatActivity {
         // When a new habit event is created
         if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
-
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
-            } else if (data != null){
-                // uncheck the box that was selected
-                int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
-                // TODO: fix
-                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
             }
-
-
         }
         //Read result from create habit activity
 
@@ -254,11 +237,11 @@ public class HomePageActivity extends AppCompatActivity {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
+                todaysHabits = user.getTodaysHabits();
+
+                // TODO: are these needed
                 adapter.refresh();
                 adapter.notifyDataSetChanged();
-
-                //Refresh checkableListView
-                lvc_adapter.notifyDataSetChanged();
 
             }
         } else if (requestCode == VIEW_HABIT){
@@ -268,6 +251,37 @@ public class HomePageActivity extends AppCompatActivity {
         }
     }
 
+
+    private void checkCompletedEvents(){
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
+
+        // automatically check the events that have already been completed today
+        for (int index = 0; index < todaysHabits.size(); ++index) {
+            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
+                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
+            }
+        }
+
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String checkedItems = ((TextView)view).getText().toString();
+                //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());
+                //intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
+
+                startActivityForResult(intent, CREATE_EVENT);
+
+            }
+        });
+    }
 
 }
 

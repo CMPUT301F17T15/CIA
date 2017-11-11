@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
  * This activity displays the information about a user's profile
  */
 
-// TODO: following/unfollowing, image, save button if user==profile
+// TODO: following/unfollowing, image
 
 public class UserProfileActivity extends AppCompatActivity {
 
