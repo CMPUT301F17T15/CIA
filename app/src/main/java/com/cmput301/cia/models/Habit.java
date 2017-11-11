@@ -239,7 +239,7 @@ public class Habit extends ElasticSearchable implements Serializable {
 
         // TODO: save the event's 'base' parameter as getId()
         for (HabitEvent event : events)
-            ElasticSearchUtilities.save(event);
+            event.save();
 
         // TODO: save the user who created it's ID as 'creator'
         ElasticSearchUtilities.save(this);

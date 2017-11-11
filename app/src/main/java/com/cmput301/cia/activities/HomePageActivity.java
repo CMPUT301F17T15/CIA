@@ -25,10 +25,13 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,6 +60,8 @@ public class HomePageActivity extends AppCompatActivity {
     //ExpandableListView for displaying habit types as parent and habits as childs
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter adapter;
+    private ListView checkable;
+    private ArrayAdapter<Habit> lvc_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +103,7 @@ public class HomePageActivity extends AppCompatActivity {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
                 startActivityForResult(intent, VIEW_HABIT);
@@ -107,29 +111,37 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
+        // the habits the user needs to do today
+        List<Habit> todaysHabits = user.getTodaysHabits();
 
         //Checkable listView
-        ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
+        checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
 
-        //Onclick display toast, show congratulation on complete.
-        // TODO: prevent the box from being unchecked, and make it automatically checked if getLastCompletionDate() is today's date
+        // automatically check the events that have already been completed today
+        for (int index = 0; index < todaysHabits.size(); ++index) {
+            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()))
+                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
+        }
+
+        // TODO: prevent the box from being unchecked
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String checkedItems = ((TextView)view).getText().toString();
-                Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());//habitList.get(i).getId());
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
 
                 startActivityForResult(intent, CREATE_EVENT);
 
             }
         });
+
     }
 
     //button on activity_home_page bridge to activity_create_habit
@@ -192,11 +204,12 @@ public class HomePageActivity extends AppCompatActivity {
         adapter.refresh();
         adapter.notifyDataSetChanged();
 
-        // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
+        // TODO: resetting the adapter results in all clicked boxes being unclicked --> find a way around this (probably have member variable
+        // for users habits today)
 
-        /*counterArrayAdapter = new ArrayAdapter<>(this,
-                R.layout.list_item, new ArrayList<Habit>());//counters);
-        countersList.setAdapter(counterArrayAdapter);*/
+        //lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+        //checkable.setAdapter(lvc_adapter);
+
     }
 
     @Override
@@ -226,7 +239,7 @@ public class HomePageActivity extends AppCompatActivity {
                 int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
 
                 // TODO: uncheck the box that was selected
-                expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
+                //expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
             }
 
 
@@ -241,12 +254,7 @@ public class HomePageActivity extends AppCompatActivity {
                 adapter.refresh();
                 adapter.notifyDataSetChanged();
 
-                // TODO: is below necessary
                 //Refresh checkableListView
-                ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
-                checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-                checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
 
             }
