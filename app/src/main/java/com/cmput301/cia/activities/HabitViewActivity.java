@@ -15,8 +15,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.Habit;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by gsp on 2017/11/7.
@@ -28,7 +33,9 @@ public class HabitViewActivity extends AppCompatActivity{
     private TextView habitType;
     private TextView habitReason;
     private TextView habitStartDate;
-
+    private TextView habitFrequency;
+    private String temp = "";
+    private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -37,19 +44,21 @@ public class HabitViewActivity extends AppCompatActivity{
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
         setSupportActionBar(toolbar);
-
-
+        //Display habit detail
         habitName = (TextView) findViewById(R.id.EditHabitName);
         habitType = (TextView) findViewById(R.id.EditHabitType);
         habitReason = (TextView) findViewById(R.id.EditHabitReason);
         habitStartDate = (TextView) findViewById(R.id.StartingDate);
-
-        Bundle bundle = getIntent().getExtras();
-        habitType.setText(bundle.getString("HabitType"));
-        habitName.setText(bundle.getString("HabitName"));
-        habitReason.setText(bundle.getString("HabitReason"));
-        habitStartDate.setText(bundle.getString("StartingDate"));
-
+        habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
+        Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
+        habitType.setText(habit.getType());
+        habitName.setText(habit.getTitle());
+        habitReason.setText(habit.getReason());
+        habitStartDate.setText(habit.getStartDate().toString());
+        for (int i : habit.getDaysOfWeek()) {
+            temp = temp + days[i - 1];
+        }
+        habitFrequency.setText(temp);
     }
 
     //Crate the menu object

@@ -97,9 +97,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                 getPickedDates(daysSelected),
                 spinner.getSelectedItem().toString()
         );
-//        Intent intent = new Intent(this, HomePageActivity.class);
-//        startActivity(intent);
-        //Toast.makeText(this, "In onActivityResult", Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent();
         intent.putExtra("Habit", habit);
         setResult(RESULT_OK, intent);
