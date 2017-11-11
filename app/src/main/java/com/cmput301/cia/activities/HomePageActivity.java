@@ -35,10 +35,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 4
- * Author: Adil Malik
- * Modified by: Shipin Guan
- * Date: Nov 9 2017
+ * Version 5
+ * Authors: Adil Malik, Shipin Guan
+ * Date: Nov 11 2017
  *
  * Represents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
@@ -122,14 +121,16 @@ public class HomePageActivity extends AppCompatActivity {
 
         // automatically check the events that have already been completed today
         for (int index = 0; index < todaysHabits.size(); ++index) {
-            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()))
+            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
                 checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
+            }
         }
 
         // TODO: prevent the box from being unchecked
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 String checkedItems = ((TextView)view).getText().toString();
                 //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
@@ -165,6 +166,8 @@ public class HomePageActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_button_My_Profile:
                 Intent intent_My_Profile = new Intent(this, UserProfileActivity.class);
+                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user.getId());
+                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user.getId());
                 startActivity(intent_My_Profile);
                 return true;
             case R.id.menu_button_Add_New_Habit:
@@ -236,10 +239,10 @@ public class HomePageActivity extends AppCompatActivity {
                 user.tryHabitEvent(addEvent);
                 user.save();
             } else if (data != null){
+                // uncheck the box that was selected
                 int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
-
-                // TODO: uncheck the box that was selected
-                //expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
+                // TODO: fix
+                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
             }
 
 

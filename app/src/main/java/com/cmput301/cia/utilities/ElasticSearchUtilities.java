@@ -113,7 +113,7 @@ public class ElasticSearchUtilities {
 
             String typeId = search_parameters[0];
             String objectId = search_parameters[1];
-            String query = "{\"query\":{\"match\":{\"id\":\"" + objectId + "\"}}}}";
+            String query = "{\"query\":{\"match\":{\"_id\":\"" + objectId + "\"}}}}";
 
             Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
 
