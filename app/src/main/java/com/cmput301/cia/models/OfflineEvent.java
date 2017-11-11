@@ -25,6 +25,7 @@ public abstract class OfflineEvent implements Serializable {
         handleImpl(profile);
         profile.save();
         // TODO: return true only if profile saved successfully
+        // TODO: probably should change everything (including ElasticSearchable.save()) to boolean and return (handleImpl(profile) && profile.save())
         return true;
     }
 

@@ -95,7 +95,7 @@ public class HomePageActivity extends AppCompatActivity {
             user.save();
         }
 
-        //linking expandableListView
+        // initialize the list of all habits the user has
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
@@ -103,7 +103,6 @@ public class HomePageActivity extends AppCompatActivity {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
-
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
                 Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
@@ -117,21 +116,12 @@ public class HomePageActivity extends AppCompatActivity {
         // the habits the user needs to do today
         todaysHabits = user.getTodaysHabits();
 
-        //Checkable listView
+        // TODO: prevent the box from being unchecked
+        // today's tasks listview (checkable)
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
-
-        // automatically check the events that have already been completed today
-        /*for (int index = 0; index < todaysHabits.size(); ++index) {
-            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
-                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
-            }
-        }*/
-
-        // TODO: prevent the box from being unchecked
-
 
     }
 
@@ -141,7 +131,7 @@ public class HomePageActivity extends AppCompatActivity {
         startActivityForResult(intent, 2);
     }
 
-    //Crate the menu object
+    //Create the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -197,13 +187,9 @@ public class HomePageActivity extends AppCompatActivity {
         adapter.refresh();
         adapter.notifyDataSetChanged();
 
-        // TODO: resetting the adapter results in all clicked boxes being unclicked --> find a way around this (probably have member variable
-        // for users habits today)
-
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
         checkCompletedEvents();
-
     }
 
     @Override
@@ -249,10 +235,12 @@ public class HomePageActivity extends AppCompatActivity {
                 // TODO: handle if habit was deleted
             }
         }
+
     }
 
 
     private void checkCompletedEvents(){
+        // reset the listener so that a new event is not created
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -262,23 +250,26 @@ public class HomePageActivity extends AppCompatActivity {
         // automatically check the events that have already been completed today
         for (int index = 0; index < todaysHabits.size(); ++index) {
             if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
-                checkable.performItemClick(checkable.getAdapter().getView(index, null, null), index, checkable.getAdapter().getItemId(index));
+                checkable.performItemClick(lvc_adapter.getView(index, null, null), index, lvc_adapter.getItemId(index));
             }
         }
 
+        // set the listener to handle event completions
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // This item is already clicked, prevent it from being disabled
+                if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                    return;
+                }
 
                 String checkedItems = ((TextView)view).getText().toString();
                 //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());
-                //intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
-
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, todaysHabits.get(i).getId());
                 startActivityForResult(intent, CREATE_EVENT);
-
             }
         });
     }

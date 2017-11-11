@@ -43,10 +43,11 @@ public class ElasticSearchUtilities {
     /**
      * Asynchronous Task for inserting/updating an object into the database
      */
-    private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Void> {
+    // TODO: test case where the insert fails
+    private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(ElasticSearchable... objects) {
+        protected Boolean doInBackground(ElasticSearchable... objects) {
             verifySettings();
 
             for (ElasticSearchable obj : objects) {
@@ -67,10 +68,11 @@ public class ElasticSearchUtilities {
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the objects");
+                    return Boolean.FALSE;
                 }
 
             }
-            return null;
+            return Boolean.TRUE;
         }
     }
 
@@ -247,8 +249,6 @@ public class ElasticSearchUtilities {
     public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, String id){
         SearchResult result = search(typeId, "", id);
         if (result != null && result.isSucceeded()) {
-
-            // TODO: verify that the object is the first item in the hits array
             T object = result.getSourceAsObject(tempClass);
             // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
             // appears to be fixed
@@ -294,8 +294,15 @@ public class ElasticSearchUtilities {
      * @param object the object to save
      * @param <T> generic representing the java type corresponding to that object's type
      */
-    public static <T extends ElasticSearchable> void save(T object){
-        new InsertTask().execute(object);
+    public static <T extends ElasticSearchable> boolean save(T object){
+        try {
+            return new InsertTask().execute(object).get().booleanValue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
