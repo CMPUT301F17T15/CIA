@@ -16,10 +16,6 @@ import io.searchbox.annotations.JestId;
 
 public abstract class ElasticSearchable {
 
-    // The default ElasticSearch object ID
-    // TODO: better to do this or use != null in hasValidId()?
-    //private static final String DEFAULT_ID = "";
-
     @JestId
     private String id;
 
@@ -48,7 +44,7 @@ public abstract class ElasticSearchable {
      */
 
     public boolean hasValidId(){
-        return id != null;
+        return id != "";
     }
 
     /**

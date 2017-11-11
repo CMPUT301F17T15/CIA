@@ -375,10 +375,10 @@ public class Profile extends ElasticSearchable {
      * Save this profile to the database
      */
     public void save(){
-        ElasticSearchUtilities.save(this);
         for (Habit habit : habits){
             ElasticSearchUtilities.save(habit);
         }
+        ElasticSearchUtilities.save(this);
         SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
     }
 

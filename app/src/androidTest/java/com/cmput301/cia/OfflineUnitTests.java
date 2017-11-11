@@ -14,9 +14,12 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Adil on Oct 18 2017.
@@ -52,23 +55,24 @@ public class OfflineUnitTests extends ActivityInstrumentationTestCase2 {
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).setId("Habit");
         profile.tryHabitEvent(event);
-        assertFalse(profile.getHabits().get(0).getTimesCompleted() == 1);
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
         profile.synchronize();
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
     }
 
     public void testOfflineDeleteEvent(){
-        Profile profile = new Profile("Name");
+        Profile profile = new Profile("45a");
         HabitEvent old = new HabitEvent("XYZ", new Date());
         OfflineEvent event = new DeleteHabitEvent("Habit", old);
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
-        profile.getHabits().get(0).setId("Habit");
+        //profile.getHabits().get(0).setId("Habit");
         profile.getHabits().get(0).addHabitEvent(old);
 
         profile.tryHabitEvent(event);
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
         profile.synchronize();
-        assertFalse(profile.getHabits().get(0).getTimesCompleted() == 1);
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
+
     }
 
 }
