@@ -58,6 +58,12 @@ public class Profile extends ElasticSearchable {
     // Points received for completing a habit
     private int habitPoints;
 
+    // The date this profile was created
+    private Date creationDate;
+
+    // The user's comment about their profile
+    private String comment;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -70,6 +76,8 @@ public class Profile extends ElasticSearchable {
         pendingEvents = new ArrayList<>();
         powerPoints = 0;
         habitPoints = 0;
+        creationDate = new Date();
+        comment = new String();
     }
 
     /**
@@ -513,6 +521,28 @@ public class Profile extends ElasticSearchable {
         }
 
         return list;
+    }
+
+    /**
+     * @return the date this profile was made on
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * @return the user's comment about their profile
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * Set the user's comment about this profile
+     * @param comment the user's new comment
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
 }

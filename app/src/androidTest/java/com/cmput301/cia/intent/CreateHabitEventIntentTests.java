@@ -36,6 +36,9 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
+
+        // TODO: add a event that must be done today in the user field
+
     }
 
     public void testCommentLength(){
