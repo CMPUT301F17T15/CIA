@@ -29,12 +29,6 @@ import java.util.List;
 
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
-    //Those data should be obtained from java serialization
-    //List<String> x = new ArrayList<>();
-    String[] habitTypes = {"Fitness", "Thankful", "Diet"};
-    String[][] habits = {{"10km Running", "100 push-up", "100 sit-up", "100 squats"},{"Happiness"},
-            {"No burger", "No coke", "No frise"}};
-    //List <Habit> habit;
     Context context;
     HashMap<String, List<String>> map;
 
@@ -43,8 +37,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         this.map = map;
     }
 
-    public String[] getHabitTypes(){return habitTypes;}
-    public String[][] getHabits(){return habits;}
     @Override
     public int getGroupCount() {
         return map.size();
