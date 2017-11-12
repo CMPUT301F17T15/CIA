@@ -4,6 +4,7 @@
 
 package com.cmput301.cia.utilities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -27,6 +28,16 @@ public class DateUtilities {
             return false;
 
         return one.getDay() == two.getDay() && one.getMonth() == two.getMonth() && one.getYear() == two.getYear();
+    }
+
+    /**
+     * Format the specified date as "MMM dd, YYYY" for consistency across the application
+     * @param date the date to format
+     * @return the string in the above format
+     */
+    public static String formatDate(Date date){
+        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+        return df.format(date);
     }
 
 }

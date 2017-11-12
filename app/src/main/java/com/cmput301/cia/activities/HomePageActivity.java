@@ -76,7 +76,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
-        boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, false);
+        boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
 
         Profile dummy = new Profile(name);
         // search for the user by their name

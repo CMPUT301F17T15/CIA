@@ -162,6 +162,32 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Asynchronous task for deleting all records matching a query
+     */
+    // TODO: test
+    private static class DeleteSearchTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
+            verifySettings();
+
+            String typeId = search_parameters[0];
+            String query = getCompleteQuery(search_parameters[1]);
+
+            Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).build();
+
+            try {
+                // TODO: test success
+                client.execute(delete);
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Execute a search with ElasticSearch
      * @param typeId the type template id all results must match
      * @param query the query to execute
@@ -320,6 +346,15 @@ public class ElasticSearchUtilities {
      */
     public static void delete(ElasticSearchable object) {
         new DeleteTask().execute(object.getTypeId(), object.getId(), "");
+    }
+
+    /**
+     * Delete all records with the specified parameter values
+     * @param typeId the type template id of the result
+     * @param values map where key=parameter and value=required record value for that parameter
+     */
+    public static void delete(String typeId, Map<String, String> values){
+        new DeleteSearchTask().execute(typeId, getQueryFromMap(values));
     }
 
     /**

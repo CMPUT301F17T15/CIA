@@ -44,7 +44,7 @@ public abstract class ElasticSearchable {
      */
 
     public boolean hasValidId(){
-        return id != "";
+        return id != null;
     }
 
     /**

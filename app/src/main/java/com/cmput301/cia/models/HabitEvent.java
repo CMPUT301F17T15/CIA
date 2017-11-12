@@ -13,16 +13,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Version 1.2
+ * Version 2
  * Author: Adil Malik
  * Modified by: Jessica Prieto
- * Date: Oct 13 2017
+ * Date: Nov 11 2017
  *
  * Represents a habit event that the user has successfully completed
  */
 
 public class HabitEvent extends ElasticSearchable implements Serializable {
 
+    // if the latitude/longitude variable is equal to this, then the location is null
     private static final double INVALID_LATLONG = -999999999999999.259;
 
     public static final String TYPE_ID = "habitevent";
@@ -239,6 +240,18 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     @Override
     public void delete() {
         ElasticSearchUtilities.delete(this);
+    }
+
+    /**
+     * Copy over the data from another habit event into this object
+     * @param other the object to copy from
+     */
+    public void copyFrom(HabitEvent other){
+        comment = other.comment;
+        base64EncodedPhoto = other.base64EncodedPhoto;
+        date = other.date;
+        latitude = other.latitude;
+        longitude = other.longitude;
     }
 
 }

@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.HistoryActivity">
 
-    <TextView
-        android:id="@+id/filterStaticText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/historyFilterButton"
+        android:layout_width="79dp"
+        android:layout_height="38dp"
         android:layout_marginBottom="38dp"
         android:layout_marginLeft="16dp"
-        android:text="FILTER"
+        android:text="Filter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -20,24 +20,13 @@
         android:id="@+id/filterEditText"
         android:layout_width="155dp"
         android:layout_height="42dp"
-        android:layout_marginBottom="28dp"
-        android:layout_marginLeft="69dp"
+        android:layout_marginBottom="38dp"
+        android:layout_marginLeft="102dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:maxLength="30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/historyEventFilterButton"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="32dp"
-        android:layout_marginRight="16dp"
-        android:text="EVENTS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteX="289dp" />
 
 
     <Button
@@ -62,23 +51,22 @@
         android:layout_marginTop="8dp" />
 
     <Button
-        android:id="@+id/filterByType"
+        android:id="@+id/historyEventButton"
         android:layout_width="79dp"
         android:layout_height="38dp"
-        android:text="Type?"
-        android:layout_marginBottom="-1dp"
-        android:layout_marginRight="70dp"
+        android:layout_marginBottom="37dp"
+        android:layout_marginLeft="289dp"
+        android:text="Event"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="60dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
-    <Button
-        android:id="@+id/filterByComment"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
-        android:text="Event?"
-        android:layout_marginBottom="-1dp"
+    <CheckBox
+        android:id="@+id/historyTypeCheckbox"
+        android:layout_width="68dp"
+        android:layout_height="23dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="16dp"
+        android:text="Type"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="153dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
