@@ -43,7 +43,7 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  *      - frequency (days of the week to do the habit)
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
-    private Profile user;
+
     Date chooseStartDate;
     EditText habitName;
     EditText reason;
