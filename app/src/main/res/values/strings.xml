@@ -21,4 +21,5 @@
     <string name="Type_Input">New Type:</string>
     <string name="enter_new_type_here">Enter new type here:</string>
     <string name="ok">OK</string>
+    <string name="edit_habit">Edit Habit</string>
 </resources>
