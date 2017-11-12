@@ -89,21 +89,24 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
      */
     public void createHabit(View v) {
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
+        if (daysSelected.size() == 0) {
+            Toast.makeText(CreateHabitActivity.this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Habit habit = CreateHabitController.onSaveClicked(
+                    habitName.getText().toString(),
+                    reason.getText().toString(),
+                    chooseStartDate,
+                    getPickedDates(daysSelected),
+                    spinner.getSelectedItem().toString()
+            );
 
-        Habit habit = CreateHabitController.onSaveClicked(
-                habitName.getText().toString(),
-                reason.getText().toString(),
-                chooseStartDate,
-                getPickedDates(daysSelected),
-                spinner.getSelectedItem().toString()
-        );
-
-        Intent intent = new Intent();
-        intent.putExtra("Habit", habit);
-        setResult(RESULT_OK, intent);
-        finish();
+            Intent intent = new Intent();
+            intent.putExtra("Habit", habit);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
-
     public void clearInputFields(View v) {
         habitName.setText("");
         reason.setText("");
