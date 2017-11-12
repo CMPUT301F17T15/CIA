@@ -120,13 +120,13 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     /**
      * method for creating a habit from the layout by getting the user's inputs
      * @param v: the layout that it's coming from
-     *
-     * TODO: take into account the habit type
      */
     public void createHabit(View v) {
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
         if (daysSelected.size() == 0) {
             Toast.makeText(CreateHabitActivity.this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
+        } else if (habitName.getText().toString().length() == 0){
+            Toast.makeText(CreateHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
         }
         else{
             Habit habit = CreateHabitController.onSaveClicked(
