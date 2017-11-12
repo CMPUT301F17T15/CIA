@@ -74,6 +74,10 @@ public class HabitEventViewActivity extends AppCompatActivity {
      */
     private void finishActivity(boolean deleted){
         Intent intent = new Intent();
+        if (deleted) {
+
+        }
+        
 
         
     }
