@@ -5,17 +5,14 @@
 package com.cmput301.cia.utilities;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Nov 5 2017
+ * Date: Nov 12 2017
  *
  * This class provides utility functions for bitmap related activities
  */
@@ -41,19 +38,23 @@ public class ImageUtilities {
      * @return the compressed image if it was possible to get it to that size, or null otherwise
      */
     public static Bitmap compressImageToMax(Bitmap image, int maxBytes){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        int oldSize = image.getByteCount();
 
         // attempt to resize the image as much as possible while valid
-        while (image != null && image.getByteCount() > maxBytes && image.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)){
+        while (image != null && image.getByteCount() > maxBytes){
 
-            int oldSize = image.getByteCount();
+            // Prevent image from becoming too small
+            if (image.getWidth() <= 20 || image.getHeight() <= 20)
+                return null;
 
-            // TODO: test to make sure no exceptions
-            InputStream is = new ByteArrayInputStream(outputStream.toByteArray());
-            image = BitmapFactory.decodeStream(is);
+            // scale down the image by a factor of 2
+            image = Bitmap.createScaledBitmap(image, image.getWidth() / 2, image.getHeight() / 2, false);
 
+            // the byte count did not change for some reason, can not be made any smaller
             if (image.getByteCount() == oldSize)
                 return null;
+
+            oldSize = image.getByteCount();
         }
 
         return image;
