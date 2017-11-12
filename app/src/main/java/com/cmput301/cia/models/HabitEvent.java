@@ -6,11 +6,8 @@ package com.cmput301.cia.models;
 
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,6 +28,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     public static final String TYPE_ID = "habitevent";
 
     private String comment;
+    private String tittle;
     private String base64EncodedPhoto;
     private Date date;
 
@@ -107,6 +105,25 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     }
 
     /**
+     * add by Tinghui
+     * Construct a new habit event
+     * @param tittle
+     * @param comment the optional habit comment (not null)
+     * @param image a base64EncodedPhoto of the event (not null)
+     * @param date the date the event occurred on (not null)
+     * @param latitude the latitude of the location where the event occurred
+     * @param longitude the longitude of the location where the event occurred
+     */
+    public HabitEvent(String comment, String image, Date date, double latitude, double longitude, String tittle) {
+        this.comment = comment;
+        this.base64EncodedPhoto = image;
+        this.date = date;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.tittle = tittle;
+    }
+
+    /**
      * @return the comment about this event
      */
     public String getComment(){
@@ -180,6 +197,13 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+    }
+
+    /**
+     * @return the habit's name
+     */
+    public String getTittle() {
+        return tittle;
     }
 
     /**
