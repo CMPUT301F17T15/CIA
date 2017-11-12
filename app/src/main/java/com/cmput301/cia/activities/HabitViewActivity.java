@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.utilities.DateUtilities;
 
 import org.w3c.dom.Text;
 
@@ -62,7 +63,7 @@ public class HabitViewActivity extends AppCompatActivity{
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
-        habitStartDate.setText(habit.getStartDate().toString());
+        habitStartDate.setText(DateUtilities.formatDate(habit.getStartDate()));
         for (int i : habit.getDaysOfWeek()) {
             temp = temp + days[i - 1];
         }
