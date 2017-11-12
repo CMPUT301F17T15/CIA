@@ -49,7 +49,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
     private static final int CREATE_EVENT = 1;
-    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3;
+    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4;
 
 
     // Intent extra data identifier for the name of the user who signed in
@@ -188,7 +188,7 @@ public class HomePageActivity extends AppCompatActivity {
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
                 intent_Habit_History.putExtra("ID", user.getId());
-                startActivity(intent_Habit_History);
+                startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
                 return true;
             case R.id.menu_button_My_Following:
                 Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
@@ -272,6 +272,10 @@ public class HomePageActivity extends AppCompatActivity {
                 lvc_adapter.notifyDataSetChanged();
 
             }
+        } else if (requestCode == VIEW_HABIT_HISTORY){
+            // reload to account for possibly deleted events
+            // TODO: test
+            user.load();
         }
 
     }
