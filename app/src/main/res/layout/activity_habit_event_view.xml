@@ -10,25 +10,104 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.HabitEventViewActivity">
 
-    <EditText
-        android:id="@+id/EditHabitEventName"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/app_name"
-        android:textSize="50sp"
-        tools:layout_editor_absoluteX="8dp"
+    <TextView
+        android:id="@+id/EventTitle"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:text="Habit Event"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="119dp"
         tools:layout_editor_absoluteY="16dp" />
 
+    <TextView
+        android:id="@+id/EventName"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="139dp"
+        tools:layout_editor_absoluteY="46dp" />
+
+    <TextView
+        android:id="@+id/EventDate"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
+        android:text="Completed on :"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="103dp" />
+
+    <TextView
+        android:id="@+id/DateView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="103dp" />
+
+    <TextView
+        android:id="@+id/EventLocation"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Completed at :"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="155dp" />
+
+    <TextView
+        android:id="@+id/LocationView"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="155dp" />
+
+    <TextView
+        android:id="@+id/EventComment"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:text="Comment:"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="206dp" />
+
     <EditText
-        android:id="@+id/EditHabitEventType"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/EditComment"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/habitType"
-        android:textSize="50sp"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="107dp" />
+        tools:layout_editor_absoluteX="139dp"
+        tools:layout_editor_absoluteY="206dp" />
+
+    <TextView
+        android:id="@+id/EventPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Photo evidence:"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="252dp" />
+
+    <ImageView
+        android:id="@+id/PhotoView"
+        android:layout_width="194dp"
+        android:layout_height="150dp"
+        app:srcCompat="@android:color/darker_gray"
+        tools:layout_editor_absoluteX="83dp"
+        tools:layout_editor_absoluteY="291dp" />
+
+    <Button
+        android:id="@+id/EditButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="447dp" />
+
+    <Button
+        android:id="@+id/DeleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        tools:layout_editor_absoluteX="213dp"
+        tools:layout_editor_absoluteY="447dp" />
 </android.support.constraint.ConstraintLayout>
