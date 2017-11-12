@@ -57,6 +57,7 @@ public class HistoryActivity extends AppCompatActivity {
         historyList = (ListView) findViewById(R.id.historyList);
         filterEditText = (EditText) findViewById(R.id.filterEditText);
         useHabit = (CheckBox)findViewById(R.id.historyTypeCheckbox);
+        filterHabit = null;
 
         Button historyReturnButton  = (Button) findViewById(R.id.historyReturnButton);
         Button eventButton = (Button) findViewById(R.id.historyEventButton);
@@ -124,16 +125,17 @@ public class HistoryActivity extends AppCompatActivity {
             }
         };
 
-        // TODO: store habitId in HabitEvent so that complexity reduced down to O(nlogm)
         for (HabitEvent event : events) {
-            for (Habit habit : user.getHabits()) {
-                // TODO: verify ordering is still correct
+            Habit habit = user.getHabitById(event.getHabitId());
+            habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+
+            /*for (Habit habit : user.getHabits()) {
                 // get whether this habit contains the current event
                 int index = Collections.binarySearch(habit.getEvents(), event, c);
                 if (index >= 0) {
                     habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
                 }
-            }
+            }*/
         }
 
         adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
@@ -156,10 +158,8 @@ public class HistoryActivity extends AppCompatActivity {
 
                 boolean isDeleted = data.getBooleanExtra(HabitEventViewActivity.RETURNED_DELETED, false);
                 if (!isDeleted) {
-                    int eventIndex = data.getIntExtra(HabitEventViewActivity.RETURNED_INDEX, 0);
                     HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
 
-                    // TODO: habitId
                     OfflineEvent offlineEvent = new EditHabitEvent(event);
                     user.tryHabitEvent(offlineEvent);
 

@@ -240,6 +240,8 @@ public class HomePageActivity extends AppCompatActivity {
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
+                lvc_adapter.notifyDataSetChanged();
+                checkCompletedEvents();
             }
         }
         //Read result from create habit activity
