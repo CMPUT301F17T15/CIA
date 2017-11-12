@@ -188,6 +188,7 @@ public class HomePageActivity extends AppCompatActivity {
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
                 intent_Habit_History.putExtra("ID", user.getId());
+                // TODO: pass in profile through serializable instead if it is better
                 startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
                 return true;
             case R.id.menu_button_My_Following:
