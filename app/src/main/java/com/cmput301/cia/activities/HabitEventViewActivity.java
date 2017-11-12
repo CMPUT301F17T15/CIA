@@ -20,6 +20,9 @@ import com.cmput301.cia.models.HabitEvent;
 
 public class HabitEventViewActivity extends AppCompatActivity {
 
+    public static final String ID_INDEX = "Index";
+    public static final String RETURNED_INDEX = "Index", RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
+
     private TextView habitEventName;
     private TextView habitEventDate;
     private TextView habitEventLocation;
@@ -44,7 +47,9 @@ public class HabitEventViewActivity extends AppCompatActivity {
 
         habitEventName.setText(habitevent.getTittle());
         habitEventDate.setText(habitevent.getDate().toString());
-        habitEventLocation.setText(habitevent.getLocation().toString());
+
+        if (habitevent.getLocation() != null)
+            habitEventLocation.setText(habitevent.getLocation().toString());
         habitEventPhoto.setText(habitevent.getBase64EncodedPhoto());
         habitEventComment.setText(habitevent.getComment());
 
