@@ -29,6 +29,7 @@ import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -130,8 +131,19 @@ public class HomePageActivity extends AppCompatActivity {
 
     //button on activity_home_page bridge to activity_create_habit
     public void newHabit(View view){
-        Intent intent = new Intent(this, CreateHabitActivity.class);
-        startActivityForResult(intent, 2);
+        if (user.getHabitCategories() != null) {
+            List<String> types = new ArrayList<String>();
+            types.addAll(user.getHabitCategories());
+            System.out.println(types);
+            Intent intent = new Intent(this, CreateHabitActivity.class);
+            intent.putStringArrayListExtra("types", (ArrayList<String>) types);
+            startActivityForResult(intent, CREATE_HABIT);
+        }
+        else{
+            Intent intent = new Intent(this, CreateHabitActivity.class);
+            intent.putStringArrayListExtra("types", null);
+            startActivityForResult(intent, CREATE_HABIT);
+        }
     }
 
     //Create the menu object
@@ -154,8 +166,19 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent_My_Profile);
                 return true;
             case R.id.menu_button_Add_New_Habit:
-                Intent intent_new_Habit = new Intent(this, CreateHabitActivity.class);
-                startActivityForResult(intent_new_Habit, 2);
+                if (user.getHabitCategories() != null) {
+                    List<String> types = new ArrayList<String>();
+                    types.addAll(user.getHabitCategories());
+                    System.out.println(types);
+                    Intent intent = new Intent(this, CreateHabitActivity.class);
+                    intent.putStringArrayListExtra("types", (ArrayList<String>) types);
+                    startActivityForResult(intent, CREATE_HABIT);
+                }
+                else{
+                    Intent intent = new Intent(this, CreateHabitActivity.class);
+                    intent.putStringArrayListExtra("types", null);
+                    startActivityForResult(intent, CREATE_HABIT);
+                }
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
