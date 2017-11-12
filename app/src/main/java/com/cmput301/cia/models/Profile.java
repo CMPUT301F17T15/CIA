@@ -29,7 +29,7 @@ import java.util.Set;
  * Date: Nov 09 2017
  */
 
-// TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent from habithistory, and account for EditHabitEvent
+// TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent removed from habithistory, and account for EditHabitEvent
 
 public class Profile extends ElasticSearchable {
 

@@ -122,7 +122,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     /**
      * Refresh the user's habit categories list
      */
-    // TODO: call this whenever returning to the home screen
     public void refresh(){
         categories = user.getHabitCategories();
     }

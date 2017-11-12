@@ -7,9 +7,9 @@ package com.cmput301.cia.models;
 import java.io.Serializable;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Nov 07 2017
+ * Date: Nov 12 2017
  *
  * Represents a pending event that will be synchronized with the server when the user gains connectivity
  */
@@ -35,8 +35,7 @@ public abstract class OfflineEvent implements Serializable {
     public final boolean handle(Profile profile){
         handleImpl(profile);
         profile.save();
-        // TODO: return true only if profile saved successfully
-        // TODO: probably should change everything (including ElasticSearchable.save()) to boolean and return (profile.save())
+        // TODO: probably should change ElasticSearchable.save() to boolean and return profile.save()
         return true;
     }
 
