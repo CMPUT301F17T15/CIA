@@ -27,7 +27,9 @@ import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
@@ -65,7 +67,9 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
 
         //spinner activity, could be placed in another activity file for better practice
         //get the current habit types
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, name);
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
         user.getHabitCategories();
         spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
         final List<String> type = new ArrayList<String>();
