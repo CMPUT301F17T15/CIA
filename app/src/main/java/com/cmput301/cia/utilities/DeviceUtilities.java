@@ -72,6 +72,7 @@ public class DeviceUtilities {
     /**
      * Execute an asynchronous task to determine whether the device is connected to the internet or not
      */
+    // TODO: do this with ElasticSearch instead by inserting something random and returning whether it was successful
     private static class CheckConnectionTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... voids) {

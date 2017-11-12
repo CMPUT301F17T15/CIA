@@ -39,6 +39,9 @@ public class HabitViewActivity extends AppCompatActivity{
     private TextView habitFrequency;
     private String temp = "";
     private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
+
+    private String habitId;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,15 +68,18 @@ public class HabitViewActivity extends AppCompatActivity{
         }
         habitFrequency.setText(temp);
 
+        habitId = getIntent().getStringExtra("HabitID");
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("HabitName", habit.getTitle());
+                returnIntent.putExtra("HabitID", habitId);
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
+
     }
 
     //Crate the menu object
