@@ -49,10 +49,12 @@ public class OfflineUnitTests {
         habit.setId("XYZ");
 
         HabitEvent old = new HabitEvent("XYZ", new Date());
+        old.setId("TEST");
         habit.addHabitEvent(old);
 
         HabitEvent newEvent = new HabitEvent("DBZ", new Date());
-        OfflineEvent event = new EditHabitEvent("XYZ", newEvent);
+        newEvent.setId("TEST");
+        OfflineEvent event = new EditHabitEvent(newEvent);
 
         profile.addHabit(habit);
 
@@ -69,6 +71,8 @@ public class OfflineUnitTests {
         OfflineEvent event = new AddHabitEvent("Habit", old);
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).setId("Habit");
+
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
         profile.tryHabitEvent(event);
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
         profile.synchronize();
@@ -79,14 +83,28 @@ public class OfflineUnitTests {
     public void testOfflineDeleteEvent(){
         Profile profile = new Profile("45a");
         HabitEvent old = new HabitEvent("XYZ", new Date());
-        OfflineEvent event = new DeleteHabitEvent("Habit", old);
+        old.setId("XYZ");
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).setId("Habit");
         profile.getHabits().get(0).addHabitEvent(old);
 
-        profile.tryHabitEvent(event);
+        HabitEvent toDelete = new HabitEvent("XYZ", new Date());
+        toDelete.setId("TOO");
+        OfflineEvent event = new DeleteHabitEvent(toDelete);
+
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
+        profile.tryHabitEvent(event);   // not deleted yet since offline
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
         profile.synchronize();
+        // different IDs, so does not get deleted
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
+
+        toDelete.setId("XYZ");
+        event = new DeleteHabitEvent(toDelete);
+        profile.tryHabitEvent(event);   // not deleted yet since offline
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
+        profile.synchronize();
+        // same IDs, should delete now
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
 
     }

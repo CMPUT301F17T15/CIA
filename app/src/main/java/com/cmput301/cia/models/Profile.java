@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -123,6 +124,14 @@ public class Profile extends ElasticSearchable {
      */
     public void removeHabit(Habit habit){
         habits.remove(habit);
+
+        // remove the pending events that were related to the removed habit
+        Iterator<OfflineEvent> it = pendingEvents.iterator();
+        while (it.hasNext()){
+            if (it.next().getHabitId().equals(habit.getId())){
+                it.remove();
+            }
+        }
     }
 
     /**
