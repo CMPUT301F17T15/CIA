@@ -10,11 +10,13 @@ package com.cmput301.cia.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitController;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DatePickerUtilities;
 
 import java.util.ArrayList;
@@ -39,12 +42,13 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  *      - frequency (days of the week to do the habit)
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+    private Profile user;
     Date chooseStartDate;
     EditText habitName;
     EditText reason;
     EditText startDate;
     MaterialDayPicker dayPicker;
-    private Spinner spinner;
+    Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,16 +64,47 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         //ToDo fix spinner activity
         //spinner activity, could be placed in another activity file for better practice
         spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
-        List<String> type = new ArrayList<String>();
-        type.add("Habit type 1");
-        type.add("Habit type 2");
-        type.add("Habit type 3");
+        final List<String> type = new ArrayList<String>();
+        if (getIntent().getStringArrayListExtra("types") == null){
+            type.add("Create new type");
+        }
+        else {
+            for (String t : getIntent().getStringArrayListExtra("types")){
+                type.add(t);
+            }
+            type.add("Create new type");
+        }
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
+                if (i == type.size() - 1){
+                    final AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateHabitActivity.this);
+                    View mview = getLayoutInflater().inflate(R.layout.dialog_input,null);
+                    final EditText minput = (EditText) mview.findViewById(R.id.edit_Type_Input);
+                    Button okButton = (Button) mview.findViewById(R.id.Ok_Button);
+                    mBuilder.setView(mview);
+                    final AlertDialog dialog = mBuilder.create();
+                    dialog.show();
+                    okButton.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            if (!minput.getText().toString().isEmpty()){
+                                type.add(0, minput.getText().toString());
+                                dialog.dismiss();
+                            }else{
+                                Toast.makeText(CreateHabitActivity.this, "Please enter the type name", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    mBuilder.setView(mview);
+                    dialog.show();
+
+                }
             }
 
             @Override

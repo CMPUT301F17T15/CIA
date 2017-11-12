@@ -18,4 +18,7 @@
     <string name="FrequencyText">Repeat Frequency:</string>
     <string name="Edit">Edit</string>
     <string name="Delete">Delete</string>
+    <string name="Type_Input">New Type:</string>
+    <string name="enter_new_type_here">Enter new type here:</string>
+    <string name="ok">OK</string>
 </resources>

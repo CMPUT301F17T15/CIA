@@ -112,8 +112,6 @@
                 android:layout_marginLeft="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="16dp"
-                android:prompt="@string/habitType"
-                android:entries="@array/habit_types"
                 app:layout_constraintTop_toBottomOf="@+id/reasonWrapper"
                 android:layout_marginStart="16dp" />
 
