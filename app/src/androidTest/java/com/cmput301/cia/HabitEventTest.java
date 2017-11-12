@@ -77,7 +77,8 @@ public class HabitEventTest {
         assertEquals("wrong comment", "comment", habitEvent.getComment());
         assertEquals("wrong image", testBase64Image, habitEvent.getBase64EncodedPhoto());
         assertEquals("wrong date", testDate, habitEvent.getDate());
-        assertEquals("wrong location", testLocation, habitEvent.getLocation());
+        assertEquals("wrong location", testLocation.getLatitude(), habitEvent.getLocation().getLatitude(), 0.4);
+        assertEquals("wrong location", testLocation.getLongitude(), habitEvent.getLocation().getLongitude(), 0.4);
     }
 
     /**

@@ -6,15 +6,29 @@ package com.cmput301.cia.intent;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.CreateHabitActivity;
 import com.cmput301.cia.activities.CreateHabitEventActivity;
+import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Version 1
@@ -25,21 +39,33 @@ import java.lang.reflect.Field;
  * NOTE: some of these tests require an internet connection (for saving in the ElasticSearch database)
  */
 
-public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Solo solo;
 
     public CreateHabitEventIntentTests() {
-        super(com.cmput301.cia.activities.HomePageActivity.class);
+        super(com.cmput301.cia.activities.MainActivity.class);
     }
 
+    // TODO: do this after habit history
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
+
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz");
+        solo.clickOnButton("Login");
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.clickOnView(solo.getView(R.id.menu_button_Habit_History));
+        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
     }
 
-    public void testCommentLength(){
+    public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
+
+
+        ListView list = solo.getCurrentViews(ListView.class).get(1);
         solo.clickInList(1, 1);
+        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
+
         solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
         // max length = 20
         assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
@@ -48,7 +74,13 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
     public void testFinish() throws NoSuchFieldException, IllegalAccessException {
         // Select the 1st option in the second list (the "today's tasks" list)
-        solo.clickInList(1, 1);
+
+        solo.clickOnView(solo.getView(R.id.CreateNewHabitButton));
+        solo.goBack();
+
+        ArrayList<ListView> lists = solo.getCurrentViews(ListView.class);
+        solo.clickOnView(lists.get(1).getAdapter().getView(0, null, null));
+
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
         solo.clickOnButton("Save");
 
@@ -58,7 +90,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         Profile user = (Profile) field.get(solo.getCurrentActivity());
         int habitEvents = user.getHabitHistory().size();
 
-        solo.clickInList(1, 1);
+        solo.clickOnView(lists.get(1).getAdapter().getView(0, null, null));
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Save");

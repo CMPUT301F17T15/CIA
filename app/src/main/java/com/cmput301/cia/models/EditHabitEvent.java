@@ -5,20 +5,21 @@
 package com.cmput301.cia.models;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Nov 07 2017
+ * Date: Nov 11 2017
  *
  * Represents an event that overwrites the old information of a habit event with new info
  */
+
 public class EditHabitEvent extends OfflineEvent {
 
-    private HabitEvent oldData;
     private HabitEvent newData;
+    private String habitId;
 
-    public EditHabitEvent(HabitEvent old, HabitEvent newEvent){
-        oldData = old;
+    public EditHabitEvent(String habitId, HabitEvent newEvent){
         newData = newEvent;
+        this.habitId = habitId;
     }
 
     /**
@@ -27,12 +28,12 @@ public class EditHabitEvent extends OfflineEvent {
      */
     @Override
     public void handleImpl(Profile profile) {
-        // TODO: copy newData into oldData
-
-        // TODO: probably better to do this in a function oldData.copyFrom(newData)
-        /*oldData.setBase64EncodedPhoto(newData.getBase64EncodedPhoto());
-        oldData.setLocation(newData.getLocation());
-        */
+        Habit habit = profile.getHabitById(habitId);
+        for (HabitEvent event : habit.getEvents()){
+            if (event.equals(newData)){
+                event.copyFrom(newData);
+            }
+        }
     }
 
 }

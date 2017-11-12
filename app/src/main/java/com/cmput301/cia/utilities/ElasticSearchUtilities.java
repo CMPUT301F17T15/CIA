@@ -43,10 +43,11 @@ public class ElasticSearchUtilities {
     /**
      * Asynchronous Task for inserting/updating an object into the database
      */
-    private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Void> {
+    // TODO: test case where the insert fails
+    private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(ElasticSearchable... objects) {
+        protected Boolean doInBackground(ElasticSearchable... objects) {
             verifySettings();
 
             for (ElasticSearchable obj : objects) {
@@ -67,10 +68,11 @@ public class ElasticSearchUtilities {
                 }
                 catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the objects");
+                    return Boolean.FALSE;
                 }
 
             }
-            return null;
+            return Boolean.TRUE;
         }
     }
 
@@ -113,7 +115,7 @@ public class ElasticSearchUtilities {
 
             String typeId = search_parameters[0];
             String objectId = search_parameters[1];
-            String query = "{\"query\":{\"match\":{\"id\":\"" + objectId + "\"}}}}";
+            String query = "{\"query\":{\"match\":{\"_id\":\"" + objectId + "\"}}}}";
 
             Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
 
@@ -146,6 +148,32 @@ public class ElasticSearchUtilities {
             String query = search_parameters[2];
 
             Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).id(objectId).build();
+
+            try {
+                // TODO: test success
+                client.execute(delete);
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Asynchronous task for deleting all records matching a query
+     */
+    // TODO: test
+    private static class DeleteSearchTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... search_parameters) {
+            verifySettings();
+
+            String typeId = search_parameters[0];
+            String query = getCompleteQuery(search_parameters[1]);
+
+            Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).build();
 
             try {
                 // TODO: test success
@@ -210,7 +238,7 @@ public class ElasticSearchUtilities {
      * @param tempClass the java class of the generic type T
      * @param values map where key=parameter and value=required record value for that parameter
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return the list of all records matching that type ID
+     * @return the list of all records matching that type ID with the required parameter values
      */
     public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, Map<String, String> values){
         SearchResult result = search(typeId, getQueryFromMap(values));
@@ -247,8 +275,6 @@ public class ElasticSearchUtilities {
     public static <T extends ElasticSearchable> T getObject(String typeId, Class<T> tempClass, String id){
         SearchResult result = search(typeId, "", id);
         if (result != null && result.isSucceeded()) {
-
-            // TODO: verify that the object is the first item in the hits array
             T object = result.getSourceAsObject(tempClass);
             // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
             // appears to be fixed
@@ -294,8 +320,15 @@ public class ElasticSearchUtilities {
      * @param object the object to save
      * @param <T> generic representing the java type corresponding to that object's type
      */
-    public static <T extends ElasticSearchable> void save(T object){
-        new InsertTask().execute(object);
+    public static <T extends ElasticSearchable> boolean save(T object){
+        try {
+            return new InsertTask().execute(object).get().booleanValue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -313,6 +346,15 @@ public class ElasticSearchUtilities {
      */
     public static void delete(ElasticSearchable object) {
         new DeleteTask().execute(object.getTypeId(), object.getId(), "");
+    }
+
+    /**
+     * Delete all records with the specified parameter values
+     * @param typeId the type template id of the result
+     * @param values map where key=parameter and value=required record value for that parameter
+     */
+    public static void delete(String typeId, Map<String, String> values){
+        new DeleteSearchTask().execute(typeId, getQueryFromMap(values));
     }
 
     /**

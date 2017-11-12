@@ -27,8 +27,7 @@ public class AddHabitEvent extends OfflineEvent {
      */
     @Override
     public void handleImpl(Profile profile) {
-        // TODO: get profile from name, then add this event to the habit with matching name
         profile.setHabitPoints(profile.getHabitPoints() + 1);
-        //profile.getHabitById(habitId).addEvent(toAdd)
+        profile.getHabitById(habitId).addHabitEvent(toAdd);
     }
 }

@@ -6,31 +6,30 @@ package com.cmput301.cia.models;
 
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
-
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Version 1.2
+ * Version 2
  * Author: Adil Malik
  * Modified by: Jessica Prieto
- * Date: Oct 13 2017
+ * Date: Nov 11 2017
  *
  * Represents a habit event that the user has successfully completed
  */
 
 public class HabitEvent extends ElasticSearchable implements Serializable {
 
+    // if the latitude/longitude variable is equal to this, then the location is null
     private static final double INVALID_LATLONG = -999999999999999.259;
 
     public static final String TYPE_ID = "habitevent";
 
     private String comment;
+    private String tittle;
     private String base64EncodedPhoto;
     private Date date;
 
@@ -104,6 +103,25 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         this.date = date;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    /**
+     * add by Tinghui
+     * Construct a new habit event
+     * @param tittle
+     * @param comment the optional habit comment (not null)
+     * @param image a base64EncodedPhoto of the event (not null)
+     * @param date the date the event occurred on (not null)
+     * @param latitude the latitude of the location where the event occurred
+     * @param longitude the longitude of the location where the event occurred
+     */
+    public HabitEvent(String comment, String image, Date date, double latitude, double longitude, String tittle) {
+        this.comment = comment;
+        this.base64EncodedPhoto = image;
+        this.date = date;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.tittle = tittle;
     }
 
     /**
@@ -183,6 +201,13 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     }
 
     /**
+     * @return the habit's name
+     */
+    public String getTittle() {
+        return tittle;
+    }
+
+    /**
      * @return the object's template type id
      */
     @Override
@@ -216,4 +241,17 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     public void delete() {
         ElasticSearchUtilities.delete(this);
     }
+
+    /**
+     * Copy over the data from another habit event into this object
+     * @param other the object to copy from
+     */
+    public void copyFrom(HabitEvent other){
+        comment = other.comment;
+        base64EncodedPhoto = other.base64EncodedPhoto;
+        date = other.date;
+        latitude = other.latitude;
+        longitude = other.longitude;
+    }
+
 }

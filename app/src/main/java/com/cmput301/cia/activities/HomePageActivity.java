@@ -25,21 +25,21 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.SetUtilities;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Version 4
- * Author: Adil Malik
- * Modified by: Shipin Guan
- * Date: Nov 9 2017
+ * Version 5
+ * Authors: Adil Malik, Shipin Guan
+ * Date: Nov 11 2017
  *
- * Repressents the home page the user sees after signing in
+ * Represents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
  * from other activities
  */
@@ -47,20 +47,24 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-
     private static final int CREATE_EVENT = 1;
-    private static final int CREATE_HABIT = 2;
-    private static final  int NOTIFY_CHANGE = 3;
+    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3;
+
 
     // Intent extra data identifier for the name of the user who signed in
-    public static final String ID_USERNAME = "User";
+    public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
 
     // Profile of the signed in user
     private Profile user;
 
     //ExpandableListView for displaying habit types as parent and habits as childs
-    ExpandableListView expandableListView;
+    private ExpandableListView expandableListView;
+    private ExpandableListViewAdapter adapter;
+    private ListView checkable;
+    private ArrayAdapter<Habit> lvc_adapter;
 
+    // the habits the user must do today
+    private List<Habit> todaysHabits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,86 +77,55 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String name = intent.getStringExtra(ID_USERNAME);
+        boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
+
         Profile dummy = new Profile(name);
+        // search for the user by their name
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
         if (user == null){
+
+            if (!newAccount){
+                Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+
             user = dummy;
             user.save();
         }
 
-        values.clear();
-        values.put("creator", user.getId());
-        final List<Habit> habitList = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, values);
-        habitList.add(new Habit("10km Running", "dg", new Date(), new ArrayList<Integer>(),"type1"));
-
-        /**
-        HashMap function:
-         key = habit type.
-         value = habits with the specific habit type.
-         purpose of this HashMap is to fit in the ExpandableListView structure requirement.
-         Simple ExpandableListView Structure:
-         List[] = key
-         LIst[][] = values
-         */
-        final HashMap<String, List<String>> types = new HashMap<String, List<String>>();
-        for(Habit h : user.getHabits()) {
-            if(types.containsKey(h.getType())){
-                types.get(h.getType()).add(h.getTitle());
-            }else{
-                types.put(h.getType(), new ArrayList<String>());
-                types.get(h.getType()).add(h.getTitle());
-            }
-        }
-
-        //linking expandableListView
+        // initialize the list of all habits the user has
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
+        adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
-        //activity for expandableListView
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
-                finder: //In case there are duplicate habits. find the habit by name.
-                for(Habit habit : user.getHabits()){
-                    if (habit.getTitle() == adapter.getChild(group, child)){
-                        Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
-                        intent.putExtra("Habit", habit);
-                        startActivityForResult(intent, 3);
-                        break finder;
-                    }
-                }
+
+                String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
+                Habit habit = user.getHabitsInCategory(category).get(child);
+                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
+                intent.putExtra("Habit", habit);
+                startActivityForResult(intent, VIEW_HABIT);
+
                 return false;
             }
         });
 
+        // the habits the user needs to do today
+        todaysHabits = user.getTodaysHabits();
 
-        //Checkable listView
-        ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
+        // TODO: prevent the box from being unchecked
+        // today's tasks listview (checkable)
+        checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
 
-        //Onclick display toast, show congratulation on complete.
-        // TODO: prevent the box from being unchecked, and make it automatically checked if getLastCompletionDate() is today's date
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String checkedItems = ((TextView)view).getText().toString();
-                Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, user.getTodaysHabits().get(i).getId());//habitList.get(i).getId());
-                intent.putExtra(CreateHabitEventActivity.ID_HABIT_INDEX, i);
-
-                startActivityForResult(intent, CREATE_EVENT);
-
-            }
-        });
     }
 
     //button on activity_home_page bridge to activity_create_habit
@@ -161,7 +134,7 @@ public class HomePageActivity extends AppCompatActivity {
         startActivityForResult(intent, 2);
     }
 
-    //Crate the menu object
+    //Create the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -176,6 +149,8 @@ public class HomePageActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_button_My_Profile:
                 Intent intent_My_Profile = new Intent(this, UserProfileActivity.class);
+                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user.getId());
+                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user.getId());
                 startActivity(intent_My_Profile);
                 return true;
             case R.id.menu_button_Add_New_Habit:
@@ -211,13 +186,11 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         user.synchronize();
-        
-
-        // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
-
-        /*counterArrayAdapter = new ArrayAdapter<>(this,
-                R.layout.list_item, new ArrayList<Habit>());//counters);
-        countersList.setAdapter(counterArrayAdapter);*/
+        adapter.refresh();
+        adapter.notifyDataSetChanged();
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+        checkable.setAdapter(lvc_adapter);
+        checkCompletedEvents();
     }
 
     @Override
@@ -237,20 +210,12 @@ public class HomePageActivity extends AppCompatActivity {
         // When a new habit event is created
         if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
-
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
-            } else if (data != null){
-                int index = data.getIntExtra(CreateHabitEventActivity.ID_HABIT_INDEX, 0);
-
-                // TODO: uncheck the box that was selected
-                expandableListView.performItemClick(expandableListView.getChildAt(index), index, index);
             }
-
-
         }
         //Read result from create habit activity
         else if(requestCode == CREATE_HABIT) {
@@ -258,74 +223,74 @@ public class HomePageActivity extends AppCompatActivity {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
-                /**
-                 HashMap function:
-                 key = habit type.
-                 value = habits with the specific habit type.
-                 purpose of this HashMap is to fit in the ExpandableListView structure requirement.
-                 Simple ExpandableListView Structure:
-                 List[] = key
-                 LIst[][] = values
-                 */
 
-                HashMap<String, List<String>> types = new HashMap<String, List<String>>();
-                for(Habit h : user.getHabits()) {
-                    if(types.containsKey(h.getType())){
-                        types.get(h.getType()).add(h.getTitle());
-                    }else{
-                        types.put(h.getType(), new ArrayList<String>());
-                        types.get(h.getType()).add(h.getTitle());
-                    }
-                }
-                //Refresh expandableListView
-                expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-                final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
-                expandableListView.setAdapter(adapter);
+                todaysHabits = user.getTodaysHabits();
+
+                // TODO: are these needed
+                adapter.refresh();
                 adapter.notifyDataSetChanged();
-                //Refresh checkableListView
-                ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
-                checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-                checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
 
             }
 
         }
-        else if (requestCode == NOTIFY_CHANGE){
+        else if (requestCode == VIEW_HABIT){
             if (resultCode == RESULT_OK){
+                System.out.println("In side return result");
+                System.out.println(data.getStringExtra("HabitName"));
+                finder:
                 for(Habit h : user.getHabits()) {
                     if(h.getTitle().equals(data.getStringExtra("HabitName"))){
                         System.out.println("In side if");
                         Toast.makeText(HomePageActivity.this, "Habit: " + h.getTitle() + " Deleted", Toast.LENGTH_SHORT).show();
                         user.removeHabit(h);
+                        break finder;
                     }
                 }
                 user.save();
-                HashMap<String, List<String>> types = new HashMap<String, List<String>>();
-                for(Habit h : user.getHabits()) {
-                    if(types.containsKey(h.getType())){
-                        types.get(h.getType()).add(h.getTitle());
-                    }else{
-                        types.put(h.getType(), new ArrayList<String>());
-                        types.get(h.getType()).add(h.getTitle());
-                    }
-                }
-                //Refresh expandableListView
-                expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
-                final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
-                expandableListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                //Refresh checkableListView
-                ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
-                checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-                checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
+
             }
         }
+
     }
 
+
+    private void checkCompletedEvents(){
+        // reset the listener so that a new event is not created
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            }
+        });
+
+        // automatically check the events that have already been completed today
+        for (int index = 0; index < todaysHabits.size(); ++index) {
+            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
+                checkable.performItemClick(lvc_adapter.getView(index, null, null), index, lvc_adapter.getItemId(index));
+            }
+        }
+
+        // set the listener to handle event completions
+        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // This item is already clicked, prevent it from being disabled
+                if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                    return;
+                }
+
+                String checkedItems = ((TextView)view).getText().toString();
+                //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
+                intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, todaysHabits.get(i).getId());
+                startActivityForResult(intent, CREATE_EVENT);
+            }
+        });
+    }
 
 }
 

@@ -7,132 +7,168 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.EditHabitEvent;
+import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
-
-import org.w3c.dom.ls.LSException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-    /** * Version 2 * Author: Guanfang Dong
- * Date: Nov 5 2017
+
+/**
+ * Version 1
+ * Author: Adil Malik
+ * Date: Nov 11 2017
  *
- * This is history activity.
-
-*  User allows to view their history habits and filter by date and comment.
+ * This activity allows the user to view all of their completed habit events
  */
+
 public class HistoryActivity extends AppCompatActivity {
-    // global variables
-    private List<HabitEvent> habitList;
-    private List<HabitEvent> habitsShowOnScreen;
-    private ArrayAdapter<HabitEvent> habitsShowOnScreen_adapter;
 
+    private static final int FILTER_CODE = 0, EVENT_CODE = 1;
+
+    private List<String> habitList;
+    private ArrayAdapter<String> adapter;
     private ListView historyList;
-    private String ID;
     private EditText filterEditText;
-    private Profile user;
+    private CheckBox useHabit;
 
-    
+    private Profile user;
+    private Habit filterHabit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        ID = getIntent().getExtras().getString("ID");
-        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, ID);
-        habitList = user.getHabitHistory();
+        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, getIntent().getExtras().getString("ID"));
         historyList = (ListView) findViewById(R.id.historyList);
-        TextView filterStaticText;
-
-
-
-
         filterEditText = (EditText) findViewById(R.id.filterEditText);
+        useHabit = (CheckBox)findViewById(R.id.historyTypeCheckbox);
 
-
-        Button historyEventFilterButton = (Button) findViewById(R.id.historyEventFilterButton);
         Button historyReturnButton  = (Button) findViewById(R.id.historyReturnButton);
-        Button filterByType = (Button) findViewById(R.id.filterByType);
-        Button filterByComment = (Button) findViewById(R.id.filterByComment);
+        Button eventButton = (Button) findViewById(R.id.historyEventButton);
+        Button filter = (Button) findViewById(R.id.historyFilterButton);
 
-/*
-Added date list descending order, not sure if correct 
-Dinesh
- */
-        List<HabitEvent> datedList = new ArrayList<HabitEvent>();
-        Collections.sort(datedList, new Comparator<HabitEvent>() {
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(HistoryActivity.this, FilterEventsActivity.class);
+                intent.putExtra(FilterEventsActivity.ID_USER, user.getId());
+                startActivityForResult(intent, FILTER_CODE);
+            }
+        });
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (useHabit.isChecked() && filterHabit == null){
+                    Toast.makeText(HistoryActivity.this, "No filter habit was selected. Checkbox is ignored.", Toast.LENGTH_SHORT).show();
+                }
+                convertEventsToString();
+            }
+        });
+
+        historyReturnButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public int compare(HabitEvent o1, HabitEvent o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
-        habitsShowOnScreen = datedList;
-
-        filterByType.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String type = new String();
-                type = filterEditText.getText().toString();
-                habitsShowOnScreen = filterByTypeFunction(habitList, type);
-                habitsShowOnScreen_adapter.notifyDataSetChanged();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
+                intent.putExtra("HabitEvent", getDisplayedEvents().get(position));
+                startActivityForResult(intent, EVENT_CODE);
             }
         });
 
-
-        filterByComment.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String comment = new String();
-                comment = filterEditText.getText().toString();
-                habitsShowOnScreen = filterByCommentFunction(habitList, comment);
-                habitsShowOnScreen_adapter.notifyDataSetChanged();
-            }
-        });
-
-        habitsShowOnScreen_adapter = new ArrayAdapter<HabitEvent>(this,
-                R.layout.list_item,habitsShowOnScreen);
-
-        historyList.setAdapter(habitsShowOnScreen_adapter);
+        convertEventsToString();
     }
 
-
-
-
-    // giving habits and filter by type
-    public List<HabitEvent> filterByTypeFunction(List<HabitEvent> habitList, String type){
-        List<HabitEvent> sortedList = new ArrayList<HabitEvent>();
-        int size = habitList.size();
-        int counter = 0;
-        while (counter<size){
-            if (habitList.get(counter).getTypeId() == type){
-                sortedList.add(habitList.get(counter));
-            }
-            counter++;
+    /**
+     * @return list of all habit events that are currently displayed on the screen
+     */
+    private List<HabitEvent> getDisplayedEvents(){
+        if (useHabit.isChecked() && filterHabit != null){
+            return user.getHabitHistory(filterHabit);
+        } else if (!filterEditText.getText().equals("")) {
+            return user.getHabitHistory(filterEditText.getText().toString());
+        } else {
+            return user.getHabitHistory();
         }
-        return sortedList;
     }
 
+    /**
+     * Convert all displayed habit events into a string representation
+     */
+    private void convertEventsToString(){
+        List<HabitEvent> events = getDisplayedEvents();
+        habitList = new ArrayList<>(events.size());
 
-    // giving habits and filter by comment
-    public List<HabitEvent> filterByCommentFunction(List<HabitEvent> habitList, String comment){
-        List<HabitEvent> filteredList = new ArrayList<HabitEvent>();
-        int size = habitList.size();
-        int counter = 0;
-        while (counter<size){
-            if (habitList.get(counter).getComment()==comment){
-                filteredList.add(habitList.get(counter));
+        // binary search comparator based on event date
+        Comparator<HabitEvent> c = new Comparator<HabitEvent>() {
+            public int compare(HabitEvent u1, HabitEvent u2) {
+                return u1.getDate().compareTo(u2.getDate());
             }
-            counter++;
+        };
+
+        // TODO: store habitId in HabitEvent so that complexity reduced down to O(nlogm)
+        for (HabitEvent event : events) {
+            for (Habit habit : user.getHabits()) {
+                // TODO: verify ordering is still correct
+                // get whether this habit contains the current event
+                int index = Collections.binarySearch(habit.getEvents(), event, c);
+                if (index >= 0) {
+                    habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+                }
+            }
         }
-        return filteredList;
+
+        adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
+        historyList.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == FILTER_CODE) {
+            if (resultCode == RESULT_OK) {
+                String habitId = data.getStringExtra(FilterEventsActivity.RETURNED_HABIT_ID);
+                if (!habitId.equals("")) {
+                    filterHabit = user.getHabitById(habitId);
+                }
+            }
+
+        } else if (requestCode == EVENT_CODE) {
+            if (resultCode == RESULT_OK) {
+
+                boolean isDeleted = data.getBooleanExtra(HabitEventViewActivity.RETURNED_DELETED, false);
+                if (!isDeleted) {
+                    int eventIndex = data.getIntExtra(HabitEventViewActivity.RETURNED_INDEX, 0);
+                    HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
+
+                    // TODO: habitId
+                    OfflineEvent offlineEvent = new EditHabitEvent("", event);
+                    user.tryHabitEvent(offlineEvent);
+
+                } else {
+                    // TODO: delete habit event
+                }
+            }
+
+        }
     }
 
 }

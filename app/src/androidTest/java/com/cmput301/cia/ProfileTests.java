@@ -68,4 +68,26 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
     }
 
+    public void testCategories(){
+
+        Profile profile = new Profile("N");
+
+        // no categories to start off with
+        assertTrue(profile.getHabitCategories().size() == 0);
+
+        // one category
+        profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>(), "dx1"));
+        assertTrue(profile.getHabitCategories().size() == 1);
+        profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>(), "dx1"));
+        assertTrue(profile.getHabitCategories().size() == 1);
+
+        // a new category
+        profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>(), "dx2"));
+        assertTrue(profile.getHabitCategories().size() == 2);
+
+        assertTrue(profile.getHabitsInCategory("dx1").size() == 2);
+        assertTrue(profile.getHabitsInCategory("dx2").size() == 1);
+
+    }
+
 }

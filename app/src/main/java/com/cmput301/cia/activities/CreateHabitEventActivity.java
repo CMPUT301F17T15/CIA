@@ -24,6 +24,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
@@ -46,7 +47,7 @@ import java.util.Date;
 public class CreateHabitEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     // The name of the intent data representing the owning habit's name, id, and index in the display list
-    public static final String ID_HABIT_NAME = "Habit", ID_HABIT_HASH = "HabitID", ID_HABIT_INDEX = "Index";
+    public static final String ID_HABIT_NAME = "Habit", ID_HABIT_HASH = "HabitID";//, ID_HABIT_INDEX = "Index";
 
     // Intent returned ID for the habit event
     public static final String RETURNED_HABIT = "HabitEvent";
@@ -82,7 +83,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     private Date eventDate;
 
     // Index of the habit in the display list
-    private int index;
+    //private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
-        index = intent.getIntExtra(ID_HABIT_INDEX, 0);
+        //index = intent.getIntExtra(ID_HABIT_INDEX, 0);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
         imageView = (ImageView)findViewById(R.id.cheImageView);
@@ -235,8 +236,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * Update the view displaying the event's date in text form
      */
     private void setDateText(){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        dateText.setText(format.format(eventDate));
+        dateText.setText(DateUtilities.formatDate(eventDate));
     }
 
     /**
@@ -278,7 +278,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
 
         intent.putExtra(RETURNED_HABIT, event);
         intent.putExtra(ID_HABIT_HASH, habitId);
-        intent.putExtra(ID_HABIT_INDEX, index);
+        //intent.putExtra(ID_HABIT_INDEX, index);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
