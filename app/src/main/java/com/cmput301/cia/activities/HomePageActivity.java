@@ -265,6 +265,8 @@ public class HomePageActivity extends AppCompatActivity {
                 String id = data.getStringExtra("HabitID");
                 user.removeHabit(user.getHabitById(id));
 
+                todaysHabits = user.getTodaysHabits();
+
                 user.save();
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
