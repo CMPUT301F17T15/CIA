@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * Date: Nov 5 2017
  *
  * This class tests the UI for creating habit events
- * NOTE: some of these tests require an internet connection (for saving in the ElasticSearch database)
+ * NOTE: These tests require an internet connection
  */
 
 public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
@@ -42,7 +42,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
 
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz");
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
         solo.clickOnButton("Login");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
