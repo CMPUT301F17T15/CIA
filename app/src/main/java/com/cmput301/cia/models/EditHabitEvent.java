@@ -14,12 +14,12 @@ package com.cmput301.cia.models;
 
 public class EditHabitEvent extends OfflineEvent {
 
-    private HabitEvent newData;
-    private String habitId;
-
-    public EditHabitEvent(String habitId, HabitEvent newEvent){
-        newData = newEvent;
-        this.habitId = habitId;
+    /**
+     * Construct a new command object that will edit the specified event when executed
+     * @param event the new data of the event
+     */
+    public EditHabitEvent(HabitEvent event){
+        super(event);
     }
 
     /**
@@ -28,10 +28,10 @@ public class EditHabitEvent extends OfflineEvent {
      */
     @Override
     public void handleImpl(Profile profile) {
-        Habit habit = profile.getHabitById(habitId);
-        for (HabitEvent event : habit.getEvents()){
-            if (event.equals(newData)){
-                event.copyFrom(newData);
+        Habit habit = profile.getHabitById(event.getHabitId());
+        for (HabitEvent habitEvent : habit.getEvents()){
+            if (habitEvent.equals(event)){
+                habitEvent.copyFrom(event);
             }
         }
     }

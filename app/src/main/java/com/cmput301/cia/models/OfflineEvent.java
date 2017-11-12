@@ -16,6 +16,17 @@ import java.io.Serializable;
 
 public abstract class OfflineEvent implements Serializable {
 
+    // the event to do something with
+    protected HabitEvent event;
+
+    /**
+     * Construct a new OfflineEvent command object
+     * @param event the event to do something with
+     */
+    public OfflineEvent(HabitEvent event){
+        this.event = event;
+    }
+
     /**
      * What this event does when it is synchronized with the server
      * @param profile the user who this event is being handled for
@@ -25,7 +36,7 @@ public abstract class OfflineEvent implements Serializable {
         handleImpl(profile);
         profile.save();
         // TODO: return true only if profile saved successfully
-        // TODO: probably should change everything (including ElasticSearchable.save()) to boolean and return (handleImpl(profile) && profile.save())
+        // TODO: probably should change everything (including ElasticSearchable.save()) to boolean and return (profile.save())
         return true;
     }
 

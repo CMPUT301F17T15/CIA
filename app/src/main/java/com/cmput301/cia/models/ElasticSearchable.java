@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import java.io.Serializable;
+
 import io.searchbox.annotations.JestId;
 
 /**
@@ -14,7 +16,8 @@ import io.searchbox.annotations.JestId;
  * Represents an object that can be stored and retrieved from an ElasticSearch database
  */
 
-public abstract class ElasticSearchable {
+// TODO: more testing to make sure serializable does not mess something up with ElasticSearch
+public abstract class ElasticSearchable implements Serializable {
 
     @JestId
     private String id;

@@ -13,12 +13,12 @@ package com.cmput301.cia.models;
 
 public class DeleteHabitEvent extends OfflineEvent {
 
-    private HabitEvent toDelete;
-    private String habitId;
-
-    public DeleteHabitEvent(String habitId, HabitEvent event){
-        toDelete = event;
-        this.habitId = habitId;
+    /**
+     * Construct a new command object that will delete the specified event when executed
+     * @param event the event to delete
+     */
+    public DeleteHabitEvent(HabitEvent event){
+        super(event);
     }
 
     /**
@@ -28,6 +28,6 @@ public class DeleteHabitEvent extends OfflineEvent {
     @Override
     public void handleImpl(Profile profile) {
         // TODO: test
-        profile.getHabitById(habitId).removeHabitEvent(toDelete);
+        profile.getHabitById(event.getHabitId()).removeHabitEvent(event);
     }
 }

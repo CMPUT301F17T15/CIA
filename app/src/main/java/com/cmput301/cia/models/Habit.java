@@ -22,7 +22,7 @@ import java.util.Map;
  * Keeps track of all habit events the user has completed/missed related to the habit
  */
 
-public class Habit extends ElasticSearchable implements Serializable {
+public class Habit extends ElasticSearchable {
 
     public static final String TYPE_ID = "habit";
 
@@ -83,6 +83,7 @@ public class Habit extends ElasticSearchable implements Serializable {
      * @param event the event to add
      */
     public void addHabitEvent(HabitEvent event){
+        event.setHabitId(getId());
         events.add(event);
     }
 
