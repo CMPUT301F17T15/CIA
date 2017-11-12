@@ -50,26 +50,26 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        // get HabitList
         ID = getIntent().getExtras().getString("ID");
         user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, ID);
         habitList = user.getHabitHistory();
+        // init historyList
         historyList = (ListView) findViewById(R.id.historyList);
-        TextView filterStaticText;
-
+        // init edit text
         filterEditText = (EditText) findViewById(R.id.filterEditText);
-
+        // init buttons
         Button historyEventFilterButton = (Button) findViewById(R.id.historyEventFilterButton);
         Button historyReturnButton  = (Button) findViewById(R.id.historyReturnButton);
         Button filterByType = (Button) findViewById(R.id.filterByType);
         Button filterByComment = (Button) findViewById(R.id.filterByComment);
-
+        // init adapter, next five lines have issue.
         habitsShowOnScreen_adapter=new ArrayAdapter<String>(this,R.layout.list_item, habitsShowOnScreen_toString);
         historyList.setAdapter(habitsShowOnScreen_adapter);
         habitsShowOnScreen = habitList;
         habitsShowOnScreen_toString=getListOfString(habitsShowOnScreen,user);
         habitsShowOnScreen_adapter.notifyDataSetChanged();
-
+        // set clicker
         filterByType.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String type = new String();
@@ -78,7 +78,6 @@ public class HistoryActivity extends AppCompatActivity {
                 habitsShowOnScreen_adapter.notifyDataSetChanged();
             }
         });
-
 
         filterByComment.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -96,11 +95,6 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
-
     // giving habits and filter by type
     public List<HabitEvent> filterByTypeFunction(List<HabitEvent> habitList, String type){
         List<HabitEvent> sortedList = new ArrayList<HabitEvent>();
@@ -130,7 +124,7 @@ public class HistoryActivity extends AppCompatActivity {
         return filteredList;
     }
 
-
+    // create a string list containing naame and comment.
     public List<String> getListOfString(List<HabitEvent> habitsShowOnScreen, Profile user){
         int size=habitsShowOnScreen.size();
         int counter = 0;
