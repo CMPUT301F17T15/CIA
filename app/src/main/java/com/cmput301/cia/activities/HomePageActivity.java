@@ -50,6 +50,7 @@ public class HomePageActivity extends AppCompatActivity {
     private static final int CREATE_EVENT = 1;
     private static final int CREATE_HABIT = 2, VIEW_HABIT = 3;
 
+
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
 
@@ -103,12 +104,14 @@ public class HomePageActivity extends AppCompatActivity {
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int group, int child, long childRowId) {
+
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
                 Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
                 startActivityForResult(intent, VIEW_HABIT);
+
                 return false;
             }
         });
@@ -182,11 +185,9 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         user.synchronize();
         adapter.refresh();
         adapter.notifyDataSetChanged();
-
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
         checkCompletedEvents();
@@ -217,22 +218,39 @@ public class HomePageActivity extends AppCompatActivity {
             }
         }
         //Read result from create habit activity
-
         else if(requestCode == CREATE_HABIT) {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
+
                 todaysHabits = user.getTodaysHabits();
 
                 // TODO: are these needed
                 adapter.refresh();
                 adapter.notifyDataSetChanged();
+                lvc_adapter.notifyDataSetChanged();
 
             }
-        } else if (requestCode == VIEW_HABIT){
-            if (resultCode == RESULT_OK) {
-                // TODO: handle if habit was deleted
+
+        }
+        else if (requestCode == VIEW_HABIT){
+            if (resultCode == RESULT_OK){
+                System.out.println("In side return result");
+                System.out.println(data.getStringExtra("HabitName"));
+                finder:
+                for(Habit h : user.getHabits()) {
+                    if(h.getTitle().equals(data.getStringExtra("HabitName"))){
+                        System.out.println("In side if");
+                        Toast.makeText(HomePageActivity.this, "Habit: " + h.getTitle() + " Deleted", Toast.LENGTH_SHORT).show();
+                        user.removeHabit(h);
+                        break finder;
+                    }
+                }
+                user.save();
+                adapter.notifyDataSetChanged();
+                lvc_adapter.notifyDataSetChanged();
+
             }
         }
 

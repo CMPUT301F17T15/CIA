@@ -11,8 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
@@ -41,6 +44,8 @@ public class HabitViewActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_habit_detail);
 
+        Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
+        Button editButton = (Button) findViewById(R.id.EditHabitButton);
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
         setSupportActionBar(toolbar);
@@ -50,7 +55,7 @@ public class HabitViewActivity extends AppCompatActivity{
         habitReason = (TextView) findViewById(R.id.EditHabitReason);
         habitStartDate = (TextView) findViewById(R.id.StartingDate);
         habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
-        Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
+        final Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
@@ -59,6 +64,16 @@ public class HabitViewActivity extends AppCompatActivity{
             temp = temp + days[i - 1];
         }
         habitFrequency.setText(temp);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("HabitName", habit.getTitle());
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 
     //Crate the menu object
