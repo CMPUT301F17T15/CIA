@@ -119,11 +119,11 @@ public class HistoryActivity extends AppCompatActivity {
         habitList = new ArrayList<>(events.size());
 
         // binary search comparator based on event date
-        Comparator<HabitEvent> c = new Comparator<HabitEvent>() {
+        /*Comparator<HabitEvent> c = new Comparator<HabitEvent>() {
             public int compare(HabitEvent u1, HabitEvent u2) {
                 return u1.getDate().compareTo(u2.getDate());
             }
-        };
+        };*/
 
         for (HabitEvent event : events) {
             Habit habit = user.getHabitById(event.getHabitId());
