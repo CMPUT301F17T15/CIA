@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class MainActivity extends AppCompatActivity {
 
-    // The text displaying the total number of counters
+    // The view where the user enters their name
     private EditText userName;
 
     @Override

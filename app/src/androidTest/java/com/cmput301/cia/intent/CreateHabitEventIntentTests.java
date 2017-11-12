@@ -38,7 +38,6 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         super(com.cmput301.cia.activities.MainActivity.class);
     }
 
-    // TODO: do this after habit history
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
