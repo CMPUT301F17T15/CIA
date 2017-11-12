@@ -9,6 +9,8 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,14 +37,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Nov 7 2017
+ * Date: Nov 12 2017
  *
  * This class represents the activity for creating a new habit event
  */
-
-// TODO: location name on the TextView for it
 
 public class CreateHabitEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -82,9 +82,6 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     // The date this event occurred on
     private Date eventDate;
 
-    // Index of the habit in the display list
-    //private int index;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +94,6 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
-        //index = intent.getIntExtra(ID_HABIT_INDEX, 0);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
         imageView = (ImageView)findViewById(R.id.cheImageView);
@@ -155,12 +151,13 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // TODO: put an image on the emulator and test choosing it
         if (requestCode == SELECT_IMAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
             try {
 
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 Bitmap chosenImage = BitmapFactory.decodeStream(inputStream);
+
+                // attempt to resize the image if necessary
                 chosenImage = ImageUtilities.compressImageToMax(chosenImage, MAX_IMAGE_SIZE);
 
                 if (chosenImage == null) {
@@ -217,7 +214,6 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * Reset the image view to nothing
      * @param view
      */
-    // TODO: test
     public void onResetImageClicked(View view){
         image = null;
         updateImage();
@@ -243,13 +239,15 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * Update the image view after an image has been selected or removed
      */
     private void updateImage(){
-        // TODO: try setImageBitmap(null) to see if it works fine
         if (image != null) {
+            imageView.clearColorFilter();
+            imageView.setBackgroundColor(Color.rgb(255, 255, 255));
             imageView.setImageBitmap(image);
             resetImageButton.setVisibility(View.VISIBLE);
         }
         else {
-            imageView.setImageAlpha(0);
+            imageView.setColorFilter(Color.rgb(0, 0, 0));
+            imageView.setBackgroundColor(Color.rgb(0, 0, 0));
             resetImageButton.setVisibility(View.INVISIBLE);
         }
     }
@@ -278,7 +276,6 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
 
         intent.putExtra(RETURNED_HABIT, event);
         intent.putExtra(ID_HABIT_HASH, habitId);
-        //intent.putExtra(ID_HABIT_INDEX, index);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
