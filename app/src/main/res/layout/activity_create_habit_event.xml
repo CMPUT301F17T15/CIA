@@ -143,7 +143,7 @@
         android:onClick="onImageClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@android:color/darker_gray" />
+        app:srcCompat="@android:color/black" />
 
     <Button
         android:id="@+id/cheSaveButton"
@@ -174,8 +174,10 @@
         android:onClick="onResetImageClicked"
         android:text="Reset Image"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="318dp" />
+        android:layout_marginLeft="36dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="113dp" />
 
     <TextView
         android:id="@+id/cheDateTextView"

@@ -28,7 +28,6 @@ import com.cmput301.cia.utilities.ElasticSearchUtilities;
  */
 
 // TODO: following/unfollowing, image, messages
-// TODO: comment not saving/loading
 
 public class UserProfileActivity extends AppCompatActivity {
 
