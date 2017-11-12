@@ -6,4 +6,50 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.FilterEventsActivity">
 
+    <Button
+        android:id="@+id/filterCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="185dp"
+        android:layout_marginRight="8dp"
+        android:onClick="onCancelClicked"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.922"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ListView
+        android:id="@+id/filterListView"
+        android:layout_width="342dp"
+        android:layout_height="450dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.277" />
+
+    <Button
+        android:id="@+id/filterFinishButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="181dp"
+        android:onClick="onFinishClicked"
+        android:text="Finish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/filterHabitText"
+        android:layout_width="155dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="16dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
