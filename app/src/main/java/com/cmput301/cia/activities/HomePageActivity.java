@@ -50,6 +50,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     private static final int CREATE_EVENT = 1;
     private static final int CREATE_HABIT = 2;
+    private static final  int NOTIFY_CHANGE = 3;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User";
@@ -121,7 +122,7 @@ public class HomePageActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                         intent.putExtra("Habit", habit);
-                        startActivityForResult(intent, 2);
+                        startActivityForResult(intent, 3);
                         break finder;
                     }
                 }
@@ -209,8 +210,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         user.synchronize();
+        
 
         // TODO: move some of the expandablelistview adapter stuff from onCreate() to here
 
@@ -252,13 +253,11 @@ public class HomePageActivity extends AppCompatActivity {
 
         }
         //Read result from create habit activity
-
         else if(requestCode == CREATE_HABIT) {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
-
                 /**
                  HashMap function:
                  key = habit type.
@@ -290,6 +289,39 @@ public class HomePageActivity extends AppCompatActivity {
                 checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
 
+            }
+
+        }
+        else if (requestCode == NOTIFY_CHANGE){
+            if (resultCode == RESULT_OK){
+                for(Habit h : user.getHabits()) {
+                    if(h.getTitle().equals(data.getStringExtra("HabitName"))){
+                        System.out.println("In side if");
+                        Toast.makeText(HomePageActivity.this, "Habit: " + h.getTitle() + " Deleted", Toast.LENGTH_SHORT).show();
+                        user.removeHabit(h);
+                    }
+                }
+                user.save();
+                HashMap<String, List<String>> types = new HashMap<String, List<String>>();
+                for(Habit h : user.getHabits()) {
+                    if(types.containsKey(h.getType())){
+                        types.get(h.getType()).add(h.getTitle());
+                    }else{
+                        types.put(h.getType(), new ArrayList<String>());
+                        types.get(h.getType()).add(h.getTitle());
+                    }
+                }
+                //Refresh expandableListView
+                expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
+                final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(HomePageActivity.this, types);
+                expandableListView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                //Refresh checkableListView
+                ListView checkable = (ListView) findViewById(R.id.TodayToDoListView);
+                checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                ArrayAdapter<Habit> lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+                checkable.setAdapter(lvc_adapter);
+                lvc_adapter.notifyDataSetChanged();
             }
         }
     }
