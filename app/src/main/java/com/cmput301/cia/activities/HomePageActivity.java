@@ -77,7 +77,7 @@ public class HomePageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra(ID_USERNAME);
+        final String name = intent.getStringExtra(ID_USERNAME);
         boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
 
         Profile dummy = new Profile(name);
