@@ -112,6 +112,7 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
                 intent.putExtra("HabitID", habit.getId());
+                intent.putExtra("UserName", name);
                 startActivityForResult(intent, VIEW_HABIT);
 
                 return false;

@@ -60,6 +60,7 @@ public class HabitViewActivity extends AppCompatActivity{
         habitStartDate = (TextView) findViewById(R.id.StartingDate);
         habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
         final Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
+
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
@@ -68,7 +69,7 @@ public class HabitViewActivity extends AppCompatActivity{
             temp = temp + days[i - 1];
         }
         habitFrequency.setText(temp);
-
+        final String name = getIntent().getStringExtra("UserName");
         habitId = getIntent().getStringExtra("HabitID");
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +79,18 @@ public class HabitViewActivity extends AppCompatActivity{
                 returnIntent.putExtra("HabitID", habitId);
                 setResult(RESULT_OK, returnIntent);
                 finish();
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent editIntent = new Intent(HabitViewActivity.this, EditHabitActivity.class);
+                System.out.println(habitId);
+                System.out.println(name);
+                editIntent.putExtra("UserName", name);
+                editIntent.putExtra("HabitID", habitId);
+                startActivity(editIntent);
             }
         });
 
