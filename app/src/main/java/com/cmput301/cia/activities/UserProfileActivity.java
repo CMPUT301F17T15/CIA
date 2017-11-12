@@ -16,9 +16,8 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
-
-import java.text.SimpleDateFormat;
 
 /**
  * Version 1
@@ -28,7 +27,8 @@ import java.text.SimpleDateFormat;
  * This activity displays the information about a user's profile
  */
 
-// TODO: following/unfollowing, image
+// TODO: following/unfollowing, image, messages
+// TODO: comment not saving/loading
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -61,21 +61,23 @@ public class UserProfileActivity extends AppCompatActivity {
         String profileId = intent.getStringExtra(PROFILE_ID);
         String userId = intent.getStringExtra(USER_ID);
 
+        // initialize the profiles
         profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, profileId);
         if (profileId.equals(userId))
             user = profile;
         else
             user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, userId);
 
+        // connection error
         if (profile == null || user == null){
             Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
+        // initialize view member variables
         nameText = (TextView)findViewById(R.id.profileNameText);
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
-
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
         saveButton = (Button)findViewById(R.id.profileSaveButton);
@@ -94,8 +96,30 @@ public class UserProfileActivity extends AppCompatActivity {
         commentText.setText(profile.getComment());
         nameText.setText(profile.getName());
 
-        SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-        ((TextView)findViewById(R.id.profileDateDynamicText)).setText(df.format(profile.getCreationDate()));
+        ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(profile.getCreationDate()));
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profile.setComment(commentText.getText().toString());
+                // TODO: image
+            }
+        });
+
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profile.addFollowRequest(user);
+            }
+        });
+
+        unfollowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO
+                //user.unfollow(profile);
+            }
+        });
     }
 
     @Override

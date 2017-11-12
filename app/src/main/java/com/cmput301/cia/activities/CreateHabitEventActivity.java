@@ -24,6 +24,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
@@ -235,8 +236,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * Update the view displaying the event's date in text form
      */
     private void setDateText(){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        dateText.setText(format.format(eventDate));
+        dateText.setText(DateUtilities.formatDate(eventDate));
     }
 
     /**
