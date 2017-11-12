@@ -34,4 +34,12 @@ public class AddHabitEvent extends OfflineEvent {
         profile.setHabitPoints(profile.getHabitPoints() + 1);
         profile.getHabitById(habitId).addHabitEvent(event);
     }
+
+    /**
+     * @return the habit ID of the habit containing the habit event
+     */
+    @Override
+    public String getHabitId() {
+        return habitId;
+    }
 }

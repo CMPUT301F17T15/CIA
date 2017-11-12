@@ -47,4 +47,11 @@ public abstract class OfflineEvent implements Serializable {
      */
     public abstract void handleImpl(Profile profile);
 
+    /**
+     * @return the habit ID of the habit containing the habit event
+     */
+    public String getHabitId(){
+        return event.getHabitId();
+    }
+
 }
