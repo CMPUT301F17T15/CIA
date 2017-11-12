@@ -27,6 +27,7 @@ import com.cmput301.cia.controller.CreateHabitController;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DatePickerUtilities;
+import com.cmput301.cia.utilities.DateUtilities;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +60,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         reason = (EditText) findViewById(R.id.reason);
         startDate = (EditText) findViewById(R.id.startDate);
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
-        startDate.setText(chooseStartDate.toString());
+        startDate.setText(DateUtilities.formatDate(chooseStartDate));
 
         //ToDo fix spinner activity
         //spinner activity, could be placed in another activity file for better practice
@@ -191,6 +192,6 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
         chooseStartDate = calendar.getTime();
-        startDate.setText(chooseStartDate.toString());
+        startDate.setText(DateUtilities.formatDate(chooseStartDate));
     }
 }

@@ -49,7 +49,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
     private static final int CREATE_EVENT = 1;
-    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3;
+    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4;
 
 
     // Intent extra data identifier for the name of the user who signed in
@@ -111,6 +111,7 @@ public class HomePageActivity extends AppCompatActivity {
                 Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
+                intent.putExtra("HabitID", habit.getId());
                 startActivityForResult(intent, VIEW_HABIT);
 
                 return false;
@@ -187,7 +188,8 @@ public class HomePageActivity extends AppCompatActivity {
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
                 intent_Habit_History.putExtra("ID", user.getId());
-                startActivity(intent_Habit_History);
+                // TODO: pass in profile through serializable instead if it is better
+                startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
                 return true;
             case R.id.menu_button_My_Following:
                 Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
@@ -259,27 +261,29 @@ public class HomePageActivity extends AppCompatActivity {
         }
         else if (requestCode == VIEW_HABIT){
             if (resultCode == RESULT_OK){
-                System.out.println("In side return result");
-                System.out.println(data.getStringExtra("HabitName"));
-                finder:
-                for(Habit h : user.getHabits()) {
-                    if(h.getTitle().equals(data.getStringExtra("HabitName"))){
-                        System.out.println("In side if");
-                        Toast.makeText(HomePageActivity.this, "Habit: " + h.getTitle() + " Deleted", Toast.LENGTH_SHORT).show();
-                        user.removeHabit(h);
-                        break finder;
-                    }
-                }
+
+                // TODO: user.removeHabitById
+                String id = data.getStringExtra("HabitID");
+                user.removeHabit(user.getHabitById(id));
+
+                todaysHabits = user.getTodaysHabits();
+
                 user.save();
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
             }
+        } else if (requestCode == VIEW_HABIT_HISTORY){
+            // reload to account for possibly deleted events
+            // TODO: test
+            user.load();
         }
 
     }
 
-
+    /**
+     * Automatically check all habits that the user has completed today
+     */
     private void checkCompletedEvents(){
         // reset the listener so that a new event is not created
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -301,6 +305,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // This item is already clicked, prevent it from being disabled
+                // TODO
                 if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
                     return;
                 }

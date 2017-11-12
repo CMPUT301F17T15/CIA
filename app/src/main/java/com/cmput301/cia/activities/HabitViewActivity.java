@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.utilities.DateUtilities;
 
 import org.w3c.dom.Text;
 
@@ -39,6 +40,9 @@ public class HabitViewActivity extends AppCompatActivity{
     private TextView habitFrequency;
     private String temp = "";
     private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
+
+    private String habitId;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -59,21 +63,24 @@ public class HabitViewActivity extends AppCompatActivity{
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
-        habitStartDate.setText(habit.getStartDate().toString());
+        habitStartDate.setText(DateUtilities.formatDate(habit.getStartDate()));
         for (int i : habit.getDaysOfWeek()) {
             temp = temp + days[i - 1];
         }
         habitFrequency.setText(temp);
 
+        habitId = getIntent().getStringExtra("HabitID");
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("HabitName", habit.getTitle());
+                returnIntent.putExtra("HabitID", habitId);
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
         });
+
     }
 
     //Crate the menu object

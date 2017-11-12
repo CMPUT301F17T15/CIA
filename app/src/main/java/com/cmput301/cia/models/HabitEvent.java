@@ -21,7 +21,7 @@ import java.util.Date;
  * Represents a habit event that the user has successfully completed
  */
 
-public class HabitEvent extends ElasticSearchable implements Serializable {
+public class HabitEvent extends ElasticSearchable {
 
     // if the latitude/longitude variable is equal to this, then the location is null
     private static final double INVALID_LATLONG = -999999999999999.259;
@@ -35,6 +35,9 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
 
     private double latitude;
     private double longitude;
+
+    // the ID of the habit that contains this event
+    private String habitId;
 
     /**
      * Construct a new habit event
@@ -230,7 +233,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     public void load() {
         HabitEvent found = ElasticSearchUtilities.getObject(getTypeId(), HabitEvent.class, getId());
         if (found != null){
-            // TODO: copy
+            copyFrom(found);
         }
     }
 
@@ -244,7 +247,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
 
     /**
      * Copy over the data from another habit event into this object
-     * @param other the object to copy from
+     * @param other the object to copy from (not null)
      */
     public void copyFrom(HabitEvent other){
         comment = other.comment;
@@ -252,6 +255,21 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
         date = other.date;
         latitude = other.latitude;
         longitude = other.longitude;
+    }
+
+    /**
+     * Set the id of the habit containing this event
+     * @param habitId the id of the habit containing this event
+     */
+    public void setHabitId(String habitId){
+        this.habitId = habitId;
+    }
+
+    /**
+     * @return the id of the habit containing this event
+     */
+    public String getHabitId(){
+        return habitId;
     }
 
 }

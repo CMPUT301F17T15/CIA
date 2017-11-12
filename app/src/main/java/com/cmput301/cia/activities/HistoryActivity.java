@@ -160,7 +160,7 @@ public class HistoryActivity extends AppCompatActivity {
                     HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
 
                     // TODO: habitId
-                    OfflineEvent offlineEvent = new EditHabitEvent("", event);
+                    OfflineEvent offlineEvent = new EditHabitEvent(event);
                     user.tryHabitEvent(offlineEvent);
 
                 } else {

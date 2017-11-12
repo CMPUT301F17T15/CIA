@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -123,6 +124,14 @@ public class Profile extends ElasticSearchable {
      */
     public void removeHabit(Habit habit){
         habits.remove(habit);
+
+        // remove the pending events that were related to the removed habit
+        Iterator<OfflineEvent> it = pendingEvents.iterator();
+        while (it.hasNext()){
+            if (it.next().getHabitId().equals(habit.getId())){
+                it.remove();
+            }
+        }
     }
 
     /**
@@ -397,11 +406,15 @@ public class Profile extends ElasticSearchable {
     public void load() {
         Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
         if (found != null){
-            Map<String, String> params = new HashMap<>();
-            params.put("creator", getId());
-            List<Habit> foundHabits = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, params);
-
-            // TODO: copy from vars into this
+            name = found.name;
+            habits = found.habits;
+            following = found.following;
+            followRequests = found.followRequests;
+            //pendingEvents = found.pendingEvents;
+            powerPoints = found.powerPoints;
+            habitPoints = found.habitPoints;
+            creationDate = found.creationDate;
+            comment = found.comment;
         }
 
         List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
@@ -415,7 +428,7 @@ public class Profile extends ElasticSearchable {
     @Override
     public void delete() {
         for (Habit habit : habits)
-            ElasticSearchUtilities.delete(habit);
+            habit.delete();
         ElasticSearchUtilities.delete(this);
     }
 

@@ -13,11 +13,15 @@ package com.cmput301.cia.models;
 
 public class AddHabitEvent extends OfflineEvent {
 
-    private HabitEvent toAdd;
     private String habitId;
 
+    /**
+     * Construct a new command object that will add the specified event when executed
+     * @param habitId the id of the habit containing the event
+     * @param event the event to add
+     */
     public AddHabitEvent(String habitId, HabitEvent event){
-        toAdd = event;
+        super(event);
         this.habitId = habitId;
     }
 
@@ -28,6 +32,14 @@ public class AddHabitEvent extends OfflineEvent {
     @Override
     public void handleImpl(Profile profile) {
         profile.setHabitPoints(profile.getHabitPoints() + 1);
-        profile.getHabitById(habitId).addHabitEvent(toAdd);
+        profile.getHabitById(habitId).addHabitEvent(event);
+    }
+
+    /**
+     * @return the habit ID of the habit containing the habit event
+     */
+    @Override
+    public String getHabitId() {
+        return habitId;
     }
 }

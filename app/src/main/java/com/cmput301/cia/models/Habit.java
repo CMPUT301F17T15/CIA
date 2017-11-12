@@ -22,7 +22,7 @@ import java.util.Map;
  * Keeps track of all habit events the user has completed/missed related to the habit
  */
 
-public class Habit extends ElasticSearchable implements Serializable {
+public class Habit extends ElasticSearchable {
 
     public static final String TYPE_ID = "habit";
 
@@ -44,8 +44,6 @@ public class Habit extends ElasticSearchable implements Serializable {
     // The dates this event was missed on
     private List<Date> missedDates;
 
-    private String creator;
-
     /**
 
      * Construct a new habit object
@@ -63,7 +61,6 @@ public class Habit extends ElasticSearchable implements Serializable {
         events = new ArrayList<>();
         daysOfWeek = days;
         missedDates = new ArrayList<>();
-        creator = "";
     }
 
     /**
@@ -86,6 +83,7 @@ public class Habit extends ElasticSearchable implements Serializable {
      * @param event the event to add
      */
     public void addHabitEvent(HabitEvent event){
+        event.setHabitId(getId());
         events.add(event);
     }
 
@@ -234,16 +232,10 @@ public class Habit extends ElasticSearchable implements Serializable {
      */
     @Override
     public void save() {
-        // TODO: for saving, maybe do it in Profile and then loop through each Habit stored in
-        // the database and assign it's 'creator' parameter to the profile's getId() result
-
-        // TODO: save the event's 'base' parameter as getId()
         for (HabitEvent event : events)
             event.save();
 
-        // TODO: save the user who created it's ID as 'creator'
         ElasticSearchUtilities.save(this);
-
     }
 
     /**
@@ -254,10 +246,13 @@ public class Habit extends ElasticSearchable implements Serializable {
 
         Habit found = ElasticSearchUtilities.getObject(getTypeId(), Habit.class, getId());
         if (found != null){
-            Map<String, String> params = new HashMap<>();
-            params.put("base", getId());
-            List<HabitEvent> foundEvents = ElasticSearchUtilities.getListOf(HabitEvent.TYPE_ID, HabitEvent.class, params);
-            // TODO: copy from vars into this
+            type = found.type;
+            title = found.title;
+            reason = found.reason;
+            startDate = found.startDate;
+            events = found.events;
+            daysOfWeek = found.daysOfWeek;
+            missedDates = found.missedDates;
         }
     }
 
@@ -274,15 +269,6 @@ public class Habit extends ElasticSearchable implements Serializable {
     @Override
     public String toString(){
         return title;
-    }
-
-
-    /**
-     * Set the ID of the profile that created this habit
-     * @param creator the id of the creator's profile
-     */
-    public void setCreator(String creator) {
-        this.creator = creator;
     }
 
 }
