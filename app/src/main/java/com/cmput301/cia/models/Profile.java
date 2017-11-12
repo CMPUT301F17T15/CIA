@@ -397,11 +397,15 @@ public class Profile extends ElasticSearchable {
     public void load() {
         Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
         if (found != null){
-            Map<String, String> params = new HashMap<>();
-            params.put("creator", getId());
-            List<Habit> foundHabits = ElasticSearchUtilities.getListOf(Habit.TYPE_ID, Habit.class, params);
-
-            // TODO: copy from vars into this
+            name = found.name;
+            habits = found.habits;
+            following = found.following;
+            followRequests = found.followRequests;
+            //pendingEvents = found.pendingEvents;
+            powerPoints = found.powerPoints;
+            habitPoints = found.habitPoints;
+            creationDate = found.creationDate;
+            comment = found.comment;
         }
 
         List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
@@ -415,7 +419,7 @@ public class Profile extends ElasticSearchable {
     @Override
     public void delete() {
         for (Habit habit : habits)
-            ElasticSearchUtilities.delete(habit);
+            habit.delete();
         ElasticSearchUtilities.delete(this);
     }
 

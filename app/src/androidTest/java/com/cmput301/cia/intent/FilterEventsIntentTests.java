@@ -17,13 +17,9 @@ import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Version 2

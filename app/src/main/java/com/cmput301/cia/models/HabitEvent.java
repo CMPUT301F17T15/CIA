@@ -230,7 +230,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
     public void load() {
         HabitEvent found = ElasticSearchUtilities.getObject(getTypeId(), HabitEvent.class, getId());
         if (found != null){
-            // TODO: copy
+            copyFrom(found);
         }
     }
 
@@ -244,7 +244,7 @@ public class HabitEvent extends ElasticSearchable implements Serializable {
 
     /**
      * Copy over the data from another habit event into this object
-     * @param other the object to copy from
+     * @param other the object to copy from (not null)
      */
     public void copyFrom(HabitEvent other){
         comment = other.comment;

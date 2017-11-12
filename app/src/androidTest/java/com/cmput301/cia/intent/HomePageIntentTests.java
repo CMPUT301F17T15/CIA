@@ -4,20 +4,15 @@
 
 package com.cmput301.cia.intent;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.CreateHabitActivity;
 import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.UserProfileActivity;
 import com.robotium.solo.Solo;
-
-import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
  * Version 1
