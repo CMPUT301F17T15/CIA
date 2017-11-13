@@ -42,7 +42,7 @@ public class HabitViewActivity extends AppCompatActivity{
 
     private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
 
-    private String habitId;
+    private Habit habit;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -51,6 +51,8 @@ public class HabitViewActivity extends AppCompatActivity{
 
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
         Button editButton = (Button) findViewById(R.id.EditHabitButton);
+        Button finishButton = (Button)findViewById(R.id.dhdReturnButton);
+
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
         setSupportActionBar(toolbar);
@@ -60,17 +62,17 @@ public class HabitViewActivity extends AppCompatActivity{
         habitReason = (TextView) findViewById(R.id.EditHabitReason);
         habitStartDate = (TextView) findViewById(R.id.StartingDate);
         habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
-        final Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
 
-        RefreshPage(habit);
-        final String name = getIntent().getStringExtra("UserName");
-        habitId = getIntent().getStringExtra("HabitID");
+        habit = (Habit) getIntent().getSerializableExtra("Habit");
+        final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
+        RefreshPage();
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("HabitID", habitId);
+                returnIntent.putExtra("Deleted", true);
+                returnIntent.putExtra("HabitID", habit.getId());
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
@@ -80,11 +82,20 @@ public class HabitViewActivity extends AppCompatActivity{
             @Override
             public void onClick(View view){
                 Intent editIntent = new Intent(HabitViewActivity.this, EditHabitActivity.class);
-                System.out.println(habitId);
-                System.out.println(name);
-                editIntent.putExtra("UserName", name);
-                editIntent.putExtra("HabitID", habitId);
+                editIntent.putExtra("Habit", habit);
+                editIntent.putExtra("Categories", categories);
                 startActivityForResult(editIntent, 1);
+            }
+        });
+
+        finishButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent();
+                intent.putExtra("Habit", habit);
+                intent.putExtra("Deleted", false);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -100,14 +111,13 @@ public class HabitViewActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                String habitId = data.getStringExtra("HabitID");
-                Habit habit = ElasticSearchUtilities.getObject("habit", Habit.class, habitId);
-                RefreshPage(habit);
+                habit = (Habit) data.getSerializableExtra("Habit");
+                RefreshPage();
             }
         }
     }
 
-    private void RefreshPage(Habit habit) {
+    private void RefreshPage() {
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());

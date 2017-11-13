@@ -131,8 +131,11 @@ public class HomePageActivity extends AppCompatActivity {
                 Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
-                intent.putExtra("HabitID", habit.getId());
-                intent.putExtra("UserName", name);
+
+                ArrayList<String> types = new ArrayList<String>();
+                types.addAll(user.getHabitCategories());
+                intent.putExtra("Categories", types);
+
                 startActivityForResult(intent, VIEW_HABIT);
 
                 return false;
@@ -282,35 +285,49 @@ public class HomePageActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
-                user.save();
                 todaysHabits = user.getTodaysHabits();
 
-                adapter.refresh();
                 adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-                checkable.setAdapter(lvc_adapter);
                 expandableListView.setAdapter(adapter);
-
                 adapter.notifyDataSetChanged();
+
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+                checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
 
+                user.save();
             }
 
         }
         //result from delete habit button
         else if (requestCode == VIEW_HABIT){
             if (resultCode == RESULT_OK){
-                // TODO: user.removeHabitById
-                String id = data.getStringExtra("HabitID");
-                user.removeHabit(user.getHabitById(id));
-                user.save();
-                todaysHabits = user.getTodaysHabits();
+
+                boolean deleted = data.getBooleanExtra("Deleted", false);
+                if (deleted) {
+                    String id = data.getStringExtra("HabitID");
+                    // TODO: user.removeHabitById
+                    user.removeHabit(user.getHabitById(id));
+                } else {
+                    Habit habit = (Habit) data.getSerializableExtra("Habit");
+                    for (Habit h : user.getHabits()){
+                        if (h.equals(habit)){
+                            h.copyFrom(habit);
+                            break;
+                        }
+                    }
+                }
+
                 adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-                checkable.setAdapter(lvc_adapter);
                 expandableListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                todaysHabits = user.getTodaysHabits();
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+                checkable.setAdapter(lvc_adapter);
                 lvc_adapter.notifyDataSetChanged();
+
+                user.save();
 
             }
         } else if (requestCode == VIEW_HABIT_HISTORY){
@@ -332,18 +349,6 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        user.load();
-        user.save();
-        todaysHabits = user.getTodaysHabits();
-        adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-        expandableListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
 
     /**
      * Automatically check all habits that the user has completed today

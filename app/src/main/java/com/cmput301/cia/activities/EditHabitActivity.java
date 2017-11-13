@@ -40,29 +40,25 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  */
 
 public class EditHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
     private Date chooseStartDate;
     private EditText habitName;
     private EditText reason;
     private EditText startDate;
     private MaterialDayPicker dayPicker;
     private Spinner spinner;
-    private Profile user;
+
     private Habit target;
-    private String habitId;
+    private ArrayList<String> habitCategories;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit_detail);
         Intent intent = getIntent();
-        habitId = intent.getStringExtra("HabitID");
-        String name = intent.getStringExtra("UserName");
 
-        Map<String, String> values = new HashMap<>();
-        values.put("name", name);
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
-
-
-        target = user.getHabitById(habitId);
+        target = (Habit) intent.getSerializableExtra("Habit");
+        habitCategories = intent.getStringArrayListExtra("Categories");
 
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
@@ -70,7 +66,6 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         reason = (EditText) findViewById(R.id.reason);
         reason.setText(target.getReason());
         startDate = (EditText) findViewById(R.id.startDate);
-        startDate.setText(target.getStartDate().toString());
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
         startDate.setText(DateUtilities.formatDate(chooseStartDate));
 
@@ -79,11 +74,11 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
 
         spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
         final List<String> type = new ArrayList<String>();
-        if (user.getHabitCategories() == null){
+        if (habitCategories.size() == 0){
             type.add("Create new type");
         }
         else {
-            for (String t : user.getHabitCategories()){
+            for (String t : habitCategories){
                 type.add(t);
             }
             type.remove(type.indexOf(target.getType()));
@@ -146,10 +141,9 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
             target.setStartDate(chooseStartDate);
             target.setDaysOfWeek(getPickedDates(daysSelected));
             target.setType(spinner.getSelectedItem().toString());
-            user.save();
 
             Intent returnIntent = new Intent();
-            returnIntent.putExtra("HabitID", habitId);
+            returnIntent.putExtra("Habit", target);
             setResult(RESULT_OK, returnIntent);
             finish();
 
