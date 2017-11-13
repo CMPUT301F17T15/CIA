@@ -302,6 +302,21 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+        adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+        checkable.setAdapter(lvc_adapter);
+        expandableListView.setAdapter(adapter);
+        adapter.refresh();
+        adapter.notifyDataSetChanged();
+        lvc_adapter.notifyDataSetChanged();
+    }
+
 
     /**
      * Automatically check all habits that the user has completed today
