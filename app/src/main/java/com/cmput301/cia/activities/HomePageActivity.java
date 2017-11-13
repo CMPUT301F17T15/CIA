@@ -215,11 +215,13 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent_My_Following);
                 return true;
             case R.id.menu_button_PowerRankings:
-                Intent intentPR = new Intent(this, CreateHabitActivity.class);
+                Intent intentPR = new Intent(this, RankingsActivity.class);
+                intentPR.putExtra(RankingsActivity.ID_ISPOWER, true);
                 startActivity(intentPR);
                 return true;
             case R.id.menu_button_OverallRankings:
-                Intent intentOR = new Intent(this, CreateHabitActivity.class);
+                Intent intentOR = new Intent(this, RankingsActivity.class);
+                intentOR.putExtra(RankingsActivity.ID_ISPOWER, false);
                 startActivity(intentOR);
                 return true;
         }
@@ -269,6 +271,7 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 // update the today's tasks list
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
                 lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
@@ -307,6 +310,10 @@ public class HomePageActivity extends AppCompatActivity {
             // reload to account for possibly deleted events
             // TODO: test
             user.load();
+
+            todaysHabits = user.getTodaysHabits();
+            lvc_adapter.notifyDataSetChanged();
+            checkCompletedEvents();
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
                 String newComment = data.getStringExtra(UserProfileActivity.RESULT_COMMENT_ID);

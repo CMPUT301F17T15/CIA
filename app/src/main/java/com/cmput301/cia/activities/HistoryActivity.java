@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -98,6 +99,12 @@ public class HistoryActivity extends AppCompatActivity {
         convertEventsToString();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        convertEventsToString();
+    }
+
     /**
      * @return list of all habit events that are currently displayed on the screen
      */
@@ -155,17 +162,15 @@ public class HistoryActivity extends AppCompatActivity {
 
         } else if (requestCode == EVENT_CODE) {
             if (resultCode == RESULT_OK) {
-
                 boolean isDeleted = data.getBooleanExtra(HabitEventViewActivity.RETURNED_DELETED, false);
+                HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
+                OfflineEvent offlineEvent;
                 if (!isDeleted) {
-                    HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
-
-                    OfflineEvent offlineEvent = new EditHabitEvent(event);
-                    user.tryHabitEvent(offlineEvent);
-
+                    offlineEvent = new EditHabitEvent(event);
                 } else {
-                    // TODO: delete habit event
+                    offlineEvent = new DeleteHabitEvent(event);
                 }
+                user.tryHabitEvent(offlineEvent);
             }
 
         }

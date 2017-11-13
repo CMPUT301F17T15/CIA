@@ -339,11 +339,11 @@ public class Profile extends ElasticSearchable {
             }
         }
 
-        if (!missedEvent){
+        /*if (!missedEvent){
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(endingDay);
             setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
-        }
+        }*/
     }
 
     /**

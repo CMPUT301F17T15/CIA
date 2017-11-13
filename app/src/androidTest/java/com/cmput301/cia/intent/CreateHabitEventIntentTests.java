@@ -19,12 +19,11 @@ import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Nov 5 2017
+ * Date: Nov 12 2017
  *
  * This class tests the UI for creating habit events
  * NOTE: These tests require an internet connection
@@ -47,29 +46,22 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
+        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
+        solo.clickOnMenuItem("Habit History");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
+
         // delete all habit events
-        while (true) {
-            try {
-                solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
-                solo.clickOnMenuItem("Habit History");
-                solo.sleep(1000);
-                solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-                solo.clickInList(1, 0);
-                solo.sleep(3000);
-                solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
-                solo.clickOnButton("Delete");
-                solo.sleep(1000);
-                // TODO: continue debugging here after delete is implemented
-                solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-                solo.goBackToActivity("HomePageActivity");
-                solo.sleep(1000);
-                solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-                solo.clickOnView(solo.getView(R.id.menu_button_Habit_History));
-                solo.sleep(1000);
-                solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-            } catch (Exception e){
-                break;
-            }
+        while (((ListView)solo.getView(R.id.historyList)).getAdapter().getCount() > 0) {
+            solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
+            solo.enterText((EditText)solo.getView(R.id.filterEditText), "");
+            //solo.goBack();
+            solo.sleep(1000);
+            solo.clickInList(1, 0);
+            solo.sleep(3000);
+            solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
+            solo.clickOnButton("Delete");
+            solo.sleep(1000);
         }
 
         solo.sleep(100);
@@ -80,7 +72,6 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
     public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
 
-        ListView list = solo.getCurrentViews(ListView.class).get(1);
         solo.clickInList(1, 1);
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
@@ -92,24 +83,25 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
     }
 
     public void testFinish() throws NoSuchFieldException, IllegalAccessException {
-        // Select the 1st option in the second list (the "today's tasks" list)
 
-        ArrayList<ListView> lists = solo.getCurrentViews(ListView.class);
-        solo.clickOnView(lists.get(1).getAdapter().getView(0, null, null));
-        solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        solo.clickOnButton("Save");
-
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
         field.setAccessible(true);
         Profile user = (Profile) field.get(solo.getCurrentActivity());
         int habitEvents = user.getHabitHistory().size();
 
-        solo.clickOnView(lists.get(1).getAdapter().getView(0, null, null));
+        // Select the 1st option in the second list (the "today's tasks" list)
+        solo.clickInList(1, 1);
+        solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-
         solo.clickOnButton("Save");
+
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+
+        // make sure no new event activity is started
+        solo.clickInList(1, 1);
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // assert that a new event was added
         assertTrue(user.getHabitHistory().size() == habitEvents + 1);
