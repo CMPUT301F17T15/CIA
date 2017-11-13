@@ -7,6 +7,8 @@ package com.cmput301.cia.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,9 +38,10 @@ public class StatisticViewActivity extends AppCompatActivity {
     private TextView completeNumber;
     private TextView totalNumber;
     private TextView mostMissed;
-    PieChart pieChart;
-    int[] yData;
-    String[] xData;
+    private ListView BreakDownList;
+    private PieChart pieChart;
+    private int[] yData;
+    private String[] xData;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,16 +59,20 @@ public class StatisticViewActivity extends AppCompatActivity {
         int completeCounter = 0;
         int missCounter = 0;
         int largestMiss = 0;
+        List<String> breakdownlist = new ArrayList<String>();
+
         mostMissed = (TextView) findViewById(R.id.missedMost);
         for (Habit h : user.getHabitsInCategory(type)){
+            System.out.println(h.getTitle());
             completeCounter += h.getTimesCompleted();
             missCounter += h.getTimesMissed();
+            breakdownlist.add("Habit: " + h.getTitle() + "\nCompleted: " + h.getTimesCompleted() + ". \nMissed: " + h.getTimesMissed() + ".");
             if(h.getTimesMissed() > largestMiss){
                 mostMissed.setText(h.getTitle());
                 largestMiss = h.getTimesMissed();
             }
         }
-
+        System.out.println(breakdownlist);
 
         completeNumber = (TextView) findViewById(R.id.completeNumber);
         completeNumber.setText(String.valueOf(completeCounter));
@@ -74,6 +82,11 @@ public class StatisticViewActivity extends AppCompatActivity {
             Toast.makeText(StatisticViewActivity.this, "WOW you haven't missed any habits yet!\nKeep up the good work!", Toast.LENGTH_LONG).show();
             mostMissed.setText("Nothing Missed");
         }
+        //Break down list view for each habit
+        BreakDownList = (ListView) findViewById(R.id.BreakDownListView);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, breakdownlist);
+        BreakDownList.setAdapter(adapter);
+        //data for pie chart
         yData = new int[]{missCounter, user.getHabitHistory().size()};
         xData = new String[]{"Total","Complete"};
 
