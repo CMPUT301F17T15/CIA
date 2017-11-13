@@ -217,11 +217,13 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent_My_Following);
                 return true;
             case R.id.menu_button_PowerRankings:
-                Intent intentPR = new Intent(this, CreateHabitActivity.class);
+                Intent intentPR = new Intent(this, RankingsActivity.class);
+                intentPR.putExtra(RankingsActivity.ID_ISPOWER, true);
                 startActivity(intentPR);
                 return true;
             case R.id.menu_button_OverallRankings:
-                Intent intentOR = new Intent(this, CreateHabitActivity.class);
+                Intent intentOR = new Intent(this, RankingsActivity.class);
+                intentOR.putExtra(RankingsActivity.ID_ISPOWER, false);
                 startActivity(intentOR);
                 return true;
         }
