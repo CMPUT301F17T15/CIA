@@ -342,6 +342,7 @@ public class HomePageActivity extends AppCompatActivity {
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         lvc_adapter.notifyDataSetChanged();
+        checkCompletedEvents();
     }
 
 
