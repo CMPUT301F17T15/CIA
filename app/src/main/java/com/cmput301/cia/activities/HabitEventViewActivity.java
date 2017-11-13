@@ -4,10 +4,12 @@
 
 package com.cmput301.cia.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
@@ -20,15 +22,15 @@ import com.cmput301.cia.models.HabitEvent;
 
 public class HabitEventViewActivity extends AppCompatActivity {
 
-    public static final String ID_INDEX = "Index";
-    public static final String RETURNED_INDEX = "Index", RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
+    public static final String RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
 
     private TextView habitEventName;
     private TextView habitEventDate;
     private TextView habitEventLocation;
     private TextView habitEventPhoto;
-    TextView habitEventComment;
+    private EditText habitEventComment;
 
+    private HabitEvent event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +39,23 @@ public class HabitEventViewActivity extends AppCompatActivity {
         /**
          * display habit event information.
          */
+        Intent intent = getIntent();
+
         habitEventName = (TextView) findViewById(R.id.EventName);
         habitEventDate = (TextView) findViewById(R.id.EventDate);
         habitEventLocation = (TextView) findViewById(R.id.EventLocation);
         habitEventPhoto = (TextView) findViewById(R.id.EventPhoto);
-        habitEventComment = (TextView) findViewById(R.id.EventComment);
+        habitEventComment = (EditText) findViewById(R.id.EditComment);
 
-        HabitEvent habitevent = (HabitEvent) getIntent().getSerializableExtra("HabitEvent");
+        event = (HabitEvent) getIntent().getSerializableExtra("HabitEvent");
 
-        habitEventName.setText(habitevent.getTittle());
-        habitEventDate.setText(habitevent.getDate().toString());
+        habitEventName.setText(event.getTittle());
+        habitEventDate.setText(event.getDate().toString());
 
-        if (habitevent.getLocation() != null)
-            habitEventLocation.setText(habitevent.getLocation().toString());
-        habitEventPhoto.setText(habitevent.getBase64EncodedPhoto());
-        habitEventComment.setText(habitevent.getComment());
+        if (event.getLocation() != null)
+            habitEventLocation.setText(event.getLocation().toString());
+        habitEventPhoto.setText(event.getBase64EncodedPhoto());
+        habitEventComment.setText(event.getComment());
 
     }
 
@@ -79,11 +83,12 @@ public class HabitEventViewActivity extends AppCompatActivity {
      */
     private void finishActivity(boolean deleted){
         Intent intent = new Intent();
-        if (deleted) {
+        String comment = ((EditText)findViewById(R.id.EditComment)).getText().toString();
 
-        }
-        
 
-        
+        intent.putExtra(RETURNED_EVENT, event);
+        intent.putExtra(RETURNED_DELETED, deleted);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }

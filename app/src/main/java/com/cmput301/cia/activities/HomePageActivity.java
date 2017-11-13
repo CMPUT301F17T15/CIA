@@ -39,9 +39,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 5
+ * Version 6
  * Authors: Adil Malik, Shipin Guan
- * Date: Nov 11 2017
+ * Date: Nov 12 2017
  *
  * Represents the home page the user sees after signing in
  * Keeps track of the user's information, and handles results
@@ -51,9 +51,7 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    private static final int CREATE_EVENT = 1;
-    private static final int CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4;
-
+    private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
@@ -90,6 +88,7 @@ public class HomePageActivity extends AppCompatActivity {
         user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
         if (user == null){
 
+            // connection error
             if (!newAccount){
                 Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
                 finish();
@@ -99,6 +98,7 @@ public class HomePageActivity extends AppCompatActivity {
             user = dummy;
             user.save();
         } else {
+            // handle any habits that may have been missed since the user's last login
             Date currentDate = new Date();
             if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
                 GregorianCalendar calendar = new GregorianCalendar();
@@ -113,6 +113,7 @@ public class HomePageActivity extends AppCompatActivity {
                 }
 
             }
+
             user.setLastLogin(currentDate);
         }
 
@@ -183,7 +184,7 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent intent_My_Profile = new Intent(this, UserProfileActivity.class);
                 intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user.getId());
                 intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user.getId());
-                startActivity(intent_My_Profile);
+                startActivityForResult(intent_My_Profile, VIEW_PROFILE);
                 return true;
             case R.id.menu_button_Add_New_Habit:
                 if (user.getHabitCategories() != null) {
@@ -215,11 +216,13 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivity(intent_My_Following);
                 return true;
             case R.id.menu_button_PowerRankings:
-                Intent intentPR = new Intent(this, CreateHabitActivity.class);
+                Intent intentPR = new Intent(this, RankingsActivity.class);
+                intentPR.putExtra(RankingsActivity.ID_ISPOWER, true);
                 startActivity(intentPR);
                 return true;
             case R.id.menu_button_OverallRankings:
-                Intent intentOR = new Intent(this, CreateHabitActivity.class);
+                Intent intentOR = new Intent(this, RankingsActivity.class);
+                intentOR.putExtra(RankingsActivity.ID_ISPOWER, false);
                 startActivity(intentOR);
                 return true;
         }
@@ -229,9 +232,15 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        // attempt to synchronize user's pending events with the server
         user.synchronize();
+
+        // update the habits list display
         adapter.refresh();
         adapter.notifyDataSetChanged();
+
+        // update the today's task list
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
         checkCompletedEvents();
@@ -254,11 +263,16 @@ public class HomePageActivity extends AppCompatActivity {
         // When a new habit event is created
         if (requestCode == CREATE_EVENT) {
             if (resultCode == RESULT_OK) {
+
+                // successful event creation
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
+
+                // update the today's tasks list
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
                 lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
@@ -300,6 +314,18 @@ public class HomePageActivity extends AppCompatActivity {
             // reload to account for possibly deleted events
             // TODO: test
             user.load();
+
+            todaysHabits = user.getTodaysHabits();
+            lvc_adapter.notifyDataSetChanged();
+            checkCompletedEvents();
+        } else if (requestCode == VIEW_PROFILE){
+            if (resultCode == RESULT_OK){
+                String newComment = data.getStringExtra(UserProfileActivity.RESULT_COMMENT_ID);
+                String image = data.getStringExtra(UserProfileActivity.RESULT_IMAGE_ID);
+                user.setComment(newComment);
+                user.save();
+                // TODO: image
+            }
         }
 
     }
@@ -348,8 +374,8 @@ public class HomePageActivity extends AppCompatActivity {
                     return;
                 }
 
+                // start the activity to create a habit event for this completion
                 String checkedItems = ((TextView)view).getText().toString();
-                //Toast.makeText(HomePageActivity.this, "Congratulations! you have completed " + checkedItems, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitEventActivity.class);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, checkedItems);
                 intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, todaysHabits.get(i).getId());

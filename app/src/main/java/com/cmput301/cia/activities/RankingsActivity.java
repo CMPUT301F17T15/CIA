@@ -50,18 +50,21 @@ public class RankingsActivity extends AppCompatActivity {
         elements = new ArrayList<>();
 
         List<Profile> profiles = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, new HashMap<String, String>());
+        // compare based on points, in descending order
         Collections.sort(profiles, new Comparator<Profile>() {
             @Override
             public int compare(Profile p1, Profile p2) {
                 Integer lhsPoints = powerPoints ? p1.getPowerPoints() : p1.getHabitPoints();
                 Integer rhsPoints = powerPoints ? p2.getPowerPoints() : p2.getHabitPoints();
-                return lhsPoints.compareTo(rhsPoints);
+                return -1 * lhsPoints.compareTo(rhsPoints);
             }
         });
 
+        int rank = 1;
         for (Profile profile : profiles){
             int points = powerPoints ? profile.getPowerPoints() : profile.getHabitPoints();
-            elements.add(profile.getName() + ": " + points);
+            elements.add(rank + ":      " + profile.getName() + ": " + points);
+            ++rank;
         }
 
         adapter = new ArrayAdapter<>(this, R.layout.list_item, elements);

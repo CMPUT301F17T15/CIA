@@ -37,6 +37,7 @@ import static org.junit.Assert.assertTrue;
 public class OfflineUnitTests {
 
     // TODO: find way to force device offline and then integrate ElasticSearch
+    // ex: WifiManager
     @Test
     public void testOfflineEditEvent(){
         Profile profile = new Profile("Name");
