@@ -5,8 +5,10 @@
 package com.cmput301.cia.utilities;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
@@ -29,6 +31,17 @@ public class ImageUtilities {
         // TODO: if JPEG reduces quality then set to PNG
         image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+    }
+
+    /**
+     * Convert a base64 string to an image
+     * @param base64 the string to decode
+     * @return the string as an image
+     */
+    public static Bitmap base64ToImage(String base64){
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        ByteArrayInputStream is = new ByteArrayInputStream(data);
+        return BitmapFactory.decodeStream(is);
     }
 
     /**
