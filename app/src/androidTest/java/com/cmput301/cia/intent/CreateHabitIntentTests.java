@@ -32,7 +32,9 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.clickOnButton("Login");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-        solo.clickOnButton(R.id.CreateNewHabitButton);
+        solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
+        solo.clickOnMenuItem("Add New Habit");
+
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
     }
