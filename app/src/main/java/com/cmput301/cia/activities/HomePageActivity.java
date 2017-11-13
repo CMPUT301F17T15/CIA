@@ -333,8 +333,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        user.save();
         user.load();
+        user.save();
         todaysHabits = user.getTodaysHabits();
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
