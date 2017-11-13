@@ -60,7 +60,6 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         Map<String, String> values = new HashMap<>();
         values.put("name", name);
         user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
-        user.getHabitCategories();
 
 
         target = user.getHabitById(habitId);
@@ -141,7 +140,6 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
             Toast.makeText(EditHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
         }
         else{
-            //ToDo user.save() not saving
             //set changes on current habit.
             target.setTitle(habitName.getText().toString());
             target.setReason(reason.getText().toString());

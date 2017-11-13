@@ -24,4 +24,6 @@
     <string name="edit_habit">Edit Habit</string>
     <string name="save">Save</string>
     <string name="frequency">Frequency</string>
+    <string name="habit_type_list">Habit Type List:</string>
+    <string name="choose_a_habit_to_see_statistic_result">Choose a habit to see statistic result</string>
 </resources>
