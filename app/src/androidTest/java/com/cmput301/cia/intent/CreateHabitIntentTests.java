@@ -28,7 +28,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
 
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "abc");
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
         solo.clickOnButton("Login");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
@@ -38,6 +38,22 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
     }
 
     public void testAdd(){
-        
+        solo.enterText((EditText)solo.getView(R.id.habitName), "nametest");
+        solo.sleep(500);
+        solo.enterText((EditText)solo.getView(R.id.reason), "reason");
+        solo.sleep(500);
+        solo.pressSpinnerItem(0, 1);
+        solo.sleep(500);
+        solo.clickOnButton("Save");
+        solo.sleep(1000);
+
+        // should not change because no days selected
+        solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
+
+        // TODO: not sure how to pick days
+
+        /*solo.clickOnButton("Save");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);*/
     }
 }
