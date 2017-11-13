@@ -46,7 +46,8 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
         solo.clickOnMenuItem("Habit History");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-
+        solo.enterText((EditText)solo.getView(R.id.filterEditText), "");
+        solo.sleep(600);
     }
 
     public void testEdit(){
@@ -55,20 +56,18 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
             solo.clickInList(1, 0);
             solo.sleep(2000);
             solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
-            ((EditText)solo.getView(R.id.vheCommentDynamicText)).setText("");
+            solo.clearEditText(0);
             solo.sleep(600);
-            solo.enterText(R.id.vheCommentDynamicText, "newcomment");
+            solo.enterText(0, "newcomment");
             solo.sleep(600);
             solo.clickOnButton("Save");
-            solo.sleep(1000);
-
+            solo.sleep(2000);
             solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
             solo.clickInList(1, 0);
-            solo.sleep(2000);
+            solo.sleep(3000);
             solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
-
             // make sure the comment was changed
-            ((EditText)solo.getView(R.id.vheCommentDynamicText)).getText().equals("newcomment");
+            assertTrue(((EditText)solo.getView(R.id.vheCommentDynamicText)).getText().toString().equals("newcomment"));
 
         }
     }
