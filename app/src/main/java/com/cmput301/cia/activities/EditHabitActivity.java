@@ -40,12 +40,12 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  */
 
 public class EditHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-    Date chooseStartDate;
-    EditText habitName;
-    EditText reason;
-    EditText startDate;
-    MaterialDayPicker dayPicker;
-    Spinner spinner;
+    private Date chooseStartDate;
+    private EditText habitName;
+    private EditText reason;
+    private EditText startDate;
+    private MaterialDayPicker dayPicker;
+    private Spinner spinner;
     private Profile user;
     private Habit target;
     @Override

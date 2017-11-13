@@ -68,7 +68,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // the habits the user must do today
     private List<Habit> todaysHabits;
-
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +79,7 @@ public class HomePageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        final String name = intent.getStringExtra(ID_USERNAME);
+        name = intent.getStringExtra(ID_USERNAME);
         boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
 
         Profile dummy = new Profile(name);
@@ -202,6 +202,7 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
+                intent_Statistic.putExtra("userName", name);
                 startActivity(intent_Statistic);
                 return true;
             case R.id.menu_button_Habit_History:
