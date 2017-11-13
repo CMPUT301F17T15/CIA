@@ -271,8 +271,8 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 // update the today's tasks list
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-                lvc_adapter.notifyDataSetChanged();
+                //lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+                //lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
         }
@@ -342,6 +342,7 @@ public class HomePageActivity extends AppCompatActivity {
     /**
      * Automatically check all habits that the user has completed today
      */
+    // TODO: not working
     private void checkCompletedEvents(){
         // reset the listener so that a new event is not created
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {

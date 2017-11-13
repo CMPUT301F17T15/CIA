@@ -99,6 +99,7 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
             habitEventPhoto.setImageBitmap(ImageUtilities.base64ToImage(event.getBase64EncodedPhoto()));
         habitEventComment.setText(event.getComment());
 
+        eventDate = event.getDate();
         setDateText();
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
