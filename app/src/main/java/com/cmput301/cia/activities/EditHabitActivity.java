@@ -19,8 +19,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.CreateHabitController;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
@@ -45,15 +47,15 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     MaterialDayPicker dayPicker;
     Spinner spinner;
     private Profile user;
-
+    private Habit target;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit_detail);
         Intent intent = getIntent();
         String habitId = intent.getStringExtra("HabitID");
         String name = intent.getStringExtra("UserName");
-        Habit target = ElasticSearchUtilities.getObject("habit", Habit.class, habitId);
+        target = ElasticSearchUtilities.getObject("habit", Habit.class, habitId);
 
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
@@ -124,7 +126,46 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
 
     }
 
+    public void saveChange(View view){
+        List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
+        if (daysSelected.size() == 0) {
+            Toast.makeText(EditHabitActivity.this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
+        } else if (habitName.getText().toString().length() == 0){
+            Toast.makeText(EditHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            //ToDo user.save() not saving
+            //set changes on current habit.
+            target.setTitle(habitName.getText().toString());
 
+            target.setReason(reason.getText().toString());
+
+            target.setStartDate(chooseStartDate);
+
+            target.setDaysOfWeek(getPickedDates(daysSelected));
+
+            target.setType(spinner.getSelectedItem().toString());
+
+            user.save();
+
+            finish();
+
+        }
+    }
+
+    public List<Integer> getPickedDates(List<MaterialDayPicker.Weekday> pickedDates) {
+        List<Integer> outputDatesList = new ArrayList<Integer>();
+        for (MaterialDayPicker.Weekday weekday : pickedDates) {
+            outputDatesList.add(weekday.ordinal() + 1);
+        }
+
+        return outputDatesList;
+    }
+
+    public void datePickerDialog(View v) {
+        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {

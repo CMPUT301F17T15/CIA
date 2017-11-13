@@ -22,4 +22,6 @@
     <string name="enter_new_type_here">Enter new type here:</string>
     <string name="ok">OK</string>
     <string name="edit_habit">Edit Habit</string>
+    <string name="save">Save</string>
+    <string name="frequency">Frequency</string>
 </resources>
