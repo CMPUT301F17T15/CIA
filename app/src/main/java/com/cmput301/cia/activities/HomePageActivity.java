@@ -315,6 +315,7 @@ public class HomePageActivity extends AppCompatActivity {
                 String newComment = data.getStringExtra(UserProfileActivity.RESULT_COMMENT_ID);
                 String image = data.getStringExtra(UserProfileActivity.RESULT_IMAGE_ID);
                 user.setComment(newComment);
+                user.save();
                 // TODO: image
             }
         }
