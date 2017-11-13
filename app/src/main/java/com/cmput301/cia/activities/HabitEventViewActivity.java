@@ -6,7 +6,6 @@ package com.cmput301.cia.activities;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
@@ -58,6 +56,8 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     private ImageView habitEventPhoto;
     private EditText habitEventComment;
 
+    private Button resetImageButton;
+
     private HabitEvent event;
 
     // the location the event occurred at
@@ -83,6 +83,7 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
         habitEventLocation = (TextView) findViewById(R.id.vheLocationDynamicText);
         habitEventPhoto = (ImageView) findViewById(R.id.vhePhotoImage);
         habitEventComment = (EditText) findViewById(R.id.vheCommentDynamicText);
+        resetImageButton = (Button)findViewById(R.id.vheResetImageButton);
 
         event = (HabitEvent) intent.getSerializableExtra("HabitEvent");
 
@@ -95,8 +96,12 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
         if (location != null)
             habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
 
-        if (!event.getBase64EncodedPhoto().equals(""))
-            habitEventPhoto.setImageBitmap(ImageUtilities.base64ToImage(event.getBase64EncodedPhoto()));
+        if (!event.getBase64EncodedPhoto().equals("")){
+            image = ImageUtilities.base64ToImage(event.getBase64EncodedPhoto());
+        } else
+            image = null;
+
+        updateImage();
         habitEventComment.setText(event.getComment());
 
         eventDate = event.getDate();
@@ -142,7 +147,8 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
         event.setLocation(location);
         if (image != null){
             event.setBase64EncodedPhoto(ImageUtilities.imageToBase64(image));
-        }
+        } else
+            event.setBase64EncodedPhoto("");
 
         intent.putExtra(RETURNED_EVENT, event);
         intent.putExtra(RETURNED_DELETED, deleted);
@@ -264,12 +270,12 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
             habitEventPhoto.clearColorFilter();
             habitEventPhoto.setBackgroundColor(Color.rgb(255, 255, 255));
             habitEventPhoto.setImageBitmap(image);
-            habitEventPhoto.setVisibility(View.VISIBLE);
+            resetImageButton.setVisibility(View.VISIBLE);
         }
         else {
             habitEventPhoto.setColorFilter(Color.rgb(0, 0, 0));
             habitEventPhoto.setBackgroundColor(Color.rgb(0, 0, 0));
-            habitEventPhoto.setVisibility(View.INVISIBLE);
+            resetImageButton.setVisibility(View.INVISIBLE);
         }
     }
 }
