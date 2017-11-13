@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CIA</string>
-    <string name="title_activity_filter_events">FilterEventsActivity</string>
+    <string name="title_activity_filter_events">Filter Habit</string>
     <string name="habitType">Habit Type</string>
     <string name="menu_My_Profile">My Profile</string>
     <string name="menu_AddNewHabit">Add New Habit</string>
