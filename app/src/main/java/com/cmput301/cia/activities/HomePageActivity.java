@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -282,25 +283,32 @@ public class HomePageActivity extends AppCompatActivity {
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 user.save();
-
                 todaysHabits = user.getTodaysHabits();
 
                 adapter.refresh();
+                adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+                checkable.setAdapter(lvc_adapter);
+                expandableListView.setAdapter(adapter);
+
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
             }
 
         }
+        //result from delete habit button
         else if (requestCode == VIEW_HABIT){
             if (resultCode == RESULT_OK){
-
                 // TODO: user.removeHabitById
                 String id = data.getStringExtra("HabitID");
                 user.removeHabit(user.getHabitById(id));
-                todaysHabits = user.getTodaysHabits();
                 user.save();
-
+                todaysHabits = user.getTodaysHabits();
+                adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+                checkable.setAdapter(lvc_adapter);
+                expandableListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
@@ -324,18 +332,20 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onResume(){
         super.onResume();
-        Map<String, String> values = new HashMap<>();
-        values.put("name", name);
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+        user.save();
+        user.load();
+        todaysHabits = user.getTodaysHabits();
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
         checkable.setAdapter(lvc_adapter);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         lvc_adapter.notifyDataSetChanged();
+        checkCompletedEvents();
     }
 
 
