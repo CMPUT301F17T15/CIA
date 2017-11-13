@@ -340,19 +340,14 @@ public class HomePageActivity extends AppCompatActivity {
         user.load();
         todaysHabits = user.getTodaysHabits();
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-        checkable.setAdapter(lvc_adapter);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        lvc_adapter.notifyDataSetChanged();
-        checkCompletedEvents();
     }
 
 
     /**
      * Automatically check all habits that the user has completed today
      */
-    // TODO: not working
     private void checkCompletedEvents(){
         // reset the listener so that a new event is not created
         checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
