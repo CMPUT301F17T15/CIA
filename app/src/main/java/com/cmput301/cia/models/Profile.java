@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Version 4
+ * Version 5
  * Author: Adil Malik
- * Date: Nov 09 2017
+ * Date: Nov 12 2017
  */
 
 // TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent removed from habithistory, and account for EditHabitEvent
@@ -54,7 +54,7 @@ public class Profile extends ElasticSearchable {
     // Events that will be synchronized when the user signs in on a valid connection
     private List<OfflineEvent> pendingEvents;
 
-    // Points received for consecutively completing all habits in a week
+    // Points received for consecutively completing habits
     private int powerPoints;
 
     // Points received for completing a habit
@@ -393,6 +393,7 @@ public class Profile extends ElasticSearchable {
     /**
      * Save this profile to the database
      */
+    @Override
     public void save(){
         for (Habit habit : habits){
             habit.save();

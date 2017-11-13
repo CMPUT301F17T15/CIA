@@ -28,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.HomePageActivity"
-            android:label="Home of Habits"
+            android:label="Habits"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

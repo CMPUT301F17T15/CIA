@@ -32,6 +32,7 @@ import com.cmput301.cia.utilities.ElasticSearchUtilities;
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";
+    public static final String RESULT_COMMENT_ID = "Comment", RESULT_IMAGE_ID = "Image";
 
     // the profile being displayed
     private Profile profile;
@@ -101,7 +102,12 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profile.setComment(commentText.getText().toString());
+                Intent intent = new Intent();
+                intent.putExtra(RESULT_COMMENT_ID, profile.getComment());
                 // TODO: image
+                intent.putExtra(RESULT_IMAGE_ID, "");
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
