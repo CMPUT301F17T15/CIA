@@ -16,6 +16,7 @@ allprojects {
     repositories {
         maven { url 'https://dl.bintray.com/gantonious/maven/' }
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 

@@ -48,14 +48,21 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     private Spinner spinner;
     private Profile user;
     private Habit target;
+    private String habitId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_habit_detail);
         Intent intent = getIntent();
-        String habitId = intent.getStringExtra("HabitID");
+        habitId = intent.getStringExtra("HabitID");
         String name = intent.getStringExtra("UserName");
-        target = ElasticSearchUtilities.getObject("habit", Habit.class, habitId);
+
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+
+
+        target = user.getHabitById(habitId);
 
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
@@ -69,10 +76,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
 
         //spinner activity, could be placed in another activity file for better practice
         //get the current habit types
-        Map<String, String> values = new HashMap<>();
-        values.put("name", name);
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
-        user.getHabitCategories();
+
         spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
         final List<String> type = new ArrayList<String>();
         if (user.getHabitCategories() == null){
@@ -136,20 +140,17 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
             Toast.makeText(EditHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
         }
         else{
-            //ToDo user.save() not saving
             //set changes on current habit.
             target.setTitle(habitName.getText().toString());
-
             target.setReason(reason.getText().toString());
-
             target.setStartDate(chooseStartDate);
-
             target.setDaysOfWeek(getPickedDates(daysSelected));
-
             target.setType(spinner.getSelectedItem().toString());
-
             user.save();
 
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("HabitID", habitId);
+            setResult(RESULT_OK, returnIntent);
             finish();
 
         }

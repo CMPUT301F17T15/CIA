@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import org.w3c.dom.Text;
 
@@ -38,7 +39,7 @@ public class HabitViewActivity extends AppCompatActivity{
     private TextView habitReason;
     private TextView habitStartDate;
     private TextView habitFrequency;
-    private String temp = "";
+
     private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
 
     private String habitId;
@@ -61,14 +62,7 @@ public class HabitViewActivity extends AppCompatActivity{
         habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
         final Habit habit = (Habit) getIntent().getSerializableExtra("Habit");
 
-        habitType.setText(habit.getType());
-        habitName.setText(habit.getTitle());
-        habitReason.setText(habit.getReason());
-        habitStartDate.setText(DateUtilities.formatDate(habit.getStartDate()));
-        for (int i : habit.getDaysOfWeek()) {
-            temp = temp + days[i - 1];
-        }
-        habitFrequency.setText(temp);
+        RefreshPage(habit);
         final String name = getIntent().getStringExtra("UserName");
         habitId = getIntent().getStringExtra("HabitID");
 
@@ -90,10 +84,39 @@ public class HabitViewActivity extends AppCompatActivity{
                 System.out.println(name);
                 editIntent.putExtra("UserName", name);
                 editIntent.putExtra("HabitID", habitId);
-                startActivity(editIntent);
+                startActivityForResult(editIntent, 1);
             }
         });
 
+    }
+
+    /**
+     * Handle the results of an activity that has finished
+     * @param requestCode the activity's identifying code
+     * @param resultCode the result status of the finished activity
+     * @param data the activity's returned intent information
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String habitId = data.getStringExtra("HabitID");
+                Habit habit = ElasticSearchUtilities.getObject("habit", Habit.class, habitId);
+                RefreshPage(habit);
+            }
+        }
+    }
+
+    private void RefreshPage(Habit habit) {
+        habitType.setText(habit.getType());
+        habitName.setText(habit.getTitle());
+        habitReason.setText(habit.getReason());
+        habitStartDate.setText(DateUtilities.formatDate(habit.getStartDate()));
+        String temp = "";
+        for (int i : habit.getDaysOfWeek()) {
+            temp = temp + days[i - 1];
+        }
+        habitFrequency.setText(temp);
     }
 
     //Crate the menu object

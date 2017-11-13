@@ -155,7 +155,6 @@ public class HomePageActivity extends AppCompatActivity {
         if (user.getHabitCategories() != null) {
             List<String> types = new ArrayList<String>();
             types.addAll(user.getHabitCategories());
-            System.out.println(types);
             Intent intent = new Intent(this, CreateHabitActivity.class);
             intent.putStringArrayListExtra("types", (ArrayList<String>) types);
             startActivityForResult(intent, CREATE_HABIT);
@@ -190,7 +189,6 @@ public class HomePageActivity extends AppCompatActivity {
                 if (user.getHabitCategories() != null) {
                     List<String> types = new ArrayList<String>();
                     types.addAll(user.getHabitCategories());
-                    System.out.println(types);
                     Intent intent = new Intent(this, CreateHabitActivity.class);
                     intent.putStringArrayListExtra("types", (ArrayList<String>) types);
                     startActivityForResult(intent, CREATE_HABIT);
@@ -288,7 +286,7 @@ public class HomePageActivity extends AppCompatActivity {
                 todaysHabits = user.getTodaysHabits();
 
                 // TODO: are these needed
-                adapter.refresh();
+
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
@@ -301,10 +299,9 @@ public class HomePageActivity extends AppCompatActivity {
                 // TODO: user.removeHabitById
                 String id = data.getStringExtra("HabitID");
                 user.removeHabit(user.getHabitById(id));
-
                 todaysHabits = user.getTodaysHabits();
-
                 user.save();
+
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
@@ -328,6 +325,20 @@ public class HomePageActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        Map<String, String> values = new HashMap<>();
+        values.put("name", name);
+        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+        adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
+        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
+        checkable.setAdapter(lvc_adapter);
+        expandableListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        lvc_adapter.notifyDataSetChanged();
+    }
+
 
     /**
      * Automatically check all habits that the user has completed today
