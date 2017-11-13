@@ -10,9 +10,12 @@ import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.DateUtilities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -87,6 +90,56 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
 
         assertTrue(profile.getHabitsInCategory("dx1").size() == 2);
         assertTrue(profile.getHabitsInCategory("dx2").size() == 1);
+
+    }
+
+    public void testOnDayEnd(){
+
+        Profile profile = new Profile("NewProfile");
+
+        List<Integer> days = new ArrayList<>();
+        for (int i = 1; i <= 7; ++i)
+            days.add(i);
+
+        GregorianCalendar testcal = new GregorianCalendar();
+        testcal.set(2017, 10, 4);
+        profile.setLastLogin(testcal.getTime());
+
+        testcal.set(2017, 10, 11);
+        Date currentDate = testcal.getTime();
+
+        profile.addHabit(new Habit("StartToday", "Reason", currentDate, days, ""));
+
+        testcal.set(2017, 10, 7);
+        profile.addHabit(new Habit("StartBefore", "Reason", testcal.getTime(), days, ""));
+
+        profile.addHabit(new Habit("CompletedOnce", "Reason", testcal.getTime(), days, ""));
+        List<Habit> habits = profile.getHabits();
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.setTime(profile.getLastLogin());
+        // go through each date between the user's last login and the current date
+        while (!DateUtilities.isSameDay(calendar.getTime(), currentDate)){
+            // update all events at the end of that date, to make sure they are marked as missed if they weren't completed
+            // on that day
+            profile.onDayEnd(calendar.getTime());
+            calendar.add(Calendar.DATE, 1);
+
+            // complete it on the 9th
+            int newDay = calendar.get(Calendar.DATE);
+            if (newDay == 9){
+                habits.get(2).addHabitEvent(new HabitEvent("XYZ", calendar.getTime()));
+            }
+        }
+
+        // started today, but today is not over. Should not count as missed
+        assertTrue(habits.get(0).getTimesMissed() == 0);
+
+        // miss it on the 7th, 8th, 9th, 10th
+        assertTrue(habits.get(1).getTimesMissed() == 4);
+
+        // miss it on the 7th, 8th, 10th
+        assertTrue(habits.get(2).getTimesMissed() == 3);
 
     }
 

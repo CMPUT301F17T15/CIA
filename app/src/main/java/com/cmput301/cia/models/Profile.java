@@ -6,6 +6,7 @@ package com.cmput301.cia.models;
 
 import android.location.Location;
 
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SerializableUtilities;
@@ -319,18 +320,17 @@ public class Profile extends ElasticSearchable {
      * After a day is finished, update the status of all uncompleted habits
      * @param endingDay is the day that ended
      */
-    // TODO: test
     public void onDayEnd(Date endingDay){
         List<Habit> toComplete = getTodaysHabits(endingDay);
 
-        // whether a habit was missed this week
+        // whether a habit was missed
         boolean missedEvent = false;
-        // how many events were completed successfully this week
+        // how many events were completed successfully
         int completedEvents = 0;
 
         for (Habit habit : toComplete){
             Date date = habit.getLastCompletionDate();
-            if (date == null || date.before(endingDay)){
+            if (date == null || DateUtilities.isBefore(date, endingDay)){
                 habit.miss(endingDay);
                 powerPoints = 0;
                 missedEvent = true;
@@ -342,9 +342,7 @@ public class Profile extends ElasticSearchable {
         if (!missedEvent){
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(endingDay);
-            int day = calendar.get(Calendar.DAY_OF_WEEK);
-            if (day == Calendar.SUNDAY)
-                setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
+            setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
         }
     }
 
