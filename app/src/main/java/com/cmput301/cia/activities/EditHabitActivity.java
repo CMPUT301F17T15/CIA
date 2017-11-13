@@ -82,6 +82,8 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
             for (String t : user.getHabitCategories()){
                 type.add(t);
             }
+            type.remove(type.indexOf(target.getType()));
+            type.add(0,target.getType());
             type.add("Create new type");
         }
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type);
