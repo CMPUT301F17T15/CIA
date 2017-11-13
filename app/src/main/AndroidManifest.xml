@@ -40,16 +40,17 @@
         <activity
             android:name=".activities.HabitViewActivity"
             android:label="Habit Details"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activities.StatisticActivity"
             android:parentActivityName=".activities.HomePageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".activities.CreateHabitActivity" />
         <activity android:name=".activities.CreateHabitEventActivity" />
         <activity android:name=".activities.HabitEventViewActivity" />
         <activity android:name=".activities.EditHabitActivity" />
-        <activity android:name=".activities.UserProfileActivity"></activity>
+        <activity android:name=".activities.UserProfileActivity" />
+        <activity android:name=".activities.RankingsActivity"></activity>
     </application>
 
 </manifest>
