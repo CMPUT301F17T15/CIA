@@ -11,7 +11,8 @@ import java.io.Serializable;
  * Author: Adil Malik
  * Date: Nov 12 2017
  *
- * Represents a pending event that will be synchronized with the server when the user gains connectivity
+ * Represents a pending event that will be synchronized with the server when the user gains connectivity.
+ * Follows the command pattern, as well as the template method pattern
  */
 
 public abstract class OfflineEvent implements Serializable {
