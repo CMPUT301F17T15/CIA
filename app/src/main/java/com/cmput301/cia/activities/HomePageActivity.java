@@ -271,6 +271,7 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 // update the today's tasks list
+                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
                 lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
@@ -310,6 +311,10 @@ public class HomePageActivity extends AppCompatActivity {
             // reload to account for possibly deleted events
             // TODO: test
             user.load();
+
+            todaysHabits = user.getTodaysHabits();
+            lvc_adapter.notifyDataSetChanged();
+            checkCompletedEvents();
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
                 String newComment = data.getStringExtra(UserProfileActivity.RESULT_COMMENT_ID);
