@@ -4,10 +4,8 @@
 
 package com.cmput301.cia.intent;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
-import android.util.Log;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.FilterEventsActivity;
@@ -23,15 +21,20 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
     private Solo solo;
 
     public HabitHistoryIntentTests(){
-        super(com.cmput301.cia.activities.HistoryActivity.class);
+        super(com.cmput301.cia.activities.MainActivity.class);
     }
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
-    }
-
-    public void testStart() throws Exception{
-        Activity activity = getActivity();
+        // login and navigate to habit history
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
+        solo.clickOnButton("Login");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
+        solo.clickOnMenuItem("Habit History");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
     }
 
     public void testNavigation()throws Exception{
@@ -39,11 +42,16 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
         // test return button works?
         solo.clickOnButton("Return");
-        solo.sleep(300);
+        solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+
+        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
+        solo.clickOnMenuItem("Habit History");
+        solo.sleep(1000);
+
         // test habits button words?
         solo.clickOnButton("Habits");
-        solo.sleep(300);
+        solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", FilterEventsActivity.class);
     }
 
@@ -52,7 +60,7 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         boolean actual1 = solo.isCheckBoxChecked("Type");
         assertEquals("Filter is Selected",false, actual1);
         // if click?
-        solo.clickOnCheckBox(5);
+        solo.clickOnCheckBox(0);
         solo.sleep(300);
         boolean actual2 = solo.isCheckBoxChecked("Type");
         assertEquals("Filter is not Selected",true, actual2);
@@ -60,18 +68,18 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
 
     public void testEditText()throws Exception{
         // try to enter the text
-        solo.clickOnEditText(1);
+        solo.clickOnEditText(0);
         String strInput = "Sample code 1";
         solo.sleep(300);
-        solo.enterText(1, strInput);
+        solo.enterText(0, strInput);
         solo.sleep(300);
         boolean actual = solo.searchEditText(strInput);
         assertEquals("text entered is not matching",true, actual);
         // clear all text
-        solo.clearEditText(1);
+        solo.clearEditText(0);
         solo.sleep(300);
         strInput = "Sample code 2";
-        solo.typeText(1, strInput);
+        solo.typeText(0, strInput);
         actual = solo.searchEditText(strInput);
         assertEquals("text entered is not matching",true, actual);
     }

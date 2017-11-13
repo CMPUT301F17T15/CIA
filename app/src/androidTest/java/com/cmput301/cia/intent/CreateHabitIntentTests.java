@@ -36,4 +36,8 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
     }
+
+    public void testAdd(){
+        
+    }
 }

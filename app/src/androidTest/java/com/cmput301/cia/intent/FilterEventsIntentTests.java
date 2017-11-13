@@ -43,7 +43,7 @@ public class FilterEventsIntentTests extends ActivityInstrumentationTestCase2<Ma
         Log.d("SETUP", "setUp()");
 
         // login and navigate to habit history
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz");
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
         solo.clickOnButton("Login");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
