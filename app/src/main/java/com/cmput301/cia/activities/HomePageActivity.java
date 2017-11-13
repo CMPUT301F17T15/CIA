@@ -272,8 +272,8 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 // update the today's tasks list
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-                lvc_adapter.notifyDataSetChanged();
+                //lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+                //lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
         }
@@ -284,10 +284,13 @@ public class HomePageActivity extends AppCompatActivity {
                 user.addHabit(habit);
                 user.save();
                 todaysHabits = user.getTodaysHabits();
+
+                adapter.refresh();
                 adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
                 lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
                 checkable.setAdapter(lvc_adapter);
                 expandableListView.setAdapter(adapter);
+
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
@@ -337,12 +340,8 @@ public class HomePageActivity extends AppCompatActivity {
         user.load();
         todaysHabits = user.getTodaysHabits();
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getTodaysHabits());
-        checkable.setAdapter(lvc_adapter);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        lvc_adapter.notifyDataSetChanged();
-        checkCompletedEvents();
     }
 
 
