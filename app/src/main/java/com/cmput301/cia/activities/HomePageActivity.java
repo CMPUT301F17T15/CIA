@@ -285,8 +285,7 @@ public class HomePageActivity extends AppCompatActivity {
 
                 todaysHabits = user.getTodaysHabits();
 
-                // TODO: are these needed
-
+                adapter.refresh();
                 adapter.notifyDataSetChanged();
                 lvc_adapter.notifyDataSetChanged();
 
