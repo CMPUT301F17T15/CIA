@@ -4,10 +4,12 @@
 
 package com.cmput301.cia.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
@@ -27,7 +29,9 @@ public class HabitEventViewActivity extends AppCompatActivity {
     private TextView habitEventDate;
     private TextView habitEventLocation;
     private TextView habitEventPhoto;
-    TextView habitEventComment;
+    private EditText habitEventComment;
+
+    private String habitId;
 
 
     @Override
@@ -37,11 +41,14 @@ public class HabitEventViewActivity extends AppCompatActivity {
         /**
          * display habit event information.
          */
+        Intent intent = getIntent();
+        habitId = intent.getStringExtra(ID_INDEX);
+
         habitEventName = (TextView) findViewById(R.id.EventName);
         habitEventDate = (TextView) findViewById(R.id.EventDate);
         habitEventLocation = (TextView) findViewById(R.id.EventLocation);
         habitEventPhoto = (TextView) findViewById(R.id.EventPhoto);
-        habitEventComment = (TextView) findViewById(R.id.EventComment);
+        habitEventComment = (EditText) findViewById(R.id.EditComment);
 
         HabitEvent habitevent = (HabitEvent) getIntent().getSerializableExtra("HabitEvent");
 
@@ -80,10 +87,17 @@ public class HabitEventViewActivity extends AppCompatActivity {
     private void finishActivity(boolean deleted){
         Intent intent = new Intent();
         if (deleted) {
-
+            intent.putExtra("INDEX", ID_INDEX);
+            setResult(RESULT_OK, intent);
+            finish();
+            return;
         }
-        
 
-        
+        String comment = ((EditText)findViewById(R.id.EditComment)).getText().toString();
+        HabitEvent event = new HabitEvent(comment);
+        intent.putExtra(RETURNED_INDEX, event);
+        intent.putExtra(ID_INDEX, habitId);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
     }
 }
