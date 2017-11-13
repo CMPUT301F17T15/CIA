@@ -51,9 +51,18 @@ public class StatisticViewActivity extends AppCompatActivity {
         typeName.setText(type);
         typeNumber = (TextView) findViewById(R.id.habitsNumber);
         typeNumber.setText(String.valueOf(user.getHabitsInCategory(type).size()));
+        int completeCounter = 0;
+        int missCounter = 0;
+        for (Habit h : user.getHabitsInCategory(type)){
+            completeCounter += h.getTimesCompleted();
+            missCounter += h.getTimesMissed();
+        }
+        System.out.println(completeCounter);
+        System.out.println(missCounter);
         completeNumber = (TextView) findViewById(R.id.completeNumber);
         completeNumber.setText(String.valueOf(user.getHabitHistory().size()));
         totalNumber = (TextView) findViewById(R.id.TotalNumber);
+
         //Todo use total passed habits
         int total = 3*user.getHabitHistory().size();
         totalNumber.setText(String.valueOf(total));
