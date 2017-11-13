@@ -6,11 +6,13 @@ package com.cmput301.cia.intent;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.CreateHabitActivity;
 import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.UserProfileActivity;
 import com.robotium.solo.Solo;
 
@@ -22,22 +24,26 @@ import com.robotium.solo.Solo;
  * This class tests the UI for the features on the home page of the activity
  */
 
-public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class HomePageIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private Solo solo;
 
     public HomePageIntentTests() {
-        super(com.cmput301.cia.activities.HomePageActivity.class);
+        super(com.cmput301.cia.activities.MainActivity.class);
     }
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
+
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
+        solo.clickOnButton("Login");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+
     }
 
     public void testNavigation(){
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-
         // select profile option in menu
         solo.clickOnActionBarItem(R.id.menu_button_My_Profile);
         solo.clickOnMenuItem("My Profile");

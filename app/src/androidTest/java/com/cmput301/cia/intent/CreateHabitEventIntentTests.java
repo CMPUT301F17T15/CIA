@@ -109,8 +109,10 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
     public void testCancel() throws NoSuchFieldException, IllegalAccessException {
         solo.clickInList(1, 1);
+        solo.sleep(2000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
         solo.clickOnButton("Cancel");
+        solo.sleep(2000);
 
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
@@ -119,59 +121,15 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         int habitEvents = user.getHabitHistory().size();
 
         solo.clickInList(1, 1);
+        solo.sleep(2000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Cancel");
+        solo.sleep(2000);
 
         // assert new habit events count is equal to old
         assertTrue(user.getHabitHistory().size() == habitEvents);
     }
-
-    public void testSelectImage(){
-        solo.clickInList(1, 1);
-        solo.clickOnImage(0);
-
-        // TODO: test picking image
-
-        //Bitmap image = ((CreateHabitEventActivity)solo.getCurrentActivity());
-
-        // TODO: assert image size <= CreateHabitEventActivity.MAX_IMAGE_SIZE
-    }
-
-    /*public void testStart() throws Exception {
-        Activity activity = getActivity();
-    }*/
-
-    /*
-    public void testClickTweetList(){
-	    LonelyTwitterActivity activity = (LonelyTwitterActivity) solo.getCurrentActivity();
-        final ListView oldTweetsList = activity.getOldTweetsList();
-        Tweet tweet = (Tweet)oldTweetsList.getItemAtPosition(0);
-        //assertEquals("Test Tweet!", tweet.getMessage());
-        solo.clickInList(0);
-        solo.assertCurrentActivity("wrong activity", EditTweetActivity.class);
-        assertFalse(solo.waitForText("New Activity", 1, 1000));
-        solo.goBack();
-        solo.assertCurrentActivity("wrong activity", LonelyTwitterActivity.class);
-    }*/
-
-    /*public void testEditTweet(){
-
-        LonelyTwitterActivity activity = (LonelyTwitterActivity) solo.getCurrentActivity();
-
-        final ListView oldTweetsList = activity.getOldTweetsList();
-        Tweet tweet = (Tweet)oldTweetsList.getItemAtPosition(0);
-
-        solo.clickInList(0);
-        solo.assertCurrentActivity("wrong activity", EditTweetActivity.class);
-        solo.clearEditText((EditText)solo.getView(R.id.msgEditText));
-        solo.enterText((EditText)solo.getView(R.id.msgEditText), "Test Tweet!");
-        assertTrue(solo.waitForText("Test Tweet!", 1, 1000));
-        solo.clickOnButton("Finish");
-        solo.assertCurrentActivity("wrong activity", LonelyTwitterActivity.class);
-
-        assertEquals("Test Tweet!", tweet.getMessage());
-    }*/
 
     @Override
     public void tearDown() throws Exception{
