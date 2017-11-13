@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
@@ -21,7 +22,6 @@ import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +34,7 @@ public class StatisticViewActivity extends AppCompatActivity {
     private TextView typeNumber;
     private TextView completeNumber;
     private TextView totalNumber;
+    private TextView mostMissed;
     PieChart pieChart;
     int[] yData;
     String[] xData;
@@ -53,25 +54,32 @@ public class StatisticViewActivity extends AppCompatActivity {
         typeNumber.setText(String.valueOf(user.getHabitsInCategory(type).size()));
         int completeCounter = 0;
         int missCounter = 0;
+        int largestMiss = 0;
+        mostMissed = (TextView) findViewById(R.id.missedMost);
         for (Habit h : user.getHabitsInCategory(type)){
             completeCounter += h.getTimesCompleted();
             missCounter += h.getTimesMissed();
+            if(h.getTimesMissed() > largestMiss){
+                mostMissed.setText(h.getTitle());
+                largestMiss = h.getTimesMissed();
+            }
         }
-        System.out.println(completeCounter);
-        System.out.println(missCounter);
-        completeNumber = (TextView) findViewById(R.id.completeNumber);
-        completeNumber.setText(String.valueOf(user.getHabitHistory().size()));
-        totalNumber = (TextView) findViewById(R.id.TotalNumber);
 
-        //Todo use total passed habits
-        int total = 3*user.getHabitHistory().size();
-        totalNumber.setText(String.valueOf(total));
-        yData = new int[]{total - user.getHabitHistory().size(), user.getHabitHistory().size()};
+
+        completeNumber = (TextView) findViewById(R.id.completeNumber);
+        completeNumber.setText(String.valueOf(completeCounter));
+        totalNumber = (TextView) findViewById(R.id.TotalNumber);
+        totalNumber.setText(String.valueOf(missCounter));
+        if(missCounter == 0) {
+            Toast.makeText(StatisticViewActivity.this, "WOW you haven't missed any habits yet!\nKeep up the good work!", Toast.LENGTH_LONG).show();
+            mostMissed.setText("Nothing Missed");
+        }
+        yData = new int[]{missCounter, user.getHabitHistory().size()};
         xData = new String[]{"Total","Complete"};
 
         pieChart = (PieChart) findViewById(R.id.pieChart);
         pieChart.setTransparentCircleAlpha(0);
-        pieChart.setHoleRadius(15f);
+        pieChart.setHoleRadius(5f);
 
         addData(pieChart);
 
