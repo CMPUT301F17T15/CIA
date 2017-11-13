@@ -65,6 +65,9 @@ public class Profile extends ElasticSearchable {
     // The user's comment about their profile
     private String comment;
 
+    // The last time this user logged in
+    private Date lastLogin;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -79,6 +82,7 @@ public class Profile extends ElasticSearchable {
         habitPoints = 0;
         creationDate = new Date();
         comment = new String();
+        lastLogin = new Date();
     }
 
     /**
@@ -556,6 +560,21 @@ public class Profile extends ElasticSearchable {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * @return the last time this user logged in
+     */
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    /**
+     * Set the last time this user logged in
+     * @param lastLogin the date the user last logged in on
+     */
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
 }

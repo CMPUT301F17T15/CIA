@@ -30,7 +30,9 @@ import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +97,22 @@ public class HomePageActivity extends AppCompatActivity {
 
             user = dummy;
             user.save();
+        } else {
+            Date currentDate = new Date();
+            if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
+                GregorianCalendar calendar = new GregorianCalendar();
+                calendar.setTime(user.getLastLogin());
+
+                // go through each date between the user's last login and the current date
+                while (!DateUtilities.isSameDay(calendar.getTime(), currentDate)){
+                    // update all events at the end of that date, to make sure they are marked as missed if they weren't completed
+                    // on that day
+                    user.onDayEnd(calendar.getTime());
+                    calendar.add(Calendar.DATE, 1);
+                }
+
+            }
+            user.setLastLogin(currentDate);
         }
 
         // initialize the list of all habits the user has
