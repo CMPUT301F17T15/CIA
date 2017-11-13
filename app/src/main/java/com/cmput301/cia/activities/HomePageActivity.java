@@ -336,8 +336,8 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        user.save();
         user.load();
+        user.save();
         todaysHabits = user.getTodaysHabits();
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
