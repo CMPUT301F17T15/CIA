@@ -19,6 +19,8 @@ import com.cmput301.cia.activities.HabitViewActivity;
 import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.activities.StatisticActivity;
+import com.cmput301.cia.activities.StatisticViewActivity;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
@@ -79,7 +81,15 @@ public class StatisticsIntentTests extends ActivityInstrumentationTestCase2<Main
     }
 
     public void testView(){
-        
+        solo.clickOnActionBarItem(R.id.menu_button_Statistic);
+        solo.clickOnMenuItem("Statistics");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", StatisticActivity.class);
+
+        solo.clickInList(1);
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", StatisticViewActivity.class);
+
     }
 
 }

@@ -42,7 +42,7 @@
         android:layout_marginEnd="8dp" />
 
     <TextView
-        android:id="@+id/vheCommentStaticText"
+        android:id="@+id/statisticChooseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/choose_a_habit_to_see_statistic_result"
@@ -63,6 +63,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/vheCommentStaticText" />
+        app:layout_constraintTop_toBottomOf="@+id/statisticChooseText" />
 
 </android.support.constraint.ConstraintLayout>
