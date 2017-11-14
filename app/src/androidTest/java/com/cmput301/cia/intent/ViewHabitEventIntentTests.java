@@ -23,6 +23,7 @@ import com.robotium.solo.Solo;
  *
  * This class tests the UI for viewing habit events
  * NOTE: These tests require an internet connection
+ * NOTE: Delete habit event is already tested in setUp() for CreateHabitEventIntentTests
  */
 
 public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
