@@ -21,9 +21,9 @@ import com.robotium.solo.Solo;
 import java.lang.reflect.Field;
 
 /**
- * Version 2
+ * Version 3
  * Author: Adil Malik
- * Date: Nov 12 2017
+ * Date: Nov 13 2017
  *
  * This class tests the UI for creating habit events
  * NOTE: These tests require an internet connection
@@ -93,6 +93,11 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.clickInList(1, 1);
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
+
+        // TODO: selecting an image
+        //solo.clickOnImage(1);
+        //solo.sleep(1000);
+
         solo.clickOnButton("Save");
 
         solo.sleep(1000);
