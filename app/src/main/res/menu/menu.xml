@@ -32,6 +32,14 @@
     <item
         android:id="@+id/menu_button_My_Following"
         android:title="@string/menu_MyFollowing" />
+    <item
+        android:id="@+id/menu_button_searchUsers"
+        android:checkable="false"
+        android:title="@string/menu_searchUsers" />
+    <item
+        android:id="@+id/menu_button_FollowRequests"
+        android:checkable="false"
+        android:title="@string/menu_FollowRequests" />
 
 
 </menu>

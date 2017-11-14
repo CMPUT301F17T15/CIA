@@ -243,7 +243,6 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void load() {
-
         Habit found = ElasticSearchUtilities.getObject(getTypeId(), Habit.class, getId());
         if (found != null){
             copyFrom(found);
@@ -267,17 +266,16 @@ public class Habit extends ElasticSearchable {
 
     /**
      * Copy from anotehr habit
-     * @param found the habit to copy from
+     * @param other the habit to copy from
      */
-    // TODO: change found -> other
-    public void copyFrom(Habit found){
-        type = found.type;
-        title = found.title;
-        reason = found.reason;
-        startDate = found.startDate;
-        events = found.events;
-        daysOfWeek = found.daysOfWeek;
-        missedDates = found.missedDates;
+    public void copyFrom(Habit other){
+        type = other.type;
+        title = other.title;
+        reason = other.reason;
+        startDate = other.startDate;
+        events = other.events;
+        daysOfWeek = other.daysOfWeek;
+        missedDates = other.missedDates;
     }
 
 }

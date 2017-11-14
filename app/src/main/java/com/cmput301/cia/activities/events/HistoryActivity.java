@@ -1,7 +1,8 @@
 /*
- * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license. */
+ * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+ */
 
-package com.cmput301.cia.activities;
+package com.cmput301.cia.activities.events;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +26,6 @@ import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**

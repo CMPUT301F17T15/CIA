@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.FilterEventsActivity;
-import com.cmput301.cia.activities.HistoryActivity;
+import com.cmput301.cia.activities.events.FilterEventsActivity;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;

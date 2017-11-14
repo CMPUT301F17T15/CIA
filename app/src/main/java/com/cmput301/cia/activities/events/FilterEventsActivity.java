@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia.activities;
+package com.cmput301.cia.activities.events;
 
 import android.app.Activity;
 import android.content.Intent;

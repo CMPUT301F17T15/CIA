@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.activities.HabitViewActivity">
+    tools:context="com.cmput301.cia.activities.habits.HabitViewActivity">
 
     <include
         android:id="@+id/app_toolbar_habit_detail"

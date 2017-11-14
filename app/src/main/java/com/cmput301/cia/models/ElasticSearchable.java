@@ -16,7 +16,6 @@ import io.searchbox.annotations.JestId;
  * Represents an object that can be stored and retrieved from an ElasticSearch database
  */
 
-// TODO: more testing to make sure serializable does not mess something up with ElasticSearch
 public abstract class ElasticSearchable implements Serializable {
 
     @JestId
@@ -65,6 +64,11 @@ public abstract class ElasticSearchable implements Serializable {
      */
     public abstract void delete();
 
+    /**
+     *
+     * @param other the object to check whether this one equals or not
+     * @return whether this object equals the specified one
+     */
     @Override
     public boolean equals(Object other){
         if (other instanceof ElasticSearchable && hasValidId() && ((ElasticSearchable) other).hasValidId()){

@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.cmput301.cia.activities.CreateHabitEventActivity;
+import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import org.junit.Test;

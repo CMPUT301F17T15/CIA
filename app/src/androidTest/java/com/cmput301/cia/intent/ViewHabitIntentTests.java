@@ -6,24 +6,20 @@ package com.cmput301.cia.intent;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.CreateHabitActivity;
-import com.cmput301.cia.activities.EditHabitActivity;
-import com.cmput301.cia.activities.HabitViewActivity;
-import com.cmput301.cia.activities.HistoryActivity;
+import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.habits.EditHabitActivity;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 /**
  * Version 1
