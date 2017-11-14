@@ -31,9 +31,11 @@ import java.util.Map;
  */
 
 public class StatisticActivity extends AppCompatActivity {
+
     private Profile user;
     private ListView typeList;
     private ArrayAdapter<String> adapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +44,7 @@ public class StatisticActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_statistic);
         setSupportActionBar(toolbar);
 
-
-        final String UserID = getIntent().getStringExtra("userName");
-        Map<String, String> values = new HashMap<>();
-        values.put("name", UserID);
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+        user = (Profile) getIntent().getSerializableExtra("Profile");
 
         typeList = (ListView)findViewById(R.id.Type_List_View);
         final List<String> types = new ArrayList<String>();
@@ -65,7 +63,7 @@ public class StatisticActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(StatisticActivity.this, StatisticViewActivity.class);
-                intent.putExtra("userName", UserID);
+                intent.putExtra("Profile", user);
                 intent.putExtra("type",types.get(i));
                 startActivity(intent);
             }

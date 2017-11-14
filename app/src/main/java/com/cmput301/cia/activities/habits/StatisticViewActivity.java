@@ -47,10 +47,8 @@ public class StatisticViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic_view);
 
-        String UserID = getIntent().getStringExtra("userName");
-        Map<String, String> values = new HashMap<>();
-        values.put("name", UserID);
-        user = ElasticSearchUtilities.getObject("profile", Profile.class, values);
+        user = (Profile) getIntent().getSerializableExtra("Profile");
+
         String type = getIntent().getStringExtra("type");
         typeName = (TextView) findViewById(R.id.Type_Name);
         typeName.setText(type);

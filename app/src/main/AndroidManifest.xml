@@ -30,7 +30,7 @@
             android:name=".activities.HomePageActivity"
             android:label="Habits"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activities.habits.HabitViewActivity"
             android:label="Habit Details"
@@ -47,7 +47,8 @@
         <activity android:name=".activities.habits.EditHabitActivity" />
         <activity android:name=".activities.users.UserProfileActivity" />
         <activity android:name=".activities.users.RankingsActivity" />
-        <activity android:name=".activities.users.ViewFollowedUsersActivity"></activity>
+        <activity android:name=".activities.users.ViewFollowedUsersActivity" />
+        <activity android:name=".activities.users.SearchUsersActivity"></activity>
     </application>
 
 </manifest>

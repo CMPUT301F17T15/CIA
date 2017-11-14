@@ -10,6 +10,7 @@
     <string name="menu_WOW">Power Rankings</string>
     <string name="menu_HabitRankings">Overall Rankings</string>
     <string name="menu_MyFollowing">Followed Users</string>
+    <string name="menu_searchUsers">Search Users</string>
     <string name="TodayTask">Today\'s Tasks</string>
     <string name="HabitNameText">Habit Name:</string>
     <string name="HabitTypeText">Habit Type:</string>

@@ -409,15 +409,7 @@ public class Profile extends ElasticSearchable {
     public void load() {
         Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
         if (found != null){
-            name = found.name;
-            habits = found.habits;
-            following = found.following;
-            followRequests = found.followRequests;
-            //pendingEvents = found.pendingEvents;
-            powerPoints = found.powerPoints;
-            habitPoints = found.habitPoints;
-            creationDate = found.creationDate;
-            comment = found.comment;
+            copyFrom(found, false);
         }
 
         List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
@@ -574,6 +566,41 @@ public class Profile extends ElasticSearchable {
      */
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    /**
+     * Copy over the data from another profile into this one
+     * @param other the profile to copy from
+     * @param copyPending whether pending events should also be copied over
+     */
+    public void copyFrom(Profile other, boolean copyPending){
+        name = other.name;
+        habits = other.habits;
+        following = other.following;
+        followRequests = other.followRequests;
+        powerPoints = other.powerPoints;
+        habitPoints = other.habitPoints;
+        creationDate = other.creationDate;
+        comment = other.comment;
+
+        if (copyPending)
+            pendingEvents = other.pendingEvents;
+    }
+
+    /**
+     * Set the users this user is following
+     * @param following the list of users this user is following (non-null)
+     */
+    public void setFollowing(List<Profile> following) {
+        this.following = following;
+    }
+
+    /**
+     * @return the profile's name
+     */
+    @Override
+    public String toString(){
+        return name;
     }
 
 }

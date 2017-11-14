@@ -25,7 +25,9 @@ import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.users.RankingsActivity;
+import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -57,7 +59,8 @@ import java.util.Map;
 public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
-    private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5;
+    private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
+        FOLLOWED_USERS = 6, SEARCH_USERS = 7;
 
     // Intent extra data identifier for the name of the user who signed in
     public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
@@ -73,7 +76,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // the habits the user must do today
     private List<Habit> todaysHabits;
-    private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +87,7 @@ public class HomePageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        name = intent.getStringExtra(ID_USERNAME);
+        String name = intent.getStringExtra(ID_USERNAME);
         boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
 
         Profile dummy = new Profile(name);
@@ -191,8 +194,8 @@ public class HomePageActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_button_My_Profile:
                 Intent intent_My_Profile = new Intent(this, UserProfileActivity.class);
-                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user.getId());
-                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user.getId());
+                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user);
+                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user);
                 startActivityForResult(intent_My_Profile, VIEW_PROFILE);
                 return true;
             case R.id.menu_button_Add_New_Habit:
@@ -211,18 +214,20 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
-                intent_Statistic.putExtra("userName", name);
+                intent_Statistic.putExtra("Profile", user);
                 startActivity(intent_Statistic);
                 return true;
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
                 intent_Habit_History.putExtra("ID", user.getId());
-                // TODO: pass in profile through serializable instead if it is better
+                // TODO: pass in profile through serializable instead
                 startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
                 return true;
             case R.id.menu_button_My_Following:
-                Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_My_Following);
+                Intent intent_My_Following = new Intent(this, ViewFollowedUsersActivity.class);
+                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_VIEWED, user);
+                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_USER, user);
+                startActivityForResult(intent_My_Following, FOLLOWED_USERS);
                 return true;
             case R.id.menu_button_PowerRankings:
                 Intent intentPR = new Intent(this, RankingsActivity.class);
@@ -233,6 +238,11 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent intentOR = new Intent(this, RankingsActivity.class);
                 intentOR.putExtra(RankingsActivity.ID_ISPOWER, false);
                 startActivity(intentOR);
+                return true;
+            case R.id.menu_button_searchUsers:
+                Intent search = new Intent(this, SearchUsersActivity.class);
+                search.putExtra(SearchUsersActivity.ID_USER, user);
+                startActivity(search);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -289,6 +299,7 @@ public class HomePageActivity extends AppCompatActivity {
         //Read result from create habit activity
         else if(requestCode == CREATE_HABIT) {
             if(resultCode == RESULT_OK) {
+                // add a new habit
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
                 user.addHabit(habit);
                 todaysHabits = user.getTodaysHabits();
@@ -309,12 +320,14 @@ public class HomePageActivity extends AppCompatActivity {
         else if (requestCode == VIEW_HABIT){
             if (resultCode == RESULT_OK){
 
+                // whether the habit was deleted or updated
                 boolean deleted = data.getBooleanExtra("Deleted", false);
                 if (deleted) {
                     String id = data.getStringExtra("HabitID");
                     // TODO: user.removeHabitById
                     user.removeHabit(user.getHabitById(id));
                 } else {
+                    // update the habit
                     Habit habit = (Habit) data.getSerializableExtra("Habit");
                     for (Habit h : user.getHabits()){
                         if (h.equals(habit)){
@@ -338,7 +351,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == VIEW_HABIT_HISTORY){
             // reload to account for possibly deleted events
-            // TODO: test
+            // TODO: pass back user as serializable
             user.load();
 
             todaysHabits = user.getTodaysHabits();
@@ -346,11 +359,19 @@ public class HomePageActivity extends AppCompatActivity {
             checkCompletedEvents();
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
-                String newComment = data.getStringExtra(UserProfileActivity.RESULT_COMMENT_ID);
-                String image = data.getStringExtra(UserProfileActivity.RESULT_IMAGE_ID);
-                user.setComment(newComment);
+                Profile result = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
+                user.copyFrom(result, false);
                 user.save();
-                // TODO: image
+            }
+        } else if (requestCode == FOLLOWED_USERS){
+            if (resultCode == RESULT_OK){
+                List<Profile> followed = (List<Profile>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
+                user.setFollowing(followed);
+                user.save();
+            }
+        } else if (requestCode == SEARCH_USERS){
+            if (resultCode == RESULT_OK){
+                // TODO
             }
         }
 

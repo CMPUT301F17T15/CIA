@@ -32,7 +32,7 @@ import com.cmput301.cia.utilities.ElasticSearchUtilities;
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";
-    public static final String RESULT_COMMENT_ID = "Comment", RESULT_IMAGE_ID = "Image";
+    public static final String RESULT_PROFILE_ID = "Profile";
 
     // the profile being displayed
     private Profile profile;
@@ -58,22 +58,9 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         Intent intent = getIntent();
-        String profileId = intent.getStringExtra(PROFILE_ID);
-        String userId = intent.getStringExtra(USER_ID);
 
-        // initialize the profiles
-        profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, profileId);
-        if (profileId.equals(userId))
-            user = profile;
-        else
-            user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, userId);
-
-        // connection error
-        if (profile == null || user == null){
-            Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+        profile = (Profile) intent.getSerializableExtra(PROFILE_ID);
+        user = (Profile) intent.getSerializableExtra(USER_ID);
 
         // initialize view member variables
         nameText = (TextView)findViewById(R.id.profileNameText);
@@ -103,9 +90,7 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 profile.setComment(commentText.getText().toString());
                 Intent intent = new Intent();
-                intent.putExtra(RESULT_COMMENT_ID, profile.getComment());
-                // TODO: image
-                intent.putExtra(RESULT_IMAGE_ID, "");
+                intent.putExtra(RESULT_PROFILE_ID, profile);
                 setResult(RESULT_OK, intent);
                 finish();
             }
