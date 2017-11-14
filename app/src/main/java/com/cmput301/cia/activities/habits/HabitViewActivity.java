@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia.activities;
+package com.cmput301.cia.activities.habits;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,20 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by gsp on 2017/11/7.

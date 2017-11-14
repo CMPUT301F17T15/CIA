@@ -6,7 +6,7 @@ package com.cmput301.cia;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.cmput301.cia.activities.HistoryActivity;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;

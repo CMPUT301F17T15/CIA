@@ -21,33 +21,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.HistoryActivity" />
+        <activity android:name=".activities.events.HistoryActivity" />
         <activity
-            android:name=".activities.FilterEventsActivity"
+            android:name=".activities.events.FilterEventsActivity"
             android:label="@string/title_activity_filter_events"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.HomePageActivity"
             android:label="Habits"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity
-            android:name=".activities.HabitViewActivity"
+            android:name=".activities.habits.HabitViewActivity"
             android:label="Habit Details"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".activities.StatisticActivity"
+            android:name=".activities.habits.StatisticActivity"
             android:label="Habit Statistics"
             android:parentActivityName=".activities.HomePageActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.CreateHabitActivity" />
-        <activity android:name=".activities.StatisticViewActivity" />
-        <activity android:name=".activities.CreateHabitEventActivity" />
-        <activity android:name=".activities.HabitEventViewActivity" />
-        <activity android:name=".activities.EditHabitActivity" />
-        <activity android:name=".activities.UserProfileActivity" />
-        <activity android:name=".activities.RankingsActivity"></activity>
+        <activity android:name=".activities.habits.CreateHabitActivity" />
+        <activity android:name=".activities.habits.StatisticViewActivity" />
+        <activity android:name=".activities.events.CreateHabitEventActivity" />
+        <activity android:name=".activities.events.HabitEventViewActivity" />
+        <activity android:name=".activities.habits.EditHabitActivity" />
+        <activity android:name=".activities.users.UserProfileActivity" />
+        <activity android:name=".activities.users.RankingsActivity" />
+        <activity android:name=".activities.users.ViewFollowedUsersActivity"></activity>
     </application>
 
 </manifest>

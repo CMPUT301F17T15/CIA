@@ -12,8 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.FilterEventsActivity;
-import com.cmput301.cia.activities.HistoryActivity;
+import com.cmput301.cia.activities.events.FilterEventsActivity;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;

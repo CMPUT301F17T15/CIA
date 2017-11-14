@@ -5,7 +5,7 @@
 package com.cmput301.cia.controller;
 
 import android.content.Intent;
-import com.cmput301.cia.activities.CreateHabitEventActivity;
+import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 
 /**
  * Version 1

@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
-import com.cmput301.cia.activities.UserProfileActivity;
+import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 

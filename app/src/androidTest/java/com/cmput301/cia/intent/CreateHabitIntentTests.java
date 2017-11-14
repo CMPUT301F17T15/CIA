@@ -9,8 +9,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.CreateHabitActivity;
-import com.cmput301.cia.activities.HistoryActivity;
+import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Profile;
