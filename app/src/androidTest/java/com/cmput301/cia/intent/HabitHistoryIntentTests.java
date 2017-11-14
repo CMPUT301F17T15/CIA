@@ -6,15 +6,28 @@ package com.cmput301.cia.intent;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.FilterEventsActivity;
 import com.cmput301.cia.activities.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.robotium.solo.Solo;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.logging.Filter;
+
 /**
- * Created by guanfang on 2017/11/12.
+ * Version 1
+ * Author: Adil Malik
+ * Date: Nov 13 2017
+ *
+ * This class tests the UI for the habit history
+ * NOTE: These tests require an internet connection
  */
 
 public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
@@ -57,13 +70,60 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
 
     public void testCheck()throws Exception{
         // test can check works?
-        boolean actual1 = solo.isCheckBoxChecked("Type");
-        assertEquals("Filter is Selected",false, actual1);
+        assertEquals("Filter is Selected",false, solo.isCheckBoxChecked("Type"));
         // if click?
         solo.clickOnCheckBox(0);
         solo.sleep(300);
-        boolean actual2 = solo.isCheckBoxChecked("Type");
-        assertEquals("Filter is not Selected",true, actual2);
+        assertEquals("Filter is not Selected",true, solo.isCheckBoxChecked("Type"));
+
+        Field field = solo.getCurrentActivity().getClass().getDeclaredField("historyList");
+        field.setAccessible(true);
+        ListView listView = (ListView)field.get(solo.getCurrentActivity());
+        int oldSize = listView.getAdapter().getCount();
+
+        // make sure that nothing is filtered, because no habit was selected and no filter text was chosen
+        solo.clickOnButton("Filter");
+        solo.sleep(600);
+        assertTrue(oldSize == listView.getAdapter().getCount());
+
+        // filter text chosen, so filter by that since no habit selected
+        solo.enterText(0, "test");
+        Method method = solo.getCurrentActivity().getClass().getDeclaredMethod("getDisplayedEvents");
+        method.setAccessible(true);
+        List<HabitEvent> events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
+        for (HabitEvent event : events){
+            assertTrue(event.getComment().contains("test"));
+        }
+
+        solo.clickOnButton("Habits");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", FilterEventsActivity.class);
+        solo.clickInList(1, 0);
+        solo.sleep(1000);
+        solo.clickOnButton("Finish");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
+
+        Field habitField = solo.getCurrentActivity().getClass().getDeclaredField("filterHabit");
+        habitField.setAccessible(true);
+        Habit filter = (Habit)habitField.get(solo.getCurrentActivity());
+        assertTrue(filter != null);
+
+        // make sure all displayed events are now of the same type as the filter habit
+        events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
+        for (HabitEvent event : events){
+            assertTrue(event.getHabitId().equals(filter.getId()));
+        }
+
+        solo.clickOnCheckBox(0);
+        solo.sleep(300);
+
+        // now filtering by text again
+        events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
+        for (HabitEvent event : events){
+            assertTrue(event.getComment().contains("test"));
+        }
+
     }
 
     public void testEditText()throws Exception{
