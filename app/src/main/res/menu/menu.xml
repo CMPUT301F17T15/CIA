@@ -22,10 +22,6 @@
         android:title="@string/menu_HabitHistory"
         />
     <item
-        android:id="@+id/menu_button_Notification"
-        android:checkable="true"
-        android:title="@string/menu_Notification" />
-    <item
         android:id="@+id/menu_button_PowerRankings"
         android:checkable="false"
         android:title="@string/menu_WOW" />
