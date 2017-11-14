@@ -25,9 +25,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Version 5
+ * Version 6
  * Author: Adil Malik
- * Date: Nov 12 2017
+ * Date: Nov 13 2017
+ *
+ * This class represents all the information about a user of the application.
+ * It keeps track of their habits and personal information.
+ *
+ * @see Habit
+ * @see HabitEvent
+ * @see OfflineEvent
  */
 
 // TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent removed from habithistory, and account for EditHabitEvent
@@ -69,6 +76,9 @@ public class Profile extends ElasticSearchable {
     // The last time this user logged in
     private Date lastLogin;
 
+    // The user's profile picture in base64
+    private String image;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -84,6 +94,7 @@ public class Profile extends ElasticSearchable {
         creationDate = new Date();
         comment = new String();
         lastLogin = new Date();
+        image = new String();
     }
 
     /**
@@ -152,7 +163,13 @@ public class Profile extends ElasticSearchable {
      * @param profile the user sending the request
      */
     public void addFollowRequest(Profile profile){
-        followRequests.add(profile);
+
+        // the requester is already following this user
+        if (profile.isFollowing(this))
+            return;
+
+        if (!hasFollowRequest(profile))
+            followRequests.add(profile);
     }
 
     /**
@@ -582,6 +599,7 @@ public class Profile extends ElasticSearchable {
         habitPoints = other.habitPoints;
         creationDate = other.creationDate;
         comment = other.comment;
+        image = other.image;
 
         if (copyPending)
             pendingEvents = other.pendingEvents;
@@ -601,6 +619,36 @@ public class Profile extends ElasticSearchable {
     @Override
     public String toString(){
         return name;
+    }
+
+    /**
+     * Unfollow the specified user
+     * @param followed the user to unfollow
+     */
+    public void unfollow(Profile followed){
+        Iterator<Profile> profile = following.iterator();
+        while (profile.hasNext()){
+            if (profile.next().equals(followed)){
+                profile.remove();
+                return;
+            }
+        }
+    }
+
+    /**
+     *
+     * @return the user's profile picture encoded in base64
+     */
+    public String getImage() {
+        return image;
+    }
+
+    /**
+     * Set the user's profile picture
+     * @param image the profile picture encoded in base64
+     */
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

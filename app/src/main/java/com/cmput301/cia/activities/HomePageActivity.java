@@ -244,6 +244,12 @@ public class HomePageActivity extends AppCompatActivity {
                 search.putExtra(SearchUsersActivity.ID_USER, user);
                 startActivity(search);
                 return true;
+            case R.id.menu_button_FollowRequests:
+                // TODO
+                Intent requests = new Intent(this, SearchUsersActivity.class);
+                requests.putExtra(SearchUsersActivity.ID_USER, user);
+                startActivity(requests);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -371,7 +377,9 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
-                // TODO
+                Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
+                user.copyFrom(result, false);
+                user.save();
             }
         }
 

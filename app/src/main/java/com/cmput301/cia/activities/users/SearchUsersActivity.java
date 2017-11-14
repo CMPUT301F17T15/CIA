@@ -134,21 +134,16 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         String searchText = nameEditText.getText().toString().toLowerCase();
 
-        // no filter, so just display all results
-        if (searchText.equals(""))
-            users = profiles;
-        else {
-            users.clear();
-            for (Profile profile : profiles) {
+        users.clear();
+        for (Profile profile : profiles) {
 
-                // don't include the current user
-                if (profile.equals(user))
-                    continue;
+            // don't include the current user
+            if (profile.equals(user))
+                continue;
 
-                // include this profile if it's name contains the search text, ignoring case
-                if (profile.getName().toLowerCase().contains(searchText)) {
-                    users.add(profile);
-                }
+            // include this profile if it's name contains the search text, ignoring case
+            if (profile.getName().toLowerCase().contains(searchText)) {
+                users.add(profile);
             }
         }
     }

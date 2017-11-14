@@ -19,6 +19,7 @@ import java.util.Date;
  * Date: Nov 11 2017
  *
  * Represents a habit event that the user has successfully completed
+ * Keeps track of all information regarding the habit event
  */
 
 public class HabitEvent extends ElasticSearchable {
