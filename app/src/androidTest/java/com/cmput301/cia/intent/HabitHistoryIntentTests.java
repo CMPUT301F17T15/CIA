@@ -17,9 +17,10 @@ import com.cmput301.cia.models.HabitEvent;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Filter;
 
 /**
  * Version 1
@@ -142,5 +143,25 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         solo.typeText(0, strInput);
         actual = solo.searchEditText(strInput);
         assertEquals("text entered is not matching",true, actual);
+    }
+
+    /**
+     * Test to make sure events are in descending order of date
+     */
+    public void testOrdering() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = solo.getCurrentActivity().getClass().getDeclaredMethod("getDisplayedEvents");
+        method.setAccessible(true);
+        List<HabitEvent> events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
+
+        // the date the previous event was on
+        Date previousDate = null;
+
+        for (HabitEvent event : events){
+            // make sure this event was earlier, since it is in descending order
+            if (previousDate != null)
+                assertTrue(event.getDate().before(previousDate));
+            previousDate = event.getDate();
+        }
+
     }
 }
