@@ -54,6 +54,7 @@ public class OfflineUnitTests {
         habit.addHabitEvent(old);
 
         HabitEvent newEvent = new HabitEvent("DBZ", new Date());
+        newEvent.setHabitId("XYZ");
         newEvent.setId("TEST");
         OfflineEvent event = new EditHabitEvent(newEvent);
 
@@ -85,12 +86,14 @@ public class OfflineUnitTests {
         Profile profile = new Profile("45a");
         HabitEvent old = new HabitEvent("XYZ", new Date());
         old.setId("XYZ");
+        old.setHabitId("Habit");
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).setId("Habit");
         profile.getHabits().get(0).addHabitEvent(old);
 
         HabitEvent toDelete = new HabitEvent("XYZ", new Date());
-        toDelete.setId("TOO");
+        toDelete.setId("XYZ");
+        toDelete.setHabitId("Habit");
         OfflineEvent event = new DeleteHabitEvent(toDelete);
 
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);

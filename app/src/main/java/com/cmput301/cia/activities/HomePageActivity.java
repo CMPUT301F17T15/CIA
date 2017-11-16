@@ -105,7 +105,6 @@ public class HomePageActivity extends AppCompatActivity {
             }
 
             user = dummy;
-            user.save();
         } else {
             // handle any habits that may have been missed since the user's last login
             Date currentDate = new Date();
@@ -125,6 +124,7 @@ public class HomePageActivity extends AppCompatActivity {
 
             user.setLastLogin(currentDate);
         }
+        user.save();
 
         // initialize the list of all habits the user has
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
