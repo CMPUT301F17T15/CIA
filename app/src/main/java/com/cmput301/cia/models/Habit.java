@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 2
- * Author: Adil Malik
- * Date: Oct 14 2017
+ * @author Adil Malik
+ * @version 2
+ * Date: Nov 16 2017
  *
  * This class represents a habit that a user has created
  * Keeps track of all habit events the user has completed/missed related to the habit

@@ -5,8 +5,8 @@
 package com.cmput301.cia.models;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Nov 07 2017
  * This class represents a pending event to delete a user's habit event
  */

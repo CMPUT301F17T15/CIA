@@ -17,6 +17,9 @@ import com.cmput301.cia.utilities.SetUtilities;
 import java.util.Set;
 
 /**
+ * @author Shipin Guan
+ * @version 2
+ *
  * Created by gsp on 2017/11/6.
  * Adapter for expandable list view for habit type
  * Also displaying habits as child for related habit type

@@ -8,8 +8,8 @@ import android.content.Intent;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 7 2017
  *
  * This class represents the controller functions for creating new habit events

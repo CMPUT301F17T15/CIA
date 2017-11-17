@@ -47,8 +47,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Version 6
- * Authors: Adil Malik, Shipin Guan
+ * @author Adil Malik, Shipin Guan
+ * @version 6
  * Date: Nov 12 2017
  *
  * Represents the home page the user sees after signing in

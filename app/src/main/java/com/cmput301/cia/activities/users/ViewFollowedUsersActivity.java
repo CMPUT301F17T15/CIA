@@ -24,8 +24,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 13 2017
  *
  * This activity displays all of the people a user is following

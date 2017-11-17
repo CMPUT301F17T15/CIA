@@ -5,8 +5,8 @@
 package com.cmput301.cia.models;
 
 /**
- * Version 3
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 3
  * Date: Nov 11 2017
  *
  * Represents an event that overwrites the old information of a habit event with new info

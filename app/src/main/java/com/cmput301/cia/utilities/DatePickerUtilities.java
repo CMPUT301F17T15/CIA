@@ -12,14 +12,16 @@ import android.support.v4.app.DialogFragment;
 import java.util.Calendar;
 
 /**
- * Created by Jessica Prieto on 2017-11-04.
+ * @author Jessica Prieto
+ * @version 1.1
+ *
+ * Date: 2017-11-04.
  *
  * This utilty is used to have a dialog show up when a user needs to input a date
  * returns: instance of TimePickerDialog
  *
  * source: https://guides.codepath.com/android/Using-DialogFragment#displaying-date-or-time-picker-dialogs
  *
- * Version 1.1
  */
 
 public class DatePickerUtilities extends DialogFragment {

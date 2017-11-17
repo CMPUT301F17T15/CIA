@@ -27,8 +27,8 @@ import java.util.Set;
 
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 13 2017
  *
  * This activity allows the user to search for other users

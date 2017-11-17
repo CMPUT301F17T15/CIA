@@ -25,8 +25,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Version 6
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 6
  * Date: Nov 13 2017
  *
  * This class represents all the information about a user of the application.

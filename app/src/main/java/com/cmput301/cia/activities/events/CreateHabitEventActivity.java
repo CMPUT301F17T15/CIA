@@ -37,8 +37,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Version 3
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 3
  * Date: Nov 12 2017
  *
  * This class represents the activity for creating a new habit event

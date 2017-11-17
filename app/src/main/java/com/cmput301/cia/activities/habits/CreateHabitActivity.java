@@ -31,7 +31,11 @@ import java.util.List;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
-/** activity for creating a new habit by letting the user input:
+/**
+ * @author Shipin Guan
+ * @version 2
+ *
+ * activity for creating a new habit by letting the user input:
  *      - habit name
  *      - reason
  *      - start date
