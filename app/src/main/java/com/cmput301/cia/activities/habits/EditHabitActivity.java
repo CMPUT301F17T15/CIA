@@ -47,7 +47,6 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     private Spinner spinner;
 
     private Habit target;
-    private ArrayList<String> habitCategories;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         Intent intent = getIntent();
 
         target = (Habit) intent.getSerializableExtra("Habit");
-        habitCategories = intent.getStringArrayListExtra("Categories");
+        ArrayList<String> habitCategories = intent.getStringArrayListExtra("Categories");
 
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
@@ -149,7 +148,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     }
 
     public List<Integer> getPickedDates(List<MaterialDayPicker.Weekday> pickedDates) {
-        List<Integer> outputDatesList = new ArrayList<Integer>();
+        List<Integer> outputDatesList = new ArrayList<>();
         for (MaterialDayPicker.Weekday weekday : pickedDates) {
             outputDatesList.add(weekday.ordinal() + 1);
         }

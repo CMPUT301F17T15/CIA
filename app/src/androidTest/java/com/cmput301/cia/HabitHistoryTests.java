@@ -4,28 +4,33 @@
 
 package com.cmput301.cia;
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import com.cmput301.cia.activities.events.HistoryActivity;
+import android.support.test.runner.AndroidJUnit4;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by guanfang on 2017/10/21.
  */
 
-public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
+@RunWith(AndroidJUnit4.class)
+public class HabitHistoryTests {
 
-    public HabitHistoryTests(){super (HistoryActivity.class);}
     /** testing method(s): Part of ViewHabitHistory, It will
      * test will a new profile has been created.
      */
+    @Test
     public void testProfile(){
         // create a new habit
         String title = "Habit1";
@@ -45,6 +50,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
     /** testing method(s): Part of ViewHabitHistory, It will
      * test will a new habit list has been created
      */
+    @Test
     public void testCollectHabits(){
         // We create new habit,
         String title = "Habit1";
@@ -64,6 +70,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
     /** testing method(s): Part of ViewHabitHistory(), It will
      * test can we find the missing date?
      */
+    @Test
     public void testFindMissing(){
         //We create a new habit.
         String title = "Habit1";
@@ -86,6 +93,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
     /** testing method(s): part of HabitFilterByType(), It will
      * test can we filter habits by time?
      */
+    @Test
     public void testSort(){
         // We create two new habits.
         String title = "Habit1";
@@ -124,6 +132,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
     /** testing method(s): part of HabitFilterByType(), It will
      * test can we filter habits by type?
      */
+    @Test
     public void testFilterByType(){
         // We create two new habits.
         String title = "Habit1";
@@ -171,6 +180,7 @@ public class HabitHistoryTests extends ActivityInstrumentationTestCase2 {
     /** testing method(s): part of HabitFilterByType(), It will
      * test can we filter habits by comment?
      */
+    @Test
     public void testFilterByComment(){
         //We create two new habits,
         String title = "Habit1";

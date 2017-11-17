@@ -138,9 +138,10 @@ public class ElasticSearchUtilities {
     /**
      * Asynchronous Task for deleting an object from the database with it's unique ID
      */
-    private static class DeleteTask extends AsyncTask<String, Void, Void> {
+    // TODO: return Boolean representing success
+    private static class DeleteTask extends AsyncTask<String, Void, Boolean> {
         @Override
-        protected Void doInBackground(String... search_parameters) {
+        protected Boolean doInBackground(String... search_parameters) {
             verifySettings();
 
             String typeId = search_parameters[0];
@@ -151,7 +152,7 @@ public class ElasticSearchUtilities {
 
             try {
                 // TODO: test success
-                client.execute(delete);
+                return client.execute(delete).isSucceeded();
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
@@ -319,6 +320,7 @@ public class ElasticSearchUtilities {
      * Save an object into the database
      * @param object the object to save
      * @param <T> generic representing the java type corresponding to that object's type
+     * @return whether the save was successful
      */
     public static <T extends ElasticSearchable> boolean save(T object){
         try {
@@ -335,17 +337,33 @@ public class ElasticSearchUtilities {
      * Delete an object from the database
      * @param typeId the type template id of the result
      * @param objId the id of the object to search for
+     * @return whether the deletion was successful
      */
-    public static void delete(String typeId, String objId) {
-        new DeleteTask().execute(typeId, objId, "");
+    public static boolean delete(String typeId, String objId) {
+        try {
+            return new DeleteTask().execute(typeId, objId, "").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
      * Delete an object from the database
      * @param object the object to delete
+     * @return whether the deletion was successful
      */
-    public static void delete(ElasticSearchable object) {
-        new DeleteTask().execute(object.getTypeId(), object.getId(), "");
+    public static boolean delete(ElasticSearchable object) {
+        try {
+            return new DeleteTask().execute(object.getTypeId(), object.getId(), "").get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
@@ -353,8 +371,14 @@ public class ElasticSearchUtilities {
      * @param typeId the type template id of the result
      * @param values map where key=parameter and value=required record value for that parameter
      */
-    public static void delete(String typeId, Map<String, String> values){
-        new DeleteSearchTask().execute(typeId, getQueryFromMap(values));
+    public static <T extends ElasticSearchable> void delete(String typeId, Class<T> deleteClass, Map<String, String> values){
+
+        List<T> found = getListOf(typeId, deleteClass, values);
+        for (T item : found){
+            delete(item);
+        }
+
+        //new DeleteSearchTask().execute(typeId, getQueryFromMap(values));
     }
 
     /**

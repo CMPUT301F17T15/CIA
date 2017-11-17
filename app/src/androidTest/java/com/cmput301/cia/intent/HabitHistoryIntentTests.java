@@ -43,7 +43,7 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         // login and navigate to habit history
         solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
         solo.clickOnButton("Login");
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
         solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
         solo.clickOnMenuItem("Habit History");

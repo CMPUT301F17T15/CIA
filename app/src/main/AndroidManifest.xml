@@ -50,10 +50,6 @@
         <activity android:name=".activities.users.ViewFollowedUsersActivity" />
         <activity android:name=".activities.users.SearchUsersActivity" />
 
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD5tsVtMXn-0B1GrtOanTXgeFQktzdAO_k" />
-
         <activity android:name=".activities.users.FollowRequestsActivity" />
         <activity android:name=".activities.users.FollowerHistoryActivity" />
         <!--

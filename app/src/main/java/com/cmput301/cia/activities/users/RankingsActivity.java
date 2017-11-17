@@ -31,11 +31,6 @@ public class RankingsActivity extends AppCompatActivity {
 
     public static final String ID_ISPOWER = "Type";
 
-    private ListView list;
-    private ArrayAdapter<String> adapter;
-
-    private List<String> elements;
-
     // whether power or overall points are being used (true=power, false=overall)
     private boolean powerPoints;
 
@@ -44,10 +39,10 @@ public class RankingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rankings);
 
-        list = (ListView)findViewById(R.id.rankingsList);
+        ListView list = (ListView)findViewById(R.id.rankingsList);
         powerPoints = getIntent().getBooleanExtra(ID_ISPOWER, false);
 
-        elements = new ArrayList<>();
+        List<String> elements = new ArrayList<>();
 
         List<Profile> profiles = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, new HashMap<String, String>());
         // compare based on points, in descending order
@@ -67,7 +62,7 @@ public class RankingsActivity extends AppCompatActivity {
             ++rank;
         }
 
-        adapter = new ArrayAdapter<>(this, R.layout.list_item, elements);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, elements);
         list.setAdapter(adapter);
     }
 }

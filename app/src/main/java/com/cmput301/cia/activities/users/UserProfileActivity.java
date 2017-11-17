@@ -52,10 +52,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private Button followButton;
     private Button unfollowButton;
-    private Button saveButton;
-
-    // the profile's name
-    private TextView nameText;
 
     // the profile's comment
     private EditText commentText;
@@ -77,11 +73,11 @@ public class UserProfileActivity extends AppCompatActivity {
         user = (Profile) intent.getSerializableExtra(USER_ID);
 
         // initialize view member variables
-        nameText = (TextView)findViewById(R.id.profileNameText);
+        TextView nameText = (TextView)findViewById(R.id.profileNameText);
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
-        saveButton = (Button)findViewById(R.id.profileSaveButton);
+        Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
         // if user is viewing their own profile

@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Nov 11 2017
  *
  * This class tests the UI for logging into the system and creating
@@ -40,33 +40,44 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         Log.d("SETUP", "setUp()");
 
         Map<String, String> values = new HashMap<>();
-        values.put("name", "TestSignIn");
-        ElasticSearchUtilities.delete(Profile.TYPE_ID, values);
-
+        values.put("name", "testsignin");
+        ElasticSearchUtilities.delete(Profile.TYPE_ID, Profile.class, values);
+        solo.sleep(3000);
         assertTrue(ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values) == null);
     }
 
     public void testCreateProfile(){
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clickOnButton("Login");            // can not login with empty name
+        solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clickOnButton("Create Profile");         // can not register with empty name
+        solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "TestSignIn");
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "testsignin");
+        solo.sleep(1000);
         solo.clickOnButton("Login");            // can not login since profile should not exist
+        solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clickOnButton("Create Profile");         // register new profile
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // make sure previously created profiles can not be recreated
-        solo.goBack();
+        solo.goBackToActivity("MainActivity");
+        solo.sleep(2500);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "TestSignIn");
+        solo.clearEditText(0);
+        solo.sleep(600);
+        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "testsignin");
+        solo.sleep(1000);
         solo.clickOnButton("Create Profile");
+        solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
         // login again
         solo.clickOnButton("Login");
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
     }
 

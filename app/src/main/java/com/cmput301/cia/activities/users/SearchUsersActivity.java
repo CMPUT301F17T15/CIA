@@ -131,13 +131,20 @@ public class SearchUsersActivity extends AppCompatActivity {
      */
     private void searchForProfiles(){
         Map<String, String> values = new HashMap<>();
-        //values.put("name", nameEditText.getText().toString());
         List<Profile> profiles = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, values);
 
         String searchText = nameEditText.getText().toString().toLowerCase();
 
+        //Set<String> includedNames = new HashSet<>();
+
         users.clear();
         for (Profile profile : profiles) {
+
+            // note: this is only for removing invalid profiles, ignore it
+            /*if (includedNames.contains(profile.getName()) || !profile.getName().equals(profile.getName().toLowerCase())){
+                ElasticSearchUtilities.delete(profile);
+                continue;
+            }*/
 
             // don't include the current user
             if (profile.equals(user))
@@ -146,6 +153,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             // include this profile if it's name contains the search text, ignoring case
             if (profile.getName().toLowerCase().contains(searchText)) {
                 users.add(profile);
+                //includedNames.add(profile.getName());
             }
         }
     }

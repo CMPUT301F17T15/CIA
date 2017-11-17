@@ -6,6 +6,7 @@ package com.cmput301.cia;
 
 import android.app.Application;
 import android.media.Image;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ApplicationTestCase;
 
@@ -13,9 +14,18 @@ import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Shipin1 on 2017-10-20.
@@ -26,12 +36,11 @@ import java.util.List;
  * All the methods and constructor implemented in class Habit has been tested here.
  */
 
-public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
 
-    public HabitUnitTests(){
-        super(MainActivity.class);
-    }
+@RunWith(AndroidJUnit4.class)
+public class HabitUnitTests {
 
+    @Test
     public void testConstructor(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -41,6 +50,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertNotNull(habit);
     }
 
+    @Test
     public void testGetDaysOfWeek(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -50,6 +60,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getDaysOfWeek() == days);
     }
 
+    @Test
     public void testSetDaysOfWeek(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -61,6 +72,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getDaysOfWeek() == newDays);
     }
 
+    @Test
     public void testGetHabitEvent(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -74,6 +86,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertFalse(habit.getEvents().isEmpty());
     }
 
+    @Test
     public void testAddHabitEvent(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -87,6 +100,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getEvents().contains(event));
     }
 
+    @Test
     public void testRemoveHabitEvent(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -101,6 +115,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getEvents().isEmpty());
     }
 
+    @Test
     public void testGetTitle(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -110,6 +125,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getTitle() == title);
     }
 
+    @Test
     public void testSetTitle(){
         String title = "Habit1";
         String newTitle = "Habit2";
@@ -121,6 +137,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getTitle() == newTitle);
     }
 
+    @Test
     public void testSetReason(){
         String title = "Habit1";
         String newReason = "Reason2";
@@ -132,6 +149,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getReason() == newReason);
     }
 
+    @Test
     public void testGetReason(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -141,6 +159,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getReason() == reason);
     }
 
+    @Test
     public void testGetStartDate(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -150,6 +169,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getStartDate() == date);
     }
 
+    @Test
     public void testSetStartDate(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -162,6 +182,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getStartDate() == newDate);
     }
 
+    @Test
     public void testOccursOn(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -175,6 +196,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertFalse(habit.occursOn(5) == true);
     }
 
+    @Test
     public void testGetTimesMissed(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -189,6 +211,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getTimesMissed() == 2);
     }
 
+    @Test
     public void testGetTimesCompleted(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -201,6 +224,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertTrue(habit.getTimesCompleted() == 1);
     }
 
+    @Test
     public void testGetMostRecentEvent(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -216,6 +240,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertEquals(habit.getMostRecentEvent(), event2);
     }
 
+    @Test
     public void testGetLastCompletionDate(){
         String title = "Habit1";
         String reason = "Reason1";
@@ -231,6 +256,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
          */
     }
 
+    @Test
     public void testGetType(){
         String type = "type1";
         String title = "Habit1";
@@ -242,6 +268,7 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertEquals(habit.getType(), type);
     }
 
+    @Test
     public void testSetType(){
         String type = "type1";
         String type2 = "type2";
@@ -255,17 +282,17 @@ public class HabitUnitTests extends ActivityInstrumentationTestCase2 {
         assertEquals(habit.getType(), type2);
     }
 
+    @Test
     public void testGetComment(){
         String type = "type1";
         String title = "Habit1";
         String reason = "Reason1";
-        String comment = "Habit comment";
         Date date = new Date();
         List<Integer> days = Arrays.asList(1,2,3);
         Habit habit = new Habit(title, reason, date, days, type);
-        //assertEquals(habit.getReason(), comment);
     }
 
+    @Test
     public void testSetComment(){
         String type = "type1";
         String title = "Habit1";
