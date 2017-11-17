@@ -50,6 +50,7 @@ public class GeolocationUnitTests {
 
         user.addHabit(habit);
         followee.addHabit(habit2);
+        followee.addHabit(habit3);
 
         followee.addFollowRequest(user);
         followee.acceptFollowRequest(user);
@@ -82,9 +83,9 @@ public class GeolocationUnitTests {
         assertTrue(user.getNearbyEvents(location).size() == 4);
         assertTrue(followee.getNearbyEvents(location).size() == 1);
 
-        // add a new event for the followee that is too far away
+        // add a new event for the followee that is too far away. it is the most recent event so count decreases for user
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 50.0, 50.0)));
-        assertTrue(user.getNearbyEvents(location).size() == 4);
+        assertTrue(user.getNearbyEvents(location).size() == 3);
         assertTrue(followee.getNearbyEvents(location).size() == 1);
 
         // add a new event for the followee -> the user's nearby events list size is still 4 since only the most recent event of each type
