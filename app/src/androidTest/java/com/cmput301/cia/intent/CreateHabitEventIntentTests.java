@@ -61,7 +61,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
             solo.sleep(3000);
             solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
             solo.clickOnButton("Delete");
-            solo.sleep(1000);
+            solo.sleep(2500);
         }
 
         solo.sleep(100);
