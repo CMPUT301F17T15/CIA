@@ -22,6 +22,17 @@
         android:title="@string/menu_HabitHistory"
         />
     <item
+        android:id="@+id/menu_button_followedHistory"
+        android:checkable="false"
+        android:title="@string/menu_followedHistory" />
+    <item
+        android:id="@+id/menu_button_My_Following"
+        android:title="@string/menu_MyFollowing" />
+    <item
+        android:id="@+id/menu_button_FollowRequests"
+        android:checkable="false"
+        android:title="@string/menu_FollowRequests" />
+    <item
         android:id="@+id/menu_button_PowerRankings"
         android:checkable="false"
         android:title="@string/menu_WOW" />
@@ -30,16 +41,9 @@
         android:checkable="false"
         android:title="@string/menu_HabitRankings" />
     <item
-        android:id="@+id/menu_button_My_Following"
-        android:title="@string/menu_MyFollowing" />
-    <item
         android:id="@+id/menu_button_searchUsers"
         android:checkable="false"
         android:title="@string/menu_searchUsers" />
-    <item
-        android:id="@+id/menu_button_FollowRequests"
-        android:checkable="false"
-        android:title="@string/menu_FollowRequests" />
 
 
 </menu>

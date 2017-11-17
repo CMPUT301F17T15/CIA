@@ -31,8 +31,8 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    testCompile 'org.testng:testng:6.9.6'
-    androidTestCompile 'junit:junit:4.12'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.google.android.gms:play-services:11.0.4'
+    testCompile 'org.testng:testng:6.9.6'
+    androidTestCompile 'junit:junit:4.12'
 }
