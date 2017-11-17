@@ -2,7 +2,6 @@ package com.cmput301.cia.utilities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -10,19 +9,16 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.Network;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-/*import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.PlaceDetectionApi;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-*/
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -109,7 +105,7 @@ public class DeviceUtilities {
     /**
      * @return the user's last known location if known, or null otherwise
      */
-    // TODO: test Google API on an emulator device that works (requires a Google Play update so it won't work on Nexus 4)
+    // TODO: test on a device where GPS works, as the location on Nexus 4 always returns Mountain View
     public static Location getLocation(Activity activity) {
 
         /**
@@ -124,6 +120,9 @@ public class DeviceUtilities {
         }
 
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null)
+            return null;
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.0f, listener);
         final Location[] location = {null};
         location[0] = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -135,9 +134,9 @@ public class DeviceUtilities {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
                 // non-null location
-                if (task.isSuccessful()) {
+                if (task.isSuccessful() && task.getResult() != null) {
                     location[0] = task.getResult();
-                    System.out.println("lc= " + location[0].toString());
+
                 }
             }
         });*/
