@@ -21,8 +21,8 @@ import java.util.Map;
 
 /**
  * @author Adil Malik
- * @version 2
- * Date: Oct 18 2017
+ * @version 3
+ * Date: Nov 17, 2017
  *
  * The main activity of the application.
  * Allows the user to sign into their profile
@@ -58,13 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         String name = userName.getText().toString();
 
-        Map<String, String> searchTerms = new HashMap<String, String>();
+        // Attempt to search for a profile with the selected name
+        Map<String, String> searchTerms = new HashMap<>();
         searchTerms.put("name", name);
         Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+
+        // Profile found -> sign in
         if (profile != null){
             Intent intent = new Intent(this, HomePageActivity.class);
-            intent.putExtra(HomePageActivity.ID_USERNAME, name);
-            intent.putExtra(HomePageActivity.ID_NEW_ACCOUNT, false);
+            intent.putExtra(HomePageActivity.ID_PROFILE, profile);
             startActivity(intent);
         } else {
             Toast.makeText(this, "There exists no user with that name", Toast.LENGTH_SHORT).show();
@@ -80,19 +82,22 @@ public class MainActivity extends AppCompatActivity {
 
         String name = userName.getText().toString();
         if (name.length() == 0){
-            Toast.makeText(this, "This name is invalid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The profile name can not be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Attempt to search for a profile with the selected name
         Map<String, String> searchTerms = new HashMap<String, String>();
         searchTerms.put("name", name);
         Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+
+        // Found, can't create an account with same name
         if (profile != null){
             Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
         } else {
+            // No profile found, sign the user in with their new account
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
-            intent.putExtra(HomePageActivity.ID_USERNAME, name);
-            intent.putExtra(HomePageActivity.ID_NEW_ACCOUNT, true);
+            intent.putExtra(HomePageActivity.ID_PROFILE, new Profile(name));
             startActivity(intent);
         }
 

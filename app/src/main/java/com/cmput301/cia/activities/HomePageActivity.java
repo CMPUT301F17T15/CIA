@@ -24,10 +24,13 @@ import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
+import com.cmput301.cia.activities.users.FollowRequestsActivity;
+import com.cmput301.cia.activities.users.FollowerHistoryActivity;
 import com.cmput301.cia.activities.users.RankingsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -62,8 +65,8 @@ public class HomePageActivity extends AppCompatActivity {
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
         FOLLOWED_USERS = 6, SEARCH_USERS = 7;
 
-    // Intent extra data identifier for the name of the user who signed in
-    public static final String ID_USERNAME = "User", ID_NEW_ACCOUNT = "New";
+    // Intent extra data identifier for the profile of the signed in user
+    public static final String ID_PROFILE = "User";
 
     // Profile of the signed in user
     private Profile user;
@@ -72,6 +75,8 @@ public class HomePageActivity extends AppCompatActivity {
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter adapter;
     private ListView checkable;
+    private CheckableListViewAdapter checkableAdapter;
+
     private ArrayAdapter<Habit> lvc_adapter;
 
     // the habits the user must do today
@@ -87,43 +92,24 @@ public class HomePageActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra(ID_USERNAME);
-        boolean newAccount = intent.getBooleanExtra(ID_NEW_ACCOUNT, true);
+        user = (Profile) intent.getSerializableExtra(ID_PROFILE);
 
-        Profile dummy = new Profile(name);
-        // search for the user by their name
-        Map<String, String> values = new HashMap<>();
-        values.put("name", name);
-        user = ElasticSearchUtilities.getObject(dummy.getTypeId(), Profile.class, values);
-        if (user == null){
+        // handle any habits that may have been missed since the user's last login
+        Date currentDate = new Date();
+        if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.setTime(user.getLastLogin());
 
-            // connection error
-            if (!newAccount){
-                Toast.makeText(this, "Could not retrieve profile from the server.", Toast.LENGTH_LONG).show();
-                finish();
-                return;
+            // go through each date between the user's last login and the current date
+            while (!DateUtilities.isSameDay(calendar.getTime(), currentDate)){
+                // update all events at the end of that date, to make sure they are marked as missed if they weren't completed
+                // on that day
+                user.onDayEnd(calendar.getTime());
+                calendar.add(Calendar.DATE, 1);
             }
-
-            user = dummy;
-        } else {
-            // handle any habits that may have been missed since the user's last login
-            Date currentDate = new Date();
-            if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
-                GregorianCalendar calendar = new GregorianCalendar();
-                calendar.setTime(user.getLastLogin());
-
-                // go through each date between the user's last login and the current date
-                while (!DateUtilities.isSameDay(calendar.getTime(), currentDate)){
-                    // update all events at the end of that date, to make sure they are marked as missed if they weren't completed
-                    // on that day
-                    user.onDayEnd(calendar.getTime());
-                    calendar.add(Calendar.DATE, 1);
-                }
-
-            }
-
-            user.setLastLogin(currentDate);
         }
+
+        user.setLastLogin(currentDate);
         user.save();
 
         // initialize the list of all habits the user has
@@ -160,7 +146,6 @@ public class HomePageActivity extends AppCompatActivity {
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(lvc_adapter);
-
     }
 
     //button on activity_home_page bridge to activity_create_habit
@@ -199,18 +184,13 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivityForResult(intent_My_Profile, VIEW_PROFILE);
                 return true;
             case R.id.menu_button_Add_New_Habit:
+                Intent intent = new Intent(this, CreateHabitActivity.class);
                 if (user.getHabitCategories() != null) {
-                    List<String> types = new ArrayList<String>();
+                    List<String> types = new ArrayList<>();
                     types.addAll(user.getHabitCategories());
-                    Intent intent = new Intent(this, CreateHabitActivity.class);
                     intent.putStringArrayListExtra("types", (ArrayList<String>) types);
-                    startActivityForResult(intent, CREATE_HABIT);
                 }
-                else{
-                    Intent intent = new Intent(this, CreateHabitActivity.class);
-                    intent.putStringArrayListExtra("types", null);
-                    startActivityForResult(intent, CREATE_HABIT);
-                }
+                startActivityForResult(intent, CREATE_HABIT);
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
@@ -246,9 +226,15 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_FollowRequests:
                 // TODO
-                Intent requests = new Intent(this, SearchUsersActivity.class);
+                Intent requests = new Intent(this, FollowRequestsActivity.class);
                 requests.putExtra(SearchUsersActivity.ID_USER, user);
                 startActivity(requests);
+                return true;
+            case R.id.menu_button_followedHistory:
+                // TODO
+                Intent followed = new Intent(this, FollowerHistoryActivity.class);
+                followed.putExtra(SearchUsersActivity.ID_USER, user);
+                startActivity(followed);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -409,7 +395,7 @@ public class HomePageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // This item is already clicked, prevent it from being disabled
-                // TODO
+                // TODO: get this to work
                 if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
                     return;
                 }

@@ -234,6 +234,7 @@ public class HistoryActivity extends AppCompatActivity {
                 if (deviceLoc == null){
                     deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
                 }
+                // try to get the location a second time
                 if (deviceLoc == null){
                     deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
                 }
