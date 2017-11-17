@@ -41,14 +41,16 @@
 
     <ListView
         android:id="@+id/historyList"
-        android:layout_width="351dp"
-        android:layout_height="415dp"
+        android:layout_width="359dp"
+        android:layout_height="375dp"
         android:layout_marginBottom="80dp"
-        android:layout_marginLeft="17dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteY="56dp" />
 
     <Button
         android:id="@+id/historyEventButton"
@@ -69,4 +71,35 @@
         android:text="Type"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/historyMapImage"
+        android:layout_width="64dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="457dp"
+        android:layout_marginRight="5dp"
+        android:onClick="onMapViewClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@mipmap/mapview" />
+
+    <TextView
+        android:id="@+id/historyFilterHabitText"
+        android:layout_width="181dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="102dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/historyMapView"
+        android:layout_width="356dp"
+        android:layout_height="273dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="119dp"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
