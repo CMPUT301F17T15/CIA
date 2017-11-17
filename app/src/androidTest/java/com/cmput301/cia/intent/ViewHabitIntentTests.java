@@ -41,7 +41,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<MainA
 
         solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "gah");
         solo.clickOnButton("Login");
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // add a habit because the list is empty

@@ -43,7 +43,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
         solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
         solo.clickOnButton("Login");
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         solo.clickOnActionBarItem(R.id.menu_button_Habit_History);

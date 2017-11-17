@@ -6,6 +6,7 @@ package com.cmput301.cia;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.cmput301.cia.models.AddHabitEvent;
@@ -14,23 +15,27 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+import static org.junit.Assert.assertTrue;
+
 /**
- * Created by Adil on Nov 08 2017.
- * Version 1
+ * @author Adil Malik
+ * @version 1
+ * Date: Nov 08 2017
  *
  * Tests the geolocation aspects of habit events
  * NOTE: assumes device is connected to the internet. Will not succeed if it isn't.
  */
 
-public class GelocationUnitTests extends ActivityInstrumentationTestCase2 {
+@RunWith(AndroidJUnit4.class)
+public class GeolocationUnitTests {
 
-    public GelocationUnitTests() {
-        super(HabitEvent.class);
-    }
-
+    @Test
     public void testNearbyEvents(){
 
         Habit habit = new Habit("XYZ", "", new Date(), new ArrayList<Integer>(), "Type");

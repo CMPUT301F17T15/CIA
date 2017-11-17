@@ -50,8 +50,6 @@ public class HistoryActivity extends AppCompatActivity {
     private static final int FILTER_CODE = 0, EVENT_CODE = 1;
 
     // the list of habits that are currently displayed on the screen
-    private List<String> habitList;
-    private ArrayAdapter<String> adapter;
     private ListView historyList;
 
     private EditText filterEditText;
@@ -148,7 +146,7 @@ public class HistoryActivity extends AppCompatActivity {
      */
     private void convertEventsToString(){
         List<HabitEvent> events = getDisplayedEvents();
-        habitList = new ArrayList<>(events.size());
+        List<String> habitList = new ArrayList<>(events.size());
 
         // binary search comparator based on event date
         /*Comparator<HabitEvent> c = new Comparator<HabitEvent>() {
@@ -170,7 +168,7 @@ public class HistoryActivity extends AppCompatActivity {
             }*/
         }
 
-        adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
         historyList.setAdapter(adapter);
     }
 

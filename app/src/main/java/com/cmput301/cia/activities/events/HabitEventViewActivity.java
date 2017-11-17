@@ -53,7 +53,6 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
 
-    private TextView habitEventName;
     private TextView habitEventDate;
     private TextView habitEventLocation;
     private ImageView habitEventPhoto;
@@ -81,7 +80,7 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
          */
         Intent intent = getIntent();
 
-        habitEventName = (TextView) findViewById(R.id.vheHabitNameText);
+        TextView habitEventName = (TextView) findViewById(R.id.vheHabitNameText);
         habitEventDate = (TextView) findViewById(R.id.vheDateDynamicText);
         habitEventLocation = (TextView) findViewById(R.id.vheLocationDynamicText);
         habitEventPhoto = (ImageView) findViewById(R.id.vhePhotoImage);

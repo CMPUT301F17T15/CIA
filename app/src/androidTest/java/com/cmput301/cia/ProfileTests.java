@@ -4,13 +4,14 @@
 
 package com.cmput301.cia;
 
-import android.test.ActivityInstrumentationTestCase2;
-
-import com.cmput301.cia.activities.MainActivity;
+import android.support.test.runner.AndroidJUnit4;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,17 +19,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by WTH on 2017-10-22.
  */
 
-public class ProfileTests extends ActivityInstrumentationTestCase2 {
-
-    public ProfileTests() {super(MainActivity.class); }
+@RunWith(AndroidJUnit4.class)
+public class ProfileTests {
 
     /**
      * following
      */
+    @Test
     public void testAddRequest(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
@@ -37,6 +41,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertFalse(request.hasFollowRequest(profile));
     }
 
+    @Test
     public void testRemoveRequest(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
@@ -45,6 +50,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertFalse(profile.hasFollowRequest(request));
     }
 
+    @Test
     public void testFollowing(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
@@ -55,6 +61,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertFalse(request.hasFollowRequest(profile));
     }
 
+    @Test
     public void testFollowedHistory(){
         Profile profile = new Profile("name");
         Profile request = new Profile("Mike");
@@ -71,6 +78,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
         assertTrue(profile.getFollowedHabitHistory().size() == 0);
     }
 
+    @Test
     public void testCategories(){
 
         Profile profile = new Profile("N");
@@ -93,6 +101,7 @@ public class ProfileTests extends ActivityInstrumentationTestCase2 {
 
     }
 
+    @Test
     public void testOnDayEnd(){
 
         Profile profile = new Profile("NewProfile");

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onLoginButtonClicked(View view){
 
-        String name = userName.getText().toString();
+        String name = userName.getText().toString().toLowerCase();
 
         // Attempt to search for a profile with the selected name
         Map<String, String> searchTerms = new HashMap<>();
@@ -80,20 +80,20 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onCreateProfileButtonClicked(View view){
 
-        String name = userName.getText().toString();
+        String name = userName.getText().toString().toLowerCase();
         if (name.length() == 0){
             Toast.makeText(this, "The profile name can not be empty", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Attempt to search for a profile with the selected name
-        Map<String, String> searchTerms = new HashMap<String, String>();
+        Map<String, String> searchTerms = new HashMap<>();
         searchTerms.put("name", name);
         Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
 
         // Found, can't create an account with same name
         if (profile != null){
-            Toast.makeText(this, "This name is already taken", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "This name is already taken. Names are case insensitive", Toast.LENGTH_SHORT).show();
         } else {
             // No profile found, sign the user in with their new account
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
