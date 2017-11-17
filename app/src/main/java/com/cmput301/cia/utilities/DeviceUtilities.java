@@ -31,8 +31,8 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Nov 09 2017
  *
  * Contains various device related utility functions accessibly anywhere

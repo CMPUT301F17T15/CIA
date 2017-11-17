@@ -9,8 +9,8 @@ import java.io.Serializable;
 import io.searchbox.annotations.JestId;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 2 2017
  *
  * Represents an object that can be stored and retrieved from an ElasticSearch database

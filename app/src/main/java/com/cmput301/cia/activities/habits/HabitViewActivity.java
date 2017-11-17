@@ -23,6 +23,9 @@ import com.cmput301.cia.utilities.DateUtilities;
 import java.util.ArrayList;
 
 /**
+ * @author Shipin Guan
+ * @version 2
+ *
  * Created by gsp on 2017/11/7.
  */
 

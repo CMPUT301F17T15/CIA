@@ -7,8 +7,8 @@ package com.cmput301.cia.models;
 import java.io.Serializable;
 
 /**
- * Version 3
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 3
  * Date: Nov 12 2017
  *
  * Represents a pending event that will be synchronized with the server when the user gains connectivity.

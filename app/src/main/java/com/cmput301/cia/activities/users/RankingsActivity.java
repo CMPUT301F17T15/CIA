@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 12 2017
  *
  * This activity displays all of the users in the database, ranked by how many points they have

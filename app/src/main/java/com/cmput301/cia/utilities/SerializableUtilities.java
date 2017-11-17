@@ -15,8 +15,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 3 2017
  *
  * Contains utilities for saving and loading Serializable objects locally

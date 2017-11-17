@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Oct 18 2017
  *
  * The main activity of the application.

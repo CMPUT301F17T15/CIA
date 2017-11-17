@@ -25,8 +25,8 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Nov 2 2017
  *
  * Contains utilities for searching from the ElasticSearch database

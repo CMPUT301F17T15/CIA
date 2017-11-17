@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Version 2
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 2
  * Date: Nov 12 2017
  *
  * Contains utilities for dates

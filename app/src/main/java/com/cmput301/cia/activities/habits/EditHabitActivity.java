@@ -31,6 +31,9 @@ import java.util.List;
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
+ * @author Shipin Guan
+ * @version 2
+ *
  * Created by gsp on 2017/11/12.
  */
 

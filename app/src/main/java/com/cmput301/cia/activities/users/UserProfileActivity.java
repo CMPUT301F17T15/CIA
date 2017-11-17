@@ -28,8 +28,8 @@ import java.io.InputStream;
 import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IMAGE_SIZE;
 
 /**
- * Version 2
- * Authors: Adil Malik, Shipin Guan
+ * @author Adil Malik, Shipin Guan
+ * @version 2
  * Date: Nov 13 2017
  *
  * This activity displays the information about a user's profile

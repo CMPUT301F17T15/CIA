@@ -26,8 +26,8 @@ import org.w3c.dom.Text;
 import java.util.Date;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 11 2017
  *
  * This activity allows the user to pick a habit to filter their habit history with

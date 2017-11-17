@@ -7,8 +7,8 @@ package com.cmput301.cia.utilities;
 import java.util.Set;
 
 /**
- * Version 1
- * Author: Adil Malik
+ * @author Adil Malik
+ * @version 1
  * Date: Nov 11 2017
  *
  * Contains utilities for sets
