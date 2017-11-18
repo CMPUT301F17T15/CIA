@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,7 +69,12 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, getIntent().getExtras().getString("ID"));
+        Pair<Profile, Boolean> search = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, getIntent().getExtras().getString("ID"));
+        if (search.first == null || !search.second){
+            Toast.makeText(this, "Could not connect to the database", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        user = search.first;
         filterHabit = null;
 
         historyList = (ListView) findViewById(R.id.historyList);
@@ -220,8 +226,8 @@ public class HistoryActivity extends AppCompatActivity {
                 for (HabitEvent habitEvent : getDisplayedEvents()){
                     Location location = habitEvent.getLocation();
                     if (location != null){
-                        Habit habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, habitEvent.getHabitId());
-                        String habitTitle = habit == null ? "" : habit.getTitle();
+                        Pair<Habit, Boolean> habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, habitEvent.getHabitId());
+                        String habitTitle = habit.first == null ? "" : habit.first.getTitle();
                         LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(coordinates).title("Completed " + habitTitle + " at " + DeviceUtilities.getLocationName(HistoryActivity.this, location)));
                     }

@@ -41,9 +41,9 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
 
         Map<String, String> values = new HashMap<>();
         values.put("name", "testsignin");
-        ElasticSearchUtilities.delete(Profile.TYPE_ID, Profile.class, values);
+        assertTrue(ElasticSearchUtilities.delete(Profile.TYPE_ID, Profile.class, values));
         solo.sleep(3000);
-        assertTrue(ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values) == null);
+        assertTrue(ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first == null);
     }
 
     public void testCreateProfile(){

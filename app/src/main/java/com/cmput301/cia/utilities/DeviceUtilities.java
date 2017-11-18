@@ -14,9 +14,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.cmput301.cia.models.Profile;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -60,40 +63,10 @@ public class DeviceUtilities {
     }
 
     /**
-     * Execute an asynchronous task to determine whether the device is connected to the internet or not
-     */
-    // TODO: do this with ElasticSearch instead by inserting something random and returning whether it was successful
-    private static class CheckConnectionTask extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                URL url = new URL("http://cmput301.softwareprocess.es:8080/");
-                Scanner scanner = new Scanner(url.openStream());
-                boolean hasNext = scanner.hasNext();
-                scanner.close();
-                return hasNext;
-            } catch (MalformedURLException e) {
-                Log.d("Error Connection", e.getMessage());
-            } catch (IOException e) {
-                Log.d("Error Connection", e.getMessage());
-            }
-            return Boolean.FALSE;
-        }
-    }
-
-    /**
      * @return whether the user is connected to the internet or not
      */
-    // TODO: testing when offline
     public static boolean isOnline() {
-        try {
-            return new CheckConnectionTask().execute().get();
-        } catch (InterruptedException e) {
-            Log.d("Error isOnline()", e.getMessage());
-        } catch (ExecutionException e) {
-            Log.d("Error isOnline()", e.getMessage());
-        }
-        return false;
+        return ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, new HashMap<String, String>()).size() > 0;
     }
 
     /**

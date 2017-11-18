@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
  * NOTE: These tests require an internet connection
  */
 
-// TODO: viewing other people's profiles, changing the profile image, following/saving
+// TODO: viewing other people's profiles, following/saving
 
 public class ProfileIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -105,7 +105,6 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<MainAct
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         assertTrue(user.getComment().equals(newComment));
-        // TODO: test image saving
     }
 
     @Override

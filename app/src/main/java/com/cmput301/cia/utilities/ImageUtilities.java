@@ -28,7 +28,7 @@ public class ImageUtilities {
      */
     public static String imageToBase64(Bitmap image){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        // TODO: if JPEG reduces quality then set to PNG
+        // put image into the output stream
         image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
     }

@@ -7,6 +7,7 @@ package com.cmput301.cia.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -61,13 +62,15 @@ public class MainActivity extends AppCompatActivity {
         // Attempt to search for a profile with the selected name
         Map<String, String> searchTerms = new HashMap<>();
         searchTerms.put("name", name);
-        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+        Pair<Profile, Boolean> profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
 
         // Profile found -> sign in
-        if (profile != null){
+        if (profile.first != null && profile.second){
             Intent intent = new Intent(this, HomePageActivity.class);
-            intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+            intent.putExtra(HomePageActivity.ID_PROFILE, profile.first);
             startActivity(intent);
+        } else if (!profile.second){
+            Toast.makeText(this, "Could not connect to the database.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "There exists no user with that name", Toast.LENGTH_SHORT).show();
         }
@@ -89,12 +92,15 @@ public class MainActivity extends AppCompatActivity {
         // Attempt to search for a profile with the selected name
         Map<String, String> searchTerms = new HashMap<>();
         searchTerms.put("name", name);
-        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+        Pair<Profile, Boolean> profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
 
         // Found, can't create an account with same name
-        if (profile != null){
+        if (profile.first != null){
             Toast.makeText(this, "This name is already taken. Names are case insensitive", Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (!profile.second){
+            Toast.makeText(this, "Could not connect to the database.", Toast.LENGTH_SHORT).show();
+        }
+        else {
             // No profile found, sign the user in with their new account
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             intent.putExtra(HomePageActivity.ID_PROFILE, new Profile(name));
