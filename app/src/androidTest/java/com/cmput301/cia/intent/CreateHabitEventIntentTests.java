@@ -94,10 +94,6 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
-        // TODO: selecting an image
-        //solo.clickOnImage(1);
-        //solo.sleep(1000);
-
         solo.clickOnButton("Save");
 
         solo.sleep(1000);

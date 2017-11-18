@@ -38,9 +38,10 @@ import java.util.Date;
 /**
  * @author Tinghui, Adil Malik
  * @version 2
+ * Date: Nov 8 2017
  *
- * created by Tinghui.
- * on 11/8/2017.
+ * This activity displays the details of one of the user's habit events. It can be edited or deleted
+ * here.
  */
 
 public class HabitEventViewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -90,7 +91,7 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
         event = (HabitEvent) intent.getSerializableExtra("HabitEvent");
 
         // TODO: pass in the habit name instead
-        Habit habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, event.getHabitId());
+        Habit habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, event.getHabitId()).first;
         if (habit != null)
             habitEventName.setText(habit.getTitle());
 

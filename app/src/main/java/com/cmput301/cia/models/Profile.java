@@ -424,7 +424,7 @@ public class Profile extends ElasticSearchable {
      */
     @Override
     public void load() {
-        Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId());
+        Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId()).first;
         if (found != null){
             copyFrom(found, false);
         }

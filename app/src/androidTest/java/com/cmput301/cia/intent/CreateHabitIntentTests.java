@@ -72,10 +72,10 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
         solo.enterText((EditText)solo.getView(R.id.habitName), "nametest");
-        solo.sleep(500);
+        solo.sleep(800);
 
         solo.clickOnButton("Save");
-        solo.sleep(2000);
+        solo.sleep(4000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // make sure a new habit was added to the user

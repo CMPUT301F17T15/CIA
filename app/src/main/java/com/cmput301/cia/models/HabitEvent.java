@@ -205,7 +205,7 @@ public class HabitEvent extends ElasticSearchable {
      */
     @Override
     public void load() {
-        HabitEvent found = ElasticSearchUtilities.getObject(getTypeId(), HabitEvent.class, getId());
+        HabitEvent found = ElasticSearchUtilities.getObject(getTypeId(), HabitEvent.class, getId()).first;
         if (found != null){
             copyFrom(found);
         }

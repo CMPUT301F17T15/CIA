@@ -14,10 +14,9 @@ import java.util.List;
  */
 
 public class CreateHabitController {
-    public static Habit onSaveClicked(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek, String type) {
-        // TODO: save the habit on elastic search/serializable
-        // TODO: handle when user also inputs habit type
 
+    public static Habit onSaveClicked(String habitName, String reason, Date startDate, List<Integer> daysOfTheWeek, String type) {
         return new Habit(habitName, reason, startDate, daysOfTheWeek, type);
     }
+
 }

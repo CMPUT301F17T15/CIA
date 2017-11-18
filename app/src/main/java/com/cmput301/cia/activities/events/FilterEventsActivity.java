@@ -56,10 +56,10 @@ public class FilterEventsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter_events);
 
         Intent data = getIntent();
-        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, data.getStringExtra(ID_USER));
+        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, data.getStringExtra(ID_USER)).first;
 
         if (user == null){
-            Toast.makeText(this, "Profile could not be retreived from the database.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Profile could not be retrieved from the database.", Toast.LENGTH_LONG).show();
             finish();
             return;
         }

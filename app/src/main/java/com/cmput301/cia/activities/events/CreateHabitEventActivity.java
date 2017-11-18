@@ -93,8 +93,6 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
 
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
-
-        // TODO: remove passing this in, it is no longer needed
         habitId = intent.getStringExtra(ID_HABIT_HASH);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 

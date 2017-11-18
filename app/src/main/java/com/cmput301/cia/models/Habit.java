@@ -252,7 +252,7 @@ public class Habit extends ElasticSearchable {
      */
     @Override
     public void load() {
-        Habit found = ElasticSearchUtilities.getObject(getTypeId(), Habit.class, getId());
+        Habit found = ElasticSearchUtilities.getObject(getTypeId(), Habit.class, getId()).first;
         if (found != null){
             copyFrom(found);
         }

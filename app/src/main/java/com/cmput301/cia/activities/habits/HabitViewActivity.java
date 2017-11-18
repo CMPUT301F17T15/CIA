@@ -25,12 +25,13 @@ import java.util.ArrayList;
 /**
  * @author Shipin Guan
  * @version 2
+ * Date: Nov 7, 2017
  *
- * Created by gsp on 2017/11/7.
+ * This activity allows the user to view the details about one of their habits
  */
 
-public class HabitViewActivity extends AppCompatActivity{
-    //ToDo display detail of selected habit
+public class HabitViewActivity extends AppCompatActivity {
+
     private TextView habitName;
     private TextView habitType;
     private TextView habitReason;
