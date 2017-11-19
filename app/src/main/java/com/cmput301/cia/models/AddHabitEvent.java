@@ -30,7 +30,7 @@ public class AddHabitEvent extends OfflineEvent {
      * @return whether the event was handled successfully or not
      */
     @Override
-    public void handleImpl(Profile profile) {
+    public void handle(Profile profile) {
         profile.setHabitPoints(profile.getHabitPoints() + 1);
         profile.setPowerPoints(profile.getPowerPoints() + 1);
         profile.getHabitById(habitId).addHabitEvent(event);

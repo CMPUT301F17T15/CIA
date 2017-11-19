@@ -113,7 +113,7 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
         if (requestCode == VIEW_PROFILE) {
             if (resultCode == RESULT_OK) {
                 Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                profile.copyFrom(newProfile, false);
+                profile.copyFrom(newProfile);
             }
         }
     }

@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Date: Nov 12 2017
  *
  * Represents a pending event that will be synchronized with the server when the user gains connectivity.
- * Follows the command pattern, as well as the template method pattern
+ * Follows the command pattern
  */
 
 public abstract class OfflineEvent implements Serializable {
@@ -33,19 +33,7 @@ public abstract class OfflineEvent implements Serializable {
      * @param profile the user who this event is being handled for
      * @return whether the event was handled successfully or not
      */
-    public final boolean handle(Profile profile){
-        handleImpl(profile);
-        profile.save();
-        // TODO: probably should change ElasticSearchable.save() to boolean and return profile.save()
-        return true;
-    }
-
-    /**
-     * Implementation for what even does when it synchronizes with server
-     * @param profile the user who this event is being handled for
-     * @return whether the event was handled successfully or not
-     */
-    public abstract void handleImpl(Profile profile);
+    public abstract void handle(Profile profile);
 
     /**
      * @return the habit ID of the habit containing the habit event

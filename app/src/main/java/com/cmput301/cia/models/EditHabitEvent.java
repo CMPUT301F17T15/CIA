@@ -27,7 +27,7 @@ public class EditHabitEvent extends OfflineEvent {
      * @return whether the event was handled successfully or not
      */
     @Override
-    public void handleImpl(Profile profile) {
+    public void handle(Profile profile) {
         Habit habit = profile.getHabitById(event.getHabitId());
         for (HabitEvent habitEvent : habit.getEvents()){
             if (habitEvent.equals(event)){
