@@ -35,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +48,12 @@ import java.util.List;
  */
 
 public class HistoryActivity extends AppCompatActivity {
+
+    // Intent data identifier for the passed in profile
+    public static final String ID_PROFILE = "Profile";
+
+    // Intent data identifier for returned habits list
+    public static final String RETURNED_HABITS_ID = "Habits";
 
     private static final int FILTER_CODE = 0, EVENT_CODE = 1;
 
@@ -69,12 +76,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        Pair<Profile, Boolean> search = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, getIntent().getExtras().getString("ID"));
-        if (search.first == null || !search.second){
-            Toast.makeText(this, "Could not connect to the database", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        user = search.first;
+        user = (Profile) getIntent().getSerializableExtra(ID_PROFILE);
         filterHabit = null;
 
         historyList = (ListView) findViewById(R.id.historyList);
@@ -111,6 +113,9 @@ public class HistoryActivity extends AppCompatActivity {
         // return to main menu
         historyReturnButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

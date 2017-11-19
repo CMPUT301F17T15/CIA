@@ -21,16 +21,15 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Adil on Oct 18 2017.
- * Version 1
+ * @author Adil Malik
+ * @version 2
+ * Date: Nov 19 2017
  *
  * Tests the offline events that will be synchronized with the database when the user
  * regains connectivity.
- *
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -61,8 +60,6 @@ public class OfflineUnitTests {
         profile.addHabit(habit);
 
         profile.tryHabitEvent(event);
-        assertFalse(old.getComment().equals(newEvent.getComment()));
-        profile.synchronize();
         assertTrue(old.getComment().equals(newEvent.getComment()));
     }
 
@@ -76,8 +73,6 @@ public class OfflineUnitTests {
 
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
         profile.tryHabitEvent(event);
-        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
-        profile.synchronize();
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
     }
 
@@ -93,22 +88,16 @@ public class OfflineUnitTests {
 
         HabitEvent toDelete = new HabitEvent("XYZ", new Date());
         toDelete.setId("XYZ");
-        toDelete.setHabitId("Habit");
+        toDelete.setHabitId("Habit2");
         OfflineEvent event = new DeleteHabitEvent(toDelete);
 
-        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
-        profile.tryHabitEvent(event);   // not deleted yet since offline
-        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
-        profile.synchronize();
-        // different IDs, so does not get deleted
-        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);        // not executed yet
+        profile.tryHabitEvent(event);
+        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);        // different habit ID, so does not get deleted
 
-        toDelete.setId("XYZ");
+        toDelete.setHabitId("Habit");
         event = new DeleteHabitEvent(toDelete);
-        profile.tryHabitEvent(event);   // not deleted yet since offline
-        assertTrue(profile.getHabits().get(0).getTimesCompleted() == 1);
-        profile.synchronize();
-        // same IDs, should delete now
+        profile.tryHabitEvent(event);                                           // deleted now that habit ID is correct
         assertTrue(profile.getHabits().get(0).getTimesCompleted() == 0);
 
     }

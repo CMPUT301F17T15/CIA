@@ -7,7 +7,6 @@ package com.cmput301.cia.models;
 import android.location.Location;
 
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SerializableUtilities;
 
@@ -26,8 +25,8 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 6
- * Date: Nov 13 2017
+ * @version 7
+ * Date: Nov 19 2017
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
@@ -36,8 +35,6 @@ import java.util.Set;
  * @see HabitEvent
  * @see OfflineEvent
  */
-
-// TODO: possibly have AddHabitEvent be included in habithistory, and remove events in DeleteHabitEvent removed from habithistory, and account for EditHabitEvent
 
 public class Profile extends ElasticSearchable {
 
@@ -57,9 +54,6 @@ public class Profile extends ElasticSearchable {
 
     // Users that have requested to follow this user (all elements are unique)
     private List<Profile> followRequests;
-
-    // Events that will be synchronized when the user signs in on a valid connection
-    private List<OfflineEvent> pendingEvents;
 
     // Points received for consecutively completing habits
     private int powerPoints;
@@ -88,7 +82,6 @@ public class Profile extends ElasticSearchable {
         habits = new ArrayList<>();
         following = new ArrayList<>();
         followRequests = new ArrayList<>();
-        pendingEvents = new ArrayList<>();
         powerPoints = 0;
         habitPoints = 0;
         creationDate = new Date();
@@ -140,14 +133,6 @@ public class Profile extends ElasticSearchable {
      */
     public void removeHabit(Habit habit){
         habits.remove(habit);
-
-        // remove the pending events that were related to the removed habit
-        Iterator<OfflineEvent> it = pendingEvents.iterator();
-        while (it.hasNext()){
-            if (it.next().getHabitId().equals(habit.getId())){
-                it.remove();
-            }
-        }
     }
 
     /**
@@ -364,31 +349,12 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * Saves all pending events to the database.
-     * Call this when this user is signed in and regains connection to the internet.
-     */
-    public void synchronize(){
-        if (DeviceUtilities.isOnline()){
-            List<OfflineEvent> unsuccessful = new ArrayList<>();
-            for (OfflineEvent event : pendingEvents){
-                if (!event.handle(this)){
-                    unsuccessful.add(event);
-                }
-            }
-            pendingEvents = unsuccessful;
-        }
-    }
-
-    /**
      * Attempt to edit/delete an existing habit event, or add a new one
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        if (DeviceUtilities.isOnline() && event.handle(this)){
-            // do nothing
-        }
-        else
-            pendingEvents.add(event);
+        event.handle(this);
+        save();
     }
 
     /**
@@ -416,7 +382,7 @@ public class Profile extends ElasticSearchable {
             habit.save();
         }
         ElasticSearchUtilities.save(this);
-        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
+        SerializableUtilities.save(getOfflineEventsFile(), habits);
     }
 
     /**
@@ -426,12 +392,12 @@ public class Profile extends ElasticSearchable {
     public void load() {
         Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId()).first;
         if (found != null){
-            copyFrom(found, false);
+            copyFrom(found);
         }
 
-        List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
+        List<Habit> loaded = SerializableUtilities.load(getOfflineEventsFile());
         if (loaded != null)
-            pendingEvents = loaded;
+            habits = loaded;
     }
 
     /**
@@ -588,9 +554,8 @@ public class Profile extends ElasticSearchable {
     /**
      * Copy over the data from another profile into this one
      * @param other the profile to copy from
-     * @param copyPending whether pending events should also be copied over
      */
-    public void copyFrom(Profile other, boolean copyPending){
+    public void copyFrom(Profile other){
         name = other.name;
         habits = other.habits;
         following = other.following;
@@ -600,9 +565,6 @@ public class Profile extends ElasticSearchable {
         creationDate = other.creationDate;
         comment = other.comment;
         image = other.image;
-
-        if (copyPending)
-            pendingEvents = other.pendingEvents;
     }
 
     /**
@@ -649,6 +611,16 @@ public class Profile extends ElasticSearchable {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+
+    /**
+     * Set the list of habits this profile has created
+     * @param habits the list of habits this profile has created
+     * @since Version 7
+     */
+    public void setHabits(List<Habit> habits) {
+        this.habits = habits;
     }
 
 }

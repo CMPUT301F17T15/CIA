@@ -26,7 +26,7 @@ public class DeleteHabitEvent extends OfflineEvent {
      * @return whether the event was handled successfully or not
      */
     @Override
-    public void handleImpl(Profile profile) {
+    public void handle(Profile profile) {
         profile.getHabitById(event.getHabitId()).removeHabitEvent(event);
     }
 }

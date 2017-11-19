@@ -94,6 +94,10 @@ public class HomePageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
 
+        // reload the profile if it is not new, in order to read the offline events data
+        if (user.hasValidId())
+            user.load();
+
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
         if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
@@ -157,7 +161,7 @@ public class HomePageActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("types", (ArrayList<String>) types);
             startActivityForResult(intent, CREATE_HABIT);
         }
-        else{
+        else {
             Intent intent = new Intent(this, CreateHabitActivity.class);
             intent.putStringArrayListExtra("types", null);
             startActivityForResult(intent, CREATE_HABIT);
@@ -199,8 +203,7 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Habit_History:
                 Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
-                intent_Habit_History.putExtra("ID", user.getId());
-                // TODO: pass in profile through serializable instead
+                intent_Habit_History.putExtra(HistoryActivity.ID_PROFILE, user);
                 startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
                 return true;
             case R.id.menu_button_My_Following:
@@ -243,9 +246,6 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        // attempt to synchronize user's pending events with the server
-        user.synchronize();
 
         // update the habits list display
         adapter.refresh();
@@ -342,17 +342,19 @@ public class HomePageActivity extends AppCompatActivity {
 
             }
         } else if (requestCode == VIEW_HABIT_HISTORY){
-            // reload to account for possibly deleted events
-            // TODO: pass back user as serializable
-            user.load();
+            if (resultCode == RESULT_OK) {
+                List<Habit> followed = (List<Habit>) data.getSerializableExtra(HistoryActivity.RETURNED_HABITS_ID);
+                user.setHabits(followed);
+                user.save();
 
-            todaysHabits = user.getTodaysHabits();
-            lvc_adapter.notifyDataSetChanged();
-            checkCompletedEvents();
+                todaysHabits = user.getTodaysHabits();
+                lvc_adapter.notifyDataSetChanged();
+                checkCompletedEvents();
+            }
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
                 Profile result = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(result, false);
+                user.copyFrom(result);
                 user.save();
             }
         } else if (requestCode == FOLLOWED_USERS){
@@ -364,7 +366,7 @@ public class HomePageActivity extends AppCompatActivity {
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
                 Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
-                user.copyFrom(result, false);
+                user.copyFrom(result);
                 user.save();
             }
         }

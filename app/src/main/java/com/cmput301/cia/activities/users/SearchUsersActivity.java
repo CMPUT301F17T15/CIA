@@ -121,7 +121,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         if (requestCode == VIEW_PROFILE) {
             if (resultCode == RESULT_OK) {
                 Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(newProfile, false);
+                user.copyFrom(newProfile);
             }
         }
     }
