@@ -159,24 +159,9 @@ public class HistoryActivity extends AppCompatActivity {
         List<HabitEvent> events = getDisplayedEvents();
         List<String> habitList = new ArrayList<>(events.size());
 
-        // binary search comparator based on event date
-        /*Comparator<HabitEvent> c = new Comparator<HabitEvent>() {
-            public int compare(HabitEvent u1, HabitEvent u2) {
-                return u1.getDate().compareTo(u2.getDate());
-            }
-        };*/
-
         for (HabitEvent event : events) {
             Habit habit = user.getHabitById(event.getHabitId());
             habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
-
-            /*for (Habit habit : user.getHabits()) {
-                // get whether this habit contains the current event
-                int index = Collections.binarySearch(habit.getEvents(), event, c);
-                if (index >= 0) {
-                    habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
-                }
-            }*/
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);

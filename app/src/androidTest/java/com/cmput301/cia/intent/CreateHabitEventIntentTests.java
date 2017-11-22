@@ -48,7 +48,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
         solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
         solo.clickOnMenuItem("Habit History");
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
 
         // delete all habit events
@@ -66,14 +66,14 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
         solo.sleep(100);
         solo.goBackToActivity("HomePageActivity");
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
     }
 
     public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
 
         solo.clickInList(1, 1);
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
@@ -91,17 +91,17 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
         // Select the 1st option in the second list (the "today's tasks" list)
         solo.clickInList(1, 1);
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Save");
 
-        solo.sleep(1000);
+        solo.sleep(6000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // make sure no new event activity is started
         solo.clickInList(1, 1);
-        solo.sleep(1000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // assert that a new event was added
@@ -110,10 +110,10 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
     public void testCancel() throws NoSuchFieldException, IllegalAccessException {
         solo.clickInList(1, 1);
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
         solo.clickOnButton("Cancel");
-        solo.sleep(2000);
+        solo.sleep(3000);
 
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
@@ -122,11 +122,11 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         int habitEvents = user.getHabitHistory().size();
 
         solo.clickInList(1, 1);
-        solo.sleep(2000);
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
         solo.clickOnButton("Cancel");
-        solo.sleep(2000);
+        solo.sleep(3000);
 
         // assert new habit events count is equal to old
         assertTrue(user.getHabitHistory().size() == habitEvents);

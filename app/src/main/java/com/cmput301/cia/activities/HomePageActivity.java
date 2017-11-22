@@ -97,7 +97,7 @@ public class HomePageActivity extends AppCompatActivity {
         // reload the profile if it is not new, in order to read the offline events data
         if (user.hasValidId())
             user.load();
-
+        
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
         if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
@@ -316,7 +316,6 @@ public class HomePageActivity extends AppCompatActivity {
                 boolean deleted = data.getBooleanExtra("Deleted", false);
                 if (deleted) {
                     String id = data.getStringExtra("HabitID");
-                    // TODO: user.removeHabitById
                     user.removeHabit(user.getHabitById(id));
                 } else {
                     // update the habit
