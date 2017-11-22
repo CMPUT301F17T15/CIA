@@ -83,8 +83,10 @@ public class OfflineUnitTests {
         old.setId("XYZ");
         old.setHabitId("Habit");
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
+        profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
         profile.getHabits().get(0).setId("Habit");
         profile.getHabits().get(0).addHabitEvent(old);
+        profile.getHabits().get(1).setId("Habit2");
 
         HabitEvent toDelete = new HabitEvent("XYZ", new Date());
         toDelete.setId("XYZ");

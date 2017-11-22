@@ -200,6 +200,7 @@ public class Profile extends ElasticSearchable {
         int today = calendar.get(Calendar.DAY_OF_WEEK);
 
         for (Habit habit : habits){
+            // don't include habits that haven't begun yet
             if (habit.occursOn(today) && !date.before(habit.getStartDate()))
                 list.add(habit);
         }
@@ -250,25 +251,14 @@ public class Profile extends ElasticSearchable {
      * @return the user's filtered habit history, sorted in descending order based on date
      */
     public List<HabitEvent> getHabitHistory(Habit filter){
-        List<HabitEvent> list = null;
-        for (Habit habit : habits){
-            // TODO: is for loop necessary, or can filter.getEvents() be used instead?
-            if (habit.equals(filter)){
-                list = habit.getEvents();
-
-                Collections.sort(list, new Comparator<HabitEvent>() {
-                    @Override
-                    public int compare(HabitEvent event, HabitEvent t1) {
-                        return -1 * event.getDate().compareTo(t1.getDate());
-                    }
-                });
-
-                break;
+        List<HabitEvent> list = filter.getEvents();
+        Collections.sort(list, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent event, HabitEvent t1) {
+                return -1 * event.getDate().compareTo(t1.getDate());
             }
-        }
+        });
 
-        if (list == null)
-            list = new ArrayList<>();
         return list;
     }
 
@@ -325,27 +315,14 @@ public class Profile extends ElasticSearchable {
     public void onDayEnd(Date endingDay){
         List<Habit> toComplete = getTodaysHabits(endingDay);
 
-        // whether a habit was missed
-        boolean missedEvent = false;
-        // how many events were completed successfully
-        int completedEvents = 0;
-
         for (Habit habit : toComplete){
             Date date = habit.getLastCompletionDate();
             if (date == null || DateUtilities.isBefore(date, endingDay)){
                 habit.miss(endingDay);
                 powerPoints = 0;
-                missedEvent = true;
-            } else {
-                ++completedEvents;
             }
         }
 
-        /*if (!missedEvent){
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(endingDay);
-            setPowerPoints((int) Math.floor(powerPoints + Math.pow(completedEvents, 1.45)));
-        }*/
     }
 
     /**

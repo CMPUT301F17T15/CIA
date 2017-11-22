@@ -4,13 +4,13 @@
 
 package com.cmput301.cia;
 
-import android.support.test.runner.AndroidJUnit4;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  * Created by guanfang on 2017/10/21.
  */
 
-@RunWith(AndroidJUnit4.class)
+@RunWith(JUnit4.class)
 public class HabitHistoryTests {
 
     /** testing method(s): Part of ViewHabitHistory, It will
