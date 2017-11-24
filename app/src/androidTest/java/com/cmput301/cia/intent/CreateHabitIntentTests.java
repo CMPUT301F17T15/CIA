@@ -41,6 +41,23 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
     }
 
+    public void testClear(){
+        solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
+        solo.clickOnMenuItem("Add New Habit");
+        solo.sleep(1000);
+        solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
+
+        solo.enterText((EditText)solo.getView(R.id.reason), "reason");
+        solo.sleep(500);
+        solo.enterText((EditText)solo.getView(R.id.habitName), "none");
+        solo.sleep(500);
+
+        solo.clickOnButton("Clear");
+        solo.sleep(1000);
+        assertTrue(solo.getEditText(1).getText().toString().equals(""));
+        assertTrue(solo.getEditText(0).getText().toString().equals(""));
+    }
+
     public void testAdd() throws NoSuchFieldException, IllegalAccessException {
 
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
