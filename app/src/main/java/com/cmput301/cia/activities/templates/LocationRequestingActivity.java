@@ -52,6 +52,10 @@ public abstract class LocationRequestingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle the results of a request for location permissions
+     * @param granted whether permission was granted or not
+     */
     private void handleLocationPermissionRequest(boolean granted){
         if (granted){
             handleLocationGranted();
