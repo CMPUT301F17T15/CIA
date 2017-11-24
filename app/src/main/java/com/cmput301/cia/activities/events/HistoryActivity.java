@@ -86,7 +86,6 @@ public class HistoryActivity extends LocationRequestingActivity {
         map = (MapView)findViewById(R.id.historyMapView);
         map.onCreate(savedInstanceState);
 
-        Button historyReturnButton  = (Button) findViewById(R.id.historyReturnButton);
         Button eventButton = (Button) findViewById(R.id.historyEventButton);
         Button filter = (Button) findViewById(R.id.historyFilterButton);
 
@@ -110,22 +109,19 @@ public class HistoryActivity extends LocationRequestingActivity {
             }
         });
 
-        // return to main menu
-        historyReturnButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
         // view the details of a habit event
         historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String viewText = ((TextView)view).getText().toString();
+                // "completed " is 10 characters, so start at index 10 -> 11th character
+                // stop 2 characters before "on", because the space before "on" should not be included
+                String habitName = viewText.substring(10, viewText.lastIndexOf("on") - 1);
+
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
-                intent.putExtra("HabitEvent", getDisplayedEvents().get(position));
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position));
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, habitName);
                 startActivityForResult(intent, EVENT_CODE);
             }
         });
@@ -265,5 +261,15 @@ public class HistoryActivity extends LocationRequestingActivity {
         updateMap();
     }
 
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
 
 }

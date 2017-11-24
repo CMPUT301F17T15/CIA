@@ -41,6 +41,9 @@ import java.io.InputStream;
 
 public class HabitEventViewActivity extends LocationRequestingActivity {
 
+    // Intent data identifiers for inputs
+    public static final String ID_HABIT_NAME = "Habit", ID_HABIT_EVENT = "Event";
+
     // Intent data identifiers for activity results
     public static final String RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
 
@@ -82,12 +85,8 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         habitEventComment = (EditText) findViewById(R.id.vheCommentDynamicText);
         resetImageButton = (Button)findViewById(R.id.vheResetImageButton);
 
-        event = (HabitEvent) intent.getSerializableExtra("HabitEvent");
-
-        // TODO: pass in the habit name instead
-        Habit habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, event.getHabitId()).first;
-        if (habit != null)
-            habitEventName.setText(habit.getTitle());
+        event = (HabitEvent) intent.getSerializableExtra(ID_HABIT_EVENT);
+        habitEventName.setText(intent.getStringExtra(ID_HABIT_NAME));
 
         location = event.getLocation();
         if (location != null)
@@ -248,5 +247,5 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
-    
+
 }

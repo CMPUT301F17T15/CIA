@@ -243,13 +243,7 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // update the habits list display
-        adapter.refresh();
-        adapter.notifyDataSetChanged();
-
-        // update the today's task list
-        resetCheckableListAdapter();
-        checkCompletedEvents();
+        refreshDisplay();
     }
 
     @Override
@@ -405,6 +399,24 @@ public class HomePageActivity extends AppCompatActivity {
         checkable.setAdapter(checkableAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        refreshDisplay();
+        super.onResume();
+    }
+
+    /**
+     * Update the elements in both ListViews
+     */
+    private void refreshDisplay(){
+        // update the habits list display
+        adapter.refresh();
+        adapter.notifyDataSetChanged();
+
+        // update the today's task list
+        resetCheckableListAdapter();
+        checkCompletedEvents();
+    }
 }
 
 

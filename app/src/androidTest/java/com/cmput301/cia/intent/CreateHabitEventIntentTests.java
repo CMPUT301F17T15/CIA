@@ -112,7 +112,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.clickInList(1, 1);
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        solo.clickOnButton("Cancel");
+        solo.goBack();
+        //solo.clickOnButton("Cancel");
         solo.sleep(3000);
 
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
@@ -125,7 +126,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
-        solo.clickOnButton("Cancel");
+        solo.goBack();
+        //solo.clickOnButton("Cancel");
         solo.sleep(3000);
 
         // assert new habit events count is equal to old
