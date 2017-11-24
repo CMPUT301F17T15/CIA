@@ -41,10 +41,11 @@ import java.util.List;
 
 /**
  * @author Adil Malik
- * @version 2
- * Date: Nov 16 2017
+ * @version 3
+ * Date: Nov 23 2017
  *
- * This activity allows the user to view all of their completed habit events
+ * This activity allows the user to view all of their completed habit events in a list.
+ * The events can be filtered by event comment, or by their habit
  */
 
 public class HistoryActivity extends LocationRequestingActivity {
