@@ -11,16 +11,6 @@
     tools:context="com.cmput301.cia.activities.users.SearchUsersActivity">
 
     <Button
-        android:id="@+id/searchFinishButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="27dp"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
         android:id="@+id/searchSearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

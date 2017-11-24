@@ -76,20 +76,19 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
                 startActivityForResult(profileIntent, VIEW_PROFILE);
             }
         });
+    }
 
-        Button finishButton = (Button)findViewById(R.id.vfuFinishButton);
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent returnIntent = new Intent();
-                // TODO: test if profile.getFollowing() works as serializable. if not then just return profile
-                returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)profile.getFollowing());
-                returnIntent.putExtra(RETURNED_ISUSER, profile.equals(user));
-                setResult(RESULT_OK, returnIntent);
-                finish();
-            }
-        });
-
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        // TODO: test if profile.getFollowing() works as serializable. if not then just return profile
+        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)profile.getFollowing());
+        returnIntent.putExtra(RETURNED_ISUSER, profile.equals(user));
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override

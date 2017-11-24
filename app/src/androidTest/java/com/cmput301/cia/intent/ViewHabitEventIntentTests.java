@@ -39,7 +39,8 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
     }
 
     public void setUp() throws Exception{
-        Profile profile = new Profile("XYZ");
+        Profile profile = new Profile("xyz");
+        profile.setId("A");
         Habit habit = new Habit("T1", "", new Date(), new ArrayList<Integer>(), "");
         habit.setId("one");
         habit.addHabitEvent(new HabitEvent(""));

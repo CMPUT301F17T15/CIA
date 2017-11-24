@@ -55,8 +55,8 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         // test current activity
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
         // test return button works?
-        solo.clickOnButton("Return");
-        solo.sleep(1000);
+        solo.goBack();
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
