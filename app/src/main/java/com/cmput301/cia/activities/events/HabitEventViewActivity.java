@@ -104,12 +104,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
 
-    public void onCancelClicked(View view){
-        Intent intent = new Intent();
-        setResult(Activity.RESULT_CANCELED, intent);
-        finish();
-    }
-
     /**
      * the following three function basic on createhabitEventActivity.
      * Handles the save button being clicked
@@ -244,4 +238,15 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
     }
 
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_CANCELED, intent);
+        finish();
+    }
+    
 }

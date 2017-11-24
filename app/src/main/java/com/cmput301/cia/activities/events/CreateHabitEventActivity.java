@@ -122,10 +122,11 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     }
 
     /**
-     * Handles the cancel button being clicked
-     * @param view
+     * Handle the back button being pressed
      */
-    public void onCancelClicked(View view){
+    @Override
+    public void onBackPressed()
+    {
         finishActivity(true);
     }
 

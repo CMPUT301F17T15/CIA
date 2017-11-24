@@ -86,6 +86,9 @@ public class HabitViewActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handle the back button being pressed
+     */
     @Override
     public void onBackPressed()
     {
