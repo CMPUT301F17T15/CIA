@@ -45,7 +45,7 @@ import java.util.Date;
  * here.
  */
 
-public class HabitEventViewActivity extends LocationRequestingActivity implements DatePickerDialog.OnDateSetListener {
+public class HabitEventViewActivity extends LocationRequestingActivity {
 
     // Intent data identifiers for activity results
     public static final String RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
@@ -71,9 +71,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity implement
 
     // the image attached to the event
     private Bitmap image;
-
-    // The date this event occurred on
-    private Date eventDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +106,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity implement
 
         updateImage();
         habitEventComment.setText(event.getComment());
-
-        eventDate = event.getDate();
         setDateText();
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
@@ -148,8 +143,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity implement
         String comment = habitEventComment.getText().toString();
 
         event.setComment(comment);
-
-        event.setDate(eventDate);
         event.setLocation(location);
         if (image != null){
             event.setBase64EncodedPhoto(ImageUtilities.imageToBase64(image));
@@ -208,42 +201,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity implement
     }
 
     /**
-     * Creates a dialog so that the user can choose a date instead of typing
-     * see: DatePickerUtilities
-     * @param v: the layout that it's coming from
-     */
-    public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    /** for the date selected
-     * @param datePicker : the widget object for selecting a date
-     * @param year : the year chosen
-     * @param month : the month chosen
-     * @param day : the day chosen
-     * see: DatePickerUtilities
-     */
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        final Calendar calendar = Calendar.getInstance();
-
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-
-        Date date = calendar.getTime();
-        Date currentDate = new Date();
-
-        // Prevent the event's date from being a date in the future
-        if (currentDate.before(date))
-            date = currentDate;
-
-        eventDate = date;
-        setDateText();
-    }
-
-    /**
      * Reset the image view to nothing
      * @param view
      */
@@ -264,7 +221,7 @@ public class HabitEventViewActivity extends LocationRequestingActivity implement
      * Update the view displaying the event's date in text form
      */
     private void setDateText(){
-        habitEventDate.setText(DateUtilities.formatDate(eventDate));
+        habitEventDate.setText(DateUtilities.formatDate(event.getDate()));
     }
 
     /**
