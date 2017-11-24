@@ -50,7 +50,12 @@
         <activity android:name=".activities.users.ViewFollowedUsersActivity" />
         <activity android:name=".activities.users.SearchUsersActivity" />
 
-        <activity android:name=".activities.users.FollowRequestsActivity" />
+        <activity android:name=".activities.users.FollowRequestsActivity" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity android:name=".activities.users.FollowerHistoryActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
