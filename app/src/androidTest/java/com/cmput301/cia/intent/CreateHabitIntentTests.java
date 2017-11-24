@@ -54,8 +54,8 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
 
         solo.clickOnButton("Clear");
         solo.sleep(1000);
-        assertTrue(solo.getEditText(1).getText().equals(""));
-        assertTrue(solo.getEditText(0).getText().equals(""));
+        assertTrue(solo.getEditText(1).getText().toString().equals(""));
+        assertTrue(solo.getEditText(0).getText().toString().equals(""));
     }
 
     public void testAdd() throws NoSuchFieldException, IllegalAccessException {
