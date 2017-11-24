@@ -10,9 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.LocationRequestingActivity;
+import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
@@ -33,14 +31,13 @@ import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 12 2017
+ * @version 4
+ * Date: Nov 23 2017
  *
  * This class represents the activity for creating a new habit event
  */
