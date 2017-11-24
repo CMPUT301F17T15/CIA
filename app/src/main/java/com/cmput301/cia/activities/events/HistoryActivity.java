@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.LocationRequestingActivity;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
 import com.cmput301.cia.models.Habit;
@@ -47,7 +48,7 @@ import java.util.List;
  * This activity allows the user to view all of their completed habit events
  */
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends LocationRequestingActivity {
 
     // Intent data identifier for the passed in profile
     public static final String ID_PROFILE = "Profile";
@@ -247,15 +248,28 @@ public class HistoryActivity extends AppCompatActivity {
     public void onMapViewClicked(View view){
         // switch into map mode
         if (historyList.getVisibility() == View.VISIBLE){
-            historyList.setVisibility(View.INVISIBLE);
-            map.setVisibility(View.VISIBLE);
-            updateMap();
-
-
+            requestLocationPermissions();
         } else {    // switch into list mode
             historyList.setVisibility(View.VISIBLE);
             map.setVisibility(View.INVISIBLE);
         }
     }
+
+
+    /**
+     * Handle the results of the request location permissions
+     * @param granted whether permission was granted or not to use the user's location
+     */
+    @Override
+    public void handleLocationResponse(boolean granted) {
+        if (granted){
+            historyList.setVisibility(View.INVISIBLE);
+            map.setVisibility(View.VISIBLE);
+            updateMap();
+        } else {
+            Toast.makeText(this, "Can not access map view without granting permission", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

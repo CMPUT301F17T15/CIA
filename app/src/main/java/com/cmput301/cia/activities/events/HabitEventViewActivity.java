@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.LocationRequestingActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
@@ -44,8 +45,9 @@ import java.util.Date;
  * here.
  */
 
-public class HabitEventViewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class HabitEventViewActivity extends LocationRequestingActivity implements DatePickerDialog.OnDateSetListener {
 
+    // Intent data identifiers for activity results
     public static final String RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
 
     // All images can be at most this number of bytes
@@ -54,13 +56,14 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
 
+    // views visible on the UI
     private TextView habitEventDate;
     private TextView habitEventLocation;
     private ImageView habitEventPhoto;
     private EditText habitEventComment;
-
     private Button resetImageButton;
 
+    // the event being displayed
     private HabitEvent event;
 
     // the location the event occurred at
@@ -254,8 +257,7 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
      * @param view
      */
     public void onAttachLocationClicked(View view){
-        location = DeviceUtilities.getLocation(this);
-        habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+        requestLocationPermissions();
     }
 
     /**
@@ -281,4 +283,15 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
             resetImageButton.setVisibility(View.INVISIBLE);
         }
     }
+
+    /**
+     * Handle the results of the request location permissions
+     * @param granted whether permission was granted or not to use the user's location
+     */
+    @Override
+    protected void handleLocationResponse(boolean granted) {
+        location = DeviceUtilities.getLocation(this);
+        habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+    }
+
 }
