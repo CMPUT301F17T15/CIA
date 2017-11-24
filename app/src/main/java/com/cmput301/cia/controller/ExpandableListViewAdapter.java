@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia.activities;
+package com.cmput301.cia.controller;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -29,8 +29,11 @@ import java.util.Set;
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private Context context;
+
+    // the signed in user
     private Profile user;
 
+    // the habit categories the user has created
     private Set<String> categories;
 
     public ExpandableListViewAdapter(Context context, Profile user){
@@ -39,14 +42,21 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         refresh();
     }
 
+    /**
+     * @return the number of habit categories
+     */
     @Override
     public int getGroupCount() {
         return categories.size();
     }
 
+    /**
+     * Get the number of habits in the specified category
+     * @param i the index of the habit category
+     * @return the number of habits in the category with the specified index
+     */
     @Override
     public int getChildrenCount(int i) {
-
         int index = 0;
         for (String value : categories){
             if (index == i)
@@ -57,11 +67,20 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         throw new IndexOutOfBoundsException();
     }
 
+    /**
+     * @param i the index of the category to get
+     * @return the object representing the category at the specified index
+     */
     @Override
     public Object getGroup(int i) {
         return SetUtilities.getItemAtIndex(categories, i);
     }
 
+    /**
+     * @param i the index of the category type
+     * @param i1 the index of the child object to get within that category
+     * @return the object representing the child at the specified index
+     */
     @Override
     public Object getChild(int i, int i1) {
 
@@ -75,11 +94,20 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         throw new IndexOutOfBoundsException();
     }
 
+    /**
+     * @param i the index of the habit category
+     * @return the unique ID of the specified habit category
+     */
     @Override
     public long getGroupId(int i) {
         return i;
     }
 
+    /**
+     * @param i the index of the habit category
+     * @param i1 the index of the habit within that category
+     * @return the unique ID of the specified habit within that category
+     */
     @Override
     public long getChildId(int i, int i1) {
         return i1;
@@ -90,6 +118,14 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    /**
+     * Get the text display for a specified habit category in the list
+     * @param i the index of the habit category
+     * @param b (unused)
+     * @param view (unused)
+     * @param parent (unused)
+     * @return the view displaying the specified habit category in the list
+     */
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup parent) {
         TextView textView = new TextView(context);
@@ -100,6 +136,15 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return textView;
     }
 
+    /**
+     * Get the text display for a specified habit in the list
+     * @param i the index of the habit category
+     * @param i1 the index of the habit within that category
+     * @param b (unused)
+     * @param view (unused)
+     * @param viewGroup (unused)
+     * @return the view displaying a specified habit in the list
+     */
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final TextView textView = new TextView(context);
@@ -107,16 +152,14 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         textView.setPadding(200, 30, 30, 0);
         textView.setTextColor(Color.DKGRAY);
         textView.setTextSize(20);
-
-        /*textView.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Toast.makeText(context,"Habit " + textView.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
-
-            }
-        });*/
         return textView;
     }
 
+    /**
+     * @param i the index of the habit category
+     * @param i1 the index of the habit within that category
+     * @return whether the specified object is selectable
+     */
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return true;

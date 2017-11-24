@@ -25,8 +25,8 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * @author Adil Malik
- * @version 1
- * Date: Nov 08 2017
+ * @version 2
+ * Date: Nov 23 2017
  *
  * Tests the geolocation aspects of habit events
  * NOTE: assumes device is connected to the internet. Will not succeed if it isn't.
@@ -45,8 +45,8 @@ public class GeolocationUnitTests {
         habit2.setId("DBZ");
         habit3.setId("YYY");
 
-        Profile user = new Profile("User");
-        Profile followee = new Profile("Followee");
+        Profile user = new OfflineUnitTests.TestProfile("User");
+        Profile followee = new OfflineUnitTests.TestProfile("Followee");
 
         user.addHabit(habit);
         followee.addHabit(habit2);
