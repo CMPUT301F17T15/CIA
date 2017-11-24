@@ -31,6 +31,7 @@ import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
+import com.cmput301.cia.controller.ExpandableListViewAdapter;
 import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -38,16 +39,13 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Adil Malik, Shipin Guan
@@ -77,7 +75,7 @@ public class HomePageActivity extends AppCompatActivity {
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
 
-    private ArrayAdapter<Habit> lvc_adapter;
+    //private ArrayAdapter<Habit> lvc_adapter;
 
     // the habits the user must do today
     private List<Habit> todaysHabits;
@@ -144,12 +142,10 @@ public class HomePageActivity extends AppCompatActivity {
         // the habits the user needs to do today
         todaysHabits = user.getTodaysHabits();
 
-        // TODO: prevent the box from being unchecked
         // today's tasks listview (checkable)
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-        checkable.setAdapter(lvc_adapter);
+        resetCheckableListAdapter();
     }
 
     //button on activity_home_page bridge to activity_create_habit
@@ -252,8 +248,7 @@ public class HomePageActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         // update the today's task list
-        lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-        checkable.setAdapter(lvc_adapter);
+        resetCheckableListAdapter();
         checkCompletedEvents();
     }
 
@@ -283,8 +278,6 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 // update the today's tasks list
-                //lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-                //lvc_adapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
         }
@@ -300,10 +293,7 @@ public class HomePageActivity extends AppCompatActivity {
                 expandableListView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-                checkable.setAdapter(lvc_adapter);
-                lvc_adapter.notifyDataSetChanged();
-
+                resetCheckableListAdapter();
                 user.save();
             }
 
@@ -333,10 +323,7 @@ public class HomePageActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
 
                 todaysHabits = user.getTodaysHabits();
-                lvc_adapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
-                checkable.setAdapter(lvc_adapter);
-                lvc_adapter.notifyDataSetChanged();
-
+                resetCheckableListAdapter();
                 user.save();
 
             }
@@ -347,7 +334,7 @@ public class HomePageActivity extends AppCompatActivity {
                 user.save();
 
                 todaysHabits = user.getTodaysHabits();
-                lvc_adapter.notifyDataSetChanged();
+                checkableAdapter.notifyDataSetChanged();
                 checkCompletedEvents();
             }
         } else if (requestCode == VIEW_PROFILE){
@@ -386,7 +373,7 @@ public class HomePageActivity extends AppCompatActivity {
         // automatically check the events that have already been completed today
         for (int index = 0; index < todaysHabits.size(); ++index) {
             if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
-                checkable.performItemClick(lvc_adapter.getView(index, null, null), index, lvc_adapter.getItemId(index));
+                checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
             }
         }
 
@@ -396,7 +383,6 @@ public class HomePageActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // This item is already clicked, prevent it from being disabled
-                // TODO: get this to work
                 if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
                     return;
                 }
@@ -409,6 +395,14 @@ public class HomePageActivity extends AppCompatActivity {
                 startActivityForResult(intent, CREATE_EVENT);
             }
         });
+    }
+
+    /**
+     * Update the checkable list view adapter for the "today's tasks" list
+     */
+    private void resetCheckableListAdapter(){
+        checkableAdapter = new CheckableListViewAdapter(this, R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
+        checkable.setAdapter(checkableAdapter);
     }
 
 }
