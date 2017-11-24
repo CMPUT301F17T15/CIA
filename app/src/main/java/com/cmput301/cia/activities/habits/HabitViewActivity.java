@@ -49,7 +49,6 @@ public class HabitViewActivity extends AppCompatActivity {
 
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
         Button editButton = (Button) findViewById(R.id.EditHabitButton);
-        Button finishButton = (Button)findViewById(R.id.dhdReturnButton);
 
         //Create custom tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
@@ -85,18 +84,19 @@ public class HabitViewActivity extends AppCompatActivity {
                 startActivityForResult(editIntent, 1);
             }
         });
+    }
 
-        finishButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent();
-                intent.putExtra("Habit", habit);
-                intent.putExtra("Deleted", false);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent();
+        intent.putExtra("Habit", habit);
+        intent.putExtra("Deleted", false);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     /**

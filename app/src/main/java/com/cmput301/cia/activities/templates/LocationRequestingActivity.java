@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 
@@ -45,29 +46,36 @@ public abstract class LocationRequestingActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case REQUEST_LOCATION: {
-                handleLocationResponse(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
+                handleLocationPermissionRequest(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 return;
             }
         }
     }
 
-    /**
-     * Handle the results of the request location permissions
-     * @param granted whether permission was granted or not to use the user's location
-     */
-    protected abstract void handleLocationResponse(boolean granted);
+    private void handleLocationPermissionRequest(boolean granted){
+        if (granted){
+            handleLocationGranted();
+        } else {
+            Toast.makeText(this, "Some features are unavailable without location permissions", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     /**
      * Request the permission to use the user's device location
-     * Note: the results should be handled by overriding handleLocationResponse()
+     * Note: the results should be handled by overriding handleLocationGranted()
      */
     protected void requestLocationPermissions(){
         // Request permissions for the GPS service if not granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
-            handleLocationResponse(true);
+            handleLocationGranted();
         }
     }
+
+    /**
+     * Handle the results of the request location permission being granted
+     */
+    protected abstract void handleLocationGranted();
 
 }

@@ -131,8 +131,8 @@
         android:id="@+id/vheSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="36dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="169dp"
         android:onClick="onSaveClicked"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,21 +142,10 @@
         android:id="@+id/vheDeleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="141dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="266dp"
         android:onClick="onDeleteClicked"
         android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/vheCancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="257dp"
-        android:onClick="onCancelClicked"
-        android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
