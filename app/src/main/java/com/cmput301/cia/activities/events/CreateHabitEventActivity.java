@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.LocationRequestingActivity;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
@@ -44,7 +45,7 @@ import java.util.Date;
  * This class represents the activity for creating a new habit event
  */
 
-public class CreateHabitEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class CreateHabitEventActivity extends LocationRequestingActivity implements DatePickerDialog.OnDateSetListener {
 
     // The name of the intent data representing the owning habit's name, id, and index in the display list
     public static final String ID_HABIT_NAME = "Habit", ID_HABIT_HASH = "HabitID";//, ID_HABIT_INDEX = "Index";
@@ -224,8 +225,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * @param view
      */
     public void onAttachLocationClicked(View view){
-        location = DeviceUtilities.getLocation(this);
-        locationText.setText(DeviceUtilities.getLocationName(this, location));
+        requestLocationPermissions();
     }
 
     /**
@@ -278,6 +278,20 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         intent.putExtra(ID_HABIT_HASH, habitId);
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    /**
+     * Handle the results of the request location permissions
+     * @param granted whether permission was granted or not to use the user's location
+     */
+    @Override
+    protected void handleLocationResponse(boolean granted) {
+        if (granted){
+            location = DeviceUtilities.getLocation(this);
+            locationText.setText(DeviceUtilities.getLocationName(this, location));
+        } else {
+            Toast.makeText(this, "Permission for accessing location was not granted", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
