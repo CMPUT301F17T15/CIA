@@ -71,8 +71,8 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<MainAc
         solo.clickOnMenuItem("Habit History");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-        solo.clickOnButton("Return");
-        solo.sleep(300);
+        solo.goBack();
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // TODO: power rankings

@@ -18,6 +18,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,17 +66,6 @@ public class SearchUsersActivity extends AppCompatActivity {
         userList = (ListView)findViewById(R.id.searchUsersList);
         nameEditText = (EditText)findViewById(R.id.searchNameDynamicText);
 
-        Button finish = (Button)findViewById(R.id.searchFinishButton);
-        finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.putExtra(RETURNED_PROFILE, user);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
         Button search = (Button)findViewById(R.id.searchSearchButton);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +88,17 @@ public class SearchUsersActivity extends AppCompatActivity {
         });
 
         users = new ArrayList<>();
+    }
+
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(RETURNED_PROFILE, user);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
