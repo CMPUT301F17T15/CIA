@@ -236,11 +236,10 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
     }
 
     /**
-     * Handle the results of the request location permissions
-     * @param granted whether permission was granted or not to use the user's location
+     * Handle the results of the request location permission being granted
      */
     @Override
-    protected void handleLocationResponse(boolean granted) {
+    protected void handleLocationGranted() {
         location = DeviceUtilities.getLocation(this);
         habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
     }

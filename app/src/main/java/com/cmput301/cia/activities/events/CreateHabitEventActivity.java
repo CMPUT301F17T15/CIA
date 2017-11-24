@@ -279,16 +279,11 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
     /**
      * Handle the results of the request location permissions
-     * @param granted whether permission was granted or not to use the user's location
      */
     @Override
-    protected void handleLocationResponse(boolean granted) {
-        if (granted){
-            location = DeviceUtilities.getLocation(this);
-            locationText.setText(DeviceUtilities.getLocationName(this, location));
-        } else {
-            Toast.makeText(this, "Permission for accessing location was not granted", Toast.LENGTH_SHORT).show();
-        }
+    protected void handleLocationGranted() {
+        location = DeviceUtilities.getLocation(this);
+        locationText.setText(DeviceUtilities.getLocationName(this, location));
     }
 
 }

@@ -256,18 +256,13 @@ public class HistoryActivity extends LocationRequestingActivity {
 
 
     /**
-     * Handle the results of the request location permissions
-     * @param granted whether permission was granted or not to use the user's location
+     * Handle the results of the request location permission being granted
      */
     @Override
-    public void handleLocationResponse(boolean granted) {
-        if (granted){
-            historyList.setVisibility(View.INVISIBLE);
-            map.setVisibility(View.VISIBLE);
-            updateMap();
-        } else {
-            Toast.makeText(this, "Can not access map view without granting permission", Toast.LENGTH_SHORT).show();
-        }
+    public void handleLocationGranted() {
+        historyList.setVisibility(View.INVISIBLE);
+        map.setVisibility(View.VISIBLE);
+        updateMap();
     }
 
 
