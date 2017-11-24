@@ -49,6 +49,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     EditText startDate;
     MaterialDayPicker dayPicker;
     Spinner spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
             }
             type.add("Create new type");
         }
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, type);
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, type);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
@@ -95,6 +96,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                         public void onClick(View view){
                             if (!minput.getText().toString().isEmpty()){
                                 type.add(0, minput.getText().toString());
+                                spinnerAdapter.notifyDataSetChanged();
                                 dialog.dismiss();
                             }else{
                                 Toast.makeText(CreateHabitActivity.this, "Please enter the type name", Toast.LENGTH_SHORT).show();
