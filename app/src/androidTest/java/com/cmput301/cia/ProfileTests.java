@@ -34,8 +34,8 @@ public class ProfileTests {
      */
     @Test
     public void testAddRequest(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         assertTrue(profile.hasFollowRequest(request));
         assertFalse(request.hasFollowRequest(profile));
@@ -43,8 +43,8 @@ public class ProfileTests {
 
     @Test
     public void testRemoveRequest(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.removeFollowRequest(request);
         assertFalse(profile.hasFollowRequest(request));
@@ -52,8 +52,8 @@ public class ProfileTests {
 
     @Test
     public void testFollowing(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
         assertFalse(profile.hasFollowRequest(request));
@@ -63,8 +63,8 @@ public class ProfileTests {
 
     @Test
     public void testFollowedHistory(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
         List<HabitEvent> eventList = request.getFollowedHabitHistory();
@@ -81,7 +81,7 @@ public class ProfileTests {
     @Test
     public void testCategories(){
 
-        Profile profile = new Profile("N");
+        Profile profile = new TestProfile("N");
 
         // no categories to start off with
         assertTrue(profile.getHabitCategories().size() == 0);
@@ -104,7 +104,7 @@ public class ProfileTests {
     @Test
     public void testOnDayEnd(){
 
-        Profile profile = new Profile("NewProfile");
+        Profile profile = new TestProfile("NewProfile");
 
         List<Integer> days = new ArrayList<>();
         for (int i = 1; i <= 7; ++i)

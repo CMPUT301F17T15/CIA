@@ -545,7 +545,7 @@ public class ElasticSearchUtilities {
         StringBuilder builder = new StringBuilder();
 
         // TODO: test when there is more than 10 results
-        builder.append("{\"query\": {\"_id\": {\"values\": [");
+        builder.append("{\"query\": {\"ids\": {\"values\": [");
         for (String id : ids){
             builder.append("\"" + id + "\"");
             // add a comma if this is not the last ID
