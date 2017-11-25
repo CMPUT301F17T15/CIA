@@ -5,6 +5,7 @@
 package com.cmput301.cia.models;
 
 import android.location.Location;
+import android.util.Pair;
 
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -169,20 +170,48 @@ public class Profile extends ElasticSearchable {
      * @return whether the specified user has requested to follow this user
      */
     public boolean hasFollowRequest(Profile profile){
-        return followRequests.contains(profile);
+
+        for (String id : followRequests){
+            if (id.equals(profile.getId()))
+                return true;
+        }
+
+        return false;
     }
 
     /**
      * Remove the follow request from the specified user
-     * @param profile the user sending the request
+     * @param profile the user to remove a request from
      */
     public void removeFollowRequest(Profile profile){
-        followRequests.remove(profile);
+
+        Iterator<String> it = followRequests.iterator();
+        while (it.hasNext()){
+            if (it.next().equals(profile.getId())){
+                it.remove();
+                return;
+            }
+        }
     }
 
     /**
      * Accept a follow request from the specified user
-     * @param profile the user sending the request
+     * @param profile the user to accept a request from
+     */
+    /*public void acceptFollowRequest(String id){
+
+        Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, id);
+        if (result.first != null){
+            result.first.follow(this);
+            result.first.save();
+        }
+
+        removeFollowRequest(id);
+    }*/
+
+    /**
+     * Accept a follow request from the specified user
+     * @param profile the user to accept a request from
      */
     public void acceptFollowRequest(Profile profile){
         profile.follow(this);
@@ -346,7 +375,13 @@ public class Profile extends ElasticSearchable {
      * @return whether this user is following the specified profile
      */
     public boolean isFollowing(Profile profile){
-        return following.contains(profile);
+
+        for (String id : following){
+            if (id.equals(profile.getId()))
+                return true;
+        }
+
+        return false;
     }
 
     /**

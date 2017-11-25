@@ -5,10 +5,13 @@
 package com.cmput301.cia;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Pair;
+
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,13 +20,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by WTH on 2017-10-22.
+ * @author Tinghui, Adil Malik
+ * @version 3
+ * Date: Nov 24 2017
+ *
+ * Unit tests for the profile class
+ * NOTE: These tests require an internet connection or they will fail
  */
 
 @RunWith(AndroidJUnit4.class)
@@ -34,54 +44,105 @@ public class ProfileTests {
      */
     @Test
     public void testAddRequest(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         assertTrue(profile.hasFollowRequest(request));
         assertFalse(request.hasFollowRequest(profile));
+        assertFalse(profile.isFollowing(request));
+        assertFalse(request.isFollowing(profile));
     }
 
     @Test
     public void testRemoveRequest(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.removeFollowRequest(request);
         assertFalse(profile.hasFollowRequest(request));
+        assertFalse(profile.isFollowing(request));
+        assertFalse(request.isFollowing(profile));
     }
 
     @Test
     public void testFollowing(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+        Profile profile = new TestProfile("name");
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
+
+        // remove the request
         assertFalse(profile.hasFollowRequest(request));
-        assertTrue(request.isFollowing(profile));
         assertFalse(request.hasFollowRequest(profile));
+
+        // request is following profile, but not the other way around
+        assertTrue(request.isFollowing(profile));
+        assertFalse(profile.isFollowing(request));
+
+        request.addFollowRequest(profile);
+        request.acceptFollowRequest(profile);
+
+        // remove the request
+        assertFalse(profile.hasFollowRequest(request));
+        assertFalse(request.hasFollowRequest(profile));
+
+        // now both are following each other
+        assertTrue(request.isFollowing(profile));
+        assertTrue(profile.isFollowing(request));
     }
 
     @Test
-    public void testFollowedHistory(){
-        Profile profile = new Profile("name");
-        Profile request = new Profile("Mike");
+    public void testFollowedHistory() throws InterruptedException {
+
+        Map<String, String> searchTerms = new HashMap<>();
+        searchTerms.put("name", "nowitenz3");
+        Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+        assertTrue(result.first != null && result.second);        // if this fails then there was a connection error
+        Profile profile = result.first;
+
+        Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
         List<HabitEvent> eventList = request.getFollowedHabitHistory();
-        assertTrue(eventList.size() == 0);
-        assertTrue(profile.getFollowedHabitHistory().size() == 0);
-        profile.addHabit(new Habit("XTZ", "", new Date(), new ArrayList<Integer>(), ""));
-        assertTrue(request.getFollowedHabitHistory().size() == 0);
-        profile.getHabits().get(0).addHabitEvent(new HabitEvent("XYZ"));
+
+        // only the most recent event should be visible to the follower, so count how much that should be
+        int correctSize = 0;
+        for (Habit habit : profile.getHabits()){
+            if (habit.getLastCompletionDate() != null)
+                ++correctSize;
+        }
+
+        assertTrue(eventList.size() == correctSize);
+
+        profile.addHabit(new Habit("ProfileTests Habit", "", new Date(), new ArrayList<Integer>(), "test"));
+        profile.getHabits().get(profile.getHabitsCount() - 1).addHabitEvent(new HabitEvent("XYZ"));
+
+        // TODO: assertTrue(save)
+        profile.save();
+        Thread.sleep(1000);
+
         eventList = request.getFollowedHabitHistory();
-        assertTrue(eventList.size() == 1);
-        assertTrue(profile.getFollowedHabitHistory().size() == 0);
+
+        // a new event is added, so the list size should increase by 1
+        assertTrue(eventList.size() == correctSize + 1);
+        assertTrue(request.getHabitHistory().size() == 0);
+
+        // still the same size, because the new event is now the most recent one
+        profile.getHabits().get(profile.getHabitsCount() - 1).addHabitEvent(new HabitEvent("XYZ"));
+
+        // TODO: assertTrue(save)
+        profile.save();
+        Thread.sleep(1000);
+
+        eventList = request.getFollowedHabitHistory();
+
+        assertTrue(eventList.size() == correctSize + 1);
     }
 
     @Test
     public void testCategories(){
 
-        Profile profile = new Profile("N");
+        Profile profile = new TestProfile("N");
 
         // no categories to start off with
         assertTrue(profile.getHabitCategories().size() == 0);
@@ -104,7 +165,7 @@ public class ProfileTests {
     @Test
     public void testOnDayEnd(){
 
-        Profile profile = new Profile("NewProfile");
+        Profile profile = new TestProfile("NewProfile");
 
         List<Integer> days = new ArrayList<>();
         for (int i = 1; i <= 7; ++i)
