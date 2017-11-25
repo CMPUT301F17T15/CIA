@@ -64,7 +64,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.users.ViewNearbyEventsActivity"
+            android:name=".activities.users.ViewEventsMapActivity"
             android:label="@string/title_activity_view_nearby_events">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
+import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
 import com.cmput301.cia.models.Habit;
@@ -64,7 +65,6 @@ public class HistoryActivity extends LocationRequestingActivity {
     private EditText filterEditText;
     private CheckBox useHabit;
     private TextView filterHabitText;
-    private MapView map;
 
     // The user who is viewing their habit history
     private Profile user;
@@ -80,12 +80,12 @@ public class HistoryActivity extends LocationRequestingActivity {
         user = (Profile) getIntent().getSerializableExtra(ID_PROFILE);
         filterHabit = null;
 
+        findViewById(R.id.historyLayout).requestFocus();
+
         historyList = (ListView) findViewById(R.id.historyList);
         filterEditText = (EditText) findViewById(R.id.filterEditText);
         useHabit = (CheckBox)findViewById(R.id.historyTypeCheckbox);
         filterHabitText = (TextView)findViewById(R.id.historyFilterHabitText);
-        map = (MapView)findViewById(R.id.historyMapView);
-        map.onCreate(savedInstanceState);
 
         Button eventButton = (Button) findViewById(R.id.historyEventButton);
         Button filter = (Button) findViewById(R.id.historyFilterButton);
@@ -106,7 +106,6 @@ public class HistoryActivity extends LocationRequestingActivity {
                     Toast.makeText(HistoryActivity.this, "No filter habit was selected. Checkbox is ignored.", Toast.LENGTH_SHORT).show();
                 }
                 convertEventsToString();
-                updateMap();
             }
         });
 
@@ -200,66 +199,23 @@ public class HistoryActivity extends LocationRequestingActivity {
     }
 
     /**
-     * Update the markers displayed on the map
-     */
-    // TODO: zoom out the map to show all marked locations
-    private void updateMap(){
-        map.getMapAsync(new OnMapReadyCallback() {
-
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                googleMap.clear();              // remove all markers from the map
-                // add marker for all habit events with locations
-                for (HabitEvent habitEvent : getDisplayedEvents()){
-                    Location location = habitEvent.getLocation();
-                    if (location != null){
-                        Pair<Habit, Boolean> habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, habitEvent.getHabitId());
-                        String habitTitle = habit.first == null ? "" : habit.first.getTitle();
-                        LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
-                        googleMap.addMarker(new MarkerOptions().position(coordinates).title("Completed " + habitTitle + " at " + DeviceUtilities.getLocationName(HistoryActivity.this, location)));
-                    }
-                }
-
-                // move the map to the device's current location
-                Location deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                if (deviceLoc == null){
-                    deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                }
-                // try to get the location a second time
-                if (deviceLoc == null){
-                    deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(deviceLoc.getLatitude(), deviceLoc.getLongitude()), 50));
-                map.onResume();
-            }
-        });
-
-    }
-
-    /**
      * Switch the habit history view type into map view if it is in list view, or into list view if it is in map view
      * @param view
      * @since Version 2
      */
     public void onMapViewClicked(View view){
-        // switch into map mode
-        if (historyList.getVisibility() == View.VISIBLE){
-            requestLocationPermissions();
-        } else {    // switch into list mode
-            historyList.setVisibility(View.VISIBLE);
-            map.setVisibility(View.INVISIBLE);
-        }
+        // switch into map mode if permission is granted
+        requestLocationPermissions();
     }
-
 
     /**
      * Handle the results of the request location permission being granted
      */
     @Override
     public void handleLocationGranted() {
-        historyList.setVisibility(View.INVISIBLE);
-        map.setVisibility(View.VISIBLE);
-        updateMap();
+        Intent intent = new Intent(this, ViewEventsMapActivity.class);
+        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) getDisplayedEvents());
+        startActivity(intent);
     }
 
     /**
