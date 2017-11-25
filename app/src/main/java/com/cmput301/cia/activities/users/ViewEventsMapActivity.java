@@ -56,15 +56,8 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
 
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Add map markers for all events that have valid locations
      */
-    // TODO: zoom out the map to show all marked locations
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -75,7 +68,7 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
                 String habitTitle = habit.first == null ? "habit" : habit.first.getTitle();
 
                 if (habit.first == null)
-                    Toast.makeText(this, "Connection to the database was lost.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Connection to the database was lost. Can't access habit name.", Toast.LENGTH_LONG).show();
 
                 LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(coordinates).title("Completed " + habitTitle + " at " + DeviceUtilities.getLocationName(this, location)));
@@ -84,6 +77,7 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
         }
 
         // move the map to the device's current location
+        // TODO: zoom out the map to show all marked locations
         Location deviceLoc = DeviceUtilities.getLocation(this);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(deviceLoc.getLatitude(), deviceLoc.getLongitude()), 50));
     }

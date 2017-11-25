@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.events.HabitEventViewActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
@@ -39,8 +40,7 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
     }
 
     public void setUp() throws Exception{
-        Profile profile = new Profile("xyz");
-        profile.setId("A");
+        Profile profile = new TestProfile("xyz");
         Habit habit = new Habit("T1", "", new Date(), new ArrayList<Integer>(), "");
         habit.setId("one");
         habit.addHabitEvent(new HabitEvent(""));
@@ -55,6 +55,9 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
         Log.d("SETUP", "setUp()");
     }
 
+    /**
+     * Test to make sure the edit button actually modifies the event
+     */
     public void testEdit(){
 
         if (((ListView)solo.getView(R.id.historyList)).getAdapter().getCount() > 0){
@@ -77,6 +80,9 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
         }
     }
 
+    /**
+     * Test to make sure changes to the event are not saved when the return button is pressed
+     */
     public void testCancel(){
         // change the comment to "newcomment" just for testing purposes
         testEdit();
@@ -102,6 +108,28 @@ public class ViewHabitEventIntentTests extends ActivityInstrumentationTestCase2<
             assertTrue(((EditText)solo.getView(R.id.vheCommentDynamicText)).getText().toString().equals("newcomment"));
 
         }
+    }
+
+    /**
+     * Test to make sure the delete button deletes the event
+     */
+    public void testDelete(){
+
+        // view the event
+        solo.clickInList(1, 0);
+        solo.sleep(2000);
+        solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
+
+        solo.clickOnButton("Delete");
+        solo.sleep(1000);
+        // confirm deletion dialog
+        solo.clickOnView(solo.getView(android.R.id.button1));
+        solo.sleep(3000);
+        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
+
+        // make sure the event was deleted
+        assertTrue(((ListView)solo.getView(R.id.historyList)).getAdapter().getCount() == 0);
+
     }
 
     @Override

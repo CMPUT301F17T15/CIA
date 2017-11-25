@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.activities.habits;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,11 +69,29 @@ public class HabitViewActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("Deleted", true);
-                returnIntent.putExtra("HabitID", habit.getId());
-                setResult(RESULT_OK, returnIntent);
-                finish();
+
+                /**
+                 * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+                 */
+                // Ask the user for confirmation before a habit is deleted
+                AlertDialog.Builder dialog = new AlertDialog.Builder(HabitViewActivity.this);
+                dialog.setTitle("Are you sure you want to delete this habit?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("Deleted", true);
+                        returnIntent.putExtra("HabitID", habit.getId());
+                        setResult(RESULT_OK, returnIntent);
+                        finish();
+                    }
+                });
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                dialog.show();
             }
         });
 

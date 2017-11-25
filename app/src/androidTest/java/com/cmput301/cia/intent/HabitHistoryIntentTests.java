@@ -4,78 +4,81 @@
 
 package com.cmput301.cia.intent;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.EditText;
 import android.widget.ListView;
 
-import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.events.FilterEventsActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Version 1
+ * Version 2
  * Author: Adil Malik
- * Date: Nov 13 2017
+ * Date: Nov 24 2017
  *
  * This class tests the UI for the habit history
- * NOTE: These tests require an internet connection
  */
 
-public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
+public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<HistoryActivity> {
     private Solo solo;
 
     public HabitHistoryIntentTests(){
-        super(com.cmput301.cia.activities.MainActivity.class);
+        super(HistoryActivity.class);
     }
 
     public void setUp() throws Exception{
+        Profile profile = new TestProfile("xyz");
+        Habit habit = new Habit("T1", "", new Date(), new ArrayList<Integer>(), "");
+        habit.setId("one");
+        habit.addHabitEvent(new HabitEvent(""));
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(1991, 10, 10);
+
+        habit.addHabitEvent(new HabitEvent("test", calendar.getTime()));
+        habit.addHabitEvent(new HabitEvent(""));
+        habit.getEvents().get(0).setId("two");
+        habit.getEvents().get(1).setId("two");
+        profile.addHabit(habit);
+
+        Habit habit2 = new Habit("X95", "", new Date(), new ArrayList<Integer>(), "");
+        habit2.setId("h2");
+        habit2.addHabitEvent(new HabitEvent("", calendar.getTime()));
+        habit2.addHabitEvent(new HabitEvent("test"));
+        habit2.getEvents().get(0).setId("three");
+        habit2.getEvents().get(1).setId("four");
+        profile.addHabit(habit2);
+
+        Intent intent = new Intent();
+        intent.putExtra(HistoryActivity.ID_PROFILE, profile);
+        setActivityIntent(intent);
+
         solo = new Solo(getInstrumentation(), getActivity());
-        // login and navigate to habit history
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
-        solo.clickOnButton("Login");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
-        solo.clickOnMenuItem("Habit History");
-        solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
     }
 
-    public void testNavigation()throws Exception{
-        // test current activity
-        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-        // test return button works?
-        solo.goBack();
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-
-        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
-        solo.clickOnMenuItem("Habit History");
-        solo.sleep(1000);
-
-        // test habits button words?
+    public void testNavigation() throws Exception {
         solo.clickOnButton("Habits");
-        solo.sleep(1000);
+        solo.sleep(2000);
         solo.assertCurrentActivity("wrong activity", FilterEventsActivity.class);
     }
 
-    public void testCheck()throws Exception{
-        // test can check works?
-        assertEquals("Filter is Selected",false, solo.isCheckBoxChecked("Type"));
-        // if click?
+    public void testFilters() throws Exception {
+
         solo.clickOnCheckBox(0);
-        solo.sleep(300);
-        assertEquals("Filter is not Selected",true, solo.isCheckBoxChecked("Type"));
 
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("historyList");
         field.setAccessible(true);
@@ -95,6 +98,8 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         for (HabitEvent event : events){
             assertTrue(event.getComment().contains("test"));
         }
+        // the user has 2 habit events containing test as the comment
+        assertTrue(events.size() == 2);
 
         solo.clickOnButton("Habits");
         solo.sleep(1000);
@@ -110,6 +115,9 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         Habit filter = (Habit)habitField.get(solo.getCurrentActivity());
         assertTrue(filter != null);
 
+        solo.clickOnButton("Filter");
+        solo.sleep(1000);
+
         // make sure all displayed events are now of the same type as the filter habit
         events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
         for (HabitEvent event : events){
@@ -117,7 +125,10 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         }
 
         solo.clickOnCheckBox(0);
-        solo.sleep(300);
+        solo.sleep(600);
+
+        solo.clickOnButton("Filter");
+        solo.sleep(1000);
 
         // now filtering by text again
         events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
@@ -159,7 +170,7 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2 {
         for (HabitEvent event : events){
             // make sure this event was earlier, since it is in descending order
             if (previousDate != null)
-                assertTrue(event.getDate().before(previousDate));
+                assertFalse(previousDate.before(event.getDate()));
             previousDate = event.getDate();
         }
 

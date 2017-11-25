@@ -45,8 +45,8 @@ public class GeolocationUnitTests {
         habit2.setId("DBZ");
         habit3.setId("YYY");
 
-        Profile user = new OfflineUnitTests.TestProfile("User");
-        Profile followee = new OfflineUnitTests.TestProfile("Followee");
+        Profile user = new TestProfile("User");
+        Profile followee = new TestProfile("Followee");
 
         user.addHabit(habit);
         followee.addHabit(habit2);

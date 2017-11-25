@@ -94,7 +94,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         eventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(HistoryActivity.this, FilterEventsActivity.class);
-                intent.putExtra(FilterEventsActivity.ID_USER, user.getId());
+                intent.putExtra(FilterEventsActivity.ID_USER, user);
                 startActivityForResult(intent, FILTER_CODE);
             }
         });

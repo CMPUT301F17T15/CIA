@@ -5,6 +5,8 @@
 package com.cmput301.cia.activities.events;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -73,25 +76,25 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_event_view);
-        /**
-         * display habit event information.
-         */
-        Intent intent = getIntent();
 
-        TextView habitEventName = (TextView) findViewById(R.id.vheHabitNameText);
+        // load views
+        TextView habitName = (TextView) findViewById(R.id.vheHabitNameText);
         habitEventDate = (TextView) findViewById(R.id.vheDateDynamicText);
         habitEventLocation = (TextView) findViewById(R.id.vheLocationDynamicText);
         habitEventPhoto = (ImageView) findViewById(R.id.vhePhotoImage);
         habitEventComment = (EditText) findViewById(R.id.vheCommentDynamicText);
         resetImageButton = (Button)findViewById(R.id.vheResetImageButton);
 
+        // get event information
+        Intent intent = getIntent();
         event = (HabitEvent) intent.getSerializableExtra(ID_HABIT_EVENT);
-        habitEventName.setText(intent.getStringExtra(ID_HABIT_NAME));
+        habitName.setText(intent.getStringExtra(ID_HABIT_NAME));
 
         location = event.getLocation();
         if (location != null)
             habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
 
+        // display the image if one is selected
         if (!event.getBase64EncodedPhoto().equals("")){
             image = ImageUtilities.base64ToImage(event.getBase64EncodedPhoto());
         } else
@@ -117,7 +120,25 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
      * @param view
      */
     public void onDeleteClicked(View view){
-        finishActivity(true);
+
+        /**
+         * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+         */
+        // Ask the user for confirmation before a habit event is deleted
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Are you sure you want to delete this event?");
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishActivity(true);       // delete the event
+            }
+        });
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -241,8 +262,7 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
      * Handle the back button being pressed
      */
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         Intent intent = new Intent();
         setResult(Activity.RESULT_CANCELED, intent);
         finish();

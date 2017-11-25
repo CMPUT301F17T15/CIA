@@ -35,7 +35,7 @@ import java.util.Date;
 
 public class FilterEventsActivity extends AppCompatActivity {
 
-    // Intent identifier for the incoming user ID
+    // Intent identifier for the incoming user
     public static final String ID_USER = "User";
 
     // Intent identifier for the outgoing selected habit id
@@ -56,7 +56,7 @@ public class FilterEventsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter_events);
 
         Intent data = getIntent();
-        user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, data.getStringExtra(ID_USER)).first;
+        user = (Profile) data.getSerializableExtra(ID_USER);
 
         if (user == null){
             Toast.makeText(this, "Profile could not be retrieved from the database.", Toast.LENGTH_LONG).show();
