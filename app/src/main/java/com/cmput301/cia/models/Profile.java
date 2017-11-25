@@ -375,7 +375,13 @@ public class Profile extends ElasticSearchable {
      * @return whether this user is following the specified profile
      */
     public boolean isFollowing(Profile profile){
-        return following.contains(profile);
+
+        for (String id : following){
+            if (id.equals(profile.getId()))
+                return true;
+        }
+
+        return false;
     }
 
     /**
