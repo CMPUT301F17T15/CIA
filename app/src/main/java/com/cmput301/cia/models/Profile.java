@@ -49,11 +49,11 @@ public class Profile extends ElasticSearchable {
     // The user's list of created habits
     private List<Habit> habits;
 
-    // List of users this user is following (all elements are unique)
-    private List<Profile> following;
+    // List of the unique IDs of all users this user is following (all elements are unique)
+    private List<String> following;
 
-    // Users that have requested to follow this user (all elements are unique)
-    private List<Profile> followRequests;
+    // IDs of the users that have requested to follow this user (all elements are unique)
+    private List<String> followRequests;
 
     // Points received for consecutively completing habits
     private int powerPoints;
@@ -116,6 +116,13 @@ public class Profile extends ElasticSearchable {
      * @return list of all users this user is following
      */
     public List<Profile> getFollowing() {
+        return ElasticSearchUtilities.getListOf(getTypeId(), Profile.class, following);
+    }
+
+    /**
+     * @return list of all IDs of users this user is following
+     */
+    public List<String> getFollowingIds() {
         return following;
     }
 
@@ -140,7 +147,7 @@ public class Profile extends ElasticSearchable {
      * @param profile the user to follow
      */
     public void follow(Profile profile){
-        following.add(profile);
+        following.add(profile.getId());
     }
 
     /**
@@ -154,7 +161,7 @@ public class Profile extends ElasticSearchable {
             return;
 
         if (!hasFollowRequest(profile))
-            followRequests.add(profile);
+            followRequests.add(profile.getId());
     }
 
     /**
@@ -270,7 +277,7 @@ public class Profile extends ElasticSearchable {
         // map (event -> [user name of creator, habit title])
         final Map<HabitEvent, String[]> eventDetailsMap = new HashMap<>();
 
-        for (Profile followee : following) {
+        for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
@@ -548,7 +555,7 @@ public class Profile extends ElasticSearchable {
      * Set the users this user is following
      * @param following the list of users this user is following (non-null)
      */
-    public void setFollowing(List<Profile> following) {
+    public void setFollowing(List<String> following) {
         this.following = following;
     }
 
@@ -565,9 +572,9 @@ public class Profile extends ElasticSearchable {
      * @param followed the user to unfollow
      */
     public void unfollow(Profile followed){
-        Iterator<Profile> profile = following.iterator();
+        Iterator<String> profile = following.iterator();
         while (profile.hasNext()){
-            if (profile.next().equals(followed)){
+            if (profile.next().equals(followed.getId())){
                 profile.remove();
                 return;
             }
