@@ -394,14 +394,20 @@ public class Profile extends ElasticSearchable {
 
     /**
      * Save this profile to the database
+     * @return whether the save was successful
      */
     @Override
-    public void save(){
+    public boolean save(){
+        boolean success = true;
         for (Habit habit : habits){
-            habit.save();
+            success = success && habit.save();
         }
-        ElasticSearchUtilities.save(this);
+
+        if (success) {
+            success = ElasticSearchUtilities.save(this);
+        }
         SerializableUtilities.save(getOfflineEventsFile(), habits);
+        return success;
     }
 
     /**

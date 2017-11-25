@@ -51,8 +51,9 @@ public abstract class ElasticSearchable implements Serializable {
 
     /**
      * Serialize this object to the ElasticSearch server
+     * @return whether the object was saved successfully or not
      */
-    public abstract void save();
+    public abstract boolean save();
 
     /**
      * Synchronize this object from the ElasticSearch server
