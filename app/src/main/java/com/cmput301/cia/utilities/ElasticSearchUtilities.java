@@ -32,8 +32,8 @@ import io.searchbox.core.SearchResult;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 17 2017
+ * @version 4
+ * Date: Nov 24 2017
  *
  * Contains utilities for searching for, inserting into, and deleting from the ElasticSearch database
  */
@@ -42,6 +42,7 @@ public class ElasticSearchUtilities {
 
     // The index used to access the database
     private static final String INDEX = "cmput301f17t15_cia";
+
     // Maximum number of search results per query
     private static final int MAX_RESULTS = 10000;
 
@@ -57,7 +58,6 @@ public class ElasticSearchUtilities {
      * @return true if all of the objects were successfully inserted, false otherwise
      *
      */
-    // TODO: test case where the insert fails
     private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Boolean> {
 
         @Override

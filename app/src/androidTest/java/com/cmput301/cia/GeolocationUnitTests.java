@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Adil Malik
  * @version 2
- * Date: Nov 23 2017
+ * Date: Nov 24 2017
  *
  * Tests the geolocation aspects of habit events
  * NOTE: assumes device is connected to the internet. Will not succeed if it isn't.
@@ -79,8 +79,7 @@ public class GeolocationUnitTests {
         location.setLatitude(10.0);
         location.setLongitude(10.0);
 
-        // TODO: assert(save)
-        followee.save();
+        assertTrue(followee.save());
         Thread.sleep(1000);
 
         // no events for either user
@@ -103,7 +102,7 @@ public class GeolocationUnitTests {
 
         // add a new event for the followee -> should show up in user's nearby events list since that includes followees
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
-        followee.save();
+        assertTrue(followee.save());
         Thread.sleep(1000);
 
         assertTrue(user.getNearbyEvents(location).size() == 4);
@@ -111,7 +110,7 @@ public class GeolocationUnitTests {
 
         // add a new event for the followee that is too far away. it is the most recent event so count decreases for user
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 50.0, 50.0)));
-        followee.save();
+        assertTrue(followee.save());
         Thread.sleep(1000);
 
         assertTrue(user.getNearbyEvents(location).size() == 3);
@@ -120,7 +119,7 @@ public class GeolocationUnitTests {
         // add a new event for the followee -> the user's nearby events list size is still 4 since only the most recent event of each type
         // shows up from followed users
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
-        followee.save();
+        assertTrue(followee.save());
         Thread.sleep(1000);
 
         assertTrue(user.getNearbyEvents(location).size() == 4);
@@ -128,7 +127,7 @@ public class GeolocationUnitTests {
 
         // add a new event for the followee in a new category --> shows up for both user and followee
         followee.tryHabitEvent(new AddHabitEvent("YYY", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
-        followee.save();
+        assertTrue(followee.save());
         Thread.sleep(1000);
 
         assertTrue(user.getNearbyEvents(location).size() == 5);

@@ -30,8 +30,8 @@ public class TestProfile extends Profile {
     /**
      * Override to prevent saving
      */
-    public void save(){
-
+    public boolean save(){
+        return true;
     }
 
     /**

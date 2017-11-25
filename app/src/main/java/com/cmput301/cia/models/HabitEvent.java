@@ -194,10 +194,11 @@ public class HabitEvent extends ElasticSearchable {
 
     /**
      * Serialize this object to the ElasticSearch server
+     * @return whether the save attempt was successful or not
      */
     @Override
-    public void save() {
-        ElasticSearchUtilities.save(this);
+    public boolean save() {
+        return ElasticSearchUtilities.save(this);
     }
 
     /**
