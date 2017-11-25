@@ -4,7 +4,6 @@
 
 package com.cmput301.cia;
 
-import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 
 /**
@@ -14,6 +13,7 @@ import com.cmput301.cia.models.Profile;
  * Date: Nov 24 2017
  *
  * A mock profile class used only for testing
+ * This is created to prevent saving/loading from the database
  */
 public class TestProfile extends Profile {
 
@@ -27,10 +27,16 @@ public class TestProfile extends Profile {
         setId(id);
     }
 
+    /**
+     * Override to prevent saving
+     */
     public void save(){
 
     }
 
+    /**
+     * Override to prevent loading
+     */
     public void load(){
 
     }
