@@ -41,7 +41,7 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchUtilities {
 
     // The index used to access the database
-    private static final String INDEX = "cmput301f17t15_cia";
+    private static final String INDEX = "cmput301f17t15";
 
     // Maximum number of search results per query
     private static final int MAX_RESULTS = 10000;
