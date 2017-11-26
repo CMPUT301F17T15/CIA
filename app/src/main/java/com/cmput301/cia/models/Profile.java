@@ -299,39 +299,54 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of the most recent event for each habit of all followed users, sorted by user name and then habit title
+     * @return list of {the most recent event for each habit, user name of habit creator} of all followed users
      */
-    public List<HabitEvent> getFollowedHabitHistory(){
-        List<HabitEvent> list = new ArrayList<>();
-        // map (event -> [user name of creator, habit title])
-        final Map<HabitEvent, String[]> eventDetailsMap = new HashMap<>();
-
+    public List<Pair<HabitEvent, String>> getFollowedHabitHistory() {
+        List<Pair<HabitEvent, String>> list = new ArrayList<>();
         for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
-                    list.add(event);
-                    eventDetailsMap.put(event, new String[]{followee.getName(), habit.getTitle()});
+                    list.add(new Pair<>(event, followee.getName()));
                 }
             }
         }
 
-        // TODO: test
-        Collections.sort(list, new Comparator<HabitEvent>() {
-            @Override
-            public int compare(HabitEvent eventOne, HabitEvent eventTwo) {
+        return list;
+    }
 
-                String[] oneKeys = eventDetailsMap.get(eventOne);
-                String[] twoKeys = eventDetailsMap.get(eventTwo);
+    /**
+     * @return list of habits that followed users have created, sorted by user name and then habit title
+     */
+    public List<Habit> getFollowedHabits(){
+
+        // get all habits
+        List<Habit> list = new ArrayList<>();
+        for (Profile followee : getFollowing()) {
+            for (Habit habit : followee.getHabits()) {
+                list.add(habit);
+            }
+        }
+
+        // map (habit -> user name of creator)
+        final Map<Habit, String> eventDetailsMap = new HashMap<>();
+
+        // TODO: test
+        Collections.sort(list, new Comparator<Habit>() {
+            @Override
+            public int compare(Habit habitOne, Habit habitTwo) {
+
+                String oneUserName = eventDetailsMap.get(habitOne);
+                String twoUserName = eventDetailsMap.get(habitTwo);
 
                 // Attempt to compare based on username
-                int nameComp = oneKeys[0].compareTo(twoKeys[0]);
+                int nameComp = oneUserName.compareTo(twoUserName);
                 if (nameComp != 0){
                     return nameComp;
                 }
 
                 // Compare based on habit title
-                return oneKeys[1].compareTo(twoKeys[1]);
+                return habitOne.getTitle().compareTo(habitTwo.getTitle());
             }
         });
         return list;
@@ -510,7 +525,11 @@ public class Profile extends ElasticSearchable {
             final float MAX_DISTANCE = 5000.0f;
 
             List<HabitEvent> allEvents = getHabitHistory();
-            allEvents.addAll(getFollowedHabitHistory());
+
+            List<Pair<HabitEvent, String>> events = getFollowedHabitHistory();
+            for (Pair<HabitEvent, String> pair : events){
+                allEvents.add(pair.first);
+            }
 
             for (HabitEvent event : allEvents) {
                 Location eventLoc = event.getLocation();

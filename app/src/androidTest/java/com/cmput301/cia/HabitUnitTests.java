@@ -4,13 +4,7 @@
 
 package com.cmput301.cia;
 
-import android.app.Application;
-import android.media.Image;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ApplicationTestCase;
-
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -103,7 +104,7 @@ public class ProfileTests {
         Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
-        List<HabitEvent> eventList = request.getFollowedHabitHistory();
+        List<Pair<HabitEvent, String>> eventList = request.getFollowedHabitHistory();
 
         // only the most recent event should be visible to the follower, so count how much that should be
         int correctSize = 0;
@@ -117,9 +118,8 @@ public class ProfileTests {
         profile.addHabit(new Habit("ProfileTests Habit", "", new Date(), new ArrayList<Integer>(), "test"));
         profile.getHabits().get(profile.getHabitsCount() - 1).addHabitEvent(new HabitEvent("XYZ"));
 
-        // TODO: assertTrue(save)
-        profile.save();
-        Thread.sleep(1000);
+        assertTrue(profile.save());
+        Thread.sleep(2000);
 
         eventList = request.getFollowedHabitHistory();
 
@@ -130,9 +130,8 @@ public class ProfileTests {
         // still the same size, because the new event is now the most recent one
         profile.getHabits().get(profile.getHabitsCount() - 1).addHabitEvent(new HabitEvent("XYZ"));
 
-        // TODO: assertTrue(save)
-        profile.save();
-        Thread.sleep(1000);
+        assertTrue(profile.save());
+        Thread.sleep(2000);
 
         eventList = request.getFollowedHabitHistory();
 
@@ -210,6 +209,77 @@ public class ProfileTests {
 
         // miss it on the 7th, 8th, 10th
         assertTrue(habits.get(2).getTimesMissed() == 3);
+
+    }
+
+    @Test
+    public void testFollowedHabits(){
+
+        Map<String, String> searchTerms = new HashMap<>();
+        searchTerms.put("name", "nowitenz3");
+        Pair<Profile, Boolean> pair1 = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+        assertTrue(pair1.first != null && pair1.second);        // if this fails then there was a connection error
+
+        searchTerms.put("name", "gah");
+        Pair<Profile, Boolean> pair2 = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
+        assertTrue(pair2.first != null && pair2.second);        // if this fails then there was a connection error
+
+        Profile profile = pair1.first;
+        Profile request = pair2.first;
+        Profile profile2 = new TestProfile("awsdo");
+
+        profile.addFollowRequest(request);
+        profile.acceptFollowRequest(request);
+        profile2.addFollowRequest(request);
+        profile2.acceptFollowRequest(request);
+
+        // request is now following profile and profile2
+        assert(request.getFollowing().size() == 2);
+
+        profile.addHabit(new Habit("X", "", new Date(), Arrays.asList(1,2,3), ""));
+        profile.addHabit(new Habit("A", "", new Date(), Arrays.asList(1,2,3), ""));
+        profile.addHabit(new Habit("292", "", new Date(), Arrays.asList(1,2,3), ""));
+
+        List<Habit> habits = request.getFollowedHabits();
+        // 3 habits were just added, so the size should always be atleast 3
+        assertTrue(habits.size() >= 3);
+
+        // Verify that all of the habits are ordered by {creator name, habit title}
+
+        // name of the previous habit's creator
+        String previousName = null;
+        // the previous habit's title
+        String previousTitle = null;
+
+        List<Profile> followed = request.getFollowing();
+
+        for (Habit habit : habits){
+            String name = null;
+
+            // get the name of the user who made this habit
+            for (Profile p : followed){
+                if (p.getHabitById(habit.getId()) != null){
+                    name = p.getName();
+                    break;
+                }
+            }
+
+            // a profile should be found that contains this habit
+            assertTrue(name != null);
+
+            if (previousName != null) {
+                // if both names are the same, then the previous habit's title must be lexicographically smaller
+                if (previousName.compareTo(name) == 0){
+                    assertTrue(previousTitle.compareTo(habit.getTitle()) > 0);
+                } else {
+                    // names are different, so previous name must be lexicographically smaller
+                    assertTrue(previousName.compareTo(name) > 0);
+                }
+            }
+
+            previousName = name;
+            previousTitle = habit.getTitle();
+        }
 
     }
 
