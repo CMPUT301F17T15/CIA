@@ -6,6 +6,7 @@ package com.cmput301.cia.intent;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.EditText;
 
 import com.cmput301.cia.R;
@@ -41,9 +42,18 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
 
         Map<String, String> values = new HashMap<>();
         values.put("name", "testsignin");
-        assertTrue(ElasticSearchUtilities.delete(Profile.TYPE_ID, Profile.class, values));
+
+        // attempt to delete the test profile if it exists
+        boolean deleted = ElasticSearchUtilities.delete(Profile.TYPE_ID, Profile.class, values);
+        if (!deleted){
+            // it was not deleted, so make sure it does not exist in the database already
+            Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values);
+            assertTrue(result.first == null && result.second);
+        }
+
         solo.sleep(3000);
-        assertTrue(ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first == null);
+        Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values);
+        assertTrue(result.first == null && result.second);
     }
 
     public void testCreateProfile(){

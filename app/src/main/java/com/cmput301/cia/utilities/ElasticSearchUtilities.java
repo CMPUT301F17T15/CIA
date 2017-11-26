@@ -97,7 +97,7 @@ public class ElasticSearchUtilities {
      * - The first one is the type id of the object to search for
      * - The second one is the parameter values any result must have (ex: "name":"xyz")
      *
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     private static class SearchTask extends AsyncTask<String, Void, Pair<SearchResult, Boolean>> {
         @Override
@@ -132,7 +132,7 @@ public class ElasticSearchUtilities {
      * - The first one is the type id of the object to search for
      * - The second one is the unique id of the object to search for
      *
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
 
     private static class IDSearchTask extends AsyncTask<String, Void, Pair<SearchResult, Boolean>> {
@@ -170,7 +170,7 @@ public class ElasticSearchUtilities {
      * - The first one is the type id of the object to search for
      * - The second one is the final query to execute
      *
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     private static class SearchMultipleIDsTask extends AsyncTask<String, Void, Pair<SearchResult, Boolean>> {
         @Override
@@ -233,7 +233,7 @@ public class ElasticSearchUtilities {
      * Execute a search with ElasticSearch
      * @param typeId the type template id all results must match
      * @param query the query to execute
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     public static Pair<SearchResult, Boolean> search(String typeId, String query){
         try {
@@ -253,7 +253,7 @@ public class ElasticSearchUtilities {
      * @param typeId the type template id all results must match
      * @param query the query to execute
      * @param id the id of the object to search for
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     public static Pair<SearchResult, Boolean> search(String typeId, String query, String id){
         try {
@@ -272,7 +272,7 @@ public class ElasticSearchUtilities {
      * Execute a search with ElasticSearch for all objects that have one of the IDs specified in the query
      * @param typeId the type template id all results must match
      * @param query the query to execute
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     public static Pair<SearchResult, Boolean> searchByIds(String typeId, String query){
         try {
@@ -375,7 +375,7 @@ public class ElasticSearchUtilities {
      * @param tempClass the java class of the generic type T
      * @param values map where key=parameter and value=required record value for that parameter
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return {@nullable result, success} as a pair
+     * @return (@nullable result, success) as a pair
      */
     public static <T extends ElasticSearchable> Pair<T, Boolean> getObject(String typeId, Class<T> tempClass, Map<String, String> values){
         Pair<SearchResult, Boolean> result = search(typeId, getQueryFromMap(values));
