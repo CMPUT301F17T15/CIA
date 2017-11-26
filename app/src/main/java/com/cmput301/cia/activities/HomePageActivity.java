@@ -61,7 +61,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     // Codes to keep track of other activities
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
-        FOLLOWED_USERS = 6, SEARCH_USERS = 7;
+        FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
 
     // Intent extra data identifier for the profile of the signed in user
     public static final String ID_PROFILE = "User";
@@ -221,13 +221,12 @@ public class HomePageActivity extends AppCompatActivity {
             case R.id.menu_button_searchUsers:
                 Intent search = new Intent(this, SearchUsersActivity.class);
                 search.putExtra(SearchUsersActivity.ID_USER, user);
-                startActivity(search);
+                startActivityForResult(search, SEARCH_USERS);
                 return true;
             case R.id.menu_button_FollowRequests:
-                // TODO
                 Intent requests = new Intent(this, FollowRequestsActivity.class);
-                requests.putExtra(SearchUsersActivity.ID_USER, user);
-                startActivity(requests);
+                requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
+                startActivityForResult(requests, FOLLOW_REQUESTS);
                 return true;
             case R.id.menu_button_followedHistory:
                 // TODO
@@ -354,6 +353,13 @@ public class HomePageActivity extends AppCompatActivity {
                 Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
                 user.copyFrom(result);
                 user.save();
+            }
+        } else if (requestCode == FOLLOW_REQUESTS){
+            if (resultCode == RESULT_OK){
+                // TODO
+                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
+                user.copyFrom(result);
+                user.save();*/
             }
         }
 
