@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cmput301.cia.activities.users.SendMessageActivity">
+
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="158dp"
+        android:layout_height="112dp"
+        android:layout_marginBottom="61dp"
+        android:layout_marginLeft="289dp"
+        android:layout_marginRight="8dp"
+        android:text="Goback"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="158dp"
+        android:layout_height="112dp"
+        android:text="Send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.07"
+        android:layout_marginBottom="61dp" />
+
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="258dp"
+        android:layout_height="44dp"
+        android:text="TextView"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="376dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <EditText
+        android:id="@+id/body1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="enter message here"
+        android:scrollbars="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="319dp" />
+
+</android.support.constraint.ConstraintLayout>

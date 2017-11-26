@@ -9,12 +9,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.events.HabitEventViewActivity;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -42,7 +46,7 @@ public class FollowerHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follower_history);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(SearchUsersActivity.ID_USER);
         followed_history = user.getFollowedHabitHistory();
         historyList = (ListView) findViewById(R.id.followed_history);
@@ -50,6 +54,17 @@ public class FollowerHistoryActivity extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(FollowerHistoryActivity.this, HomePageActivity.class);
+                intent.putExtra(SearchUsersActivity.ID_USER, user);
+                startActivity(intent);
+            }
+        });
+        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String user_name = followed_history.get(position).second;
+                Intent intent = new Intent(FollowerHistoryActivity.this, SendMessageActivity.class);
+                intent.putExtra("name",user_name);
+                intent.putExtra("pos",position);
                 intent.putExtra(SearchUsersActivity.ID_USER, user);
                 startActivity(intent);
             }
