@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
@@ -46,7 +47,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     Date chooseStartDate;
     EditText habitName;
     EditText reason;
-    EditText startDate;
+    TextView startDate;
     MaterialDayPicker dayPicker;
     Spinner spinner;
 
@@ -58,7 +59,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         chooseStartDate = new Date();
         habitName = (EditText) findViewById(R.id.habitName);
         reason = (EditText) findViewById(R.id.reason);
-        startDate = (EditText) findViewById(R.id.startDate);
+        startDate = (TextView) findViewById(R.id.startDate);
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
         startDate.setText(DateUtilities.formatDate(chooseStartDate));
 

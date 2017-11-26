@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historyLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.events.HistoryActivity">
@@ -29,26 +30,16 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
 
-    <Button
-        android:id="@+id/historyReturnButton"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="-1dp"
-        android:layout_marginRight="16dp"
-        android:text="Return"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
     <ListView
         android:id="@+id/historyList"
         android:layout_width="359dp"
         android:layout_height="375dp"
         android:layout_marginBottom="80dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteY="56dp" />
 
@@ -56,11 +47,14 @@
         android:id="@+id/historyEventButton"
         android:layout_width="79dp"
         android:layout_height="38dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginBottom="36dp"
         android:layout_marginLeft="289dp"
+        android:layout_marginRight="8dp"
         android:text="Habits"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintHorizontal_bias="0.875"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <CheckBox
         android:id="@+id/historyTypeCheckbox"
@@ -93,13 +87,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/historyMapView"
-        android:layout_width="356dp"
-        android:layout_height="273dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="119dp"
-        android:visibility="invisible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

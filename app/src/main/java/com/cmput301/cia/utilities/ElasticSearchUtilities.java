@@ -21,26 +21,30 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import io.searchbox.action.BulkableAction;
+import io.searchbox.core.Bulk;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 17 2017
+ * @version 4
+ * Date: Nov 24 2017
  *
- * Contains utilities for searching from the ElasticSearch database
+ * Contains utilities for searching for, inserting into, and deleting from the ElasticSearch database
  */
 
 public class ElasticSearchUtilities {
 
     // The index used to access the database
     private static final String INDEX = "cmput301f17t15_cia";
+
     // Maximum number of search results per query
-    private static final int MAX_RESULTS = 1000;
+    private static final int MAX_RESULTS = 10000;
 
     // The maximum time in milliseconds before a query is cancelled
     private static final long MAX_QUERY_TIME = 5000;
@@ -54,7 +58,6 @@ public class ElasticSearchUtilities {
      * @return true if all of the objects were successfully inserted, false otherwise
      *
      */
-    // TODO: test case where the insert fails
     private static class InsertTask extends AsyncTask<ElasticSearchable, Void, Boolean> {
 
         @Override
@@ -103,7 +106,6 @@ public class ElasticSearchUtilities {
 
             String typeId = search_parameters[0];
             String finalQuery = getCompleteQuery(search_parameters[1]);
-
             Search search = new Search.Builder(finalQuery).addIndex(INDEX).addType(typeId).build();
 
             try {
@@ -162,6 +164,41 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Asynchronous Task for searching for multiple objects with multiple unique IDs
+     *
+     * Takes in 2 string parameters:
+     * - The first one is the type id of the object to search for
+     * - The second one is the final query to execute
+     *
+     * @return {@nullable result, success} as a pair
+     */
+    private static class SearchMultipleIDsTask extends AsyncTask<String, Void, Pair<SearchResult, Boolean>> {
+        @Override
+        protected Pair<SearchResult, Boolean> doInBackground(String... search_parameters) {
+            verifySettings();
+
+            String typeId = search_parameters[0];
+            String query = search_parameters[1];
+            Search search = new Search.Builder(query).addIndex(INDEX).addType(typeId).build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    return new Pair<>(result, Boolean.TRUE);
+                } else {
+                    Log.i("Error", "the search query failed to find any objects that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return new Pair<>(null, Boolean.FALSE);
+            }
+
+            return new Pair<>(null, Boolean.TRUE);
+        }
+    }
+
+    /**
      * Asynchronous Task for deleting an object from the database with it's unique ID
      *
      * Takes in 2 string parameters:
@@ -182,7 +219,6 @@ public class ElasticSearchUtilities {
             Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).id(objectId).build();
 
             try {
-                // TODO: test success
                 return client.execute(delete).isSucceeded();
             }
             catch (Exception e) {
@@ -192,32 +228,6 @@ public class ElasticSearchUtilities {
             return Boolean.FALSE;
         }
     }
-
-    /**
-     * Asynchronous task for deleting all records matching a query
-     */
-    // TODO: test
-    /*private static class DeleteSearchTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... search_parameters) {
-            verifySettings();
-
-            String typeId = search_parameters[0];
-            String query = getCompleteQuery(search_parameters[1]);
-
-            Delete delete = new Delete.Builder(query).index(INDEX).type(typeId).build();
-
-            try {
-                // TODO: test success
-                client.execute(delete);
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
-
-            return null;
-        }
-    }*/
 
     /**
      * Execute a search with ElasticSearch
@@ -259,13 +269,54 @@ public class ElasticSearchUtilities {
     }
 
     /**
-     * Execute a search for a specific object with ElasticSearch
+     * Execute a search with ElasticSearch for all objects that have one of the IDs specified in the query
      * @param typeId the type template id all results must match
-     * @param values map where key=parameter and value=required record value for that parameter
+     * @param query the query to execute
      * @return {@nullable result, success} as a pair
      */
-    public static Pair<SearchResult, Boolean> search(String typeId, Map<String, String> values){
-        return search(typeId, getQueryFromMap(values));
+    public static Pair<SearchResult, Boolean> searchByIds(String typeId, String query){
+        try {
+            return new SearchMultipleIDsTask().execute(typeId, query).get(MAX_QUERY_TIME, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        return new Pair<>(null, Boolean.FALSE);
+    }
+
+    /**
+     * Search for all records with the specified type parameter values
+     * @param typeId the type template id that all results must match
+     * @param tempClass the java class of the generic type T
+     * @param ids a list of IDs that an object could possibly have if it is returned
+     * @param <T> generic representing the java type corresponding to that type ID
+     * @return the list of all records matching that type ID with the required parameter values
+     */
+    public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, List<String> ids){
+        Pair<SearchResult, Boolean> result = searchByIds(typeId, getCompleteIdsListQuery(ids, typeId));
+        if (result.first != null && result.first.isSucceeded()) {
+
+            List<T> found = result.first.getSourceAsObjectList(tempClass);
+
+            // transform result into json
+            JsonObject jo = result.first.getJsonObject();
+
+            // get array of only the records in the database, and not the other parts of the result object
+            JsonArray array = jo.get("hits").getAsJsonObject().get("hits").getAsJsonArray();
+
+            // look at each record individually
+            for (int i = 0; i < array.size(); ++i){
+                JsonObject record = array.get(i).getAsJsonObject();
+                // set the id of this object since jest does not do it automatically
+                found.get(i).setId(record.get("_id").getAsString());
+            }
+            return found;
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -312,8 +363,6 @@ public class ElasticSearchUtilities {
         Pair<SearchResult, Boolean> result = search(typeId, "", id);
         if (result.first != null && result.first.isSucceeded()) {
             T object = result.first.getSourceAsObject(tempClass);
-            // TODO: recursive setId (ex: for profile, does not set the ids of it's habits)
-            // appears to be fixed
             object.setId(id);
             return new Pair<>(object, Boolean.TRUE);
         }
@@ -483,6 +532,29 @@ public class ElasticSearchUtilities {
             builder.append("}}\n}");
         }
 
+        return builder.toString();
+    }
+
+    /**
+     * Get a complete ElasticSearch query for searching for multiple items with multiple IDs
+     * @param ids a list of IDs that an object could possibly have if it is returned
+     * @param type the type to search for
+     * @return a string representing a query for any object with one of the specified IDs
+     */
+    private static String getCompleteIdsListQuery(List<String> ids, String type){
+        StringBuilder builder = new StringBuilder();
+
+        // TODO: test when there is more than 10 results
+        builder.append("{\"query\": {\"ids\": {\"values\": [");
+        for (String id : ids){
+            builder.append("\"" + id + "\"");
+            // add a comma if this is not the last ID
+            if (!id.equals(ids.get(ids.size() - 1))){
+                builder.append(", ");
+            }
+        }
+
+        builder.append("]}}\n}");
         return builder.toString();
     }
 

@@ -243,13 +243,7 @@ public class HomePageActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // update the habits list display
-        adapter.refresh();
-        adapter.notifyDataSetChanged();
-
-        // update the today's task list
-        resetCheckableListAdapter();
-        checkCompletedEvents();
+        refreshDisplay();
     }
 
     @Override
@@ -286,15 +280,21 @@ public class HomePageActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 // add a new habit
                 Habit habit = (Habit) data.getSerializableExtra("Habit");
-                user.addHabit(habit);
-                todaysHabits = user.getTodaysHabits();
 
-                adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
-                expandableListView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                // save the habit so that it has a valid ID
+                // this is necessary for habit events, since they need to refer to the habit's ID
+                if (habit.save()){
+                    user.addHabit(habit);
+                    user.save();
+                    todaysHabits = user.getTodaysHabits();
 
-                resetCheckableListAdapter();
-                user.save();
+                    adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
+                    expandableListView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    resetCheckableListAdapter();
+                } else {
+                    Toast.makeText(this, "There was an error connecting to the database. Habit was not saved.", Toast.LENGTH_SHORT).show();
+                }
             }
 
         }
@@ -345,7 +345,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == FOLLOWED_USERS){
             if (resultCode == RESULT_OK){
-                List<Profile> followed = (List<Profile>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
+                List<String> followed = (List<String>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
                 user.setFollowing(followed);
                 user.save();
             }
@@ -405,6 +405,24 @@ public class HomePageActivity extends AppCompatActivity {
         checkable.setAdapter(checkableAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        refreshDisplay();
+        super.onResume();
+    }
+
+    /**
+     * Update the elements in both ListViews
+     */
+    private void refreshDisplay(){
+        // update the habits list display
+        adapter.refresh();
+        adapter.notifyDataSetChanged();
+
+        // update the today's task list
+        resetCheckableListAdapter();
+        checkCompletedEvents();
+    }
 }
 
 

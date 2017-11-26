@@ -6,7 +6,6 @@ package com.cmput301.cia.activities.events;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -20,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.templates.LocationRequestingActivity;
+import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
 import com.cmput301.cia.models.Habit;
@@ -41,13 +42,14 @@ import java.util.List;
 
 /**
  * @author Adil Malik
- * @version 2
- * Date: Nov 16 2017
+ * @version 3
+ * Date: Nov 23 2017
  *
- * This activity allows the user to view all of their completed habit events
+ * This activity allows the user to view all of their completed habit events in a list.
+ * The events can be filtered by event comment, or by their habit
  */
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryActivity extends LocationRequestingActivity {
 
     // Intent data identifier for the passed in profile
     public static final String ID_PROFILE = "Profile";
@@ -63,7 +65,6 @@ public class HistoryActivity extends AppCompatActivity {
     private EditText filterEditText;
     private CheckBox useHabit;
     private TextView filterHabitText;
-    private MapView map;
 
     // The user who is viewing their habit history
     private Profile user;
@@ -79,14 +80,13 @@ public class HistoryActivity extends AppCompatActivity {
         user = (Profile) getIntent().getSerializableExtra(ID_PROFILE);
         filterHabit = null;
 
+        findViewById(R.id.historyLayout).requestFocus();
+
         historyList = (ListView) findViewById(R.id.historyList);
         filterEditText = (EditText) findViewById(R.id.filterEditText);
         useHabit = (CheckBox)findViewById(R.id.historyTypeCheckbox);
         filterHabitText = (TextView)findViewById(R.id.historyFilterHabitText);
-        map = (MapView)findViewById(R.id.historyMapView);
-        map.onCreate(savedInstanceState);
 
-        Button historyReturnButton  = (Button) findViewById(R.id.historyReturnButton);
         Button eventButton = (Button) findViewById(R.id.historyEventButton);
         Button filter = (Button) findViewById(R.id.historyFilterButton);
 
@@ -94,7 +94,7 @@ public class HistoryActivity extends AppCompatActivity {
         eventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(HistoryActivity.this, FilterEventsActivity.class);
-                intent.putExtra(FilterEventsActivity.ID_USER, user.getId());
+                intent.putExtra(FilterEventsActivity.ID_USER, user);
                 startActivityForResult(intent, FILTER_CODE);
             }
         });
@@ -106,17 +106,6 @@ public class HistoryActivity extends AppCompatActivity {
                     Toast.makeText(HistoryActivity.this, "No filter habit was selected. Checkbox is ignored.", Toast.LENGTH_SHORT).show();
                 }
                 convertEventsToString();
-                updateMap();
-            }
-        });
-
-        // return to main menu
-        historyReturnButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
-                setResult(RESULT_OK, intent);
-                finish();
             }
         });
 
@@ -124,8 +113,15 @@ public class HistoryActivity extends AppCompatActivity {
         historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String viewText = ((TextView)view).getText().toString();
+                // "completed " is 10 characters, so start at index 10 -> 11th character
+                // stop 2 characters before "on", because the space before "on" should not be included
+                String habitName = viewText.substring(10, viewText.lastIndexOf("on") - 1);
+
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
-                intent.putExtra("HabitEvent", getDisplayedEvents().get(position));
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position));
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, habitName);
                 startActivityForResult(intent, EVENT_CODE);
             }
         });
@@ -203,59 +199,34 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     /**
-     * Update the markers displayed on the map
-     */
-    // TODO: zoom out the map to show all marked locations
-    private void updateMap(){
-        map.getMapAsync(new OnMapReadyCallback() {
-
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                googleMap.clear();              // remove all markers from the map
-                // add marker for all habit events with locations
-                for (HabitEvent habitEvent : getDisplayedEvents()){
-                    Location location = habitEvent.getLocation();
-                    if (location != null){
-                        Pair<Habit, Boolean> habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, habitEvent.getHabitId());
-                        String habitTitle = habit.first == null ? "" : habit.first.getTitle();
-                        LatLng coordinates = new LatLng(location.getLatitude(), location.getLongitude());
-                        googleMap.addMarker(new MarkerOptions().position(coordinates).title("Completed " + habitTitle + " at " + DeviceUtilities.getLocationName(HistoryActivity.this, location)));
-                    }
-                }
-
-                // move the map to the device's current location
-                Location deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                if (deviceLoc == null){
-                    deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                }
-                // try to get the location a second time
-                if (deviceLoc == null){
-                    deviceLoc = DeviceUtilities.getLocation(HistoryActivity.this);
-                }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(deviceLoc.getLatitude(), deviceLoc.getLongitude()), 50));
-                map.onResume();
-            }
-        });
-
-    }
-
-    /**
      * Switch the habit history view type into map view if it is in list view, or into list view if it is in map view
      * @param view
      * @since Version 2
      */
     public void onMapViewClicked(View view){
-        // switch into map mode
-        if (historyList.getVisibility() == View.VISIBLE){
-            historyList.setVisibility(View.INVISIBLE);
-            map.setVisibility(View.VISIBLE);
-            updateMap();
+        // switch into map mode if permission is granted
+        requestLocationPermissions();
+    }
 
+    /**
+     * Handle the results of the request location permission being granted
+     */
+    @Override
+    public void handleLocationGranted() {
+        Intent intent = new Intent(this, ViewEventsMapActivity.class);
+        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) getDisplayedEvents());
+        startActivity(intent);
+    }
 
-        } else {    // switch into list mode
-            historyList.setVisibility(View.VISIBLE);
-            map.setVisibility(View.INVISIBLE);
-        }
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
 }

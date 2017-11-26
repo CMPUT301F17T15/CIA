@@ -49,13 +49,7 @@
         <activity android:name=".activities.users.RankingsActivity" />
         <activity android:name=".activities.users.ViewFollowedUsersActivity" />
         <activity android:name=".activities.users.SearchUsersActivity" />
-
-        <activity android:name=".activities.users.FollowRequestsActivity" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name=".activities.users.FollowRequestsActivity" />
         <activity android:name=".activities.users.FollowerHistoryActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -70,7 +64,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.users.ViewNearbyEventsActivity"
+            android:name=".activities.users.ViewEventsMapActivity"
             android:label="@string/title_activity_view_nearby_events">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,6 +72,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.templates.LocationRequestingActivity"></activity>
     </application>
 
 </manifest>

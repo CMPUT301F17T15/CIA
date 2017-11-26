@@ -35,30 +35,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class OfflineUnitTests {
 
-    /**
-     * A mock profile class used only for testing
-     */
-    static class TestProfile extends Profile {
-
-        public TestProfile(String name){
-            super(name);
-        }
-
-        /**
-         * Overridden implementation to prevent saving of the test profiles
-         * @param event represents the object that handles what needs to be done
-         */
-        public void tryHabitEvent(OfflineEvent event){
-            event.handle(this);
-        }
-
-    }
-
     // TODO: find way to force device offline and then integrate ElasticSearch
     // ex: WifiManager
     @Test
     public void testOfflineEditEvent(){
-        Profile profile = new TestProfile("Name");
+        Profile profile = new TestProfile();
 
         String title = "Habit1";
         String reason = "Reason1";
@@ -84,7 +65,7 @@ public class OfflineUnitTests {
 
     @Test
     public void testOfflineAddEvent(){
-        Profile profile = new TestProfile("Name");
+        Profile profile = new TestProfile();
         HabitEvent old = new HabitEvent("XYZ", new Date());
         OfflineEvent event = new AddHabitEvent("Habit", old);
         profile.addHabit(new Habit("Habit", "", new Date(), new ArrayList<Integer>(), ""));
@@ -97,7 +78,7 @@ public class OfflineUnitTests {
 
     @Test
     public void testOfflineDeleteEvent(){
-        Profile profile = new TestProfile("45a");
+        Profile profile = new TestProfile();
         HabitEvent old = new HabitEvent("XYZ", new Date());
         old.setId("XYZ");
         old.setHabitId("Habit");

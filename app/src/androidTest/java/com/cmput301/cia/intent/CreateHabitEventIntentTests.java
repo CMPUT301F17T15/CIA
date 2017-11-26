@@ -4,21 +4,31 @@
 
 package com.cmput301.cia.intent;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.cmput301.cia.OfflineUnitTests;
 import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.events.HabitEventViewActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Version 3
@@ -29,45 +39,37 @@ import java.lang.reflect.Field;
  * NOTE: These tests require an internet connection
  */
 
-public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
 
     private Solo solo;
 
     public CreateHabitEventIntentTests() {
-        super(com.cmput301.cia.activities.MainActivity.class);
+        super(com.cmput301.cia.activities.HomePageActivity.class);
     }
 
     public void setUp() throws Exception{
+
+        List<Integer> allDays = new ArrayList<>();
+        for (int i = 1; i <= 7; ++i){
+            allDays.add(i);
+        }
+
+        Profile profile = new TestProfile("xyz");
+        Habit habit = new Habit("T1", "", new Date(), allDays, "");
+        habit.setId("one");
+        profile.addHabit(habit);
+
+        Habit habit2 = new Habit("T55", "", new Date(), allDays, "");
+        habit2.setId("h2");
+        profile.addHabit(habit2);
+
+        Intent intent = new Intent();
+        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        setActivityIntent(intent);
+
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
 
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
-        solo.clickOnButton("Login");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-
-        solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
-        solo.clickOnMenuItem("Habit History");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-
-        // delete all habit events
-        while (((ListView)solo.getView(R.id.historyList)).getAdapter().getCount() > 0) {
-            solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
-            solo.enterText((EditText)solo.getView(R.id.filterEditText), "");
-            //solo.goBack();
-            solo.sleep(1000);
-            solo.clickInList(1, 0);
-            solo.sleep(3000);
-            solo.assertCurrentActivity("wrong activity", HabitEventViewActivity.class);
-            solo.clickOnButton("Delete");
-            solo.sleep(2500);
-        }
-
-        solo.sleep(100);
-        solo.goBackToActivity("HomePageActivity");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
     }
 
     public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
@@ -112,7 +114,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.clickInList(1, 1);
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-        solo.clickOnButton("Cancel");
+        solo.goBack();
+        //solo.clickOnButton("Cancel");
         solo.sleep(3000);
 
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
@@ -125,7 +128,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
 
-        solo.clickOnButton("Cancel");
+        solo.goBack();
+        //solo.clickOnButton("Cancel");
         solo.sleep(3000);
 
         // assert new habit events count is equal to old

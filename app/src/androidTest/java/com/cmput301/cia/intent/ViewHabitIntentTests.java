@@ -109,7 +109,10 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<MainA
         loadHabit();
 
         solo.clickOnButton("Delete");
-        solo.sleep(2000);
+        solo.sleep(1000);
+        // confirm deletion dialog
+        solo.clickOnView(solo.getView(android.R.id.button1));
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // make sure habit was removed
@@ -158,8 +161,8 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<MainA
         assertTrue(((TextView)solo.getView(R.id.HabitFrequency)).getText().toString().equals("Wednesday\n"));
 
         // return to home page
-        solo.clickOnButton("Return");
-        solo.sleep(1500);
+        solo.goBack();
+        solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         // make sure changes took effect in the home page

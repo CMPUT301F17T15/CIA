@@ -10,9 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.CreateHabitEventController;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
@@ -32,19 +31,18 @@ import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 12 2017
+ * @version 4
+ * Date: Nov 23 2017
  *
  * This class represents the activity for creating a new habit event
  */
 
-public class CreateHabitEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class CreateHabitEventActivity extends LocationRequestingActivity implements DatePickerDialog.OnDateSetListener {
 
     // The name of the intent data representing the owning habit's name, id, and index in the display list
     public static final String ID_HABIT_NAME = "Habit", ID_HABIT_HASH = "HabitID";//, ID_HABIT_INDEX = "Index";
@@ -124,10 +122,11 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
     }
 
     /**
-     * Handles the cancel button being clicked
-     * @param view
+     * Handle the back button being pressed
      */
-    public void onCancelClicked(View view){
+    @Override
+    public void onBackPressed()
+    {
         finishActivity(true);
     }
 
@@ -224,8 +223,7 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
      * @param view
      */
     public void onAttachLocationClicked(View view){
-        location = DeviceUtilities.getLocation(this);
-        locationText.setText(DeviceUtilities.getLocationName(this, location));
+        requestLocationPermissions();
     }
 
     /**
@@ -278,6 +276,15 @@ public class CreateHabitEventActivity extends AppCompatActivity implements DateP
         intent.putExtra(ID_HABIT_HASH, habitId);
         setResult(Activity.RESULT_OK, intent);
         finish();
+    }
+
+    /**
+     * Handle the results of the request location permissions
+     */
+    @Override
+    protected void handleLocationGranted() {
+        location = DeviceUtilities.getLocation(this);
+        locationText.setText(DeviceUtilities.getLocationName(this, location));
     }
 
 }

@@ -5,26 +5,26 @@
 package com.cmput301.cia.activities.events;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
+import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
-import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -32,20 +32,22 @@ import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Tinghui, Adil Malik
- * @version 2
- * Date: Nov 8 2017
+ * @version 3
+ * Date: Nov 23 2017
  *
  * This activity displays the details of one of the user's habit events. It can be edited or deleted
  * here.
  */
 
-public class HabitEventViewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class HabitEventViewActivity extends LocationRequestingActivity {
 
+    // Intent data identifiers for inputs
+    public static final String ID_HABIT_NAME = "Habit", ID_HABIT_EVENT = "Event";
+
+    // Intent data identifiers for activity results
     public static final String RETURNED_EVENT = "Event", RETURNED_DELETED = "Deleted";
 
     // All images can be at most this number of bytes
@@ -54,13 +56,14 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
 
+    // views visible on the UI
     private TextView habitEventDate;
     private TextView habitEventLocation;
     private ImageView habitEventPhoto;
     private EditText habitEventComment;
-
     private Button resetImageButton;
 
+    // the event being displayed
     private HabitEvent event;
 
     // the location the event occurred at
@@ -69,36 +72,29 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     // the image attached to the event
     private Bitmap image;
 
-    // The date this event occurred on
-    private Date eventDate;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_event_view);
-        /**
-         * display habit event information.
-         */
-        Intent intent = getIntent();
 
-        TextView habitEventName = (TextView) findViewById(R.id.vheHabitNameText);
+        // load views
+        TextView habitName = (TextView) findViewById(R.id.vheHabitNameText);
         habitEventDate = (TextView) findViewById(R.id.vheDateDynamicText);
         habitEventLocation = (TextView) findViewById(R.id.vheLocationDynamicText);
         habitEventPhoto = (ImageView) findViewById(R.id.vhePhotoImage);
         habitEventComment = (EditText) findViewById(R.id.vheCommentDynamicText);
         resetImageButton = (Button)findViewById(R.id.vheResetImageButton);
 
-        event = (HabitEvent) intent.getSerializableExtra("HabitEvent");
-
-        // TODO: pass in the habit name instead
-        Habit habit = ElasticSearchUtilities.getObject(Habit.TYPE_ID, Habit.class, event.getHabitId()).first;
-        if (habit != null)
-            habitEventName.setText(habit.getTitle());
+        // get event information
+        Intent intent = getIntent();
+        event = (HabitEvent) intent.getSerializableExtra(ID_HABIT_EVENT);
+        habitName.setText(intent.getStringExtra(ID_HABIT_NAME));
 
         location = event.getLocation();
         if (location != null)
             habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
 
+        // display the image if one is selected
         if (!event.getBase64EncodedPhoto().equals("")){
             image = ImageUtilities.base64ToImage(event.getBase64EncodedPhoto());
         } else
@@ -106,16 +102,8 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
 
         updateImage();
         habitEventComment.setText(event.getComment());
-
-        eventDate = event.getDate();
         setDateText();
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
-    }
-
-    public void onCancelClicked(View view){
-        Intent intent = new Intent();
-        setResult(Activity.RESULT_CANCELED, intent);
-        finish();
     }
 
     /**
@@ -132,7 +120,25 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
      * @param view
      */
     public void onDeleteClicked(View view){
-        finishActivity(true);
+
+        /**
+         * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+         */
+        // Ask the user for confirmation before a habit event is deleted
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Are you sure you want to delete this event?");
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishActivity(true);       // delete the event
+            }
+        });
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -145,8 +151,6 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
         String comment = habitEventComment.getText().toString();
 
         event.setComment(comment);
-
-        event.setDate(eventDate);
         event.setLocation(location);
         if (image != null){
             event.setBase64EncodedPhoto(ImageUtilities.imageToBase64(image));
@@ -205,42 +209,6 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
     }
 
     /**
-     * Creates a dialog so that the user can choose a date instead of typing
-     * see: DatePickerUtilities
-     * @param v: the layout that it's coming from
-     */
-    public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
-        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    /** for the date selected
-     * @param datePicker : the widget object for selecting a date
-     * @param year : the year chosen
-     * @param month : the month chosen
-     * @param day : the day chosen
-     * see: DatePickerUtilities
-     */
-    @Override
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        final Calendar calendar = Calendar.getInstance();
-
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-
-        Date date = calendar.getTime();
-        Date currentDate = new Date();
-
-        // Prevent the event's date from being a date in the future
-        if (currentDate.before(date))
-            date = currentDate;
-
-        eventDate = date;
-        setDateText();
-    }
-
-    /**
      * Reset the image view to nothing
      * @param view
      */
@@ -254,15 +222,14 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
      * @param view
      */
     public void onAttachLocationClicked(View view){
-        location = DeviceUtilities.getLocation(this);
-        habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+        requestLocationPermissions();
     }
 
     /**
      * Update the view displaying the event's date in text form
      */
     private void setDateText(){
-        habitEventDate.setText(DateUtilities.formatDate(eventDate));
+        habitEventDate.setText(DateUtilities.formatDate(event.getDate()));
     }
 
     /**
@@ -281,4 +248,24 @@ public class HabitEventViewActivity extends AppCompatActivity implements DatePic
             resetImageButton.setVisibility(View.INVISIBLE);
         }
     }
+
+    /**
+     * Handle the results of the request location permission being granted
+     */
+    @Override
+    protected void handleLocationGranted() {
+        location = DeviceUtilities.getLocation(this);
+        habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+    }
+
+    /**
+     * Handle the back button being pressed
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(Activity.RESULT_CANCELED, intent);
+        finish();
+    }
+
 }

@@ -70,21 +70,17 @@ public class DeviceUtilities {
     }
 
     /**
+     * PRECONDITION: The user has granted the system permission to access their device's location. May crash otherwise
      * @return the user's last known location if known, or null otherwise
      */
     // TODO: test on a device where GPS works, as the location on Nexus 4 always returns Mountain View
+    @SuppressWarnings("MissingPermission")
     public static Location getLocation(Activity activity) {
 
         /**
          * Reference:
          * https://github.com/googlemaps/android-samples/blob/master/tutorials/CurrentPlaceDetailsOnMap
          */
-
-        // Request permissions for the GPS service if not granted
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return null;
-        }
 
         LocationManager locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager == null)
@@ -112,6 +108,7 @@ public class DeviceUtilities {
     }
 
     /**
+     * PRECONDITION: The user has granted the system permission to access their device's location. May crash otherwise
      * @param activity the activity requesting the location name
      * @return the name of the device's current location if found, or "NONE" otherwise
      */

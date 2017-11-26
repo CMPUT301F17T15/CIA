@@ -72,41 +72,5 @@ public class StatisticActivity extends AppCompatActivity {
             }
         });
     }
-
-    //Crate the menu object
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    //Menu item onclick bridge to specific activity.
-    //use startActivityForResult instead of startActivity for return value or refresh home page.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_button_My_Profile:
-                Intent intent_My_Profile = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_My_Profile);
-                return true;
-            case R.id.menu_button_Add_New_Habit:
-                Intent intent_new_Habit = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_new_Habit);
-                return true;
-            case R.id.menu_button_Statistic:
-                Intent intent_Statistic = new Intent(this, StatisticActivity.class);
-                startActivity(intent_Statistic);
-                return true;
-            case R.id.menu_button_Habit_History:
-                Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
-                startActivity(intent_Habit_History);
-                return true;
-            case R.id.menu_button_My_Following:
-                Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_My_Following);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    
 }

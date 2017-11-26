@@ -5,6 +5,7 @@
 package com.cmput301.cia.models;
 
 import android.location.Location;
+import android.util.Pair;
 
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -49,11 +50,11 @@ public class Profile extends ElasticSearchable {
     // The user's list of created habits
     private List<Habit> habits;
 
-    // List of users this user is following (all elements are unique)
-    private List<Profile> following;
+    // List of the unique IDs of all users this user is following (all elements are unique)
+    private List<String> following;
 
-    // Users that have requested to follow this user (all elements are unique)
-    private List<Profile> followRequests;
+    // IDs of the users that have requested to follow this user (all elements are unique)
+    private List<String> followRequests;
 
     // Points received for consecutively completing habits
     private int powerPoints;
@@ -116,6 +117,13 @@ public class Profile extends ElasticSearchable {
      * @return list of all users this user is following
      */
     public List<Profile> getFollowing() {
+        return ElasticSearchUtilities.getListOf(getTypeId(), Profile.class, following);
+    }
+
+    /**
+     * @return list of all IDs of users this user is following
+     */
+    public List<String> getFollowingIds() {
         return following;
     }
 
@@ -144,7 +152,7 @@ public class Profile extends ElasticSearchable {
      * @param profile the user to follow
      */
     public void follow(Profile profile){
-        following.add(profile);
+        following.add(profile.getId());
     }
 
     /**
@@ -158,7 +166,7 @@ public class Profile extends ElasticSearchable {
             return;
 
         if (!hasFollowRequest(profile))
-            followRequests.add(profile);
+            followRequests.add(profile.getId());
     }
 
     /**
@@ -166,20 +174,48 @@ public class Profile extends ElasticSearchable {
      * @return whether the specified user has requested to follow this user
      */
     public boolean hasFollowRequest(Profile profile){
-        return followRequests.contains(profile);
+
+        for (String id : followRequests){
+            if (id.equals(profile.getId()))
+                return true;
+        }
+
+        return false;
     }
 
     /**
      * Remove the follow request from the specified user
-     * @param profile the user sending the request
+     * @param profile the user to remove a request from
      */
     public void removeFollowRequest(Profile profile){
-        followRequests.remove(profile);
+
+        Iterator<String> it = followRequests.iterator();
+        while (it.hasNext()){
+            if (it.next().equals(profile.getId())){
+                it.remove();
+                return;
+            }
+        }
     }
 
     /**
      * Accept a follow request from the specified user
-     * @param profile the user sending the request
+     * @param profile the user to accept a request from
+     */
+    /*public void acceptFollowRequest(String id){
+
+        Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, id);
+        if (result.first != null){
+            result.first.follow(this);
+            result.first.save();
+        }
+
+        removeFollowRequest(id);
+    }*/
+
+    /**
+     * Accept a follow request from the specified user
+     * @param profile the user to accept a request from
      */
     public void acceptFollowRequest(Profile profile){
         profile.follow(this);
@@ -267,39 +303,62 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of the most recent event for each habit of all followed users, sorted by user name and then habit title
+     * @return list of {the most recent event for each habit, user name of habit creator} of all followed users sorted in descending
+     * order of date
      */
-    public List<HabitEvent> getFollowedHabitHistory(){
-        List<HabitEvent> list = new ArrayList<>();
-        // map (event -> [user name of creator, habit title])
-        final Map<HabitEvent, String[]> eventDetailsMap = new HashMap<>();
-
-        for (Profile followee : following) {
+    public List<Pair<HabitEvent, String>> getFollowedHabitHistory() {
+        List<Pair<HabitEvent, String>> list = new ArrayList<>();
+        for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
-                    list.add(event);
-                    eventDetailsMap.put(event, new String[]{followee.getName(), habit.getTitle()});
+                    list.add(new Pair<>(event, followee.getName()));
                 }
             }
         }
 
-        // TODO: test
-        Collections.sort(list, new Comparator<HabitEvent>() {
+        Collections.sort(list, new Comparator<Pair<HabitEvent, String>>() {
             @Override
-            public int compare(HabitEvent eventOne, HabitEvent eventTwo) {
+            public int compare(Pair<HabitEvent, String> event, Pair<HabitEvent, String> t1) {
+                return -1 * event.first.getDate().compareTo(t1.first.getDate());
+            }
+        });
 
-                String[] oneKeys = eventDetailsMap.get(eventOne);
-                String[] twoKeys = eventDetailsMap.get(eventTwo);
+        return list;
+    }
+
+    /**
+     * @return list of habits that followed users have created, sorted by user name and then habit title
+     */
+    public List<Habit> getFollowedHabits(){
+
+        // map (habit -> user name of creator)
+        final Map<Habit, String> habitCreatorMap = new HashMap<>();
+
+        // get all habits
+        List<Habit> list = new ArrayList<>();
+        for (Profile followee : getFollowing()) {
+            for (Habit habit : followee.getHabits()) {
+                list.add(habit);
+                habitCreatorMap.put(habit, followee.getName());
+            }
+        }
+
+        Collections.sort(list, new Comparator<Habit>() {
+            @Override
+            public int compare(Habit habitOne, Habit habitTwo) {
+
+                String oneUserName = habitCreatorMap.get(habitOne);
+                String twoUserName = habitCreatorMap.get(habitTwo);
 
                 // Attempt to compare based on username
-                int nameComp = oneKeys[0].compareTo(twoKeys[0]);
+                int nameComp = oneUserName.compareTo(twoUserName);
                 if (nameComp != 0){
                     return nameComp;
                 }
 
                 // Compare based on habit title
-                return oneKeys[1].compareTo(twoKeys[1]);
+                return habitOne.getTitle().compareTo(habitTwo.getTitle());
             }
         });
         return list;
@@ -343,7 +402,13 @@ public class Profile extends ElasticSearchable {
      * @return whether this user is following the specified profile
      */
     public boolean isFollowing(Profile profile){
-        return following.contains(profile);
+
+        for (String id : following){
+            if (id.equals(profile.getId()))
+                return true;
+        }
+
+        return false;
     }
 
     /**
@@ -356,14 +421,20 @@ public class Profile extends ElasticSearchable {
 
     /**
      * Save this profile to the database
+     * @return whether the save was successful
      */
     @Override
-    public void save(){
+    public boolean save(){
+        boolean success = true;
         for (Habit habit : habits){
-            habit.save();
+            success = success && habit.save();
         }
-        ElasticSearchUtilities.save(this);
+
+        if (success) {
+            success = ElasticSearchUtilities.save(this);
+        }
         SerializableUtilities.save(getOfflineEventsFile(), habits);
+        return success;
     }
 
     /**
@@ -466,7 +537,11 @@ public class Profile extends ElasticSearchable {
             final float MAX_DISTANCE = 5000.0f;
 
             List<HabitEvent> allEvents = getHabitHistory();
-            allEvents.addAll(getFollowedHabitHistory());
+
+            List<Pair<HabitEvent, String>> events = getFollowedHabitHistory();
+            for (Pair<HabitEvent, String> pair : events){
+                allEvents.add(pair.first);
+            }
 
             for (HabitEvent event : allEvents) {
                 Location eventLoc = event.getLocation();
@@ -552,7 +627,7 @@ public class Profile extends ElasticSearchable {
      * Set the users this user is following
      * @param following the list of users this user is following (non-null)
      */
-    public void setFollowing(List<Profile> following) {
+    public void setFollowing(List<String> following) {
         this.following = following;
     }
 
@@ -569,9 +644,9 @@ public class Profile extends ElasticSearchable {
      * @param followed the user to unfollow
      */
     public void unfollow(Profile followed){
-        Iterator<Profile> profile = following.iterator();
+        Iterator<String> profile = following.iterator();
         while (profile.hasNext()){
-            if (profile.next().equals(followed)){
+            if (profile.next().equals(followed.getId())){
                 profile.remove();
                 return;
             }
