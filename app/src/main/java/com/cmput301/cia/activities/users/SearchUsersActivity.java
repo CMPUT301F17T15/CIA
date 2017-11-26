@@ -142,13 +142,13 @@ public class SearchUsersActivity extends AppCompatActivity {
         for (Profile profile : profiles) {
 
             // note: this is only for removing invalid profiles, ignore it
-            /*if (includedNames.contains(profile.getName()) || !profile.getName().equals(profile.getName().toLowerCase())){
+            /*if (profile.getName() == null || includedNames.contains(profile.getName()) || !profile.getName().equals(profile.getName().toLowerCase())){
                 ElasticSearchUtilities.delete(profile);
                 continue;
             }*/
 
             // don't include the current user
-            if (profile.equals(user) || profile.getName() == null)
+            if (profile.equals(user))
                 continue;
 
             // include this profile if it's name contains the search text, ignoring case
