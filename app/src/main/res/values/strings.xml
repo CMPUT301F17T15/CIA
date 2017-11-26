@@ -17,7 +17,7 @@
     <string name="HabitNameText">Habit Name:</string>
     <string name="HabitTypeText">Habit Type:</string>
     <string name="HabitReasonText">Habit Reason:</string>
-    <string name="StartDateText">Starting Date:</string>
+    <string name="StartDateText">Start Date:</string>
     <string name="FrequencyText">Repeat Frequency:</string>
     <string name="Edit">Edit</string>
     <string name="Delete">Delete</string>
@@ -26,7 +26,7 @@
     <string name="ok">OK</string>
     <string name="edit_habit">Edit Habit</string>
     <string name="save">Save</string>
-    <string name="frequency">Frequency</string>
+    <string name="frequency">Frequency:</string>
     <string name="habit_type_list">Habit Categories</string>
     <string name="choose_a_habit_to_see_statistic_result">Choose Habit Category</string>
     <string name="title_activity_view_nearby_events">Nearby Events</string>
