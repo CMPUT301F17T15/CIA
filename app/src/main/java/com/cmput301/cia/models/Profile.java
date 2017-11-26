@@ -299,7 +299,8 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of {the most recent event for each habit, user name of habit creator} of all followed users
+     * @return list of {the most recent event for each habit, user name of habit creator} of all followed users sorted in descending
+     * order of date
      */
     public List<Pair<HabitEvent, String>> getFollowedHabitHistory() {
         List<Pair<HabitEvent, String>> list = new ArrayList<>();
@@ -312,6 +313,13 @@ public class Profile extends ElasticSearchable {
             }
         }
 
+        Collections.sort(list, new Comparator<Pair<HabitEvent, String>>() {
+            @Override
+            public int compare(Pair<HabitEvent, String> event, Pair<HabitEvent, String> t1) {
+                return -1 * event.first.getDate().compareTo(t1.first.getDate());
+            }
+        });
+
         return list;
     }
 
@@ -321,14 +329,14 @@ public class Profile extends ElasticSearchable {
     public List<Habit> getFollowedHabits(){
 
         // map (habit -> user name of creator)
-        final Map<Habit, String> eventDetailsMap = new HashMap<>();
+        final Map<Habit, String> habitCreatorMap = new HashMap<>();
 
         // get all habits
         List<Habit> list = new ArrayList<>();
         for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 list.add(habit);
-                eventDetailsMap.put(habit, followee.getName());
+                habitCreatorMap.put(habit, followee.getName());
             }
         }
 
@@ -336,8 +344,8 @@ public class Profile extends ElasticSearchable {
             @Override
             public int compare(Habit habitOne, Habit habitTwo) {
 
-                String oneUserName = eventDetailsMap.get(habitOne);
-                String twoUserName = eventDetailsMap.get(habitTwo);
+                String oneUserName = habitCreatorMap.get(habitOne);
+                String twoUserName = habitCreatorMap.get(habitTwo);
 
                 // Attempt to compare based on username
                 int nameComp = oneUserName.compareTo(twoUserName);

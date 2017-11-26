@@ -101,7 +101,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<MainAct
         solo.sleep(500);
         solo.enterText((EditText)solo.getView(R.id.profileCommentDynamicText), newComment);
         solo.clickOnButton("Save");
-        solo.sleep(1000);
+        solo.sleep(4000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         assertTrue(user.getComment().equals(newComment));
