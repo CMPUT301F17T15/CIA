@@ -73,19 +73,7 @@ public class UserProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-
-        // return the viewer
-        if (!user.equals(profile))
-            intent.putExtra(RESULT_PROFILE_ID, user);
-        else {
-            // modify and return the user's profile
-            profile.setComment(commentText.getText().toString());
-            if (image != null)
-                profile.setImage(ImageUtilities.imageToBase64(image));
-
-            intent.putExtra(RESULT_PROFILE_ID, profile);
-        }
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_CANCELED, intent);
         finish();
         super.onBackPressed();
     }
@@ -135,7 +123,21 @@ public class UserProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent = new Intent();
+
+                // return the viewer
+                if (!user.equals(profile))
+                    intent.putExtra(RESULT_PROFILE_ID, user);
+                else {
+                    // modify and return the user's profile
+                    profile.setComment(commentText.getText().toString());
+                    if (image != null)
+                        profile.setImage(ImageUtilities.imageToBase64(image));
+
+                    intent.putExtra(RESULT_PROFILE_ID, profile);
+                }
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
