@@ -127,6 +127,10 @@ public class Profile extends ElasticSearchable {
         return following;
     }
 
+    public List<Profile> getFollowRequests() {
+        return followRequests;
+    }
+
     /**
      * Add a new habit to the user's list of habits
      * @param habit the habit to add
