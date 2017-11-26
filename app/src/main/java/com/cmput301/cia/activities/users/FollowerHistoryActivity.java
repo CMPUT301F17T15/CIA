@@ -7,6 +7,7 @@ package com.cmput301.cia.activities.users;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,8 +15,6 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.events.FilterEventsActivity;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -35,8 +34,9 @@ import java.util.List;
 public class FollowerHistoryActivity extends AppCompatActivity {
 
     private Profile user;
-    private List<HabitEvent> followed_history;
+    private List<Pair<HabitEvent, String>> followed_history;
     private ListView historyList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -148,7 +148,7 @@ public class SearchUsersActivity extends AppCompatActivity {
             }*/
 
             // don't include the current user
-            if (profile.equals(user))
+            if (profile.equals(user) || profile.getName() == null)
                 continue;
 
             // include this profile if it's name contains the search text, ignoring case

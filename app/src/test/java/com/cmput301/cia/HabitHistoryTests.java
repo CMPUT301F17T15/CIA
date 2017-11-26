@@ -21,7 +21,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by guanfang on 2017/10/21.
+ *
+ * @author: Guanfang
+ * @version 1
+ * Date: Oct 21, 2017
+ *
+ * Unit tests for the habit history aspect of profiles
  */
 
 @RunWith(JUnit4.class)

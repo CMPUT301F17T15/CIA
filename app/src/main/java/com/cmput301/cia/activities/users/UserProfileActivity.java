@@ -20,16 +20,18 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IMAGE_SIZE;
 
 /**
- * @author Adil Malik, Shipin Guan
- * @version 2
+ * @author Adil Malik, Shipin Guan, Jessica Prieto
+ * @version 2.1
  * Date: Nov 13 2017
  *
  * This activity displays the information about a user's profile
@@ -41,6 +43,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";
     public static final String RESULT_PROFILE_ID = "Profile";
+
+    private final String followButtonMessage_follow = "FOLLOW";
+    private final String followButtonMessage_pending = "PENDING";
+
+    private List<String> followerRequestIds;
+    private List<Profile> followerRequests;
 
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
@@ -63,6 +71,26 @@ public class UserProfileActivity extends AppCompatActivity {
     private Bitmap image;
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+
+        // return the viewer
+        if (!user.equals(profile))
+            intent.putExtra(RESULT_PROFILE_ID, user);
+        else {
+            // modify and return the user's profile
+            profile.setComment(commentText.getText().toString());
+            if (image != null)
+                profile.setImage(ImageUtilities.imageToBase64(image));
+
+            intent.putExtra(RESULT_PROFILE_ID, profile);
+        }
+        setResult(RESULT_OK, intent);
+        finish();
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
@@ -71,6 +99,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
         profile = (Profile) intent.getSerializableExtra(PROFILE_ID);
         user = (Profile) intent.getSerializableExtra(USER_ID);
+
+        followerRequestIds = profile.getFollowRequests();
+        followerRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followerRequestIds);
 
         // initialize view member variables
         TextView nameText = (TextView)findViewById(R.id.profileNameText);
@@ -104,28 +135,26 @@ public class UserProfileActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-
-                // return the viewer
-                if (!user.equals(profile))
-                    intent.putExtra(RESULT_PROFILE_ID, user);
-                else {
-                    // modify and return the user's profile
-                    profile.setComment(commentText.getText().toString());
-                    if (image != null)
-                        profile.setImage(ImageUtilities.imageToBase64(image));
-
-                    intent.putExtra(RESULT_PROFILE_ID, profile);
-                }
-                setResult(RESULT_OK, intent);
-                finish();
+                onBackPressed();
             }
         });
+
+        if (followerRequestIds.contains(user)) {
+            followButton.setText(followButtonMessage_pending);
+        }
 
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profile.addFollowRequest(user);
+                if (!followerRequestIds.contains(user)) {
+                    followButton.setText(followButtonMessage_pending);
+                    profile.addFollowRequest(user);
+                    profile.save();
+                } else {
+                    profile.removeFollowRequest(user);
+                    profile.save();
+                    followButton.setText(followButtonMessage_follow);
+                }
             }
         });
 
@@ -133,6 +162,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 user.unfollow(profile);
+                user.save();
+                profile.save();
                 unfollowButton.setVisibility(View.INVISIBLE);
                 followButton.setVisibility(View.VISIBLE);
             }

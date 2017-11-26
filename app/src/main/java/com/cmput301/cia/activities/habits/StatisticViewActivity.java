@@ -7,6 +7,8 @@ package com.cmput301.cia.activities.habits;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -85,6 +87,13 @@ public class StatisticViewActivity extends AppCompatActivity {
         }
         //Break down list view for each habit
         BreakDownList = (ListView) findViewById(R.id.BreakDownListView);
+        BreakDownList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, breakdownlist);
         BreakDownList.setAdapter(adapter);
         //data for pie chart
