@@ -14,6 +14,7 @@ import android.view.View;
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.FollowersRequestAdapter;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class FollowRequestsActivity extends AppCompatActivity {
 
     private Profile user;
     private String name;
+    private List<String> followRequestIds;
     private List<Profile> followRequests;
 
     @Override
@@ -42,7 +44,9 @@ public class FollowRequestsActivity extends AppCompatActivity {
         user = (Profile) intent.getSerializableExtra(SearchUsersActivity.ID_USER);
 
         RecyclerView rvFollowerRequests = (RecyclerView) findViewById(R.id.rvFollowerRequests);
-        followRequests = user.getFollowRequests();
+        followRequestIds = user.getFollowRequests();
+        followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
+
         final FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
 
         adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {

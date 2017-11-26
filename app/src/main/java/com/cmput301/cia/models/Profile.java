@@ -127,7 +127,7 @@ public class Profile extends ElasticSearchable {
         return following;
     }
 
-    public List<Profile> getFollowRequests() {
+    public List<String> getFollowRequests() {
         return followRequests;
     }
 

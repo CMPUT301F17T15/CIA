@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private final String followButtonMessage_follow = "FOLLOW";
     private final String followButtonMessage_pending = "PENDING";
 
+    private List<String> followerRequestIds;
     private List<Profile> followerRequests;
 
     // Result code for selecting an image from gallery
@@ -98,7 +100,8 @@ public class UserProfileActivity extends AppCompatActivity {
         profile = (Profile) intent.getSerializableExtra(PROFILE_ID);
         user = (Profile) intent.getSerializableExtra(USER_ID);
 
-        followerRequests = profile.getFollowRequests();
+        followerRequestIds = profile.getFollowRequests();
+        followerRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followerRequestIds);
 
         // initialize view member variables
         TextView nameText = (TextView)findViewById(R.id.profileNameText);
@@ -136,14 +139,14 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (followerRequests.contains(user)) {
+        if (followerRequestIds.contains(user)) {
             followButton.setText(followButtonMessage_pending);
         }
 
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!followerRequests.contains(user)) {
+                if (!followerRequestIds.contains(user)) {
                     followButton.setText(followButtonMessage_pending);
                     profile.addFollowRequest(user);
                     profile.save();
