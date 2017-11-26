@@ -288,12 +288,12 @@ public class ElasticSearchUtilities {
     }
 
     /**
-     * Search for all records with the specified type parameter values
+     * Search for all records with one of the specified ids in the list
      * @param typeId the type template id that all results must match
      * @param tempClass the java class of the generic type T
      * @param ids a list of IDs that an object could possibly have if it is returned
      * @param <T> generic representing the java type corresponding to that type ID
-     * @return the list of all records matching that type ID with the required parameter values
+     * @return the list of all records matching that type ID that have one of the ids in the list
      */
     public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, List<String> ids){
         Pair<SearchResult, Boolean> result = searchByIds(typeId, getCompleteIdsListQuery(ids, typeId));
