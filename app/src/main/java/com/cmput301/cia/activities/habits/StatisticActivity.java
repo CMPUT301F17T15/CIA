@@ -72,7 +72,7 @@ public class StatisticActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
     //Crate the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,5 +108,5 @@ public class StatisticActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
