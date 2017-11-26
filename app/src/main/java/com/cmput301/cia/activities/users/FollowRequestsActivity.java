@@ -10,13 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.controller.FollowersRequestAdapter;
 import com.cmput301.cia.models.Profile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
