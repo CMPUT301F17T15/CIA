@@ -67,10 +67,10 @@ public class FollowerHistoryActivity extends AppCompatActivity {
      */
     private void display(){
         List<String> habitList = new ArrayList<>(this.followed_history.size());
-        for (HabitEvent event : this.followed_history) {
+        for (Pair<HabitEvent, String> event : this.followed_history) {
             ElasticSearchUtilities elasticSearchUtilities = new ElasticSearchUtilities();
-            Habit habit = elasticSearchUtilities.getObject("habit", Habit.class, event.getHabitId()).first;
-            habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+            Habit habit = elasticSearchUtilities.getObject("habit", Habit.class, event.first.getHabitId()).first;
+            habitList.add(event.second+ " Completed " + habit.getTitle() + " on " + event.first.getDate());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
         historyList.setAdapter(adapter);
