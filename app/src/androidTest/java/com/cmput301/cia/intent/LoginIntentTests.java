@@ -51,7 +51,7 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnButton("Login");            // can not login with empty name
         solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
-        solo.clickOnButton("Create Profile");         // can not register with empty name
+        solo.clickOnButton("Register");         // can not register with empty name
         solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "testsignin");
@@ -59,7 +59,7 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         solo.clickOnButton("Login");            // can not login since profile should not exist
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
-        solo.clickOnButton("Create Profile");         // register new profile
+        solo.clickOnButton("Register");         // register new profile
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
@@ -71,7 +71,7 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         solo.sleep(600);
         solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "testsignin");
         solo.sleep(1000);
-        solo.clickOnButton("Create Profile");
+        solo.clickOnButton("Register");
         solo.sleep(600);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
 
