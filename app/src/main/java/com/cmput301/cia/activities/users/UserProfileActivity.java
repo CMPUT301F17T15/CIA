@@ -28,8 +28,8 @@ import java.io.InputStream;
 import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IMAGE_SIZE;
 
 /**
- * @author Adil Malik, Shipin Guan
- * @version 2
+ * @author Adil Malik, Shipin Guan, Jessica Prieto
+ * @version 2.1
  * Date: Nov 13 2017
  *
  * This activity displays the information about a user's profile
@@ -41,6 +41,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";
     public static final String RESULT_PROFILE_ID = "Profile";
+
+    private final String followButtonMessage_following = "FOLLOW";
+    private final String followButtonMessage_pending = "PENDING";
 
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
@@ -125,7 +128,15 @@ public class UserProfileActivity extends AppCompatActivity {
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profile.addFollowRequest(user);
+                if (followButton.getText().toString() == followButtonMessage_following) {
+                    profile.addFollowRequest(user);
+                    profile.save();
+                    followButton.setText(followButtonMessage_pending);
+                } else {
+                    profile.removeFollowRequest(user);
+                    profile.save();
+                    followButton.setText(followButtonMessage_following);
+                }
             }
         });
 

@@ -45,8 +45,6 @@ public class FollowRequestsActivity extends AppCompatActivity {
         followRequests = user.getFollowRequests();
         FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests);
 
-
-
         rvFollowerRequests.setAdapter(adapter);
         rvFollowerRequests.setLayoutManager(new LinearLayoutManager(this));
     }
