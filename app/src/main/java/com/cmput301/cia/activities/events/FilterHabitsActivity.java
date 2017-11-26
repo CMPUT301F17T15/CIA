@@ -33,7 +33,7 @@ import java.util.Date;
  * This activity allows the user to pick a habit to filter their habit history with
  */
 
-public class FilterEventsActivity extends AppCompatActivity {
+public class FilterHabitsActivity extends AppCompatActivity {
 
     // Intent identifier for the incoming user
     public static final String ID_USER = "User";
@@ -101,12 +101,6 @@ public class FilterEventsActivity extends AppCompatActivity {
             intent.putExtra(RETURNED_HABIT_ID, selected.getId());
 
         setResult(Activity.RESULT_OK, intent);
-        finish();
-    }
-
-    public void onCancelClicked(View view){
-        Intent intent = new Intent();
-        setResult(Activity.RESULT_CANCELED, intent);
         finish();
     }
 

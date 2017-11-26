@@ -4,6 +4,7 @@
 
 package com.cmput301.cia.intent;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
@@ -11,15 +12,22 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
+import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.EditHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Version 1
@@ -30,48 +38,30 @@ import java.lang.reflect.Field;
  * NOTE: These tests require an internet connection
  */
 
-public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
     private Solo solo;
 
-    public ViewHabitIntentTests(){super(com.cmput301.cia.activities.MainActivity.class);}
+    public ViewHabitIntentTests(){super(com.cmput301.cia.activities.HomePageActivity.class);}
 
     public void setUp() throws Exception {
+
+        Profile profile = new TestProfile("xyz");
+        Habit habit = new Habit("T1", "", new Date(), Arrays.asList(1, 2, 3), "x");
+        habit.setId("one");
+        habit.addHabitEvent(new HabitEvent(""));
+        habit.getEvents().get(0).setId("two");
+
+        profile.addHabit(habit);
+        Habit habit2 = new Habit("T2", "", new Date(), Arrays.asList(1, 2, 3), "y");
+        habit2.setId("two");
+        profile.addHabit(habit2);
+
+        Intent intent = new Intent();
+        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        setActivityIntent(intent);
+
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
-
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "gah");
-        solo.clickOnButton("Login");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-
-        // add a habit because the list is empty
-        if (((ExpandableListView)solo.getView(R.id.HabitTypeExpandableListView)).getAdapter().getCount() == 0){
-
-            solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
-            solo.clickOnMenuItem("Add New Habit");
-            solo.sleep(1000);
-            solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
-
-            solo.enterText((EditText)solo.getView(R.id.edit_Type_Input), "newtype");
-            solo.sleep(600);
-            solo.clickOnView(solo.getView(R.id.Ok_Button));
-            solo.sleep(600);
-
-            solo.enterText((EditText)solo.getView(R.id.reason), "reason");
-            solo.sleep(500);
-            solo.pressSpinnerItem(0, -1);
-            solo.sleep(500);
-            // select wednesday
-            solo.clickOnView(solo.getView(R.id.day_picker));
-            solo.sleep(600);
-
-            solo.enterText((EditText)solo.getView(R.id.habitName), "nametest");
-            solo.sleep(500);
-
-            solo.clickOnButton("Save");
-            solo.sleep(2000);
-            solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-        }
     }
 
     /**

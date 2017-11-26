@@ -194,7 +194,7 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
-                intent_Statistic.putExtra("Profile", user);
+                intent_Statistic.putExtra(StatisticActivity.ID_USER, user);
                 startActivity(intent_Statistic);
                 return true;
             case R.id.menu_button_Habit_History:

@@ -148,7 +148,6 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
     public void clearInputFields(View v) {
         habitName.setText("");
         reason.setText("");
-        startDate.setText("");
         dayPicker.clearSelection();
     }
 

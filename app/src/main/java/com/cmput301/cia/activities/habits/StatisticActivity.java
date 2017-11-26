@@ -35,6 +35,8 @@ import java.util.Map;
 
 public class StatisticActivity extends AppCompatActivity {
 
+    public static final String ID_USER = "Profile";
+
     private Profile user;
     private ListView typeList;
     private ArrayAdapter<String> adapter;
@@ -47,10 +49,10 @@ public class StatisticActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_statistic);
         setSupportActionBar(toolbar);
 
-        user = (Profile) getIntent().getSerializableExtra("Profile");
+        user = (Profile) getIntent().getSerializableExtra(ID_USER);
 
         typeList = (ListView)findViewById(R.id.Type_List_View);
-        final List<String> types = new ArrayList<String>();
+        final List<String> types = new ArrayList<>();
         if (user.getHabitCategories() == null){
             types.add(null);
         }
