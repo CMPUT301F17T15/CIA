@@ -42,13 +42,15 @@ public class FollowerHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follower_history);
 
-        user = (Profile) getIntent().getSerializableExtra("user");
+        Intent intent = getIntent();
+        user = (Profile) intent.getSerializableExtra(SearchUsersActivity.ID_USER);
         followed_history = user.getFollowedHabitHistory();
         historyList = (ListView) findViewById(R.id.followed_history);
         Button goBack = (Button) findViewById(R.id.back);
         goBack.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(FollowerHistoryActivity.this, HomePageActivity.class);
+                intent.putExtra(SearchUsersActivity.ID_USER, user);
                 startActivity(intent);
             }
         });
