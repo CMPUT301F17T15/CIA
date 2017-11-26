@@ -43,7 +43,7 @@ public class FollowRequestsActivity extends AppCompatActivity {
 
         RecyclerView rvFollowerRequests = (RecyclerView) findViewById(R.id.rvFollowerRequests);
         followRequests = user.getFollowRequests();
-        FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests);
+        FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
 
         rvFollowerRequests.setAdapter(adapter);
         rvFollowerRequests.setLayoutManager(new LinearLayoutManager(this));

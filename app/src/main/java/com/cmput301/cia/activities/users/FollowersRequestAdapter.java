@@ -22,13 +22,14 @@ import java.util.List;
  */
 
 public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersRequestAdapter.ViewHolder>{
-
     private List<Profile> followRequests;
     private Context context;
+    private Profile profile;
 
-    public FollowersRequestAdapter(Context context, List<Profile> followRequests) {
+    public FollowersRequestAdapter(Context context, List<Profile> followRequests, Profile profile) {
         this.followRequests = followRequests;
         this.context = context;
+        this.profile = profile;
     }
 
     private Context getContext() {
@@ -45,12 +46,25 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Profile contact = followRequests.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Profile userRequestee = followRequests.get(position);
 
         // Set item views based on your views and data model
         TextView textView = holder.followRequestee;
-        textView.setText(contact.getName());
+        textView.setText(userRequestee.getName());
+
+        Button approveButton = holder.approveButton;
+        approveButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                profile.acceptFollowRequest(userRequestee);
+                profile.removeFollowRequest(userRequestee);
+                profile.save();
+                userRequestee.save();
+                notifyItemRemoved(position);
+            }
+        });
     }
 
     @Override
