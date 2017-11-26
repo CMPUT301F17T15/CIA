@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.cmput301.cia.R;
@@ -28,6 +29,7 @@ import java.util.List;
 
 public class FollowRequestsActivity extends AppCompatActivity {
     public static final String ID_PROFILE = "User";
+    public static final String PROFILE_ID = "FollowerRequest";
 
     private Profile user;
     private String name;
@@ -43,7 +45,17 @@ public class FollowRequestsActivity extends AppCompatActivity {
 
         RecyclerView rvFollowerRequests = (RecyclerView) findViewById(R.id.rvFollowerRequests);
         followRequests = user.getFollowRequests();
-        FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
+        final FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
+
+        adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Intent intent = new Intent(FollowRequestsActivity.this, UserProfileActivity.class);
+                intent.putExtra(UserProfileActivity.PROFILE_ID, adapter.getProfile(position));
+                intent.putExtra(UserProfileActivity.USER_ID, user);
+                startActivity(intent);
+            }
+        });
 
         rvFollowerRequests.setAdapter(adapter);
         rvFollowerRequests.setLayoutManager(new LinearLayoutManager(this));

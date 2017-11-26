@@ -5,6 +5,7 @@
 package com.cmput301.cia.activities.users;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,10 @@ import com.cmput301.cia.models.Profile;
 import java.util.List;
 
 /**
- * Created by Jessica on 2017-11-24.
+ * @author Jessica Prieto
+ * November 24, 2017
+ *
+ * vresion 1
  */
 
 public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersRequestAdapter.ViewHolder>{
@@ -36,6 +40,21 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         return context;
     }
 
+    public Profile getProfile(int position) {
+        return followRequests.get(position);
+    }
+
+    private OnItemClickListener listener;
+
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -46,8 +65,16 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Profile userRequestee = followRequests.get(position);
+        holder.itemView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if(listener != null) {
+                    listener.onItemClick(holder.itemView, position);
+                }
+            }
+        });
 
         // Set item views based on your views and data model
         TextView textView = holder.followRequestee;
@@ -77,12 +104,25 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         public Button approveButton;
         public Button declineButton;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             followRequestee = (TextView) itemView.findViewById(R.id.followRequesteeName);
             approveButton = (Button) itemView.findViewById(R.id.approveButton);
             declineButton = (Button) itemView.findViewById(R.id.declineButton);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(itemView, position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
