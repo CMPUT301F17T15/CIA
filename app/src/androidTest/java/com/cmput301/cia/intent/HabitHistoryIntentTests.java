@@ -9,7 +9,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.events.FilterEventsActivity;
+import com.cmput301.cia.activities.events.FilterHabitsActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -73,7 +73,7 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
     public void testNavigation() throws Exception {
         solo.clickOnButton("Habits");
         solo.sleep(2000);
-        solo.assertCurrentActivity("wrong activity", FilterEventsActivity.class);
+        solo.assertCurrentActivity("wrong activity", FilterHabitsActivity.class);
     }
 
     public void testFilters() throws Exception {
@@ -103,7 +103,7 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
 
         solo.clickOnButton("Habits");
         solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", FilterEventsActivity.class);
+        solo.assertCurrentActivity("wrong activity", FilterHabitsActivity.class);
         solo.clickInList(1, 0);
         solo.sleep(1000);
         solo.clickOnButton("Finish");

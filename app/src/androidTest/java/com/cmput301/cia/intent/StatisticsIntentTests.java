@@ -4,18 +4,26 @@
 
 package com.cmput301.cia.intent;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.habits.StatisticViewActivity;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Version 1
@@ -26,48 +34,33 @@ import com.robotium.solo.Solo;
  * NOTE: These tests require an internet connection
  */
 
-public class StatisticsIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class StatisticsIntentTests extends ActivityInstrumentationTestCase2<StatisticActivity> {
     private Solo solo;
 
-    public StatisticsIntentTests(){super(com.cmput301.cia.activities.MainActivity.class);}
+    public StatisticsIntentTests(){super(StatisticActivity.class);}
 
     public void setUp() throws Exception {
+
+        List<Integer> allDays = new ArrayList<>();
+        for (int i = 1; i <= 7; ++i){
+            allDays.add(i);
+        }
+
+        Profile profile = new TestProfile("xyz");
+        Habit habit = new Habit("T1", "", new Date(), allDays, "x");
+        habit.setId("one");
+        profile.addHabit(habit);
+
+        Habit habit2 = new Habit("T55", "", new Date(), allDays, "y");
+        habit2.setId("h2");
+        profile.addHabit(habit2);
+
+        Intent intent = new Intent();
+        intent.putExtra(StatisticActivity.ID_USER, profile);
+        setActivityIntent(intent);
+
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
-
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
-        solo.clickOnButton("Login");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-
-        // add a habit because the list is empty
-        if (((ExpandableListView)solo.getView(R.id.HabitTypeExpandableListView)).getAdapter().getCount() == 0){
-
-            solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
-            solo.clickOnMenuItem("Add New Habit");
-            solo.sleep(1000);
-            solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
-
-            solo.enterText((EditText)solo.getView(R.id.edit_Type_Input), "newtype");
-            solo.sleep(600);
-            solo.clickOnView(solo.getView(R.id.Ok_Button));
-            solo.sleep(600);
-
-            solo.enterText((EditText)solo.getView(R.id.reason), "reason");
-            solo.sleep(500);
-            solo.pressSpinnerItem(0, -1);
-            solo.sleep(500);
-            // select wednesday
-            solo.clickOnView(solo.getView(R.id.day_picker));
-            solo.sleep(600);
-
-            solo.enterText((EditText)solo.getView(R.id.habitName), "nametest");
-            solo.sleep(500);
-
-            solo.clickOnButton("Save");
-            solo.sleep(2000);
-            solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
-        }
     }
 
     public void testView(){

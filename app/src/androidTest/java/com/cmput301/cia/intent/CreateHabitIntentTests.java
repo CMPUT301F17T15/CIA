@@ -4,18 +4,24 @@
 
 package com.cmput301.cia.intent;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Version 1
@@ -26,19 +32,20 @@ import java.lang.reflect.Field;
  * NOTE: These tests require an internet connection
  */
 
-public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<MainActivity> {
+public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
     private Solo solo;
 
-    public CreateHabitIntentTests(){super(com.cmput301.cia.activities.MainActivity.class);}
+    public CreateHabitIntentTests(){super(HomePageActivity.class);}
 
     public void setUp() throws Exception {
+
+        Profile profile = new TestProfile("xyz");
+        Intent intent = new Intent();
+        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        setActivityIntent(intent);
+
         solo = new Solo(getInstrumentation(), getActivity());
         Log.d("SETUP", "setUp()");
-
-        solo.enterText((EditText)solo.getView(R.id.loginNameEdit), "nowitenz3");
-        solo.clickOnButton("Login");
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
     }
 
     public void testClear(){
@@ -46,6 +53,12 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.clickOnMenuItem("Add New Habit");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
+
+        // no types exist previously, so a dialog requesting input pops up
+        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.sleep(600);
+        solo.clickOnView(solo.getView(R.id.Ok_Button));
+        solo.sleep(1000);
 
         solo.enterText((EditText)solo.getView(R.id.reason), "reason");
         solo.sleep(500);
@@ -69,14 +82,24 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Mai
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
+
+        // no types exist previously, so a dialog requesting input pops up
+        solo.clickOnView(solo.getView(R.id.Ok_Button));
+        solo.sleep(1000);
+        // dialog should not close because the new type was empty
+        assertNotNull("Dialog was closed", solo.getView(R.id.Ok_Button));
+        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.sleep(600);
+        solo.clickOnView(solo.getView(R.id.Ok_Button));
+        solo.sleep(1000);
+
         solo.enterText((EditText)solo.getView(R.id.reason), "reason");
         solo.sleep(500);
-        solo.pressSpinnerItem(0, 1);
-        solo.sleep(500);
+
         solo.clickOnButton("Save");
         solo.sleep(1000);
 
-        // should not change because no days selected
+        // should not change because no days were selected
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
         // select wednesday

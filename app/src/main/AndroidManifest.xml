@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".activities.events.HistoryActivity" />
         <activity
-            android:name=".activities.events.FilterEventsActivity"
+            android:name=".activities.events.FilterHabitsActivity"
             android:label="@string/title_activity_filter_events"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -5,9 +5,7 @@
 package com.cmput301.cia.activities.events;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,14 +25,6 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.DeviceUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -93,8 +83,8 @@ public class HistoryActivity extends LocationRequestingActivity {
         // allow the user to pick a filter habit
         eventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(HistoryActivity.this, FilterEventsActivity.class);
-                intent.putExtra(FilterEventsActivity.ID_USER, user);
+                Intent intent = new Intent(HistoryActivity.this, FilterHabitsActivity.class);
+                intent.putExtra(FilterHabitsActivity.ID_USER, user);
                 startActivityForResult(intent, FILTER_CODE);
             }
         });
@@ -175,7 +165,7 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         if (requestCode == FILTER_CODE) {
             if (resultCode == RESULT_OK) {
-                String habitId = data.getStringExtra(FilterEventsActivity.RETURNED_HABIT_ID);
+                String habitId = data.getStringExtra(FilterHabitsActivity.RETURNED_HABIT_ID);
                 if (!habitId.equals("")) {
                     filterHabit = user.getHabitById(habitId);
                     filterHabitText.setText(filterHabit.getTitle());

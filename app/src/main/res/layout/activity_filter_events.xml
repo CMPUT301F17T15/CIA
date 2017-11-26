@@ -4,21 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.activities.events.FilterEventsActivity">
-
-    <Button
-        android:id="@+id/filterCancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="185dp"
-        android:layout_marginRight="8dp"
-        android:onClick="onCancelClicked"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.922"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    tools:context="com.cmput301.cia.activities.events.FilterHabitsActivity">
 
     <ListView
         android:id="@+id/filterListView"
@@ -37,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginLeft="181dp"
+        android:layout_marginLeft="280dp"
         android:onClick="onFinishClicked"
         android:text="Finish"
         app:layout_constraintBottom_toBottomOf="parent"
