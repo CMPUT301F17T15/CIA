@@ -7,6 +7,7 @@ package com.cmput301.cia.activities.users;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,8 +15,6 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.events.FilterEventsActivity;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -34,8 +33,9 @@ import java.util.List;
 public class FollowerHistoryActivity extends AppCompatActivity {
 
     private Profile user;
-    private List<HabitEvent> followed_history;
+    private List<Pair<HabitEvent, String>> followed_history;
     private ListView historyList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +65,9 @@ public class FollowerHistoryActivity extends AppCompatActivity {
      */
     private void display(){
         List<String> habitList = new ArrayList<>(this.followed_history.size());
-        for (HabitEvent event : this.followed_history) {
-            Habit habit = user.getHabitById(event.getHabitId());
-            habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+        for (Pair<HabitEvent, String> event : this.followed_history) {
+            Habit habit = user.getHabitById(event.first.getHabitId());
+            habitList.add(event.second + " completed " + habit.getTitle() + " on " + event.first.getDate());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
         historyList.setAdapter(adapter);
