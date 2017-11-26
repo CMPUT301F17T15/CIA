@@ -268,12 +268,12 @@ public class ProfileTests {
             assertTrue(name != null);
 
             if (previousName != null) {
-                // if both names are the same, then the previous habit's title must be lexicographically smaller
+                // if both names are the same, then the previous habit's title must be lexicographically smaller (or equivalent if same name)
                 if (previousName.compareTo(name) == 0){
-                    assertTrue(previousTitle.compareTo(habit.getTitle()) > 0);
+                    assertTrue(previousTitle.compareTo(habit.getTitle()) <= 0);
                 } else {
-                    // names are different, so previous name must be lexicographically smaller
-                    assertTrue(previousName.compareTo(name) > 0);
+                    // names are different, so previous name must be lexicographically smaller since names are unique
+                    assertTrue(previousName.compareTo(name) < 0);
                 }
             }
 

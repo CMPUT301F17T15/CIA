@@ -320,18 +320,18 @@ public class Profile extends ElasticSearchable {
      */
     public List<Habit> getFollowedHabits(){
 
+        // map (habit -> user name of creator)
+        final Map<Habit, String> eventDetailsMap = new HashMap<>();
+
         // get all habits
         List<Habit> list = new ArrayList<>();
         for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 list.add(habit);
+                eventDetailsMap.put(habit, followee.getName());
             }
         }
 
-        // map (habit -> user name of creator)
-        final Map<Habit, String> eventDetailsMap = new HashMap<>();
-
-        // TODO: test
         Collections.sort(list, new Comparator<Habit>() {
             @Override
             public int compare(Habit habitOne, Habit habitTwo) {
