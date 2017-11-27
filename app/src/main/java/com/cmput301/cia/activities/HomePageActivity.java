@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -91,6 +92,18 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
+
+        TextView message = (TextView) findViewById(R.id.viewMessage);
+        try{
+            if (user.getMessage()==""){
+                message.setText("no message ");
+            }else{
+                String send_message = user.getMessage();
+                message.setText("new message: "+send_message);
+                user.clearMessage();}
+        }catch (Exception e){
+            message.setText("No Message ");
+        }
 
         // reload the profile if it is not new, in order to read the offline events data
         if (user.hasValidId())

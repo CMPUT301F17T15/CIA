@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -60,9 +63,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private Button followButton;
     private Button unfollowButton;
+    private Button sendButton;
 
     // the profile's comment
     private EditText commentText;
+    private EditText sendMessage;
 
     // the profile's photo
     private ImageView imageView;
@@ -93,9 +98,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
         // initialize view member variables
         TextView nameText = (TextView)findViewById(R.id.profileNameText);
+        sendMessage = (EditText)findViewById(R.id.editText);
+        sendMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        sendMessage.setGravity(Gravity.TOP);
+        sendMessage.setSingleLine(false);
+        sendMessage.setHorizontallyScrolling(false);
+
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
+        sendButton = (Button)findViewById(R.id.profileSendButton);
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
@@ -170,6 +182,16 @@ public class UserProfileActivity extends AppCompatActivity {
                 followButton.setVisibility(View.VISIBLE);
             }
         });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = sendMessage.getText().toString();
+                profile.setMessage(message);
+                profile.save();
+            }
+        });
+
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
