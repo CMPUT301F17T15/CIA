@@ -95,7 +95,7 @@ public class HomePageActivity extends AppCompatActivity {
 
         TextView message = (TextView) findViewById(R.id.viewMessage);
         try{
-            if (user.getMessage()==""){
+            if (user.getMessage()=="" || user.getMessage()==null){
                 message.setText("no message ");
             }else{
                 String send_message = user.getMessage();
