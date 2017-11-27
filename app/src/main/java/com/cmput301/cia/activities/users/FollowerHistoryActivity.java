@@ -58,17 +58,18 @@ public class FollowerHistoryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String user_name = followed_history.get(position).second;
-                Intent intent = new Intent(FollowerHistoryActivity.this, SendMessageActivity.class);
-                intent.putExtra("name",user_name);
-                intent.putExtra("pos",position);
-                intent.putExtra(SearchUsersActivity.ID_USER, user);
-                startActivity(intent);
-            }
-        });
+
+//        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                String user_name = followed_history.get(position).second;
+//                Intent intent = new Intent(FollowerHistoryActivity.this, SendMessageActivity.class);
+//                intent.putExtra("name",user_name);
+//                intent.putExtra("pos",position);
+//                intent.putExtra(SearchUsersActivity.ID_USER, user);
+//                startActivity(intent);
+//            }
+//        });
 
 
     }

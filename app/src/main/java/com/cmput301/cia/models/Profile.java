@@ -74,6 +74,9 @@ public class Profile extends ElasticSearchable {
     // The user's profile picture in base64
     private String image;
 
+    // other user send message to user
+    private String message;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -679,4 +682,24 @@ public class Profile extends ElasticSearchable {
         this.habits = habits;
     }
 
+    /**
+     * set message, modify by Guanfang Dong
+     */
+    public void setMessage(String message){
+        this.message = message;
+    }
+
+    /**
+     * @return the message
+     */
+    public String getMessage(){
+        return message;
+    }
+
+    /**
+     * clear message
+     */
+    public void clearMessage(){
+        this.message ="";
+    }
 }
