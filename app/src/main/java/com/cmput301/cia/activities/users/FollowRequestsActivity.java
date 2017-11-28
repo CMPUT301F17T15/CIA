@@ -13,9 +13,11 @@ import android.view.View;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.FollowersRequestAdapter;
+import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,6 +36,18 @@ public class FollowRequestsActivity extends AppCompatActivity {
     private String name;
     private List<String> followRequestIds;
     private List<Profile> followRequests;
+    private FollowersRequestAdapter adapter;
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        followRequestIds = Follow.getPendingFollows(user.getId());
+        followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
+
+        adapter.setFollowRequests(followRequests);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +58,11 @@ public class FollowRequestsActivity extends AppCompatActivity {
         user = (Profile) intent.getSerializableExtra(SearchUsersActivity.ID_USER);
 
         RecyclerView rvFollowerRequests = (RecyclerView) findViewById(R.id.rvFollowerRequests);
-        followRequestIds = user.getFollowRequests();
+
+        followRequestIds = Follow.getPendingFollows(user.getId());
         followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
 
-        final FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
+        adapter = new FollowersRequestAdapter(this, followRequests, user);
 
         adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {
             @Override

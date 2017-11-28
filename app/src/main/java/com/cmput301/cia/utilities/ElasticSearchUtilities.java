@@ -91,6 +91,39 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Asynchronous Task for searching for getting all of the type of object in the database
+     *
+     * Takes in 2 string parameters:
+     * - The first one is the type id of the object to search for
+     *
+     * @return (@nullable result, success) as a pair
+     */
+    private static class GetAllTask extends AsyncTask<String, Void, Pair<SearchResult, Boolean>> {
+        @Override
+        protected Pair<SearchResult, Boolean> doInBackground(String... search_parameters) {
+            verifySettings();
+
+            String typeId = search_parameters[0];
+            Search search = new Search.Builder("{ \"size\" : 100 } ").addIndex(INDEX).addType(typeId).build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    return new Pair<>(result, Boolean.TRUE);
+                } else {
+                    Log.i("Error", "the search query failed to find any objects that matched");
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                return new Pair<>(null, Boolean.FALSE);
+            }
+
+            return new Pair<>(null, Boolean.TRUE);
+        }
+    }
+
+    /**
      * Asynchronous Task for searching for an object in the database through parameters in the source
      *
      * Takes in 2 string parameters:
@@ -288,6 +321,24 @@ public class ElasticSearchUtilities {
     }
 
     /**
+     * Execute a search with ElasticSearch for all data in the object
+     * @param typeId the type template id all results must match
+     * @return (@nullable result, success) as a pair
+     */
+    public static Pair<SearchResult, Boolean> getAll(String typeId){
+        try {
+            return new GetAllTask().execute(typeId).get(MAX_QUERY_TIME, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        return new Pair<>(null, Boolean.FALSE);
+    }
+
+    /**
      * Search for all records with one of the specified ids in the list
      * @param typeId the type template id that all results must match
      * @param tempClass the java class of the generic type T
@@ -297,6 +348,37 @@ public class ElasticSearchUtilities {
      */
     public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass, List<String> ids){
         Pair<SearchResult, Boolean> result = searchByIds(typeId, getCompleteIdsListQuery(ids, typeId));
+        if (result.first != null && result.first.isSucceeded()) {
+
+            List<T> found = result.first.getSourceAsObjectList(tempClass);
+
+            // transform result into json
+            JsonObject jo = result.first.getJsonObject();
+
+            // get array of only the records in the database, and not the other parts of the result object
+            JsonArray array = jo.get("hits").getAsJsonObject().get("hits").getAsJsonArray();
+
+            // look at each record individually
+            for (int i = 0; i < array.size(); ++i){
+                JsonObject record = array.get(i).getAsJsonObject();
+                // set the id of this object since jest does not do it automatically
+                found.get(i).setId(record.get("_id").getAsString());
+            }
+            return found;
+        }
+
+        return new ArrayList<>();
+    }
+
+    /**
+     * Search for all records for a particular model
+     * @param typeId the type template id that all results must match
+     * @param tempClass the java class of the generic type T
+     * @param <T> generic representing the java type corresponding to that type ID
+     * @return the list of all records matching that type ID that have one of the ids in the list
+     */
+    public static <T extends ElasticSearchable> List<T> getListOf(String typeId, Class<T> tempClass){
+        Pair<SearchResult, Boolean> result = getAll(typeId);
         if (result.first != null && result.first.isSucceeded()) {
 
             List<T> found = result.first.getSourceAsObjectList(tempClass);
