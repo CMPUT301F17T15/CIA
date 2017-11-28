@@ -5,21 +5,21 @@
 package com.cmput301.cia.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
@@ -38,7 +38,6 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
@@ -92,6 +91,13 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
+
+        AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(this);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        alertDialogBuilder.setTitle("Message");
+        alertDialogBuilder.setMessage("meeeage");
+        alertDialog.show();
 
         TextView message = (TextView) findViewById(R.id.viewMessage);
         try{
