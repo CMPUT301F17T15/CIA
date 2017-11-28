@@ -7,6 +7,7 @@ package com.cmput301.cia.activities.events;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.FontUtilities;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -115,6 +117,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         });
 
         convertEventsToString();
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.historyLayout));
     }
 
     @Override

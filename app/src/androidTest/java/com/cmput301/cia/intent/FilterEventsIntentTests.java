@@ -72,11 +72,17 @@ public class FilterEventsIntentTests extends ActivityInstrumentationTestCase2<Hi
     }
 
     public void testFinishAndCancel() throws NoSuchFieldException, IllegalAccessException {
-        assertEquals("", ((TextView)solo.getView(R.id.filterHabitText)).getText().toString());
-        solo.clickInList(1, 0);
 
-        String title = ((ListView)solo.getView(R.id.filterListView)).getAdapter().getItem(0).toString();
-        assertEquals(title, ((TextView)solo.getView(R.id.filterHabitText)).getText().toString());
+        Field fieldFilter = solo.getCurrentActivity().getClass().getDeclaredField("selected");
+        fieldFilter.setAccessible(true);
+
+        assertTrue(fieldFilter.get(solo.getCurrentActivity()) == null);
+        solo.clickInList(1, 0);
+        solo.sleep(1000);
+
+        Habit habit = (Habit) fieldFilter.get(solo.getCurrentActivity());
+
+        assertEquals(habit, ((ListView)solo.getView(R.id.filterListView)).getAdapter().getItem(0));
 
         solo.clickOnButton("Finish");
         solo.sleep(1000);
@@ -85,7 +91,7 @@ public class FilterEventsIntentTests extends ActivityInstrumentationTestCase2<Hi
         // make sure that the history activity was notified of the habit selection
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("filterHabit");
         field.setAccessible(true);
-        assertEquals(((Habit)field.get(solo.getCurrentActivity())).getTitle(), title);
+        assertEquals(field.get(solo.getCurrentActivity()), habit);
 
         solo.clickOnButton("Habits");
         solo.sleep(1000);
@@ -96,7 +102,7 @@ public class FilterEventsIntentTests extends ActivityInstrumentationTestCase2<Hi
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
 
-        assertEquals(((Habit)field.get(solo.getCurrentActivity())).getTitle(), title);
+        assertEquals(field.get(solo.getCurrentActivity()), habit);
 
         solo.clickOnButton("Habits");
         solo.sleep(1000);
@@ -107,8 +113,7 @@ public class FilterEventsIntentTests extends ActivityInstrumentationTestCase2<Hi
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
 
-        assertEquals(((Habit)field.get(solo.getCurrentActivity())).getTitle(), title);
-
+        assertEquals(field.get(solo.getCurrentActivity()), habit);
     }
 
     @Override

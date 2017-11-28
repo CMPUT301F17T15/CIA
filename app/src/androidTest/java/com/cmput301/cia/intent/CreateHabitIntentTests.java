@@ -49,7 +49,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
     }
 
     public void testClear(){
-        solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
+        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
         solo.clickOnMenuItem("Add New Habit");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
@@ -77,7 +77,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         field.setAccessible(true);
         int count = ((Profile)field.get(solo.getCurrentActivity())).getHabitsCount();
 
-        solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
+        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
         solo.clickOnMenuItem("Add New Habit");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
@@ -123,7 +123,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
     }
 
     public void testLength(){
-        solo.clickOnActionBarItem(R.id.CreateNewHabitButton);
+        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
         solo.clickOnMenuItem("Add New Habit");
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
