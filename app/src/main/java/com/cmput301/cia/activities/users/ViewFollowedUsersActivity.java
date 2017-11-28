@@ -16,9 +16,12 @@ import android.widget.ListView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.models.AddHabitEvent;
+import com.cmput301.cia.models.ElasticSearchable;
+import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
 import java.util.List;
@@ -51,6 +54,7 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
     private ListView followedList;
     private ArrayAdapter<Profile> listAdapter;
     private List<Profile> followed;
+    private List<String> followingIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,9 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
         user = (Profile) intent.getSerializableExtra(ID_USER);
 
         followedList = (ListView)findViewById(R.id.vfuList);
-        followed = profile.getFollowing();
+
+        followingIds = Follow.getFollowing(profile.getId());
+        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
         listAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(listAdapter);
 
@@ -85,7 +91,7 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         // TODO: test if profile.getFollowing() works as serializable. if not then just return profile
-        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)profile.getFollowingIds());
+        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followingIds);
         returnIntent.putExtra(RETURNED_ISUSER, profile.equals(user));
         setResult(RESULT_OK, returnIntent);
         finish();
@@ -94,7 +100,7 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        followed = profile.getFollowing();
+        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
         listAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(listAdapter);
     }

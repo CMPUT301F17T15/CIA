@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -93,7 +94,7 @@ public class UserProfileActivity extends AppCompatActivity {
         profile = (Profile) intent.getSerializableExtra(PROFILE_ID);
         user = (Profile) intent.getSerializableExtra(USER_ID);
 
-        followerRequestIds = profile.getFollowRequests();
+        followerRequestIds = Follow.getPendingFollows(user.getId());
         followerRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followerRequestIds);
 
         // initialize view member variables
@@ -121,7 +122,9 @@ public class UserProfileActivity extends AppCompatActivity {
             commentText.setEnabled(false);
             imageView.setClickable(false);
 
-            if (user.isFollowing(profile))
+            List<String> following = Follow.getFollowing(user.getId());
+
+            if (following.contains(profile.getId()))
                 followButton.setVisibility(View.INVISIBLE);
             else
                 unfollowButton.setVisibility(View.INVISIBLE);
@@ -162,11 +165,12 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!followerRequestIds.contains(user)) {
                     followButton.setText(followButtonMessage_pending);
-                    profile.addFollowRequest(user);
-                    profile.save();
+                    Follow newFollow = new Follow(profile.getId(), user.getId());
+                    newFollow.save();
                 } else {
-                    profile.removeFollowRequest(user);
-                    profile.save();
+                    Follow toRemove = Follow.getFollow(profile.getId(), user.getId(), Follow.Status.PENDING);
+                    toRemove.removeFollowRequest(profile.getId(), user.getId());
+                    toRemove.save();
                     followButton.setText(followButtonMessage_follow);
                 }
             }
@@ -175,9 +179,9 @@ public class UserProfileActivity extends AppCompatActivity {
         unfollowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                user.unfollow(profile);
-                user.save();
-                profile.save();
+                Follow toUnfollow = Follow.getFollow(profile.getId(), user.getId(), Follow.Status.ACCEPTED);
+                toUnfollow.delete();
+
                 unfollowButton.setVisibility(View.INVISIBLE);
                 followButton.setVisibility(View.VISIBLE);
             }

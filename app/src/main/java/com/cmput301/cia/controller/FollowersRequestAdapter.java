@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author Jessica Prieto
  * November 24, 2017
  *
- * vresion 1
+ * version 1
  */
 
 public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersRequestAdapter.ViewHolder>{
@@ -82,10 +83,12 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
 
             @Override
             public void onClick(View view) {
-                profile.acceptFollowRequest(userRequestee);
-                profile.removeFollowRequest(userRequestee);
-                profile.save();
-                userRequestee.save();
+                Follow follow = Follow.getFollow(userRequestee.getId(), profile.getId(), Follow.Status.PENDING);
+                follow.acceptFollowRequest();
+
+                Follow.removeFollowRequest(userRequestee.getId(), profile.getId());
+                follow.save();
+
                 notifyItemRemoved(position);
             }
         });

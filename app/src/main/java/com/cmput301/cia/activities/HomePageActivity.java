@@ -34,6 +34,7 @@ import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.controller.ExpandableListViewAdapter;
 import com.cmput301.cia.models.AddHabitEvent;
+import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
@@ -358,8 +359,11 @@ public class HomePageActivity extends AppCompatActivity {
         } else if (requestCode == FOLLOWED_USERS){
             if (resultCode == RESULT_OK){
                 List<String> followed = (List<String>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
-                user.setFollowing(followed);
-                user.save();
+
+                for (String toFollow : followed) {
+                    Follow newFollow = new Follow(user.getId(), toFollow);
+                    newFollow.save();
+                }
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
