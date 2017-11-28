@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
 import java.util.ArrayList;
@@ -76,8 +78,6 @@ public class HomePageActivity extends AppCompatActivity {
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
 
-    //private ArrayAdapter<Habit> lvc_adapter;
-
     // the habits the user must do today
     private List<Habit> todaysHabits;
 
@@ -92,18 +92,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
-
-        TextView message = (TextView) findViewById(R.id.viewMessage);
-        try{
-            if (user.getMessage()=="" || user.getMessage()==null){
-                message.setText("no message ");
-            }else{
-                String send_message = user.getMessage();
-                message.setText("new message: "+send_message);
-                user.clearMessage();}
-        }catch (Exception e){
-            message.setText("No Message ");
-        }
 
         // reload the profile if it is not new, in order to read the offline events data
         if (user.hasValidId())
@@ -127,7 +115,7 @@ public class HomePageActivity extends AppCompatActivity {
         user.setLastLogin(currentDate);
         user.save();
 
-        // initialize the list of all habits the user has
+        // initialize the list displaying all habits the user has
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
@@ -138,11 +126,11 @@ public class HomePageActivity extends AppCompatActivity {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
 
-                ArrayList<String> types = new ArrayList<String>();
+                ArrayList<String> types = new ArrayList<>();
                 types.addAll(user.getHabitCategories());
                 intent.putExtra("Categories", types);
 
@@ -159,22 +147,8 @@ public class HomePageActivity extends AppCompatActivity {
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
-    }
 
-    //button on activity_home_page bridge to activity_create_habit
-    public void newHabit(View view){
-        if (user.getHabitCategories() != null) {
-            List<String> types = new ArrayList<String>();
-            types.addAll(user.getHabitCategories());
-            Intent intent = new Intent(this, CreateHabitActivity.class);
-            intent.putStringArrayListExtra("types", (ArrayList<String>) types);
-            startActivityForResult(intent, CREATE_HABIT);
-        }
-        else {
-            Intent intent = new Intent(this, CreateHabitActivity.class);
-            intent.putStringArrayListExtra("types", null);
-            startActivityForResult(intent, CREATE_HABIT);
-        }
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
     }
 
     //Create the menu object
