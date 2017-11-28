@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -101,6 +103,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
 
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
 
     @Override

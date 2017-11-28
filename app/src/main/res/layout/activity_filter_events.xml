@@ -2,21 +2,22 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/filterHabitsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.events.FilterHabitsActivity">
 
     <ListView
         android:id="@+id/filterListView"
-        android:layout_width="342dp"
-        android:layout_height="450dp"
+        android:layout_width="341dp"
+        android:layout_height="409dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="59dp"
+        app:layout_constraintHorizontal_bias="0.315"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.277" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/filterFinishButton"
@@ -30,12 +31,16 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
-        android:id="@+id/filterHabitText"
-        android:layout_width="155dp"
-        android:layout_height="29dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="16dp"
+        android:id="@+id/filterStaticText"
+        android:layout_width="218dp"
+        android:layout_height="31dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Select Filter Habit"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
