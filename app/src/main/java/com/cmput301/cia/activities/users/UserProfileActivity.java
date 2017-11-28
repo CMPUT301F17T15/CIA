@@ -187,7 +187,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = sendMessage.getText().toString();
-                profile.setMessage(message);
+                profile.sendMessage(message);
                 profile.save();
             }
         });

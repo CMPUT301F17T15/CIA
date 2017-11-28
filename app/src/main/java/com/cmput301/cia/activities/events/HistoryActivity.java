@@ -41,11 +41,8 @@ import java.util.List;
 
 public class HistoryActivity extends LocationRequestingActivity {
 
-    // Intent data identifier for the passed in profile
+    // Intent data identifier for the passed in and returned profile
     public static final String ID_PROFILE = "Profile";
-
-    // Intent data identifier for returned habits list
-    public static final String RETURNED_HABITS_ID = "Habits";
 
     private static final int FILTER_CODE = 0, EVENT_CODE = 1;
 
@@ -214,7 +211,7 @@ public class HistoryActivity extends LocationRequestingActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
+        intent.putExtra(ID_PROFILE, user);
         setResult(RESULT_OK, intent);
         finish();
     }
