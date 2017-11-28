@@ -5,6 +5,7 @@
 package com.cmput301.cia.activities;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ import com.cmput301.cia.activities.users.RankingsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.controller.ExpandableListViewAdapter;
 import com.cmput301.cia.models.AddHabitEvent;
@@ -145,6 +147,28 @@ public class HomePageActivity extends AppCompatActivity {
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
+
+        findViewById(R.id.homeAddHabitButton).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent = new Intent(HomePageActivity.this, CreateHabitActivity.class);
+                if (user.getHabitCategories() != null) {
+                    List<String> types = new ArrayList<>();
+                    types.addAll(user.getHabitCategories());
+                    intent.putStringArrayListExtra("types", (ArrayList<String>) types);
+                }
+                startActivityForResult(intent, CREATE_HABIT);
+            }
+        });
+
+        findViewById(R.id.homeHistoryImageView).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent_Habit_History = new Intent(HomePageActivity.this, HistoryActivity.class);
+                intent_Habit_History.putExtra(HistoryActivity.ID_PROFILE, user);
+                startActivityForResult(intent_Habit_History, VIEW_HABIT_HISTORY);
+            }
+        });
 
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
     }
