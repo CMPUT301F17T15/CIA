@@ -5,6 +5,8 @@
 package com.cmput301.cia.activities;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Pair;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.ButtonClickListener;
@@ -38,14 +41,27 @@ public class MainActivity extends AppCompatActivity {
 
     // The view where the user enters their name
     private EditText userName;
+    private VideoView backGround;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        backGround = (VideoView) findViewById(R.id.backGround);
         userName = (EditText) findViewById(R.id.loginNameEdit);
         SerializableUtilities.initializeFilesDir(getFilesDir().getPath());
+
+        //setting the video in raw as background.
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cia);
+        backGround.setVideoURI(uri);
+        backGround.start();
+        backGround.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+            }
+        });
 
         Button login = (Button)findViewById(R.id.loginButton);
         login.setOnClickListener(new ButtonClickListener() {
