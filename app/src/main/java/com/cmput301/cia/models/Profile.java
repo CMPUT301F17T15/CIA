@@ -431,15 +431,21 @@ public class Profile extends ElasticSearchable {
     @Override
     public boolean save(){
         boolean success = true;
-        synchronize();
 
         for (Habit habit : habits){
             success = success && habit.save();
         }
 
         if (success) {
+            // temporarily remove pending events to prevent ElasticSearch from saving it
+            List<OfflineEvent> pending = pendingEvents;
+            pendingEvents.clear();
+
             success = ElasticSearchUtilities.save(this);
+
+            pendingEvents = pending;
         }
+
         SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
         return success;
     }
