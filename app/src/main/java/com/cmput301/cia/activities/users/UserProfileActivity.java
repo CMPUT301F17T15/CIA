@@ -165,11 +165,11 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!followerRequestIds.contains(user)) {
                     followButton.setText(followButtonMessage_pending);
-                    Follow newFollow = new Follow(profile.getId(), user.getId());
+                    Follow newFollow = new Follow(user.getId(), profile.getId());
                     newFollow.save();
                 } else {
-                    Follow toRemove = Follow.getFollow(profile.getId(), user.getId(), Follow.Status.PENDING);
-                    toRemove.removeFollowRequest(profile.getId(), user.getId());
+                    Follow toRemove = Follow.getFollow(user.getId(), profile.getId(), Follow.Status.PENDING);
+                    toRemove.removeFollowRequest(user.getId(), profile.getId());
                     toRemove.save();
                     followButton.setText(followButtonMessage_follow);
                 }
@@ -179,11 +179,11 @@ public class UserProfileActivity extends AppCompatActivity {
         unfollowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Follow toUnfollow = Follow.getFollow(profile.getId(), user.getId(), Follow.Status.ACCEPTED);
-                toUnfollow.delete();
+                Follow toUnfollow = Follow.getFollow(user.getId(), profile.getId(), Follow.Status.ACCEPTED);
 
                 unfollowButton.setVisibility(View.INVISIBLE);
                 followButton.setVisibility(View.VISIBLE);
+                toUnfollow.delete();
             }
         });
 

@@ -79,6 +79,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         TextView textView = holder.followRequestee;
         textView.setText(userRequestee.getName());
         Button approveButton = holder.approveButton;
+
         approveButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -86,9 +87,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
                 Follow follow = Follow.getFollow(userRequestee.getId(), profile.getId(), Follow.Status.PENDING);
                 follow.acceptFollowRequest();
 
-                Follow.removeFollowRequest(userRequestee.getId(), profile.getId());
-                follow.save();
-
+                followRequests.remove(position);
                 notifyItemRemoved(position);
             }
         });

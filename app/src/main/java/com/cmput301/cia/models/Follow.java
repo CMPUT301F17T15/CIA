@@ -91,6 +91,7 @@ public class Follow extends ElasticSearchable {
 
     public void acceptFollowRequest() {
         currentStatus = Status.ACCEPTED;
+        save();
     }
 
 
