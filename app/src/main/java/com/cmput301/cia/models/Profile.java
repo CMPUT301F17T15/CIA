@@ -26,8 +26,8 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 7
- * Date: Nov 19 2017
+ * @version 8
+ * Date: Nov 27 2017
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
@@ -42,7 +42,7 @@ public class Profile extends ElasticSearchable {
     public static final String TYPE_ID = "profile";
 
     // The absolute maximum value for any user's powerPoints attribute
-    private static final int MAX_PP = 1000;
+    private static final int MAX_POINTS = 1000;
 
     // The user's unique name
     private String name;
@@ -77,6 +77,9 @@ public class Profile extends ElasticSearchable {
     // other user send message to user
     private String message;
 
+    // Events that will be synchronized with the server when the user regains internet connectivity
+    private List<OfflineEvent> pendingEvents;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -92,6 +95,15 @@ public class Profile extends ElasticSearchable {
         comment = new String();
         lastLogin = new Date();
         image = new String();
+        pendingEvents = new ArrayList<>();
+    }
+
+    /**
+     * Construct a new user profile object, based off of an existing one
+     * @param other the user to copy data from (not null)
+     */
+    public Profile(Profile other){
+        copyFrom(other);
     }
 
     /**
@@ -396,8 +408,10 @@ public class Profile extends ElasticSearchable {
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        event.handle(this);
-        save();
+        if (!event.handle(this)){
+            pendingEvents.add(event);
+            save();
+        }
     }
 
     /**
@@ -436,7 +450,7 @@ public class Profile extends ElasticSearchable {
         if (success) {
             success = ElasticSearchUtilities.save(this);
         }
-        SerializableUtilities.save(getOfflineEventsFile(), habits);
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
         return success;
     }
 
@@ -450,9 +464,7 @@ public class Profile extends ElasticSearchable {
             copyFrom(found);
         }
 
-        List<Habit> loaded = SerializableUtilities.load(getOfflineEventsFile());
-        if (loaded != null)
-            habits = loaded;
+        loadOfflineHabits();
     }
 
     /**
@@ -463,6 +475,15 @@ public class Profile extends ElasticSearchable {
         for (Habit habit : habits)
             habit.delete();
         ElasticSearchUtilities.delete(this);
+    }
+
+    /**
+     * Load the pending events that have been stored offline on the user's device
+     */
+    private void loadOfflineHabits(){
+        List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
+        if (loaded != null)
+            pendingEvents = loaded;
     }
 
     /**
@@ -508,8 +529,8 @@ public class Profile extends ElasticSearchable {
      * @param powerPoints the new score
      */
     public void setPowerPoints(int powerPoints) {
-        if (powerPoints > MAX_PP)
-            powerPoints = MAX_PP;
+        if (powerPoints > MAX_POINTS)
+            powerPoints = MAX_POINTS;
         this.powerPoints = powerPoints;
     }
 
@@ -517,15 +538,7 @@ public class Profile extends ElasticSearchable {
      * @return the points representing how many habit events the user has completed
      */
     public int getHabitPoints() {
-        return habitPoints;
-    }
-
-    /**
-     * Set the user's habit points
-     * @param habitPoints the new habit points
-     */
-    public void setHabitPoints(int habitPoints) {
-        this.habitPoints = habitPoints;
+        return Math.max(getHabitHistory().size(), MAX_POINTS);
     }
 
     /**
@@ -690,16 +703,30 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return the message
+     * Complete the specified habit event for the habit with the specified ID
+     * @param habitId the id of the habit that the event was completed for
+     * @param event the event that was completed
+     * @since version 8
      */
-    public String getMessage(){
-        return message;
+    public void completeHabitEvent(String habitId, HabitEvent event){
+        Habit habit = getHabitById(habitId);
+        if (habit != null && !habit.hasEvent(event)) {
+            setPowerPoints(getPowerPoints() + 1);
+            habit.addHabitEvent(event);
+        }
     }
 
     /**
-     * clear message
+     * Synchronize any pending offline events with the database if possible
      */
-    public void clearMessage(){
-        this.message ="";
+    public void synchronize(){
+        List<OfflineEvent> pending = new ArrayList<>();
+        for (OfflineEvent event : pendingEvents){
+            if (!event.handle(this))
+                pending.add(event);
+        }
+
+        pendingEvents = pending;
     }
+
 }
