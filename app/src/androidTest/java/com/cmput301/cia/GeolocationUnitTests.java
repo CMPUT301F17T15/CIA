@@ -71,8 +71,8 @@ public class GeolocationUnitTests {
         followee.addHabit(habit2);
         followee.addHabit(habit3);
 
-        followee.addFollowRequest(user);
-        followee.acceptFollowRequest(user);
+//        followee.addFollowRequest(user);
+//        followee.acceptFollowRequest(user);
 
         // location of both profiles
         Location location = new Location(LocationManager.GPS_PROVIDER);
