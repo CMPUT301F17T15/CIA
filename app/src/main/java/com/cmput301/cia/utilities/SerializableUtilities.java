@@ -96,11 +96,11 @@ public class SerializableUtilities {
             objectInputStream.close();
             is.close();
         } catch (FileNotFoundException e) {
-
+            e.printStackTrace();
         } catch (IOException e) {
-
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-
+            e.printStackTrace();
         }
         return value;
     }

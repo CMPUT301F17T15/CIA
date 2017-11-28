@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -92,11 +90,11 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
-
-        // reload the profile if it is not new, in order to read the offline events data
         if (user.hasValidId())
             user.load();
-        
+
+        user.synchronize();
+
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
         if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
@@ -228,7 +226,7 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        user.synchronize();
         refreshDisplay();
     }
 
@@ -315,8 +313,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
-                List<Habit> followed = (List<Habit>) data.getSerializableExtra(HistoryActivity.RETURNED_HABITS_ID);
-                user.setHabits(followed);
+                user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
                 user.save();
 
                 todaysHabits = user.getTodaysHabits();
@@ -325,8 +322,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
-                Profile result = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(result);
+                user.copyFrom((Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID), false);
                 user.save();
             }
         } else if (requestCode == FOLLOWED_USERS){
@@ -337,8 +333,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
-                Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
-                user.copyFrom(result);
+                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE), false);
                 user.save();
             }
         } else if (requestCode == FOLLOW_REQUESTS){

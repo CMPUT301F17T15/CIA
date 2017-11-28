@@ -26,8 +26,8 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 7
- * Date: Nov 19 2017
+ * @version 8
+ * Date: Nov 27 2017
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
@@ -41,8 +41,8 @@ public class Profile extends ElasticSearchable {
 
     public static final String TYPE_ID = "profile";
 
-    // The absolute maximum value for any user's powerPoints attribute
-    private static final int MAX_PP = 1000;
+    // The absolute maximum value for the user's powerPoints or habitPoints attributes
+    private static final int MAX_POINTS = 10000;
 
     // The user's unique name
     private String name;
@@ -74,8 +74,8 @@ public class Profile extends ElasticSearchable {
     // The user's profile picture in base64
     private String image;
 
-    // other user send message to user
-    private String message;
+    // Events that will be synchronized with the server when the user regains internet connectivity
+    private List<OfflineEvent> pendingEvents;
 
     /**
      * Construct a new user profile object
@@ -396,8 +396,10 @@ public class Profile extends ElasticSearchable {
      * @param event represents the object that handles what needs to be done
      */
     public void tryHabitEvent(OfflineEvent event){
-        event.handle(this);
-        save();
+        if (!event.handle(this)){
+            pendingEvents.add(event);
+            save();
+        }
     }
 
     /**
@@ -429,14 +431,23 @@ public class Profile extends ElasticSearchable {
     @Override
     public boolean save(){
         boolean success = true;
+
         for (Habit habit : habits){
             success = success && habit.save();
         }
 
         if (success) {
+            // temporarily remove pending events to prevent ElasticSearch from saving it
+            List<OfflineEvent> pending = pendingEvents;
+            if (pendingEvents != null)
+                pendingEvents.clear();
+
             success = ElasticSearchUtilities.save(this);
+
+            pendingEvents = pending;
         }
-        SerializableUtilities.save(getOfflineEventsFile(), habits);
+
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
         return success;
     }
 
@@ -447,12 +458,10 @@ public class Profile extends ElasticSearchable {
     public void load() {
         Profile found = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, getId()).first;
         if (found != null){
-            copyFrom(found);
+            copyFrom(found, false);
         }
 
-        List<Habit> loaded = SerializableUtilities.load(getOfflineEventsFile());
-        if (loaded != null)
-            habits = loaded;
+        loadOfflineEvents();
     }
 
     /**
@@ -463,6 +472,17 @@ public class Profile extends ElasticSearchable {
         for (Habit habit : habits)
             habit.delete();
         ElasticSearchUtilities.delete(this);
+    }
+
+    /**
+     * Load the pending events that have been stored offline on the user's device
+     */
+    private void loadOfflineEvents(){
+        List<OfflineEvent> loaded = SerializableUtilities.load(getOfflineEventsFile());
+        if (loaded != null)
+            pendingEvents = loaded;
+        else if (pendingEvents == null)
+            pendingEvents = new ArrayList<>();
     }
 
     /**
@@ -508,8 +528,8 @@ public class Profile extends ElasticSearchable {
      * @param powerPoints the new score
      */
     public void setPowerPoints(int powerPoints) {
-        if (powerPoints > MAX_PP)
-            powerPoints = MAX_PP;
+        if (powerPoints > MAX_POINTS)
+            powerPoints = MAX_POINTS;
         this.powerPoints = powerPoints;
     }
 
@@ -517,15 +537,7 @@ public class Profile extends ElasticSearchable {
      * @return the points representing how many habit events the user has completed
      */
     public int getHabitPoints() {
-        return habitPoints;
-    }
-
-    /**
-     * Set the user's habit points
-     * @param habitPoints the new habit points
-     */
-    public void setHabitPoints(int habitPoints) {
-        this.habitPoints = habitPoints;
+        return Math.max(getHabitHistory().size(), MAX_POINTS);
     }
 
     /**
@@ -613,8 +625,9 @@ public class Profile extends ElasticSearchable {
     /**
      * Copy over the data from another profile into this one
      * @param other the profile to copy from
+     * @param copyPendingEvents whether pending events should also be copied
      */
-    public void copyFrom(Profile other){
+    public void copyFrom(Profile other, boolean copyPendingEvents){
         name = other.name;
         habits = other.habits;
         following = other.following;
@@ -624,6 +637,9 @@ public class Profile extends ElasticSearchable {
         creationDate = other.creationDate;
         comment = other.comment;
         image = other.image;
+
+        if (copyPendingEvents)
+            pendingEvents = other.pendingEvents;
     }
 
     /**
@@ -683,23 +699,38 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * set message, modify by Guanfang Dong
+     * Complete the specified habit event for the habit with the specified ID
+     * @param habitId the id of the habit that the event was completed for
+     * @param event the event that was completed
+     * @since version 8
      */
-    public void setMessage(String message){
-        this.message = message;
+    public void completeHabitEvent(String habitId, HabitEvent event){
+        Habit habit = getHabitById(habitId);
+        if (habit != null && !habit.hasEvent(event)) {
+            setPowerPoints(getPowerPoints() + 1);
+            habit.addHabitEvent(event);
+        }
     }
 
     /**
-     * @return the message
+     * Synchronize any pending offline events with the database if possible
      */
-    public String getMessage(){
-        return message;
+    public void synchronize(){
+        if (pendingEvents == null)
+            loadOfflineEvents();
+
+        List<OfflineEvent> pending = new ArrayList<>();
+        for (OfflineEvent event : pendingEvents){
+            if (!event.handle(this))
+                pending.add(event);
+        }
+
+        pendingEvents = pending;
     }
 
-    /**
-     * clear message
-     */
-    public void clearMessage(){
-        this.message ="";
+    // TODO
+    public void sendMessage(String message){
+
     }
+
 }
