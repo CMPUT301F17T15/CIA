@@ -98,12 +98,22 @@ public class ViewFollowedUsersActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        followingIds = Follow.getFollowing(profile.getId());
         followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
-        listAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
-        followedList.setAdapter(listAdapter);
+        listAdapter.clear();
+        listAdapter.addAll(followed);
+        listAdapter.notifyDataSetChanged();
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
+//        listAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
+//        followedList.setAdapter(listAdapter);
+//    }
 
     /**
      * Handle the results of an activity that has finished

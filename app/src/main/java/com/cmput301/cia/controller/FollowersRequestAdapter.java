@@ -44,6 +44,10 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         return followRequests.get(position);
     }
 
+    public void setFollowRequests(List<Profile> profiles) {
+        followRequests = profiles;
+        notifyDataSetChanged();
+    }
 
     /** the listener interface **/
     public interface OnItemClickListener {

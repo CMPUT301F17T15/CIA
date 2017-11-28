@@ -36,6 +36,18 @@ public class FollowRequestsActivity extends AppCompatActivity {
     private String name;
     private List<String> followRequestIds;
     private List<Profile> followRequests;
+    private FollowersRequestAdapter adapter;
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        followRequestIds = Follow.getPendingFollows(user.getId());
+        followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
+
+        adapter.setFollowRequests(followRequests);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +62,7 @@ public class FollowRequestsActivity extends AppCompatActivity {
         followRequestIds = Follow.getPendingFollows(user.getId());
         followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
 
-        final FollowersRequestAdapter adapter = new FollowersRequestAdapter(this, followRequests, user);
+        adapter = new FollowersRequestAdapter(this, followRequests, user);
 
         adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {
             @Override
