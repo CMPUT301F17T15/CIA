@@ -103,8 +103,7 @@ public class HistoryActivity extends LocationRequestingActivity {
 
                 String viewText = ((TextView)view).getText().toString();
                 // "completed " is 10 characters, so start at index 10 -> 11th character
-                // stop 2 characters before "on", because the space before "on" should not be included
-                String habitName = viewText.substring(10, viewText.lastIndexOf("on") - 1);
+                String habitName = viewText.substring(10, viewText.lastIndexOf(" on "));
 
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
                 intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position));
