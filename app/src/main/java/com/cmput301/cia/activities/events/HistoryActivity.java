@@ -27,6 +27,8 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,7 +145,8 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         for (HabitEvent event : events) {
             Habit habit = user.getHabitById(event.getHabitId());
-            habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+            DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
+            habitList.add("Completed " + habit.getTitle() + " on " + df.format(event.getDate()));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
