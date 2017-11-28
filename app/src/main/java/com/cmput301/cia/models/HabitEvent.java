@@ -31,7 +31,6 @@ public class HabitEvent extends ElasticSearchable {
     public static final String TYPE_ID = "habitevent";
 
     private String comment;
-    private List<String> message;
     private String base64EncodedPhoto;
     private Date date;
 
@@ -247,20 +246,6 @@ public class HabitEvent extends ElasticSearchable {
      */
     public String getHabitId(){
         return habitId;
-    }
-
-    /**
-     * set message, modify by Guanfang Dong
-     */
-    public void setMessage(String message){
-        this.message.add(message);
-    }
-
-    /**
-     * @return the message
-     */
-    public List<String> getMessage(){
-        return message;
     }
 
 }

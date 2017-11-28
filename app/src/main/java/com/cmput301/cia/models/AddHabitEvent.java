@@ -6,8 +6,8 @@ package com.cmput301.cia.models;
 
 /**
  * @author Adil Malik
- * @version 2
- * Date: Nov 07 2017
+ * @version 3
+ * Date: Nov 27 2017
  * This class represents a pending event to add a new habit event to a user's habit
  */
 
@@ -27,20 +27,13 @@ public class AddHabitEvent extends OfflineEvent {
 
     /**
      * What this event does when it is synchronized with the server
+     * @param profile the user who this event is being handled for
      * @return whether the event was handled successfully or not
      */
     @Override
-    public void handle(Profile profile) {
-        profile.setHabitPoints(profile.getHabitPoints() + 1);
-        profile.setPowerPoints(profile.getPowerPoints() + 1);
-        profile.getHabitById(habitId).addHabitEvent(event);
+    public boolean handle(Profile profile) {
+        profile.completeHabitEvent(habitId, event);
+        return profile.save();
     }
 
-    /**
-     * @return the habit ID of the habit containing the habit event
-     */
-    @Override
-    public String getHabitId() {
-        return habitId;
-    }
 }

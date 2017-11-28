@@ -38,8 +38,6 @@ public class StatisticActivity extends AppCompatActivity {
     public static final String ID_USER = "Profile";
 
     private Profile user;
-    private ListView typeList;
-    private ArrayAdapter<String> adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +49,7 @@ public class StatisticActivity extends AppCompatActivity {
 
         user = (Profile) getIntent().getSerializableExtra(ID_USER);
 
-        typeList = (ListView)findViewById(R.id.Type_List_View);
+        ListView typeList = (ListView)findViewById(R.id.Type_List_View);
         final List<String> types = new ArrayList<>();
         if (user.getHabitCategories() == null){
             types.add(null);
@@ -61,7 +59,7 @@ public class StatisticActivity extends AppCompatActivity {
                 types.add(t);
             }
         }
-        adapter = new ArrayAdapter<String>(this, R.layout.list_statistic, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_statistic, types);
         typeList.setAdapter(adapter);
 
         typeList.setOnItemClickListener(new AdapterView.OnItemClickListener(){

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -20,34 +21,30 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.cmput301.cia.utilities.FontUtilities;
 
 import org.w3c.dom.Text;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Adil Malik
- * @version 1
- * Date: Nov 11 2017
+ * @version 2
+ * Date: Nov 27 2017
  *
  * This activity allows the user to pick a habit to filter their habit history with
  */
 
 public class FilterHabitsActivity extends AppCompatActivity {
 
-    // Intent identifier for the incoming user
-    public static final String ID_USER = "User";
+    // Intent identifier for the incoming habits
+    public static final String ID_HABITS = "Habits";
 
     // Intent identifier for the outgoing selected habit id
     public static final String RETURNED_HABIT_ID = "Habit";
 
-    private ListView habitsList;
     private ArrayAdapter<Habit> listAdapter;
-
-    private TextView habitNameText;
-
-    private Profile user;
-
     private Habit selected;
 
     @Override
@@ -56,35 +53,26 @@ public class FilterHabitsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter_events);
 
         Intent data = getIntent();
-        user = (Profile) data.getSerializableExtra(ID_USER);
+        List<Habit> habits = (List<Habit>) data.getSerializableExtra(ID_HABITS);
 
-        if (user == null){
-            Toast.makeText(this, "Profile could not be retrieved from the database.", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
-        habitNameText = (TextView)findViewById(R.id.filterHabitText);
-        habitsList = (ListView)findViewById(R.id.filterListView);
-
-        listAdapter = new ArrayAdapter<>(this, R.layout.list_item, user.getHabits());
+        ListView habitsList = (ListView)findViewById(R.id.filterListView);
+        listAdapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, habits);
         habitsList.setAdapter(listAdapter);
+        habitsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         habitsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selected = listAdapter.getItem(position);
-                habitNameText.setText(selected.getTitle());
             }
         });
 
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.filterHabitsLayout));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        listAdapter = new ArrayAdapter<>(this, R.layout.list_item, user.getHabits());
-        habitsList.setAdapter(listAdapter);
     }
 
     @Override

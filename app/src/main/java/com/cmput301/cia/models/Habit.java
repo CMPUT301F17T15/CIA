@@ -292,4 +292,28 @@ public class Habit extends ElasticSearchable {
         missedDates = other.missedDates;
     }
 
+    /**
+     * @param event the event to check whether this habit contains already or not
+     * @return whether this habit contains the specified event
+     */
+    public boolean hasEvent(HabitEvent event){
+        for (HabitEvent habitEvent : events){
+            if (habitEvent.equals(event))
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Edit an existing event
+     * @param event the new data an existing event will be given
+     */
+    public void editEvent(HabitEvent event){
+        for (HabitEvent habitEvent : events){
+            if (habitEvent.equals(event)){
+                habitEvent.copyFrom(event);
+            }
+        }
+    }
+
 }

@@ -7,6 +7,7 @@ package com.cmput301.cia.activities.events;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,8 +26,11 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.FontUtilities;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +45,8 @@ import java.util.List;
 
 public class HistoryActivity extends LocationRequestingActivity {
 
-    // Intent data identifier for the passed in profile
+    // Intent data identifier for the passed in and returned profile
     public static final String ID_PROFILE = "Profile";
-
-    // Intent data identifier for returned habits list
-    public static final String RETURNED_HABITS_ID = "Habits";
 
     private static final int FILTER_CODE = 0, EVENT_CODE = 1;
 
@@ -84,7 +85,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         eventButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(HistoryActivity.this, FilterHabitsActivity.class);
-                intent.putExtra(FilterHabitsActivity.ID_USER, user);
+                intent.putExtra(FilterHabitsActivity.ID_HABITS, (Serializable) user.getHabits());
                 startActivityForResult(intent, FILTER_CODE);
             }
         });
@@ -106,8 +107,7 @@ public class HistoryActivity extends LocationRequestingActivity {
 
                 String viewText = ((TextView)view).getText().toString();
                 // "completed " is 10 characters, so start at index 10 -> 11th character
-                // stop 2 characters before "on", because the space before "on" should not be included
-                String habitName = viewText.substring(10, viewText.lastIndexOf("on") - 1);
+                String habitName = viewText.substring(10, viewText.lastIndexOf(" on "));
 
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
                 intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position));
@@ -117,6 +117,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         });
 
         convertEventsToString();
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.historyLayout));
     }
 
     @Override
@@ -147,7 +148,8 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         for (HabitEvent event : events) {
             Habit habit = user.getHabitById(event.getHabitId());
-            habitList.add("Completed " + habit.getTitle() + " on " + event.getDate());
+            DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
+            habitList.add("Completed " + habit.getTitle() + " on " + df.format(event.getDate()));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
@@ -214,7 +216,7 @@ public class HistoryActivity extends LocationRequestingActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-        intent.putExtra(RETURNED_HABITS_ID, (Serializable) user.getHabits());
+        intent.putExtra(ID_PROFILE, user);
         setResult(RESULT_OK, intent);
         finish();
     }

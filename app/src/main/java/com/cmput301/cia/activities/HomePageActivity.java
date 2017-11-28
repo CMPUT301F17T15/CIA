@@ -12,9 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +40,7 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
 import java.util.ArrayList;
@@ -77,8 +77,6 @@ public class HomePageActivity extends AppCompatActivity {
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
 
-    //private ArrayAdapter<Habit> lvc_adapter;
-
     // the habits the user must do today
     private List<Habit> todaysHabits;
 
@@ -93,23 +91,11 @@ public class HomePageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
-
-        TextView message = (TextView) findViewById(R.id.viewMessage);
-        try{
-            if (user.getMessage()=="" || user.getMessage()==null){
-                message.setText("no message ");
-            }else{
-                String send_message = user.getMessage();
-                message.setText("new message: "+send_message);
-                user.clearMessage();}
-        }catch (Exception e){
-            message.setText("No Message ");
-        }
-
-        // reload the profile if it is not new, in order to read the offline events data
         if (user.hasValidId())
             user.load();
-        
+
+        user.synchronize();
+
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
         if (user.getLastLogin() != null && !DateUtilities.isSameDay(user.getLastLogin(), currentDate)) {
@@ -128,7 +114,7 @@ public class HomePageActivity extends AppCompatActivity {
         user.setLastLogin(currentDate);
         user.save();
 
-        // initialize the list of all habits the user has
+        // initialize the list displaying all habits the user has
         expandableListView = (ExpandableListView) findViewById(R.id.HabitTypeExpandableListView);
         adapter = new ExpandableListViewAdapter(HomePageActivity.this, user);
         expandableListView.setAdapter(adapter);
@@ -139,11 +125,11 @@ public class HomePageActivity extends AppCompatActivity {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(HomePageActivity.this, HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
 
-                ArrayList<String> types = new ArrayList<String>();
+                ArrayList<String> types = new ArrayList<>();
                 types.addAll(user.getHabitCategories());
                 intent.putExtra("Categories", types);
 
@@ -160,22 +146,8 @@ public class HomePageActivity extends AppCompatActivity {
         checkable = (ListView) findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
-    }
 
-    //button on activity_home_page bridge to activity_create_habit
-    public void newHabit(View view){
-        if (user.getHabitCategories() != null) {
-            List<String> types = new ArrayList<String>();
-            types.addAll(user.getHabitCategories());
-            Intent intent = new Intent(this, CreateHabitActivity.class);
-            intent.putStringArrayListExtra("types", (ArrayList<String>) types);
-            startActivityForResult(intent, CREATE_HABIT);
-        }
-        else {
-            Intent intent = new Intent(this, CreateHabitActivity.class);
-            intent.putStringArrayListExtra("types", null);
-            startActivityForResult(intent, CREATE_HABIT);
-        }
+        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
     }
 
     //Create the menu object
@@ -255,7 +227,7 @@ public class HomePageActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        user.synchronize();
         refreshDisplay();
     }
 
@@ -342,8 +314,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
-                List<Habit> followed = (List<Habit>) data.getSerializableExtra(HistoryActivity.RETURNED_HABITS_ID);
-                user.setHabits(followed);
+                user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
                 user.save();
 
                 todaysHabits = user.getTodaysHabits();
@@ -352,8 +323,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
-                Profile result = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(result);
+                user.copyFrom((Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID), false);
                 user.save();
             }
         } else if (requestCode == FOLLOWED_USERS){
@@ -367,8 +337,7 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
-                Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
-                user.copyFrom(result);
+                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE), false);
                 user.save();
             }
         } else if (requestCode == FOLLOW_REQUESTS){

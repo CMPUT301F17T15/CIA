@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 12 2017
+ * @version 4
+ * Date: Nov 27 2017
  *
  * Represents a pending event that will be synchronized with the server when the user gains connectivity.
  * Follows the command pattern
@@ -33,13 +33,7 @@ public abstract class OfflineEvent implements Serializable {
      * @param profile the user who this event is being handled for
      * @return whether the event was handled successfully or not
      */
-    public abstract void handle(Profile profile);
+    public abstract boolean handle(Profile profile);
 
-    /**
-     * @return the habit ID of the habit containing the habit event
-     */
-    public String getHabitId(){
-        return event.getHabitId();
-    }
 
 }

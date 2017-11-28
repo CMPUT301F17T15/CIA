@@ -6,15 +6,13 @@ package com.cmput301.cia;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.test.runner.AndroidJUnit4;
+import android.test.ActivityInstrumentationTestCase2;
 
+import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.utilities.ImageUtilities;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertTrue;
+import java.io.IOException;
 
 /**
  * Version 1
@@ -24,32 +22,29 @@ import static org.junit.Assert.assertTrue;
  * This class tests selecting images to attach to an event or profile
  */
 
-// TODO: make these work
+public class ImageUnitTests extends ActivityInstrumentationTestCase2<MainActivity>{
 
-@RunWith(AndroidJUnit4.class)
-public class ImageUnitTests {
+    public ImageUnitTests() {
+        super(MainActivity.class);
+    }
 
     /**
      * Testing an image that is already small enough to fit in the system
      */
-    @Test
-    public void testSmallImage() {
-        Bitmap bitmap = BitmapFactory.decodeFile("testimages/small.jpg");
+    public void testSmallImage() throws IOException {
+
+        Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("testimages/small.jpg"));
         int size = bitmap.getByteCount();
         Bitmap newBitmap = ImageUtilities.compressImageToMax(bitmap, CreateHabitEventActivity.MAX_IMAGE_SIZE);
         assertTrue(newBitmap != null);
-
-        // make sure the image was not resized
-        assertTrue(size == newBitmap.getByteCount());
-        assertTrue(size <= CreateHabitEventActivity.MAX_IMAGE_SIZE);
+        assertTrue(newBitmap.getByteCount() <= CreateHabitEventActivity.MAX_IMAGE_SIZE);
     }
 
     /**
      * Testing an image that is too large to fit in the system, and must be resized
      */
-    @Test
-    public void testLargeImage() {
-        Bitmap bitmap = BitmapFactory.decodeFile("testimages/large.jpg");
+    public void testLargeImage() throws IOException {
+        Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("testimages/large.jpg"));
         int size = bitmap.getByteCount();
         Bitmap newBitmap = ImageUtilities.compressImageToMax(bitmap, CreateHabitEventActivity.MAX_IMAGE_SIZE);
 
