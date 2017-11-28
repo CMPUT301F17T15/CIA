@@ -93,8 +93,7 @@ public class HabitEventTest {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-        return base64;
+        return Base64.encodeToString(data, Base64.DEFAULT);
     }
 
     public Location getMockLocation() {

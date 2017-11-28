@@ -44,7 +44,6 @@ public class FilterHabitsActivity extends AppCompatActivity {
     // Intent identifier for the outgoing selected habit id
     public static final String RETURNED_HABIT_ID = "Habit";
 
-    private ListView habitsList;
     private ArrayAdapter<Habit> listAdapter;
     private Habit selected;
 
@@ -56,7 +55,7 @@ public class FilterHabitsActivity extends AppCompatActivity {
         Intent data = getIntent();
         List<Habit> habits = (List<Habit>) data.getSerializableExtra(ID_HABITS);
 
-        habitsList = (ListView)findViewById(R.id.filterListView);
+        ListView habitsList = (ListView)findViewById(R.id.filterListView);
         listAdapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, habits);
         habitsList.setAdapter(listAdapter);
         habitsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
