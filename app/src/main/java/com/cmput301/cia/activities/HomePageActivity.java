@@ -93,7 +93,7 @@ public class HomePageActivity extends AppCompatActivity {
         if (user.hasValidId())
             user.load();
 
-        //user.synchronize();
+        user.synchronize();
 
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();

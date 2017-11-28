@@ -439,7 +439,8 @@ public class Profile extends ElasticSearchable {
         if (success) {
             // temporarily remove pending events to prevent ElasticSearch from saving it
             List<OfflineEvent> pending = pendingEvents;
-            pendingEvents.clear();
+            if (pendingEvents != null)
+                pendingEvents.clear();
 
             success = ElasticSearchUtilities.save(this);
 
