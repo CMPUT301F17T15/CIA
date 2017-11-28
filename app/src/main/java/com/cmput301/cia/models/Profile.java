@@ -537,7 +537,7 @@ public class Profile extends ElasticSearchable {
      * @return the points representing how many habit events the user has completed
      */
     public int getHabitPoints() {
-        return Math.max(getHabitHistory().size(), MAX_POINTS);
+        return Math.min(getHabitHistory().size(), MAX_POINTS);
     }
 
     /**

@@ -47,7 +47,7 @@ public abstract class LocationRequestingActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_LOCATION: {
                 handleLocationPermissionRequest(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                return;
+                break;
             }
         }
     }

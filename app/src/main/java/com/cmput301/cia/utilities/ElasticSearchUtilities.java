@@ -505,7 +505,7 @@ public class ElasticSearchUtilities {
         String last = Iterables.getLast(keyset);
         for (String key : keyset){
             query.append("\""+key+"\"" + ":" + "\""+values.get(key)+"\"");
-            if (key != last)
+            if (!key.equals(last))
                 query.append(",\n");
         }
         return query.toString();
