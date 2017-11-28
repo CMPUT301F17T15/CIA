@@ -26,6 +26,7 @@ import com.cmput301.cia.utilities.FontUtilities;
 import org.w3c.dom.Text;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Adil Malik
@@ -37,16 +38,14 @@ import java.util.Date;
 
 public class FilterHabitsActivity extends AppCompatActivity {
 
-    // Intent identifier for the incoming user
-    public static final String ID_USER = "User";
+    // Intent identifier for the incoming habits
+    public static final String ID_HABITS = "Habits";
 
     // Intent identifier for the outgoing selected habit id
     public static final String RETURNED_HABIT_ID = "Habit";
 
     private ListView habitsList;
     private ArrayAdapter<Habit> listAdapter;
-
-    private Profile user;
     private Habit selected;
 
     @Override
@@ -55,12 +54,10 @@ public class FilterHabitsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter_events);
 
         Intent data = getIntent();
-        // TODO: send in just the user's list of habits
-        user = (Profile) data.getSerializableExtra(ID_USER);
+        List<Habit> habits = (List<Habit>) data.getSerializableExtra(ID_HABITS);
 
         habitsList = (ListView)findViewById(R.id.filterListView);
-
-        listAdapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, user.getHabits());
+        listAdapter = new ArrayAdapter<>(this, R.layout.checkable_list_view, R.id.CheckedTextView, habits);
         habitsList.setAdapter(listAdapter);
         habitsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
@@ -77,8 +74,6 @@ public class FilterHabitsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //listAdapter = new ArrayAdapter<>(this, R.layout.list_item, user.getHabits());
-        //habitsList.setAdapter(listAdapter);
     }
 
     @Override
