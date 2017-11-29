@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.controller.CreateHabitEventController;
+import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
-import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
@@ -102,6 +102,24 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
         locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
 
+        // handle the save button being clicked
+        findViewById(R.id.cheSaveButton).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                finishActivity(false);
+            }
+        });
+
+        // handle the image being clicked
+        imageView.setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, CreateHabitEventActivity.SELECT_IMAGE_CODE);
+            }
+        });
+
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
@@ -117,31 +135,11 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     }
 
     /**
-     * Handles the save button being clicked
-     * @param view
-     */
-    public void onSaveClicked(View view){
-        finishActivity(false);
-    }
-
-    /**
      * Handle the back button being pressed
      */
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         finishActivity(true);
-    }
-
-    /**
-     * The following 2 functions are based on Benjamin's answer from
-     * https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
-     *
-     * Permalink to specific comment:
-     * https://stackoverflow.com/a/5309965
-     */
-    public void onImageClicked(View view) {
-        CreateHabitEventController.clickImage(this);
     }
 
     /**
@@ -152,6 +150,14 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        /*
+         * based on Benjamin's answer from
+         * https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
+         *
+         * Permalink to specific comment:
+         * https://stackoverflow.com/a/5309965
+         */
 
         if (requestCode == SELECT_IMAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
             try {
@@ -178,11 +184,11 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
     /**
      * Creates a dialog so that the user can choose a date instead of typing
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      * @param v: the layout that it's coming from
      */
     public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -191,7 +197,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      * @param year : the year chosen
      * @param month : the month chosen
      * @param day : the day chosen
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {

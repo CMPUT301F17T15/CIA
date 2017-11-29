@@ -20,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.controller.CreateHabitController;
+import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 
 import java.util.ArrayList;
@@ -44,12 +44,12 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    Date chooseStartDate;
-    EditText habitName;
-    EditText reason;
-    TextView startDate;
-    MaterialDayPicker dayPicker;
-    Spinner spinner;
+    private Date chooseStartDate;
+    private EditText habitName;
+    private EditText reason;
+    private TextView startDate;
+    private MaterialDayPicker dayPicker;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
         startDate.setText(DateUtilities.formatDate(chooseStartDate));
 
-        //ToDo fix spinner activity
         //spinner activity, could be placed in another activity file for better practice
         spinner = (Spinner) findViewById(R.id.habitTypeSpinner);
         final List<String> type = new ArrayList<String>();
@@ -92,15 +91,15 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                     mBuilder.setView(mview);
                     final AlertDialog dialog = mBuilder.create();
                     dialog.show();
-                    okButton.setOnClickListener(new View.OnClickListener(){
+                    okButton.setOnClickListener(new ButtonClickListener() {
                         @Override
-                        public void onClick(View view){
+                        public void handleClick() {
                             if (!minput.getText().toString().isEmpty()){
                                 type.add(0, minput.getText().toString());
                                 spinnerAdapter.notifyDataSetChanged();
                                 dialog.dismiss();
                             }else{
-                                Toast.makeText(CreateHabitActivity.this, "Please enter the type name", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateHabitActivity.this, "The type name can not be empty", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -127,17 +126,13 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
         if (daysSelected.size() == 0) {
             Toast.makeText(CreateHabitActivity.this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
-        } else if (habitName.getText().toString().length() == 0){
+        } else if (habitName.getText().toString().length() == 0) {
             Toast.makeText(CreateHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
         }
-        else{
-            Habit habit = CreateHabitController.onSaveClicked(
-                    habitName.getText().toString(),
-                    reason.getText().toString(),
-                    chooseStartDate,
-                    getPickedDates(daysSelected),
-                    spinner.getSelectedItem().toString()
-            );
+        else {
+
+            Habit habit = new Habit(habitName.getText().toString(), reason.getText().toString(), chooseStartDate, getPickedDates(daysSelected),
+                    spinner.getSelectedItem().toString());
 
             Intent intent = new Intent();
             intent.putExtra("Habit", habit);
@@ -145,6 +140,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
             finish();
         }
     }
+
     public void clearInputFields(View v) {
         habitName.setText("");
         reason.setText("");
@@ -169,11 +165,11 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
 
     /**
      * Creates a dialog so that the user can choose a date instead of typing
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      * @param v: the layout that it's coming from
      */
     public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -182,7 +178,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
      * @param year : the year chosen
      * @param month : the month chosen
      * @param day : the day chosen
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {

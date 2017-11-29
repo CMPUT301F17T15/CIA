@@ -31,11 +31,11 @@ import java.util.Map;
 
 /**
  * @author Adil Malik
- * @version 3
- * Date: Nov 17, 2017
+ * @version 4
+ * Date: Nov 28, 2017
  *
  * The main activity of the application.
- * Allows the user to sign into their profile
+ * Allows the user to sign into their profile, or to create a new account
  */
 public class MainActivity extends AppCompatActivity {
 

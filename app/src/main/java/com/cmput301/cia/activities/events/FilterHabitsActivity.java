@@ -13,19 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 
-import org.w3c.dom.Text;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,10 +53,26 @@ public class FilterHabitsActivity extends AppCompatActivity {
         habitsList.setAdapter(listAdapter);
         habitsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+        // update the selected filter habit when an item in the list is selected
         habitsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selected = listAdapter.getItem(position);
+            }
+        });
+
+        // handle the finish button being clicked
+        findViewById(R.id.filterFinishButton).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent = new Intent();
+                if (selected == null)
+                    intent.putExtra(RETURNED_HABIT_ID, "");
+                else
+                    intent.putExtra(RETURNED_HABIT_ID, selected.getId());
+
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -78,18 +87,6 @@ public class FilterHabitsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    public void onFinishClicked(View view){
-        Intent intent = new Intent();
-
-        if (selected == null)
-            intent.putExtra(RETURNED_HABIT_ID, "");
-        else
-            intent.putExtra(RETURNED_HABIT_ID, selected.getId());
-
-        setResult(Activity.RESULT_OK, intent);
-        finish();
     }
 
 }
