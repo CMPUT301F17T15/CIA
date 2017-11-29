@@ -153,7 +153,6 @@
         android:layout_marginBottom="29dp"
         android:layout_marginLeft="231dp"
         android:layout_marginRight="8dp"
-        android:onClick="onSaveClicked"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
