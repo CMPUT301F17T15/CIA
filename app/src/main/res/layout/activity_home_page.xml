@@ -9,61 +9,121 @@
     android:id="@+id/homePageLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.activities.HomePageActivity">
+    tools:context="com.cmput301.cia.activities.HomePageActivity"
+    tools:layout_editor_absoluteY="25dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <include
         android:id="@+id/app_toolbar"
         layout="@layout/app_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="367dp"
+        android:layout_height="58dp"
+        android:layout_marginRight="5dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></include>
-
-    <ExpandableListView
-        android:id="@+id/HabitTypeExpandableListView"
-        android:layout_width="364dp"
-        android:layout_height="296dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_toolbar" />
-
-    <ListView
-        android:id="@+id/TodayToDoListView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintLeft_toLeftOf="parent"></include>
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="0dp"
         android:text="@string/TodayTask"
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:layout_marginLeft="27dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HabitTypeExpandableListView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="237dp" />
+
+    <ImageView
+        android:id="@+id/homeHistoryImageView"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        app:srcCompat="@mipmap/historyicon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp"
+        android:layout_marginLeft="123dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/homeProfileImageView"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        app:srcCompat="@mipmap/profileicon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp"
+        android:layout_marginRight="173dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/homeFollowedImageView"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        app:srcCompat="@mipmap/requestsicon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp"
+        android:layout_marginRight="70dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/homeRequestsImageView"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        app:srcCompat="@mipmap/followrequestsicon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp"
+        android:layout_marginLeft="224dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/homeSearchImageView"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        app:srcCompat="@android:drawable/ic_search_category_default"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/homeAddHabitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_input_add"
+        android:layout_marginLeft="69dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="517dp" />
+
+    <ExpandableListView
+        android:id="@+id/HabitTypeExpandableListView"
+        android:layout_width="378dp"
+        android:layout_height="246dp"
+        android:layout_marginBottom="227dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="0.674" />
+
+    <ListView
+        android:id="@+id/TodayToDoListView"
+        android:layout_width="379dp"
+        android:layout_height="154dp"
+        android:layout_marginBottom="76dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.454" />
 
 </android.support.constraint.ConstraintLayout>
