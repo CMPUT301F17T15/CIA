@@ -52,9 +52,6 @@ public class HabitViewActivity extends AppCompatActivity {
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
         Button editButton = (Button) findViewById(R.id.EditHabitButton);
 
-        //Create custom tool bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_habit_detail);
-        setSupportActionBar(toolbar);
         //Display habit detail
         habitName = (TextView) findViewById(R.id.EditHabitName);
         habitType = (TextView) findViewById(R.id.EditHabitType);
@@ -64,7 +61,7 @@ public class HabitViewActivity extends AppCompatActivity {
 
         habit = (Habit) getIntent().getSerializableExtra("Habit");
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
-        RefreshPage();
+        refreshPage();
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,12 +127,12 @@ public class HabitViewActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 habit = (Habit) data.getSerializableExtra("Habit");
-                RefreshPage();
+                refreshPage();
             }
         }
     }
 
-    private void RefreshPage() {
+    private void refreshPage() {
         habitType.setText(habit.getType());
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
@@ -155,32 +152,4 @@ public class HabitViewActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //Menu item onclick bridge to specific activity.
-    //use startActivityForResult instead of startActivity for return value or refresh home page.
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_button_My_Profile:
-                Intent intent_My_Profile = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_My_Profile);
-                return true;
-            case R.id.menu_button_Add_New_Habit:
-                Intent intent_new_Habit = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_new_Habit);
-                return true;
-            case R.id.menu_button_Statistic:
-                Intent intent_Statistic = new Intent(this, StatisticActivity.class);
-                startActivity(intent_Statistic);
-                return true;
-            case R.id.menu_button_Habit_History:
-                Intent intent_Habit_History = new Intent(this, HistoryActivity.class);
-                startActivity(intent_Habit_History);
-                return true;
-            case R.id.menu_button_My_Following:
-                Intent intent_My_Following = new Intent(this, CreateHabitActivity.class);
-                startActivity(intent_My_Following);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

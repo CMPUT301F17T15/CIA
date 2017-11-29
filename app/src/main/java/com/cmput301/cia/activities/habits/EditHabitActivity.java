@@ -20,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     }
 
     public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
