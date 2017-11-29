@@ -10,16 +10,98 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.users.ViewFollowedUsersActivity">
 
-    <ListView
-        android:id="@+id/vfuList"
-        android:layout_width="337dp"
-        android:layout_height="428dp"
-        android:layout_marginLeft="16dp"
+    <ViewSwitcher
+        android:id="@+id/vfuProfileHistorySwitcher"
+        android:layout_width="374dp"
+        android:layout_height="503dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/vfuProfilesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/vfuProfilesList"
+                android:layout_width="362dp"
+                android:layout_height="431dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="60dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="4dp" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/vfuHistoryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/vfuEventsList"
+                android:layout_width="357dp"
+                android:layout_height="429dp"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="66dp" />
+
+            <ListView
+                android:id="@+id/vfuHabitsList"
+                android:layout_width="357dp"
+                android:layout_height="429dp"
+                android:visibility="invisible"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="66dp" />
+
+            <ImageView
+                android:id="@+id/vfuMapView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="53dp"
+                android:layout_marginTop="6dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/mapview" />
+
+            <Switch
+                android:id="@+id/vfuHistoryEventsSwitch"
+                android:layout_width="113dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="131dp"
+                android:layout_marginTop="16dp"
+                android:text="HABITS"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+    </ViewSwitcher>
+
+    <ImageView
+        android:id="@+id/vfuHistoryIcon"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.404"
+        android:layout_marginTop="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/historyicon" />
+
+    <ImageView
+        android:id="@+id/vfuUsersIcon"
+        android:layout_width="38dp"
+        android:layout_height="47dp"
+        android:layout_marginEnd="322dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="322dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/requestsicon" />
 
 </android.support.constraint.ConstraintLayout>

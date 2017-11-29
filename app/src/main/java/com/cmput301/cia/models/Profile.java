@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -307,25 +306,26 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of {the most recent event for each habit, user name of habit creator} of all followed users sorted in descending
+     * @return list of {the most recent event for each habit, user name of habit creator, habit name} of all followed users sorted in descending
      * order of date
      */
-    public List<Pair<HabitEvent, String>> getFollowedHabitHistory() {
-        List<Pair<HabitEvent, String>> list = new ArrayList<>();
+    public List<Triple<HabitEvent, String, String>> getFollowedHabitHistory() {
+
+        List<Triple<HabitEvent, String, String>> list = new ArrayList<>();
         List<String> followingIds = Follow.getFollowing(getId());
         List<Profile> following = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
         for (Profile followee : following) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
-                    list.add(new Pair<>(event, followee.getName()));
+                    list.add(new Triple<>(event, followee.getName(), habit.getTitle()));
                 }
             }
         }
 
-        Collections.sort(list, new Comparator<Pair<HabitEvent, String>>() {
+        Collections.sort(list, new Comparator<Triple<HabitEvent, String, String>>() {
             @Override
-            public int compare(Pair<HabitEvent, String> event, Pair<HabitEvent, String> t1) {
+            public int compare(Triple<HabitEvent, String, String> event, Triple<HabitEvent, String, String> t1) {
                 return -1 * event.first.getDate().compareTo(t1.first.getDate());
             }
         });
@@ -559,8 +559,8 @@ public class Profile extends ElasticSearchable {
 
             List<HabitEvent> allEvents = getHabitHistory();
 
-            List<Pair<HabitEvent, String>> events = getFollowedHabitHistory();
-            for (Pair<HabitEvent, String> pair : events){
+            List<Triple<HabitEvent, String, String>> events = getFollowedHabitHistory();
+            for (Triple<HabitEvent, String, String> pair : events){
                 allEvents.add(pair.first);
             }
 

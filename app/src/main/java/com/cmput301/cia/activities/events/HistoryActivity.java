@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -150,8 +151,7 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         for (HabitEvent event : events) {
             Habit habit = user.getHabitById(event.getHabitId());
-            DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
-            habitList.add("Completed " + habit.getTitle() + " on " + df.format(event.getDate()));
+            habitList.add(formatEvent(habit.getTitle(), event.getDate()));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
@@ -221,6 +221,29 @@ public class HistoryActivity extends LocationRequestingActivity {
         intent.putExtra(ID_PROFILE, user);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    /**
+     * Format a habit event for display in a list
+     * @param title the title of the habit that the event was completed for
+     * @param date the date the event was completed on
+     * @return a formatted display of the event
+     */
+    public static String formatEvent(String title, Date date){
+        DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
+        return "Completed " + title + " on " + df.format(date);
+    }
+
+    /**
+     * Format a habit event for display in a list
+     * @param title the title of the habit that the event was completed for
+     * @param date the date the event was completed on
+     * @param completer the username of the user who completed the event
+     * @return a formatted display of the event
+     */
+    public static String formatEvent(String title, Date date, String completer){
+        DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
+        return completer + " completed " + title + " on " + df.format(date);
     }
 
 }

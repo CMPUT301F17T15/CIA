@@ -22,6 +22,7 @@ import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.models.Triple;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import java.util.List;
 public class FollowerHistoryActivity extends AppCompatActivity {
 
     private Profile user;
-    private List<Pair<HabitEvent, String>> followed_history;
+    private List<Triple<HabitEvent, String, String>> followed_history;
     private ListView historyList;
 
     @Override
@@ -85,10 +86,8 @@ public class FollowerHistoryActivity extends AppCompatActivity {
      */
     private void display(){
         List<String> habitList = new ArrayList<>(this.followed_history.size());
-        for (Pair<HabitEvent, String> event : this.followed_history) {
-            ElasticSearchUtilities elasticSearchUtilities = new ElasticSearchUtilities();
-            Habit habit = elasticSearchUtilities.getObject("habit", Habit.class, event.first.getHabitId()).first;
-            habitList.add(event.second+ " Completed " + habit.getTitle() + " on " + event.first.getDate());
+        for (Triple<HabitEvent, String, String> event : this.followed_history) {
+            habitList.add(HistoryActivity.formatEvent(event.second, event.first.getDate(), event.third));
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
         historyList.setAdapter(adapter);

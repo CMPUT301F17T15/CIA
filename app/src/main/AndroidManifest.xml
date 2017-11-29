@@ -40,17 +40,32 @@
             android:label="Habit Statistics"
             android:parentActivityName=".activities.HomePageActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activities.habits.CreateHabitActivity" />
-        <activity android:name=".activities.habits.StatisticViewActivity" />
-        <activity android:name=".activities.events.CreateHabitEventActivity" />
-        <activity android:name=".activities.events.HabitEventViewActivity" />
-        <activity android:name=".activities.habits.EditHabitActivity" />
-        <activity android:name=".activities.users.UserProfileActivity" />
-        <activity android:name=".activities.users.RankingsActivity" />
-        <activity android:name=".activities.users.ViewFollowedUsersActivity" />
-        <activity android:name=".activities.users.SearchUsersActivity" />
-        <activity android:name=".activities.users.FollowRequestsActivity" />
-        <activity android:name=".activities.users.FollowerHistoryActivity" />
+        <activity
+            android:name=".activities.habits.CreateHabitActivity"
+            android:label="Create Habit"
+            />
+        <activity android:name=".activities.habits.StatisticViewActivity"
+            android:label="Statistics"/>
+        <activity android:name=".activities.events.CreateHabitEventActivity"
+            android:label="Create Habit Event"/>
+        <activity android:name=".activities.events.HabitEventViewActivity"
+            android:label="Habit Event"/>
+        <activity android:name=".activities.habits.EditHabitActivity"
+            android:label="Edit Habit"/>
+        <activity android:name=".activities.users.UserProfileActivity"
+            android:label="Profile"/>
+        <activity android:name=".activities.users.RankingsActivity"
+            android:label="Rankings"/>
+        <activity
+            android:name=".activities.users.ViewFollowedUsersActivity"
+            android:label="Followed Users"
+            />
+        <activity android:name=".activities.users.SearchUsersActivity"
+            android:label="Search Users"/>
+        <activity android:name=".activities.users.FollowRequestsActivity"
+            android:label="Follow Requests"/>
+        <activity android:name=".activities.users.FollowerHistoryActivity"
+            android:label="Follower Habit History"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -72,7 +87,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.templates.LocationRequestingActivity" />
+        <!--<activity android:name=".activities.templates.LocationRequestingActivity" />-->
         <activity android:name=".activities.users.SendMessageActivity"></activity>
     </application>
 
