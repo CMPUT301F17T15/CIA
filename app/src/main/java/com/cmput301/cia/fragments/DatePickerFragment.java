@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia.utilities;
+package com.cmput301.cia.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -24,7 +24,7 @@ import java.util.Calendar;
  *
  */
 
-public class DatePickerUtilities extends DialogFragment {
+public class DatePickerFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

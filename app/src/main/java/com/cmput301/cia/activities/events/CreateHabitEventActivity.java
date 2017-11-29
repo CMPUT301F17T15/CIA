@@ -24,8 +24,8 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.CreateHabitEventController;
+import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
-import com.cmput301.cia.utilities.DatePickerUtilities;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
@@ -178,11 +178,11 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
     /**
      * Creates a dialog so that the user can choose a date instead of typing
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      * @param v: the layout that it's coming from
      */
     public void datePickerDialog(View v) {
-        DatePickerUtilities datePickerFragment = new DatePickerUtilities();
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -191,7 +191,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      * @param year : the year chosen
      * @param month : the month chosen
      * @param day : the day chosen
-     * see: DatePickerUtilities
+     * see: DatePickerFragment
      */
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
