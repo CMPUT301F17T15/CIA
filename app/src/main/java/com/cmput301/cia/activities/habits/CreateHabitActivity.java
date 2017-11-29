@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.ButtonClickListener;
-import com.cmput301.cia.controller.CreateHabitController;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -127,17 +126,13 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
         if (daysSelected.size() == 0) {
             Toast.makeText(CreateHabitActivity.this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
-        } else if (habitName.getText().toString().length() == 0){
+        } else if (habitName.getText().toString().length() == 0) {
             Toast.makeText(CreateHabitActivity.this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
         }
-        else{
-            Habit habit = CreateHabitController.onSaveClicked(
-                    habitName.getText().toString(),
-                    reason.getText().toString(),
-                    chooseStartDate,
-                    getPickedDates(daysSelected),
-                    spinner.getSelectedItem().toString()
-            );
+        else {
+
+            Habit habit = new Habit(habitName.getText().toString(), reason.getText().toString(), chooseStartDate, getPickedDates(daysSelected),
+                    spinner.getSelectedItem().toString());
 
             Intent intent = new Intent();
             intent.putExtra("Habit", habit);

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
+import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -100,6 +101,16 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         } else
             image = null;
 
+        // handle the image being clicked
+        habitEventPhoto.setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, CreateHabitEventActivity.SELECT_IMAGE_CODE);
+            }
+        });
+
         updateImage();
         habitEventComment.setText(event.getComment());
         setDateText();
@@ -171,9 +182,7 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
      * https://stackoverflow.com/a/5309965
      */
     public void onImageClicked(View view) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, CreateHabitEventActivity.SELECT_IMAGE_CODE);
+
     }
 
     /**
