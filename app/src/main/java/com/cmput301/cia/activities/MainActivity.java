@@ -120,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.loginPageLayout));
     }
 
+    //play video when back to login page.
+    @Override
+    protected void onResume(){
+        super.onResume();
+        backGround.start();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
