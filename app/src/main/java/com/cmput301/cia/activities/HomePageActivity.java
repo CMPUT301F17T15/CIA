@@ -171,6 +171,44 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.homeProfileImageView).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent_My_Profile = new Intent(HomePageActivity.this, UserProfileActivity.class);
+                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user);
+                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user);
+                startActivityForResult(intent_My_Profile, VIEW_PROFILE);
+            }
+        });
+
+        findViewById(R.id.homeFollowedImageView).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent_My_Following = new Intent(HomePageActivity.this, ViewFollowedUsersActivity.class);
+                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_VIEWED, user);
+                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_USER, user);
+                startActivityForResult(intent_My_Following, FOLLOWED_USERS);
+            }
+        });
+
+        findViewById(R.id.homeRequestsImageView).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent requests = new Intent(HomePageActivity.this, FollowRequestsActivity.class);
+                requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
+                startActivityForResult(requests, FOLLOW_REQUESTS);
+            }
+        });
+
+        findViewById(R.id.homeSearchImageView).setOnClickListener(new ButtonClickListener() {
+            @Override
+            public void handleClick() {
+                Intent search = new Intent(HomePageActivity.this, SearchUsersActivity.class);
+                search.putExtra(SearchUsersActivity.ID_USER, user);
+                startActivityForResult(search, SEARCH_USERS);
+            }
+        });
+
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
     }
 

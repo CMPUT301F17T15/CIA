@@ -33,10 +33,10 @@
         android:textColor="@color/colorPrimary"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_marginLeft="24dp"
+        android:layout_marginLeft="27dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="200dp" />
+        android:layout_marginBottom="237dp" />
 
     <ImageView
         android:id="@+id/homeHistoryImageView"
@@ -44,8 +44,8 @@
         android:layout_height="47dp"
         app:srcCompat="@mipmap/historyicon"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp"
-        android:layout_marginLeft="71dp"
+        android:layout_marginTop="517dp"
+        android:layout_marginLeft="123dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageView
@@ -54,8 +54,8 @@
         android:layout_height="47dp"
         app:srcCompat="@mipmap/profileicon"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp"
-        android:layout_marginRight="182dp"
+        android:layout_marginTop="517dp"
+        android:layout_marginRight="173dp"
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
@@ -64,8 +64,8 @@
         android:layout_height="47dp"
         app:srcCompat="@mipmap/requestsicon"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp"
-        android:layout_marginRight="144dp"
+        android:layout_marginTop="517dp"
+        android:layout_marginRight="70dp"
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
@@ -74,8 +74,8 @@
         android:layout_height="47dp"
         app:srcCompat="@mipmap/followrequestsicon"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp"
-        android:layout_marginLeft="258dp"
+        android:layout_marginTop="517dp"
+        android:layout_marginLeft="224dp"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageView
@@ -83,10 +83,10 @@
         android:layout_width="38dp"
         android:layout_height="47dp"
         app:srcCompat="@android:drawable/ic_search_category_default"
-        android:layout_marginRight="61dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="517dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/homeAddHabitButton"
@@ -95,10 +95,10 @@
         android:clickable="true"
         app:fabSize="mini"
         app:srcCompat="@android:drawable/ic_input_add"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="69dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="517dp" />
 
     <ExpandableListView
         android:id="@+id/HabitTypeExpandableListView"
@@ -112,18 +112,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.674" />
 
     <ListView
         android:id="@+id/TodayToDoListView"
-        android:layout_width="386dp"
-        android:layout_height="184dp"
+        android:layout_width="379dp"
+        android:layout_height="154dp"
+        android:layout_marginBottom="76dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintHorizontal_bias="0.454" />
 
 </android.support.constraint.ConstraintLayout>
