@@ -21,11 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.events.HistoryActivity" />
+        <activity android:name=".activities.events.HistoryActivity"
+            android:label="Habit History"/>
         <activity
             android:name=".activities.events.FilterHabitsActivity"
-            android:label="@string/title_activity_filter_events"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_filter_events" />
         <activity
             android:name=".activities.HomePageActivity"
             android:label="Habits"
@@ -34,7 +34,7 @@
         <activity
             android:name=".activities.habits.HabitViewActivity"
             android:label="Habit Details"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            />
         <activity
             android:name=".activities.habits.StatisticActivity"
             android:label="Habit Statistics"
@@ -64,8 +64,6 @@
             android:label="Search Users"/>
         <activity android:name=".activities.users.FollowRequestsActivity"
             android:label="Follow Requests"/>
-        <activity android:name=".activities.users.FollowerHistoryActivity"
-            android:label="Follower Habit History"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

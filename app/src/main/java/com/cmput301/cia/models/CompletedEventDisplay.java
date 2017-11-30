@@ -80,7 +80,11 @@ public class CompletedEventDisplay implements Serializable {
         if (location.equals(DeviceUtilities.NO_LOCATION_NAME)){
             return toString();
         } else {
-            return toString() + " at " + locationName;
+            if (userName.equals("")){
+                return "Completed " + habitName + " at " + locationName;
+            } else {
+                return userName + " completed " + habitName + " at " + locationName;
+            }
         }
     }
 

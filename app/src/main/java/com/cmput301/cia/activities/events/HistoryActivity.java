@@ -62,6 +62,9 @@ public class HistoryActivity extends LocationRequestingActivity {
     // The habit that is selected as a filter
     private Habit filterHabit;
 
+    // Text used for filtering by event comment
+    private String filterText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,7 @@ public class HistoryActivity extends LocationRequestingActivity {
                 if (useHabit.isChecked() && filterHabit == null){
                     Toast.makeText(HistoryActivity.this, "No filter habit was selected. Checkbox is ignored.", Toast.LENGTH_SHORT).show();
                 }
+                filterText = filterEditText.getText().toString();
                 convertEventsToString();
             }
         });
@@ -127,8 +131,8 @@ public class HistoryActivity extends LocationRequestingActivity {
     private List<CompletedEventDisplay> getDisplayedEvents(){
         if (useHabit.isChecked() && filterHabit != null){
             return user.getHabitHistory(filterHabit);
-        } else if (!filterEditText.getText().equals("")) {
-            return user.getHabitHistory(filterEditText.getText().toString());
+        } else if (!filterText.equals("")) {
+            return user.getHabitHistory(filterText);
         } else {
             return user.getHabitHistory();
         }

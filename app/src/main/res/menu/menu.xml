@@ -22,10 +22,6 @@
         android:title="@string/menu_HabitHistory"
         />
     <item
-        android:id="@+id/menu_button_followedHistory"
-        android:checkable="false"
-        android:title="@string/menu_followedHistory" />
-    <item
         android:id="@+id/menu_button_My_Following"
         android:title="@string/menu_MyFollowing" />
     <item

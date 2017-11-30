@@ -5,7 +5,6 @@
 package com.cmput301.cia.activities;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +25,6 @@ import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.users.FollowRequestsActivity;
-import com.cmput301.cia.activities.users.FollowerHistoryActivity;
 import com.cmput301.cia.activities.users.RankingsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
@@ -275,12 +273,6 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent requests = new Intent(this, FollowRequestsActivity.class);
                 requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
                 startActivityForResult(requests, FOLLOW_REQUESTS);
-                return true;
-            case R.id.menu_button_followedHistory:
-                // TODO
-                Intent followed = new Intent(this, FollowerHistoryActivity.class);
-                followed.putExtra(SearchUsersActivity.ID_USER, user);
-                startActivity(followed);
                 return true;
         }
         return super.onOptionsItemSelected(item);

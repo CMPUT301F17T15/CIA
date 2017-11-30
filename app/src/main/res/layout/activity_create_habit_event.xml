@@ -78,18 +78,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/cheEventTitleText"
-        android:layout_width="219dp"
-        android:layout_height="28dp"
-        android:layout_marginLeft="83dp"
-        android:layout_marginTop="16dp"
-        android:text="Create Habit Event"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/cheHabitNameText"
         android:layout_width="130dp"
         android:layout_height="35dp"
