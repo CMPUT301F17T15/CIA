@@ -21,6 +21,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
 import com.cmput301.cia.models.Habit;
@@ -30,10 +31,6 @@ import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.FontUtilities;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -107,14 +104,9 @@ public class HistoryActivity extends LocationRequestingActivity {
         historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                String viewText = ((TextView)view).getText().toString();
-                // "completed " is 10 characters, so start at index 10 -> 11th character
-                String habitName = viewText.substring(10, viewText.lastIndexOf(" on "));
-
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
-                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position));
-                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, habitName);
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position).getEvent());
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, getDisplayedEvents().get(position).getHabitName());
                 startActivityForResult(intent, EVENT_CODE);
             }
         });
@@ -132,7 +124,7 @@ public class HistoryActivity extends LocationRequestingActivity {
     /**
      * @return list of all habit events that are currently displayed on the screen
      */
-    private List<HabitEvent> getDisplayedEvents(){
+    private List<CompletedEventDisplay> getDisplayedEvents(){
         if (useHabit.isChecked() && filterHabit != null){
             return user.getHabitHistory(filterHabit);
         } else if (!filterEditText.getText().equals("")) {
@@ -146,15 +138,8 @@ public class HistoryActivity extends LocationRequestingActivity {
      * Convert all displayed habit events into a string representation and update the listview
      */
     private void convertEventsToString(){
-        List<HabitEvent> events = getDisplayedEvents();
-        List<String> habitList = new ArrayList<>(events.size());
-
-        for (HabitEvent event : events) {
-            Habit habit = user.getHabitById(event.getHabitId());
-            habitList.add(formatEvent(habit.getTitle(), event.getDate()));
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, habitList);
+        List<CompletedEventDisplay> events = getDisplayedEvents();
+        ArrayAdapter<CompletedEventDisplay> adapter = new ArrayAdapter<>(this, R.layout.list_item, events);
         historyList.setAdapter(adapter);
     }
 
@@ -221,29 +206,6 @@ public class HistoryActivity extends LocationRequestingActivity {
         intent.putExtra(ID_PROFILE, user);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    /**
-     * Format a habit event for display in a list
-     * @param title the title of the habit that the event was completed for
-     * @param date the date the event was completed on
-     * @return a formatted display of the event
-     */
-    public static String formatEvent(String title, Date date){
-        DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
-        return "Completed " + title + " on " + df.format(date);
-    }
-
-    /**
-     * Format a habit event for display in a list
-     * @param title the title of the habit that the event was completed for
-     * @param date the date the event was completed on
-     * @param completer the username of the user who completed the event
-     * @return a formatted display of the event
-     */
-    public static String formatEvent(String title, Date date, String completer){
-        DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
-        return completer + " completed " + title + " on " + df.format(date);
     }
 
 }

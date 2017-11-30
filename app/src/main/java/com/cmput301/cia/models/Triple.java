@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import java.io.Serializable;
+
 /**
  * @author Adil Malik
  * @version 1
@@ -12,7 +14,7 @@ package com.cmput301.cia.models;
  * A storage class that stores three generic objects for easy returning of 3 values
  */
 
-public class Triple<X, Y, Z> {
+public class Triple<X extends Serializable, Y extends Serializable, Z extends Serializable> implements Serializable{
 
     public X first;
     public Y second;

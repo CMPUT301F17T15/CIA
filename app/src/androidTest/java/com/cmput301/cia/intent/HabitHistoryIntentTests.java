@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.events.FilterHabitsActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -94,9 +95,9 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
         solo.enterText(0, "test");
         Method method = solo.getCurrentActivity().getClass().getDeclaredMethod("getDisplayedEvents");
         method.setAccessible(true);
-        List<HabitEvent> events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
-        for (HabitEvent event : events){
-            assertTrue(event.getComment().contains("test"));
+        List<CompletedEventDisplay> events = (List<CompletedEventDisplay>) method.invoke(solo.getCurrentActivity());
+        for (CompletedEventDisplay event : events){
+            assertTrue(event.getEvent().getComment().contains("test"));
         }
         // the user has 2 habit events containing test as the comment
         assertTrue(events.size() == 2);
@@ -119,9 +120,9 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
         solo.sleep(1000);
 
         // make sure all displayed events are now of the same type as the filter habit
-        events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
-        for (HabitEvent event : events){
-            assertTrue(event.getHabitId().equals(filter.getId()));
+        events = (List<CompletedEventDisplay>) method.invoke(solo.getCurrentActivity());
+        for (CompletedEventDisplay event : events){
+            assertTrue(event.getEvent().getHabitId().equals(filter.getId()));
         }
 
         solo.clickOnCheckBox(0);
@@ -131,9 +132,9 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
         solo.sleep(1000);
 
         // now filtering by text again
-        events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
-        for (HabitEvent event : events){
-            assertTrue(event.getComment().contains("test"));
+        events = (List<CompletedEventDisplay>) method.invoke(solo.getCurrentActivity());
+        for (CompletedEventDisplay event : events){
+            assertTrue(event.getEvent().getComment().contains("test"));
         }
 
     }
