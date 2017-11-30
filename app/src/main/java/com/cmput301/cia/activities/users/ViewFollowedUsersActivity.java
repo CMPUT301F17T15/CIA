@@ -5,30 +5,25 @@
 package com.cmput301.cia.activities.users;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.models.Triple;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -227,6 +222,16 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         historyImage.setVisibility(View.INVISIBLE);
         profileImage.setVisibility(View.VISIBLE);
         profileHistorySwitcher.showNext();
+
+        // viewing habits list
+        if (habitsList.getVisibility() == View.VISIBLE){
+            if (habitsList.getChildCount() == 0)
+                Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
+        } else {
+            // viewing events list
+            if (eventsList.getChildCount() == 0)
+                Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -250,6 +255,16 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             // switch to history view
             habitsList.setVisibility(View.VISIBLE);
             eventsList.setVisibility(View.INVISIBLE);
+        }
+
+        // viewing habits list
+        if (habitsList.getVisibility() == View.VISIBLE){
+            if (habitsList.getChildCount() == 0)
+                Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
+        } else {
+            // viewing events list
+            if (eventsList.getChildCount() == 0)
+                Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
 }
