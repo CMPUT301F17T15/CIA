@@ -19,6 +19,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -66,7 +67,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
     // list of followed viewer's events
     private ListView eventsList;
-    private ArrayAdapter<String> eventsListAdapter;
+    private ArrayAdapter<CompletedEventDisplay> eventsListAdapter;
 
     private ImageView historyImage;
     private ImageView profileImage;
@@ -111,13 +112,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         eventsList = (ListView)findViewById(R.id.vfuEventsList);
-        List<String> eventHistory = new ArrayList<>();
-        List<Triple<HabitEvent, String, String>> followedHistory = displayed.getFollowedHabitHistory();
-        for (Triple<HabitEvent, String, String> event : followedHistory){
-            eventHistory.add(HistoryActivity.formatEvent(event.third, event.first.getDate(), event.second));
-        }
-
-        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, eventHistory);
+        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
         eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,12 +167,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     @Override
     protected void handleLocationGranted() {
         Intent intent = new Intent(this, ViewEventsMapActivity.class);
-        List<HabitEvent> events = new ArrayList<>();
-        List<Triple<HabitEvent, String, String>> history = displayed.getFollowedHabitHistory();
-        for (Triple<HabitEvent, String, String> event : history)
-            events.add(event.first);
-
-        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) events);
+        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) displayed.getFollowedHabitHistory());
         startActivity(intent);
     }
 

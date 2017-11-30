@@ -254,15 +254,17 @@ public class Profile extends ElasticSearchable {
     /**
      * @return the user's habit history, sorted in descending order based on date
      */
-    public List<HabitEvent> getHabitHistory(){
-        List<HabitEvent> list = new ArrayList<>();
+    public List<CompletedEventDisplay> getHabitHistory(){
+        List<CompletedEventDisplay> list = new ArrayList<>();
         for (Habit habit : habits){
-            list.addAll(habit.getEvents());
+            for (HabitEvent event : habit.getEvents()){
+                list.add(new CompletedEventDisplay(event, habit.getTitle()));
+            }
         }
-        Collections.sort(list, new Comparator<HabitEvent>() {
+        Collections.sort(list, new Comparator<CompletedEventDisplay>() {
             @Override
-            public int compare(HabitEvent event, HabitEvent t1) {
-                return -1 * event.getDate().compareTo(t1.getDate());
+            public int compare(CompletedEventDisplay lhs, CompletedEventDisplay rhs) {
+                return -1 * lhs.getCompletionDate().compareTo(rhs.getCompletionDate());
             }
         });
         return list;
@@ -272,18 +274,18 @@ public class Profile extends ElasticSearchable {
      * @param filter phrase that every event included in the list must contain
      * @return the user's filtered habit history, sorted in descending order based on date
      */
-    public List<HabitEvent> getHabitHistory(String filter){
-        List<HabitEvent> list = new ArrayList<>();
+    public List<CompletedEventDisplay> getHabitHistory(String filter){
+        List<CompletedEventDisplay> list = new ArrayList<>();
         for (Habit habit : habits){
             for (HabitEvent event : habit.getEvents()) {
                 if (event.getComment().contains(filter))
-                    list.add(event);
+                    list.add(new CompletedEventDisplay(event, habit.getTitle()));
             }
         }
-        Collections.sort(list, new Comparator<HabitEvent>() {
+        Collections.sort(list, new Comparator<CompletedEventDisplay>() {
             @Override
-            public int compare(HabitEvent event, HabitEvent t1) {
-                return -1 * event.getDate().compareTo(t1.getDate());
+            public int compare(CompletedEventDisplay event, CompletedEventDisplay t1) {
+                return -1 * event.getCompletionDate().compareTo(t1.getCompletionDate());
             }
         });
         return list;
@@ -293,12 +295,15 @@ public class Profile extends ElasticSearchable {
      * @param filter habit that every event included in the list must be based off of
      * @return the user's filtered habit history, sorted in descending order based on date
      */
-    public List<HabitEvent> getHabitHistory(Habit filter){
-        List<HabitEvent> list = filter.getEvents();
-        Collections.sort(list, new Comparator<HabitEvent>() {
+    public List<CompletedEventDisplay> getHabitHistory(Habit filter){
+        List<CompletedEventDisplay> list = new ArrayList<>();
+        for (HabitEvent event : filter.getEvents()){
+            list.add(new CompletedEventDisplay(event, filter.getTitle()));
+        }
+        Collections.sort(list, new Comparator<CompletedEventDisplay>() {
             @Override
-            public int compare(HabitEvent event, HabitEvent t1) {
-                return -1 * event.getDate().compareTo(t1.getDate());
+            public int compare(CompletedEventDisplay event, CompletedEventDisplay t1) {
+                return -1 * event.getCompletionDate().compareTo(t1.getCompletionDate());
             }
         });
 
@@ -306,27 +311,26 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of {the most recent event for each habit, user name of habit creator, habit name} of all followed users sorted in descending
+     * @return list of all completed events by all followed users sorted in descending
      * order of date
      */
-    public List<Triple<HabitEvent, String, String>> getFollowedHabitHistory() {
-
-        List<Triple<HabitEvent, String, String>> list = new ArrayList<>();
+    public List<CompletedEventDisplay> getFollowedHabitHistory() {
+        List<CompletedEventDisplay> list = new ArrayList<>();
         List<String> followingIds = Follow.getFollowing(getId());
         List<Profile> following = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
         for (Profile followee : following) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
-                    list.add(new Triple<>(event, followee.getName(), habit.getTitle()));
+                    list.add(new CompletedEventDisplay(event, habit.getTitle(), followee.getName()));
                 }
             }
         }
 
-        Collections.sort(list, new Comparator<Triple<HabitEvent, String, String>>() {
+        Collections.sort(list, new Comparator<CompletedEventDisplay>() {
             @Override
-            public int compare(Triple<HabitEvent, String, String> event, Triple<HabitEvent, String, String> t1) {
-                return -1 * event.first.getDate().compareTo(t1.first.getDate());
+            public int compare(CompletedEventDisplay event, CompletedEventDisplay t1) {
+                return -1 * event.getCompletionDate().compareTo(t1.getCompletionDate());
             }
         });
 
@@ -551,27 +555,22 @@ public class Profile extends ElasticSearchable {
      * @return a list of all habit events (by this user and the most recent event of each type from followers) within 5km of the user's current location
      */
     // TODO: test if distance is correct
-    public List<HabitEvent> getNearbyEvents(Location location){
-        List<HabitEvent> nearbyEvents = new ArrayList<>();
+    public List<CompletedEventDisplay> getNearbyEvents(Location location){
+        List<CompletedEventDisplay> nearbyEvents = new ArrayList<>();
 
         if (location != null) {
             final float MAX_DISTANCE = 5000.0f;
 
-            List<HabitEvent> allEvents = getHabitHistory();
+            List<CompletedEventDisplay> allEvents = getHabitHistory();
+            allEvents.addAll(getFollowedHabitHistory());
 
-            List<Triple<HabitEvent, String, String>> events = getFollowedHabitHistory();
-            for (Triple<HabitEvent, String, String> pair : events){
-                allEvents.add(pair.first);
-            }
-
-            for (HabitEvent event : allEvents) {
+            for (CompletedEventDisplay event : allEvents) {
                 Location eventLoc = event.getLocation();
                 if (eventLoc != null && eventLoc.distanceTo(location) <= MAX_DISTANCE) {
                     nearbyEvents.add(event);
                 }
             }
         }
-
         return nearbyEvents;
     }
 
