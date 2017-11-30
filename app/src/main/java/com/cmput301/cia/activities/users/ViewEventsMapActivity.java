@@ -14,7 +14,6 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
-import com.cmput301.cia.models.Triple;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.google.android.gms.maps.CameraUpdate;

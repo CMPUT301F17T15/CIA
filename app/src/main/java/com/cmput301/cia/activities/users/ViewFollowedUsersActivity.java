@@ -24,7 +24,6 @@ import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.models.Triple;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
