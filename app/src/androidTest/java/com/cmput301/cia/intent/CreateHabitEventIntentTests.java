@@ -8,26 +8,18 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import com.cmput301.cia.OfflineUnitTests;
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
-import com.cmput301.cia.activities.events.HabitEventViewActivity;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**

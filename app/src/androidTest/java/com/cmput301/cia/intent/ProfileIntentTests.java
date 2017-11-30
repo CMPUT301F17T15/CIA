@@ -63,11 +63,11 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("profile");
+        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
         field.setAccessible(true);
         Profile viewed = (Profile)field.get(solo.getCurrentActivity());
 
-        Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("user");
+        Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("viewer");
         field2.setAccessible(true);
         Profile user = (Profile)field.get(solo.getCurrentActivity());
 
@@ -94,7 +94,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("profile");
+        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
         field.setAccessible(true);
         Profile viewed = (Profile)field.get(solo.getCurrentActivity());
 

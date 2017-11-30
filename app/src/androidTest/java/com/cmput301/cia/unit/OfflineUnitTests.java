@@ -2,9 +2,11 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia;
+package com.cmput301.cia.unit;
 
 import android.support.test.runner.AndroidJUnit4;
+
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.models.AddHabitEvent;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;

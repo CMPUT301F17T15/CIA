@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Follow;
@@ -37,6 +38,8 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
     //the listener that listens when an item in the lsit is clicked
     private OnItemClickListener listener;
 
+    private Context context;
+
     /**
      * Constructs a new adapter to be used in the recycler view for FollowRequestsActivity
      * @param context the RecyclerView context
@@ -46,6 +49,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
     public FollowersRequestAdapter(Context context, List<Profile> followRequests, Profile followee) {
         this.followRequests = followRequests;
         this.followee = followee;
+        this.context = context;
     }
 
     /** returns the Profile that was chosen in the recycler view
@@ -113,11 +117,13 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
 
             @Override
             public void onClick(View view) {
-                Follow follow = Follow.getFollow(follower.getId(), followee.getId(), Follow.Status.PENDING);
-                follow.acceptFollowRequest();
-
-                followRequests.remove(position);
-                notifyItemRemoved(position);
+                followee.acceptFollowRequest(follower);
+                if (follower.isFollowing(followee)){
+                    followRequests.remove(position);
+                    notifyItemRemoved(position);
+                } else {
+                    Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -128,8 +134,16 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
 
             @Override
             public void onClick(View view) {
-                Follow follow = Follow.getFollow(follower.getId(), followee.getId(), Follow.Status.PENDING);
-                follow.removeFollowRequest(follower.getId(), followee.getId());
+
+
+                // TODO: shouldn't this remove as well?
+                followee.removeFollowRequest(follower);
+                if (!follower.isFollowing(followee)){
+                    //followRequests.remove(position);
+                    //notifyItemRemoved(position);
+                } else {
+                    Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

@@ -13,6 +13,8 @@ import android.util.Pair;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -587,10 +589,15 @@ public class ElasticSearchUtilities {
 
         Set<String> keyset = values.keySet();
         String last = Iterables.getLast(keyset);
-        for (String key : keyset){
-            query.append("\""+key+"\"" + ":" + "\""+values.get(key)+"\"");
-            if (!key.equals(last))
-                query.append(",\n");
+
+        if (values.size() == 1){
+            query.append("\""+last+"\"" + ":" + "\""+values.get(last)+"\"");
+        } else {
+            for (String key : keyset) {
+                query.append("\n{\"match\": {\""+key+"\"" + ":" + "\""+values.get(key)+"\"}}");
+                if (!key.equals(last))
+                    query.append(",");
+            }
         }
         return query.toString();
     }
@@ -603,6 +610,8 @@ public class ElasticSearchUtilities {
     private static String getCompleteQuery(String parameters){
         StringBuilder builder = new StringBuilder();
 
+        boolean multiField = StringUtils.countMatches(parameters, "}},") > 0;
+
         // TODO: handle case when there is more than max results
         builder.append("{\"size\": " + MAX_RESULTS + ",");
 
@@ -610,10 +619,14 @@ public class ElasticSearchUtilities {
         if (parameters.equals("")){
             builder.append("\n\"query\": {\"match_all\": {}");
             builder.append("}}\n}");
-        } else {
+        } else if (!multiField) {
             builder.append("\n\"query\": {\"term\":{");
             builder.append(parameters);
             builder.append("}}\n}");
+        } else {
+            builder.append("\n\"query\":{\n\"bool\": {\n\"must\": [");
+            builder.append(parameters);
+            builder.append("]}}\n}");
         }
 
         return builder.toString();

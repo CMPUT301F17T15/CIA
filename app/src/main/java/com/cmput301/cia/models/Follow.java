@@ -4,12 +4,16 @@
 
 package com.cmput301.cia.models;
 
+import android.util.Pair;
+
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jessica Prieto
@@ -17,12 +21,15 @@ import java.util.List;
  * Date: November 27, 2017
  *
  * This class represents an object for the following activity:
- * Each follow activity is stored as a Follow class (user following another user &
+ * Each sendFollowRequest activity is stored as a Follow class (user following another user &
  * pending requests)
  */
 
 public class Follow extends ElasticSearchable {
-    public static final String TYPE_ID = "follow";
+
+    public static final String TYPE_ID = "following";
+
+    private static final String PENDING_STR = "0", ACCEPTED_STR = "1";
 
     //the user doing the following
     private String followerId;
@@ -30,11 +37,8 @@ public class Follow extends ElasticSearchable {
     //the user being followed
     private String followeeId;
 
-    //follow status: accepted or pending
-    private Status currentStatus;
-
-    //Enum to differentiate the status
-    public enum Status {PENDING, ACCEPTED};
+    // whether this object represents a pending (requested) or accepted sendFollowRequest
+    private String accepted;
 
     /**
      * Constructs a new Follow object
@@ -44,50 +48,69 @@ public class Follow extends ElasticSearchable {
     public Follow(String followerId, String followeeId) {
         this.followerId = followerId;
         this.followeeId = followeeId;
-        this.currentStatus = Status.PENDING;
+        accepted = PENDING_STR;
     }
 
     /**
-     * removes the follow request by deleting the instance of the follow objects
+     * Constructs a new Follow object
+     * @param followerId the user being followed
+     * @param followeeId the user doing the following
+     * @param request whether this object represents a requested sendFollowRequest or an accepted one
+     */
+    public Follow(String followerId, String followeeId, boolean request) {
+        this.followerId = followerId;
+        this.followeeId = followeeId;
+        accepted = request ? PENDING_STR : ACCEPTED_STR;
+    }
+
+    /**
+     * removes the sendFollowRequest request by deleting the instance of the sendFollowRequest objects
      * @param follower the user doing the following
      * @param followee the user being followed
      */
     public static void removeFollowRequest(String follower, String followee) {
-        Follow toRemove = getFollow(follower, followee, Status.PENDING);
-        toRemove.delete();
-        toRemove.save();
+        Map<String, String> map = new HashMap<>();
+        map.put("followerId", follower);
+        map.put("followeeId", followee);
+        map.put("accepted", "0");
+        ElasticSearchUtilities.delete(Follow.TYPE_ID, Follow.class, map);
     }
 
     /**
-     * Returns the follow object given the parameters
-     *
+     * Send a follow request from one user to another
      * @param followerId the user doing the following
      * @param followeeId the user being followed
-     * @param currentStatus the status of the follow action : Pending of Approved
-     * @return the follow object
+     * @return whether the follow request was successfully sent or not
      */
-    public static Follow getFollow(String followerId, String followeeId, Status currentStatus) {
-        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class);
-        for (Follow currentFollow : follows) {
-            if ((currentFollow.followerId.equals(followerId)) &&
-                    (currentFollow.followeeId.equals(followeeId)) &&
-                    (currentFollow.currentStatus == currentStatus)) {
-                return currentFollow;
-            }
-        }
-        return null;
+    public static boolean sendFollowRequest(String followerId, String followeeId) {
+        Follow newFollow = new Follow(followerId, followeeId);
+        return newFollow.save();
     }
 
     /**
-     * User follows another user by creating a new follow instance
+     * Allow the follower to follow the followee
      * @param followerId the user being followed
      * @param followeeId the user doing the following
-     * @return the new instance of the follow object after creation
+     * @param requested whether this object represents a requested follow or an accepted one
+     * @return the new instance of the sendFollowRequest object after creation
      */
-    public static Follow follow(String followerId, String followeeId) {
-        Follow newFollow = new Follow(followerId, followeeId);
+    public static Follow follow(String followerId, String followeeId, boolean requested) {
+        Follow newFollow = new Follow(followerId, followeeId, requested);
         newFollow.save();
         return newFollow;
+    }
+
+    /**
+     * Remove the followee from the list of users the follower is following
+     * @param followerId the user being followed
+     * @param followeeId the user doing the following
+     */
+    public static void unfollow(String followerId, String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followerId", followerId);
+        map.put("followeeId", followeeId);
+        map.put("accepted", "1");
+        ElasticSearchUtilities.delete(Follow.TYPE_ID, Follow.class, map);
     }
 
     /**
@@ -97,84 +120,94 @@ public class Follow extends ElasticSearchable {
      * @return a list of strings containing the ID's of the users that the
      *      user is following
      */
-    public static List<String> getFollowing(String followerId) {
-        List<String> following = new ArrayList<String>();
-        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class);
-        
-        for (Follow currentFollow : follows) {
-            if (followerId.equals(currentFollow.getFollowerId()) && (currentFollow.currentStatus == Status.ACCEPTED)) {
-                following.add(currentFollow.followeeId);
-            }
+    public static List<Profile> getFollowing(String followerId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followerId", followerId);
+        map.put("accepted", "1");
+        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map);
+
+        List<Profile> following = new ArrayList<>();
+        for (Follow follow : follows){
+            Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, follow.followeeId);
+            if (result.first != null)
+                following.add(result.first);
         }
+
         return following;
     }
 
     /**
-     * Gets a list of pending follow requests
+     * Gets a list of pending sendFollowRequest requests
      *
-     * @param followeeId the current user with the follow requests
-     * @return a list of strings containing the users wanting to follow the current user
+     * @param followeeId the current user with the sendFollowRequest requests
+     * @return a list of strings containing the users wanting to sendFollowRequest the current user
      */
-    public static List<String> getPendingFollows(String followeeId) {
-        List<String> pendingFollowIds = new ArrayList<String>();
-        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class);
+    public static List<Profile> getPendingFollows(String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followeeId", followeeId);
+        map.put("accepted", "0");
+        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map);
 
-        for (Follow currentFollow : follows) {
-            if (currentFollow.followeeId.equals(followeeId) && (currentFollow.currentStatus == Status.PENDING)) {
-                pendingFollowIds.add(currentFollow.followerId);
-            }
+        List<Profile> following = new ArrayList<>();
+        for (Follow follow : follows){
+            Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, follow.followerId);
+            if (result.first != null)
+                following.add(result.first);
         }
-        return pendingFollowIds;
+
+        return following;
     }
 
     /**
-     * checks to see if the user has any pending follow requests
-     *
-     * @param followeeId the current user to check pending follow requests
-     *
-     * @return a boolean determining if the user has any follow requests
+     * checks to see if the user has a pending follow request from another user
+     * @param followeeId the id of the user to check if they are being followed or not
+     * @param followerId the id of the user to check if they have sent a follow request to the other user
+     * @return a boolean determining if the followee has a follow request from the specified follower
      */
-    public static boolean hasFollowRequest(String followeeId) {
-        List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, Arrays.asList(followeeId));
-        for (Follow currentFollow : follows) {
-            if (followeeId.equals(currentFollow.getFolloweeId()) && currentFollow.currentStatus == Status.PENDING) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean hasFollowRequest(String followeeId, String followerId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followeeId", followeeId);
+        map.put("followerId", followerId);
+        map.put("accepted", "0");
+        return ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map).size() > 0;
     }
 
     /**
-     * Accepts the follow request by changing the status from pending to accepted
+     * checks to see if a follower is following another user
+     * @param followerId the id of the user to check if they are following the other user
+     * @param followeeId the id of the user to check if they are being followed or not
+     * @return a boolean determining if the followee has a follow request from the specified follower
      */
-    public void acceptFollowRequest() {
-        currentStatus = Status.ACCEPTED;
-        save();
+    public static boolean isFollowing(String followerId, String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followeeId", followeeId);
+        map.put("followerId", followerId);
+        map.put("accepted", "1");
+        return ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map).size() > 0;
+    }
+
+    /**
+     * Accepts the sendFollowRequest request by changing the status from pending to accepted
+     */
+    public static void acceptFollowRequest(String followerId, String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followeeId", followeeId);
+        map.put("followerId", followerId);
+        map.put("accepted", "0");
+        Pair<Follow, Boolean> result = ElasticSearchUtilities.getObject(Follow.TYPE_ID, Follow.class, map);
+        if (result.first != null){
+            result.first.accepted = ACCEPTED_STR;
+            result.first.save();
+        }
     }
 
     /** helper function for the load method.
      *
-     * @param follow the follow object to load
+     * @param follow the sendFollowRequest object to load
      */
     public void copyFrom(Follow follow){
         followerId = follow.followerId;
         followeeId = follow.followeeId;
-    }
-
-    /** returns the follower id (the user doing the "following" action)
-     *
-     * @return string of the follower ID
-     */
-    public String getFollowerId() {
-        return followerId;
-    }
-
-    /**
-     * sets the follower ID (the user doing the "following" action)
-     * @param id the ID of the user to set in the object
-     */
-    public void setFolloweeId(String id) {
-        followeeId = id;
     }
 
     /** retrieves the Id of the followee (the person receiving the "following" action)
