@@ -7,6 +7,7 @@ package com.cmput301.cia;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -104,7 +105,7 @@ public class ProfileTests {
         Profile request = new TestProfile("Mike");
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
-        List<Pair<HabitEvent, String>> eventList = request.getFollowedHabitHistory();
+        List<CompletedEventDisplay> eventList = request.getFollowedHabitHistory();
 
         // only the most recent event should be visible to the follower, so count how much that should be
         int correctSize = 0;

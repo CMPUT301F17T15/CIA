@@ -33,17 +33,17 @@ import java.util.concurrent.ExecutionException;
 
 public class DeviceUtilities {
 
-    private static Context context;
+    // The returned location string when a location is invalid or an error occurs trying to find it's name
+    public static final String NO_LOCATION_NAME = "NONE";
 
     private static LocationListenerImpl listener = new LocationListenerImpl();
-
-    private static class LocationListenerImpl implements LocationListener{
-
-        private Location lastLoc = null;
+    /**
+     * dummy class used just for getting the current location
+     */
+    private static class LocationListenerImpl implements LocationListener {
 
         @Override
         public void onLocationChanged(Location location) {
-            lastLoc = location;
         }
 
         @Override
@@ -65,9 +65,9 @@ public class DeviceUtilities {
     /**
      * @return whether the user is connected to the internet or not
      */
-    public static boolean isOnline() {
+    /*public static boolean isOnline() {
         return ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, new HashMap<String, String>()).size() > 0;
-    }
+    }*/
 
     /**
      * PRECONDITION: The user has granted the system permission to access their device's location. May crash otherwise
@@ -133,11 +133,11 @@ public class DeviceUtilities {
     /**
      * @param activity the activity requesting the location name
      * @param location the device's current location
-     * @return the name of the device's current location if found, or "NONE" otherwise
+     * @return the name of the device's current location if found, or DeviceUtilities.NO_LOCATION_NAME otherwise
      */
     public static String getLocationName(Activity activity, Location location){
 
-        String name = "NONE";
+        String name = NO_LOCATION_NAME;
 
         if (location != null) {
             Geocoder geocoder = new Geocoder(activity);

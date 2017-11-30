@@ -4,6 +4,7 @@
 
 package com.cmput301.cia;
 
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
@@ -116,7 +117,7 @@ public class HabitHistoryTests {
         // We add them to the new profile.
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<HabitEvent>habitList = profile.getHabitHistory();
+        List<CompletedEventDisplay> habitList = profile.getHabitHistory();
         assertTrue(habitList.size() == 0);
 
         GregorianCalendar calendar = new GregorianCalendar();
@@ -128,10 +129,10 @@ public class HabitHistoryTests {
         habit.addHabitEvent(new HabitEvent("xyz21", calendar.getTime()));
         habit.addHabitEvent(new HabitEvent("xyz1"));
         habit2.addHabitEvent(new HabitEvent("1"));
-
         habitList = profile.getHabitHistory();
-        // We check true or not.
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+
+        // make sure ordering is in descending based on date
+        assertTrue(habitList.get(0).getCompletionDate().getTime() > habitList.get(1).getCompletionDate().getTime());
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
@@ -159,7 +160,7 @@ public class HabitHistoryTests {
         Profile profile = new Profile(name);
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<HabitEvent> habitList = profile.getHabitHistory(habit);
+        List<CompletedEventDisplay> habitList = profile.getHabitHistory(habit);
         // We assert there is true or not.
         assertTrue(habitList.size() == 0);
 
@@ -179,7 +180,7 @@ public class HabitHistoryTests {
         habitList = profile.getHabitHistory(habit);
         assertTrue(habitList.size() == 4);
         assertTrue(profile.getHabitHistory(habit2).size() == 1);
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+        assertTrue(habitList.get(0).getCompletionDate().getTime() > habitList.get(1).getCompletionDate().getTime());
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
@@ -217,10 +218,10 @@ public class HabitHistoryTests {
         // We add to new profile,
         profile.addHabit(habit);
         profile.addHabit(habit2);
-        List<HabitEvent> habitList = profile.getHabitHistory("1");
+        List<CompletedEventDisplay> habitList = profile.getHabitHistory("1");
         assertTrue(habitList.size() == 3);
         assertTrue(profile.getHabitHistory("o").size() == 0);
-        assertTrue(habitList.get(0).getDate().getTime() > habitList.get(1).getDate().getTime());
+        assertTrue(habitList.get(0).getCompletionDate().getTime() > habitList.get(1).getCompletionDate().getTime());
     }
 
 }

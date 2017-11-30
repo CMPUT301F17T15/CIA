@@ -5,29 +5,25 @@
 package com.cmput301.cia.activities.users;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.models.Triple;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +62,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
     // list of followed viewer's events
     private ListView eventsList;
-    private ArrayAdapter<String> eventsListAdapter;
+    private ArrayAdapter<CompletedEventDisplay> eventsListAdapter;
 
     private ImageView historyImage;
     private ImageView profileImage;
@@ -111,13 +107,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         eventsList = (ListView)findViewById(R.id.vfuEventsList);
-        List<String> eventHistory = new ArrayList<>();
-        List<Triple<HabitEvent, String, String>> followedHistory = displayed.getFollowedHabitHistory();
-        for (Triple<HabitEvent, String, String> event : followedHistory){
-            eventHistory.add(HistoryActivity.formatEvent(event.third, event.first.getDate(), event.second));
-        }
-
-        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, eventHistory);
+        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
         eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,12 +162,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     @Override
     protected void handleLocationGranted() {
         Intent intent = new Intent(this, ViewEventsMapActivity.class);
-        List<HabitEvent> events = new ArrayList<>();
-        List<Triple<HabitEvent, String, String>> history = displayed.getFollowedHabitHistory();
-        for (Triple<HabitEvent, String, String> event : history)
-            events.add(event.first);
-
-        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) events);
+        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) displayed.getFollowedHabitHistory());
         startActivity(intent);
     }
 
@@ -237,6 +222,16 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         historyImage.setVisibility(View.INVISIBLE);
         profileImage.setVisibility(View.VISIBLE);
         profileHistorySwitcher.showNext();
+
+        // viewing habits list
+        if (habitsList.getVisibility() == View.VISIBLE){
+            if (habitsList.getChildCount() == 0)
+                Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
+        } else {
+            // viewing events list
+            if (eventsList.getChildCount() == 0)
+                Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -260,6 +255,16 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             // switch to history view
             habitsList.setVisibility(View.VISIBLE);
             eventsList.setVisibility(View.INVISIBLE);
+        }
+
+        // viewing habits list
+        if (habitsList.getVisibility() == View.VISIBLE){
+            if (habitsList.getChildCount() == 0)
+                Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
+        } else {
+            // viewing events list
+            if (eventsList.getChildCount() == 0)
+                Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
 }
