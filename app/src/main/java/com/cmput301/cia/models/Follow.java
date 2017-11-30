@@ -55,6 +55,7 @@ public class Follow extends ElasticSearchable {
     public static void removeFollowRequest(String follower, String followee) {
         Follow toRemove = getFollow(follower, followee, Status.PENDING);
         toRemove.delete();
+        toRemove.save();
     }
 
     /**
@@ -183,7 +184,7 @@ public class Follow extends ElasticSearchable {
     public String getFolloweeId() {
         return followeeId;
     }
-    
+
     @Override
     public String getTypeId() {
         return TYPE_ID;

@@ -19,42 +19,61 @@ import com.cmput301.cia.models.Profile;
 import java.util.List;
 
 /**
+ * An adapter for displaying the follow requests
+ *
  * @author Jessica Prieto
  * November 24, 2017
  *
- * version 1
+ * version 1.1
  */
 
 public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersRequestAdapter.ViewHolder>{
+    //a list of profiles that's currently requesting to follow the current user (followee)
     private List<Profile> followRequests;
-    private Context context;
-    private Profile profile;
+
+    //the current user getting the follow requests
+    private Profile followee;
+
+    //the listener that listens when an item in the lsit is clicked
     private OnItemClickListener listener;
 
-    public FollowersRequestAdapter(Context context, List<Profile> followRequests, Profile profile) {
+    /**
+     * Constructs a new adapter to be used in the recycler view for FollowRequestsActivity
+     * @param context the RecyclerView context
+     * @param followRequests the list of follow requests
+     * @param followee the current user that has the requests
+     */
+    public FollowersRequestAdapter(Context context, List<Profile> followRequests, Profile followee) {
         this.followRequests = followRequests;
-        this.context = context;
-        this.profile = profile;
+        this.followee = followee;
     }
 
     /** returns the Profile that was chosen in the recycler view
-     *  @params position : the index of the item in the list
+     *  @param position the index of the item in the list
      * **/
     public Profile getProfile(int position) {
         return followRequests.get(position);
     }
 
-    public void setFollowRequests(List<Profile> profiles) {
-        followRequests = profiles;
+    /**
+     * sets the follow requests to the current user
+     * @param followerRequests
+     */
+    public void setFollowRequests(List<Profile> followerRequests) {
+        followRequests = followerRequests;
         notifyDataSetChanged();
     }
 
-    /** the listener interface **/
+    /**
+     * the listener interface that waits when an item is clicked
+     */
     public interface OnItemClickListener {
         void onItemClick(View itemView, int position);
     }
 
-    /** the method that allows the parent activity or fragment to define the listener **/
+    /**
+     * the method that allows the parent activity or fragment to define the listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -70,7 +89,9 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final Profile userRequestee = followRequests.get(position);
+        //the user (follower) requesting to follow the current user (followee)
+        final Profile follower = followRequests.get(position);
+
         holder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -81,18 +102,34 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         });
 
         TextView textView = holder.followRequestee;
-        textView.setText(userRequestee.getName());
+        textView.setText(follower.getName());
         Button approveButton = holder.approveButton;
+        Button declineButton = holder.declineButton;
 
+        /**
+         * sets up a listener for the "Accept" button to accept the request
+         */
         approveButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
-                Follow follow = Follow.getFollow(userRequestee.getId(), profile.getId(), Follow.Status.PENDING);
+                Follow follow = Follow.getFollow(follower.getId(), followee.getId(), Follow.Status.PENDING);
                 follow.acceptFollowRequest();
 
                 followRequests.remove(position);
                 notifyItemRemoved(position);
+            }
+        });
+
+        /**
+         * sets up a listener for the "Decline" button to ignore requests
+         */
+        declineButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Follow follow = Follow.getFollow(follower.getId(), followee.getId(), Follow.Status.PENDING);
+                follow.removeFollowRequest(follower.getId(), followee.getId());
             }
         });
     }
@@ -114,6 +151,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
             approveButton = (Button) itemView.findViewById(R.id.approveButton);
             declineButton = (Button) itemView.findViewById(R.id.declineButton);
 
+            // listens when an item is clicked
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -25,8 +25,10 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 8
+ * @version 8.1
+ *
  * Date: Nov 27 2017
+ * Modified: Nov 28 2017 by Jessica Prieto
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
