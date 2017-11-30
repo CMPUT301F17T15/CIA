@@ -36,7 +36,8 @@ public class CompletedEventDisplayUnitTests {
 
         CompletedEventDisplay display = new CompletedEventDisplay(event, title, user);
         assertTrue(display.getCompletionDate().equals(event.getDate()));
-        assertTrue(display.getLocation().equals(event.getLocation()));
+        assertTrue(display.getLocation().getLatitude() == event.getLocation().getLatitude());
+        assertTrue(display.getLocation().getLongitude() == event.getLocation().getLongitude());
         assertTrue(display.getEvent().equals(event));
         assertTrue(display.getHabitName().equals(title));
     }

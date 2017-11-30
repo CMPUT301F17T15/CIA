@@ -18,13 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IM
  * @version 2.1
  * Date: Nov 13 2017
  *
- * This activity displays the information about a user's profile
+ * This activity displays the information about a viewer's displayed
  */
 
 // TODO: following/unfollowing, messages
@@ -51,29 +50,26 @@ public class UserProfileActivity extends AppCompatActivity {
     private final String followButtonMessage_follow = "FOLLOW";
     private final String followButtonMessage_pending = "PENDING";
 
-    private List<String> followerRequestIds;
-    private List<Profile> followerRequests;
-
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
 
-    // the profile being displayed
-    private Profile profile;
-    // the currently signed in user
-    private Profile user;
+    // the displayed being displayed
+    private Profile displayed;
+    // the currently signed in viewer
+    private Profile viewer;
 
     private Button followButton;
     private Button unfollowButton;
     private Button sendButton;
 
-    // the profile's comment
+    // the displayed's comment
     private EditText commentText;
     private EditText sendMessage;
 
-    // the profile's photo
+    // the displayed's photo
     private ImageView imageView;
 
-    // the image attached to the viewed profile
+    // the image attached to the viewed displayed
     private Bitmap image;
 
     @Override
@@ -91,11 +87,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        profile = (Profile) intent.getSerializableExtra(PROFILE_ID);
-        user = (Profile) intent.getSerializableExtra(USER_ID);
-
-        followerRequestIds = Follow.getPendingFollows(user.getId());
-        followerRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followerRequestIds);
+        displayed = (Profile) intent.getSerializableExtra(PROFILE_ID);
+        viewer = (Profile) intent.getSerializableExtra(USER_ID);
 
         // initialize view member variables
         TextView nameText = (TextView)findViewById(R.id.profileNameText);
@@ -112,8 +105,8 @@ public class UserProfileActivity extends AppCompatActivity {
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
-        // if user is viewing their own profile
-        if (user.equals(profile)){
+        // if viewer is viewing their own displayed
+        if (viewer.equals(displayed)){
             followButton.setVisibility(View.INVISIBLE);
             unfollowButton.setVisibility(View.INVISIBLE);
         } else {
@@ -122,18 +115,16 @@ public class UserProfileActivity extends AppCompatActivity {
             commentText.setEnabled(false);
             imageView.setClickable(false);
 
-            List<String> following = Follow.getFollowing(user.getId());
-
-            if (following.contains(profile.getId()))
+            if (viewer.isFollowing(displayed))
                 followButton.setVisibility(View.INVISIBLE);
             else
                 unfollowButton.setVisibility(View.INVISIBLE);
         }
 
-        commentText.setText(profile.getComment());
-        nameText.setText(profile.getName());
+        commentText.setText(displayed.getComment());
+        nameText.setText(displayed.getName());
 
-        ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(profile.getCreationDate()));
+        ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(displayed.getCreationDate()));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,37 +132,44 @@ public class UserProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent();
 
                 // return the viewer
-                if (!user.equals(profile))
-                    intent.putExtra(RESULT_PROFILE_ID, user);
+                if (!viewer.equals(displayed))
+                    intent.putExtra(RESULT_PROFILE_ID, viewer);
                 else {
-                    // modify and return the user's profile
-                    profile.setComment(commentText.getText().toString());
+                    // modify and return the viewer's displayed
+                    displayed.setComment(commentText.getText().toString());
                     if (image != null)
-                        profile.setImage(ImageUtilities.imageToBase64(image));
+                        displayed.setImage(ImageUtilities.imageToBase64(image));
 
-                    intent.putExtra(RESULT_PROFILE_ID, profile);
+                    intent.putExtra(RESULT_PROFILE_ID, displayed);
                 }
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
-        if (followerRequestIds.contains(user)) {
+        if (displayed.hasFollowRequest(viewer)) {
             followButton.setText(followButtonMessage_pending);
         }
 
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!followerRequestIds.contains(user)) {
-                    followButton.setText(followButtonMessage_pending);
-                    Follow newFollow = new Follow(user.getId(), profile.getId());
-                    newFollow.save();
+
+                // send follow request if one is not sent
+                if (!displayed.hasFollowRequest(viewer)) {
+                    displayed.addFollowRequest(viewer);
+                    if (displayed.hasFollowRequest(viewer))
+                        followButton.setText(followButtonMessage_pending);
+                    else
+                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
                 } else {
-                    Follow toRemove = Follow.getFollow(user.getId(), profile.getId(), Follow.Status.PENDING);
-                    toRemove.removeFollowRequest(user.getId(), profile.getId());
-                    toRemove.save();
-                    followButton.setText(followButtonMessage_follow);
+                    // since a request has already been sent, remove it
+
+                    displayed.removeFollowRequest(viewer);
+                    if (!displayed.hasFollowRequest(viewer))
+                        followButton.setText(followButtonMessage_follow);
+                    else
+                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -179,11 +177,14 @@ public class UserProfileActivity extends AppCompatActivity {
         unfollowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Follow toUnfollow = Follow.getFollow(user.getId(), profile.getId(), Follow.Status.ACCEPTED);
 
-                unfollowButton.setVisibility(View.INVISIBLE);
-                followButton.setVisibility(View.VISIBLE);
-                toUnfollow.delete();
+                viewer.unfollow(displayed);
+                if (viewer.isFollowing(displayed))
+                    Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
+                else {
+                    unfollowButton.setVisibility(View.INVISIBLE);
+                    followButton.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -191,8 +192,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String message = sendMessage.getText().toString();
-                profile.sendMessage(message);
-                profile.save();
+                displayed.sendMessage(message);
+                displayed.save();
             }
         });
 
@@ -201,8 +202,8 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // only the user can change their profile's image
-                if (!profile.equals(user))
+                // only the viewer can change their displayed's image
+                if (!displayed.equals(viewer))
                     return;
 
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -211,10 +212,10 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        if (profile.getImage() == null || profile.getImage().equals(""))
+        if (displayed.getImage() == null || displayed.getImage().equals(""))
             image = null;
         else
-            image = ImageUtilities.base64ToImage(profile.getImage());
+            image = ImageUtilities.base64ToImage(displayed.getImage());
         updateImage();
     }
 

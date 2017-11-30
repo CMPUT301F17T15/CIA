@@ -38,6 +38,8 @@ import static org.junit.Assert.assertTrue;
  * NOTE: These tests require an internet connection or they will fail
  */
 
+// TODO: test .follow and .unfollow
+
 @RunWith(AndroidJUnit4.class)
 public class ProfileTests {
 
@@ -46,9 +48,26 @@ public class ProfileTests {
      */
     @Test
     public void testAddRequest(){
-        Profile profile = new TestProfile("name");
-        Profile request = new TestProfile("Mike");
+        Map<String, String> values = new HashMap<>();
+        values.put("name", "blah");
+        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", profile != null);
+        values.put("name", "test");
+        Profile request = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", request != null);
+
+        // reset profiles from previous runs
+        profile.removeFollowRequest(request);
+        request.removeFollowRequest(profile);
+        profile.unfollow(request);
+        request.unfollow(profile);
+
         profile.addFollowRequest(request);
+
+        // make aure a follow request was added
+        assertTrue(profile.getFollowRequests().contains(request));
+        assertFalse(request.getFollowRequests().contains(profile));
+
         assertTrue(profile.hasFollowRequest(request));
         assertFalse(request.hasFollowRequest(profile));
         assertFalse(profile.isFollowing(request));
@@ -57,19 +76,48 @@ public class ProfileTests {
 
     @Test
     public void testRemoveRequest(){
-        Profile profile = new TestProfile("name");
-        Profile request = new TestProfile("Mike");
+        Map<String, String> values = new HashMap<>();
+        values.put("name", "blah");
+        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", profile != null);
+        values.put("name", "test");
+        Profile request = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", request != null);
+
+        // reset profiles from previous runs
+        profile.removeFollowRequest(request);
+        request.removeFollowRequest(profile);
+        profile.unfollow(request);
+        request.unfollow(profile);
+
         profile.addFollowRequest(request);
         profile.removeFollowRequest(request);
+
         assertFalse(profile.hasFollowRequest(request));
         assertFalse(profile.isFollowing(request));
         assertFalse(request.isFollowing(profile));
+
+        // make aure follow request was removed
+        assertTrue(profile.getFollowRequests().isEmpty());
+        assertTrue(request.getFollowRequests().isEmpty());
     }
 
     @Test
     public void testFollowing(){
-        Profile profile = new TestProfile("name");
-        Profile request = new TestProfile("Mike");
+        Map<String, String> values = new HashMap<>();
+        values.put("name", "blah");
+        Profile profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", profile != null);
+        values.put("name", "test");
+        Profile request = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", request != null);
+
+        // reset profiles from previous runs
+        profile.removeFollowRequest(request);
+        request.removeFollowRequest(profile);
+        profile.unfollow(request);
+        request.unfollow(profile);
+
         profile.addFollowRequest(request);
         profile.acceptFollowRequest(request);
 

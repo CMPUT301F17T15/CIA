@@ -382,11 +382,9 @@ public class HomePageActivity extends AppCompatActivity {
             }
         } else if (requestCode == FOLLOWED_USERS){
             if (resultCode == RESULT_OK){
-                List<String> followed = (List<String>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
-
-                for (String toFollow : followed) {
-                    Follow newFollow = new Follow(user.getId(), toFollow);
-                    newFollow.save();
+                List<Profile> followed = (List<Profile>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
+                for (Profile toFollow : followed) {
+                    user.follow(toFollow);
                 }
             }
         } else if (requestCode == SEARCH_USERS){

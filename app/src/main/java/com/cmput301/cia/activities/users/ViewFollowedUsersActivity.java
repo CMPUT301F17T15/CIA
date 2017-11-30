@@ -18,10 +18,8 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
-import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
 import java.util.List;
@@ -54,7 +52,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     private ListView followedList;
     private ArrayAdapter<Profile> followedListAdapter;
     private List<Profile> followed;
-    private List<String> followingIds;
 
     // list of followed viewer's habits
     private ListView habitsList;
@@ -79,9 +76,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         followedList = (ListView)findViewById(R.id.vfuProfilesList);
 
-        // TODO: encapsulation using displayed.getFollowing()
-        followingIds = Follow.getFollowing(displayed.getId());
-        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
+        followed = displayed.getFollowing();
         followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(followedListAdapter);
 
@@ -173,7 +168,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         // TODO: return displayed for simplicity
-        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followingIds);
+        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followed);
         returnIntent.putExtra(RETURNED_ISUSER, displayed.equals(viewer));
         setResult(RESULT_OK, returnIntent);
         finish();
@@ -182,8 +177,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        followingIds = Follow.getFollowing(displayed.getId());
-        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
+        followed = displayed.getFollowing();
         followedListAdapter.clear();
         followedListAdapter.addAll(followed);
         followedListAdapter.notifyDataSetChanged();

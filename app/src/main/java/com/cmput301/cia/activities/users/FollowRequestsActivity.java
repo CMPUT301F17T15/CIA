@@ -29,22 +29,19 @@ import java.util.List;
  */
 
 public class FollowRequestsActivity extends AppCompatActivity {
+
     public static final String ID_PROFILE = "User";
     public static final String PROFILE_ID = "FollowerRequest";
 
     private Profile user;
     private String name;
-    private List<String> followRequestIds;
     private List<Profile> followRequests;
     private FollowersRequestAdapter adapter;
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
-        followRequestIds = Follow.getPendingFollows(user.getId());
-        followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
-
+        followRequests = user.getFollowRequests();
         adapter.setFollowRequests(followRequests);
 
     }
@@ -59,9 +56,7 @@ public class FollowRequestsActivity extends AppCompatActivity {
 
         RecyclerView rvFollowerRequests = (RecyclerView) findViewById(R.id.rvFollowerRequests);
 
-        followRequestIds = Follow.getPendingFollows(user.getId());
-        followRequests = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followRequestIds);
-
+        followRequests = user.getFollowRequests();
         adapter = new FollowersRequestAdapter(this, followRequests, user);
 
         adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {

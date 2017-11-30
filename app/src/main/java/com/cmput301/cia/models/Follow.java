@@ -26,7 +26,10 @@ import java.util.Map;
  */
 
 public class Follow extends ElasticSearchable {
-    public static final String TYPE_ID = "sendFollowRequest";
+
+    public static final String TYPE_ID = "following";
+
+    private static final String PENDING_STR = "0", ACCEPTED_STR = "1";
 
     //the user doing the following
     private String followerId;
@@ -35,7 +38,7 @@ public class Follow extends ElasticSearchable {
     private String followeeId;
 
     // whether this object represents a pending (requested) or accepted sendFollowRequest
-    private boolean accepted;
+    private String accepted;
 
     /**
      * Constructs a new Follow object
@@ -45,7 +48,7 @@ public class Follow extends ElasticSearchable {
     public Follow(String followerId, String followeeId) {
         this.followerId = followerId;
         this.followeeId = followeeId;
-        accepted = false;
+        accepted = PENDING_STR;
     }
 
     /**
@@ -57,7 +60,7 @@ public class Follow extends ElasticSearchable {
     public Follow(String followerId, String followeeId, boolean request) {
         this.followerId = followerId;
         this.followeeId = followeeId;
-        accepted = !request;
+        accepted = request ? PENDING_STR : ACCEPTED_STR;
     }
 
     /**
@@ -69,7 +72,7 @@ public class Follow extends ElasticSearchable {
         Map<String, String> map = new HashMap<>();
         map.put("followerId", follower);
         map.put("followeeId", followee);
-        map.put("accepted", "false");
+        map.put("accepted", "0");
         ElasticSearchUtilities.delete(Follow.TYPE_ID, Follow.class, map);
     }
 
@@ -85,16 +88,29 @@ public class Follow extends ElasticSearchable {
     }
 
     /**
-     * User follows another user by creating a new sendFollowRequest instance
+     * Allow the follower to follow the followee
      * @param followerId the user being followed
      * @param followeeId the user doing the following
-     * @param requested whether this object represents a requested sendFollowRequest or an accepted one
+     * @param requested whether this object represents a requested follow or an accepted one
      * @return the new instance of the sendFollowRequest object after creation
      */
     public static Follow follow(String followerId, String followeeId, boolean requested) {
         Follow newFollow = new Follow(followerId, followeeId, requested);
         newFollow.save();
         return newFollow;
+    }
+
+    /**
+     * Remove the followee from the list of users the follower is following
+     * @param followerId the user being followed
+     * @param followeeId the user doing the following
+     */
+    public static void unfollow(String followerId, String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followerId", followerId);
+        map.put("followeeId", followeeId);
+        map.put("accepted", "1");
+        ElasticSearchUtilities.delete(Follow.TYPE_ID, Follow.class, map);
     }
 
     /**
@@ -107,7 +123,7 @@ public class Follow extends ElasticSearchable {
     public static List<Profile> getFollowing(String followerId) {
         Map<String, String> map = new HashMap<>();
         map.put("followerId", followerId);
-        map.put("accepted", "true");
+        map.put("accepted", "1");
         List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map);
 
         List<Profile> following = new ArrayList<>();
@@ -129,12 +145,12 @@ public class Follow extends ElasticSearchable {
     public static List<Profile> getPendingFollows(String followeeId) {
         Map<String, String> map = new HashMap<>();
         map.put("followeeId", followeeId);
-        map.put("accepted", "false");
+        map.put("accepted", "0");
         List<Follow> follows = ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map);
 
         List<Profile> following = new ArrayList<>();
         for (Follow follow : follows){
-            Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, follow.followeeId);
+            Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, follow.followerId);
             if (result.first != null)
                 following.add(result.first);
         }
@@ -152,7 +168,7 @@ public class Follow extends ElasticSearchable {
         Map<String, String> map = new HashMap<>();
         map.put("followeeId", followeeId);
         map.put("followerId", followerId);
-        map.put("accepted", "false");
+        map.put("accepted", "0");
         return ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map).size() > 0;
     }
 
@@ -166,16 +182,23 @@ public class Follow extends ElasticSearchable {
         Map<String, String> map = new HashMap<>();
         map.put("followeeId", followeeId);
         map.put("followerId", followerId);
-        map.put("accepted", "true");
+        map.put("accepted", "1");
         return ElasticSearchUtilities.getListOf(Follow.TYPE_ID, Follow.class, map).size() > 0;
     }
 
     /**
      * Accepts the sendFollowRequest request by changing the status from pending to accepted
      */
-    public void acceptFollowRequest() {
-        accepted = true;
-        save();
+    public static void acceptFollowRequest(String followerId, String followeeId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("followeeId", followeeId);
+        map.put("followerId", followerId);
+        map.put("accepted", "0");
+        Pair<Follow, Boolean> result = ElasticSearchUtilities.getObject(Follow.TYPE_ID, Follow.class, map);
+        if (result.first != null){
+            result.first.accepted = ACCEPTED_STR;
+            result.first.save();
+        }
     }
 
     /** helper function for the load method.
@@ -194,7 +217,7 @@ public class Follow extends ElasticSearchable {
     public String getFolloweeId() {
         return followeeId;
     }
-    
+
     @Override
     public String getTypeId() {
         return TYPE_ID;

@@ -24,8 +24,10 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 8
+ * @version 8.1
+ *
  * Date: Nov 27 2017
+ * Modified: Nov 28 2017 by Jessica Prieto
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
@@ -548,13 +550,11 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * Get's the ID's of the users that the current user is following
-     * @return a List of Stings containing ID's
+     * @return the list of users this user is following
      */
     public List<Profile> getFollowing() {
         return Follow.getFollowing(getId());
     }
-
 
     /**
      * Set the list of habits this profile has created
@@ -613,11 +613,23 @@ public class Profile extends ElasticSearchable {
      * @param profile the user to sendFollowRequest
      */
     public void follow(Profile profile){
+
+        if (isFollowing(profile))
+            return;
+
         Follow.follow(getId(), profile.getId(), true);
     }
 
     /**
-     * Add a sendFollowRequest request from the specified user
+     * Remove the specified user from the list of people this user is following
+     * @param profile the user to sendFollowRequest
+     */
+    public void unfollow(Profile profile){
+        Follow.unfollow(getId(), profile.getId());
+    }
+
+    /**
+     * Add a follow request from the specified user
      * @param profile the user sending the request
      */
     public void addFollowRequest(Profile profile){
@@ -627,7 +639,7 @@ public class Profile extends ElasticSearchable {
             return;
 
         if (!hasFollowRequest(profile))
-            Follow.sendFollowRequest(getId(), profile.getId());
+            Follow.sendFollowRequest(profile.getId(), getId());
     }
 
     /**
@@ -651,8 +663,15 @@ public class Profile extends ElasticSearchable {
      * @param profile the user sending the request
      */
     public void acceptFollowRequest(Profile profile){
-        profile.follow(this);
-        removeFollowRequest(profile);
+        /*profile.follow(this);
+        removeFollowRequest(profile);*/
+        Follow.acceptFollowRequest(profile.getId(), getId());
     }
 
+    /**
+     * @return the list of users that have sent this user a follow request
+     */
+    public List<Profile> getFollowRequests() {
+        return Follow.getPendingFollows(getId());
+    }
 }

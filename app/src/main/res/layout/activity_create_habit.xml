@@ -77,7 +77,8 @@
         android:layout_marginLeft="16dp"
         android:hint="habit name"
         app:layout_constraintLeft_toLeftOf="parent"
-        tools:layout_editor_absoluteY="61dp">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp">
 
         <EditText
             android:id="@+id/habitName"
