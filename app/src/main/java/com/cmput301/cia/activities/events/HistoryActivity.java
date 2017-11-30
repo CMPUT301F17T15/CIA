@@ -72,6 +72,7 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         user = (Profile) getIntent().getSerializableExtra(ID_PROFILE);
         filterHabit = null;
+        filterText = "";
 
         findViewById(R.id.historyLayout).requestFocus();
 
