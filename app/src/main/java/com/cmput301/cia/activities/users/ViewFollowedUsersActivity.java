@@ -241,6 +241,9 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         historyImage.setVisibility(View.VISIBLE);
         profileImage.setVisibility(View.INVISIBLE);
         profileHistorySwitcher.showNext();
+
+        if (followedList.getChildCount() == 0)
+            Toast.makeText(this, "You are not following anyone.", Toast.LENGTH_SHORT).show();
     }
 
     /**
