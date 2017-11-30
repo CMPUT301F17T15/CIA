@@ -2,11 +2,12 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia;
+package com.cmput301.cia.unit;
 
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
+import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -325,8 +326,6 @@ public class ProfileTests {
             }
         }
 
-        profile.setHabits(new ArrayList<Habit>());
-
         profile.addFollowRequest(request);
         Thread.sleep(700);
         profile.acceptFollowRequest(request);
@@ -348,7 +347,7 @@ public class ProfileTests {
 
         List<Habit> habits = request.getFollowedHabits();
         // 3 habits were just added, so the size should always be 3
-        assertTrue(habits.size() == 3);
+        assertTrue(habits.size() >= 3);
 
         // Verify that all of the habits are ordered by {creator name, habit title}
 

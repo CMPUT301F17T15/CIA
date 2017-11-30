@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia;
+package com.cmput301.cia.unit;
 
 import android.location.Location;
 import android.location.LocationManager;
@@ -51,10 +51,10 @@ public class GeolocationUnitTests {
         habit3.setId("YYY");
 
         Map<String, String> values = new HashMap<>();
-        values.put("name", "blah");
+        values.put("name", "gut1");
         Profile followee = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
         assertTrue("database error", followee != null);
-        values.put("name", "test");
+        values.put("name", "gut2");
         Profile user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
         assertTrue("database error", user != null);
 
@@ -63,22 +63,17 @@ public class GeolocationUnitTests {
         user.removeFollowRequest(followee);
         followee.unfollow(user);
         user.unfollow(followee);
+        followee.setHabits(new ArrayList<Habit>());
+        user.setHabits(new ArrayList<Habit>());
 
         user.addHabit(habit);
-
-        // since followee is not a mock profile, reset any pre-existing habits from previous runs
-        Iterator<Habit> it = followee.getHabits().iterator();
-        while (it.hasNext()){
-            if (it.next().getTitle().equals("DBZ")){
-                it.remove();
-            }
-        }
-
         followee.addHabit(habit2);
         followee.addHabit(habit3);
 
         followee.addFollowRequest(user);
+        Thread.sleep(1000);
         followee.acceptFollowRequest(user);
+        Thread.sleep(1000);
 
         // location of both profiles
         Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -109,7 +104,7 @@ public class GeolocationUnitTests {
         // add a new event for the followee -> should show up in user's nearby events list since that includes followees
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
         assertTrue(followee.save());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         assertTrue(user.getNearbyEvents(location).size() == 4);
         assertTrue(followee.getNearbyEvents(location).size() == 1);
@@ -117,7 +112,7 @@ public class GeolocationUnitTests {
         // add a new event for the followee that is too far away. it is the most recent event so count decreases for user
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 50.0, 50.0)));
         assertTrue(followee.save());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         assertTrue(user.getNearbyEvents(location).size() == 3);
         assertTrue(followee.getNearbyEvents(location).size() == 1);
@@ -126,7 +121,7 @@ public class GeolocationUnitTests {
         // shows up from followed users
         followee.tryHabitEvent(new AddHabitEvent("DBZ", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
         assertTrue(followee.save());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         assertTrue(user.getNearbyEvents(location).size() == 4);
         assertTrue(followee.getNearbyEvents(location).size() == 2);
@@ -134,7 +129,7 @@ public class GeolocationUnitTests {
         // add a new event for the followee in a new category --> shows up for both user and followee
         followee.tryHabitEvent(new AddHabitEvent("YYY", new HabitEvent("X", "", new Date(), 10.0, 10.0)));
         assertTrue(followee.save());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         assertTrue(user.getNearbyEvents(location).size() == 5);
         assertTrue(followee.getNearbyEvents(location).size() == 3);

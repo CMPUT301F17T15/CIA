@@ -2,7 +2,7 @@
  * Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
  */
 
-package com.cmput301.cia;
+package com.cmput301.cia.unit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,9 +32,7 @@ public class ImageUnitTests extends ActivityInstrumentationTestCase2<MainActivit
      * Testing an image that is already small enough to fit in the system
      */
     public void testSmallImage() throws IOException {
-
         Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("testimages/small.jpg"));
-        int size = bitmap.getByteCount();
         Bitmap newBitmap = ImageUtilities.compressImageToMax(bitmap, CreateHabitEventActivity.MAX_IMAGE_SIZE);
         assertTrue(newBitmap != null);
         assertTrue(newBitmap.getByteCount() <= CreateHabitEventActivity.MAX_IMAGE_SIZE);
