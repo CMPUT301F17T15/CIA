@@ -50,13 +50,19 @@ public class GeolocationUnitTests {
         habit2.setId("DBZ");
         habit3.setId("YYY");
 
-        Profile user = new TestProfile("User");
+        Map<String, String> values = new HashMap<>();
+        values.put("name", "blah");
+        Profile followee = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", followee != null);
+        values.put("name", "test");
+        Profile user = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, values).first;
+        assertTrue("database error", user != null);
 
-        Map<String, String> searchTerms = new HashMap<>();
-        searchTerms.put("name", "nowitenz3");
-        Pair<Profile, Boolean> profile = ElasticSearchUtilities.getObject(Profile.TYPE_ID, Profile.class, searchTerms);
-        assertTrue(profile.first != null && profile.second);        // if this fails then there was a connection error
-        Profile followee = profile.first;
+        // reset profiles from previous runs
+        followee.removeFollowRequest(user);
+        user.removeFollowRequest(followee);
+        followee.unfollow(user);
+        user.unfollow(followee);
 
         user.addHabit(habit);
 
@@ -71,8 +77,8 @@ public class GeolocationUnitTests {
         followee.addHabit(habit2);
         followee.addHabit(habit3);
 
-//        followee.addFollowRequest(user);
-//        followee.acceptFollowRequest(user);
+        followee.addFollowRequest(user);
+        followee.acceptFollowRequest(user);
 
         // location of both profiles
         Location location = new Location(LocationManager.GPS_PROVIDER);

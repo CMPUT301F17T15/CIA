@@ -93,6 +93,9 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
 
         // filter text chosen, so filter by that since no habit selected
         solo.enterText(0, "test");
+        solo.clickOnButton("Filter");
+        solo.sleep(600);
+
         Method method = solo.getCurrentActivity().getClass().getDeclaredMethod("getDisplayedEvents");
         method.setAccessible(true);
         List<CompletedEventDisplay> events = (List<CompletedEventDisplay>) method.invoke(solo.getCurrentActivity());
@@ -163,16 +166,16 @@ public class HabitHistoryIntentTests extends ActivityInstrumentationTestCase2<Hi
     public void testOrdering() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method = solo.getCurrentActivity().getClass().getDeclaredMethod("getDisplayedEvents");
         method.setAccessible(true);
-        List<HabitEvent> events = (List<HabitEvent>) method.invoke(solo.getCurrentActivity());
+        List<CompletedEventDisplay> events = (List<CompletedEventDisplay>) method.invoke(solo.getCurrentActivity());
 
         // the date the previous event was on
         Date previousDate = null;
 
-        for (HabitEvent event : events){
+        for (CompletedEventDisplay event : events){
             // make sure this event was earlier, since it is in descending order
             if (previousDate != null)
-                assertFalse(previousDate.before(event.getDate()));
-            previousDate = event.getDate();
+                assertFalse(previousDate.before(event.getCompletionDate()));
+            previousDate = event.getCompletionDate();
         }
 
     }
