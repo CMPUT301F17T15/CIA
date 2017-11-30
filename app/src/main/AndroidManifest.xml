@@ -46,6 +46,8 @@
             />
         <activity android:name=".activities.habits.StatisticViewActivity"
             android:label="Statistics"/>
+        <activity android:name=".activities.habits.SingleStatisticViewActivity"
+            android:label="Statistics"/>
         <activity android:name=".activities.events.CreateHabitEventActivity"
             android:label="Create Habit Event"/>
         <activity android:name=".activities.events.HabitEventViewActivity"
@@ -64,6 +66,7 @@
             android:label="Search Users"/>
         <activity android:name=".activities.users.FollowRequestsActivity"
             android:label="Follow Requests"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
