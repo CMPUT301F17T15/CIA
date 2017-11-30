@@ -25,7 +25,7 @@ import java.util.List;
  * @version 1
  * Date: Nov 24, 2017
  *
- * This activity allows the user to see all the follow requests other users have sent them
+ * This activity allows the user to see all the sendFollowRequest requests other users have sent them
  */
 
 public class FollowRequestsActivity extends AppCompatActivity {

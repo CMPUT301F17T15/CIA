@@ -5,7 +5,6 @@
 package com.cmput301.cia.models;
 
 import android.location.Location;
-import android.util.Pair;
 
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -214,9 +213,7 @@ public class Profile extends ElasticSearchable {
      */
     public List<CompletedEventDisplay> getFollowedHabitHistory() {
         List<CompletedEventDisplay> list = new ArrayList<>();
-        List<String> followingIds = Follow.getFollowing(getId());
-        List<Profile> following = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
-        for (Profile followee : following) {
+        for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
                 if (event != null) {
@@ -243,12 +240,9 @@ public class Profile extends ElasticSearchable {
         // map (habit -> user name of creator)
         final Map<Habit, String> habitCreatorMap = new HashMap<>();
 
-        List<String> followingIds = Follow.getFollowing(getTypeId());
-        List<Profile> following = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
-
         // get all habits
         List<Habit> list = new ArrayList<>();
-        for (Profile followee : following) {
+        for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 list.add(habit);
                 habitCreatorMap.put(habit, followee.getName());
@@ -557,7 +551,7 @@ public class Profile extends ElasticSearchable {
      * Get's the ID's of the users that the current user is following
      * @return a List of Stings containing ID's
      */
-    public List<String> getFollowing() {
+    public List<Profile> getFollowing() {
         return Follow.getFollowing(getId());
     }
 
@@ -604,6 +598,61 @@ public class Profile extends ElasticSearchable {
     // TODO
     public void sendMessage(String message){
 
+    }
+
+    /**
+     * @param other the profile to check whether this user is following or not
+     * @return whether this profile is following the selected one
+     */
+    public boolean isFollowing(Profile other){
+        return Follow.isFollowing(getId(), other.getId());
+    }
+
+    /**
+     * Add the specified user to the list of people this user is following
+     * @param profile the user to sendFollowRequest
+     */
+    public void follow(Profile profile){
+        Follow.follow(getId(), profile.getId(), true);
+    }
+
+    /**
+     * Add a sendFollowRequest request from the specified user
+     * @param profile the user sending the request
+     */
+    public void addFollowRequest(Profile profile){
+
+        // the requester is already following this user
+        if (profile.isFollowing(this))
+            return;
+
+        if (!hasFollowRequest(profile))
+            Follow.sendFollowRequest(getId(), profile.getId());
+    }
+
+    /**
+     * @param profile the user to check if they sent a sendFollowRequest request
+     * @return whether the specified user has requested to sendFollowRequest this user
+     */
+    public boolean hasFollowRequest(Profile profile){
+        return Follow.hasFollowRequest(getId(), profile.getId());
+    }
+
+    /**
+     * Remove the sendFollowRequest request from the specified user
+     * @param profile the user sending the request
+     */
+    public void removeFollowRequest(Profile profile){
+        Follow.removeFollowRequest(profile.getId(), getId());
+    }
+
+    /**
+     * Accept a sendFollowRequest request from the specified user
+     * @param profile the user sending the request
+     */
+    public void acceptFollowRequest(Profile profile){
+        profile.follow(this);
+        removeFollowRequest(profile);
     }
 
 }
