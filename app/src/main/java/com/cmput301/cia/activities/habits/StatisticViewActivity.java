@@ -4,11 +4,13 @@
 
 package com.cmput301.cia.activities.habits;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,7 +56,7 @@ public class StatisticViewActivity extends AppCompatActivity {
 
         user = (Profile) getIntent().getSerializableExtra("Profile");
 
-        String type = getIntent().getStringExtra("type");
+        final String type = getIntent().getStringExtra("type");
         typeName = (TextView) findViewById(R.id.Type_Name);
         typeName.setText(type);
         typeNumber = (TextView) findViewById(R.id.habitsNumber);
@@ -62,11 +64,10 @@ public class StatisticViewActivity extends AppCompatActivity {
         int completeCounter = 0;
         int missCounter = 0;
         int largestMiss = 0;
-        List<String> breakdownlist = new ArrayList<String>();
+        final List<String> breakdownlist = new ArrayList<String>();
 
         mostMissed = (TextView) findViewById(R.id.missedMost);
         for (Habit h : user.getHabitsInCategory(type)){
-            System.out.println(h.getTitle());
             completeCounter += h.getTimesCompleted();
             missCounter += h.getTimesMissed();
             breakdownlist.add("Habit: " + h.getTitle() + "\nCompleted: " + h.getTimesCompleted() + ". \nMissed: " + h.getTimesMissed() + ".");
@@ -75,7 +76,6 @@ public class StatisticViewActivity extends AppCompatActivity {
                 largestMiss = h.getTimesMissed();
             }
         }
-        System.out.println(breakdownlist);
 
         completeNumber = (TextView) findViewById(R.id.completeNumber);
         completeNumber.setText(String.valueOf(completeCounter));
@@ -96,6 +96,18 @@ public class StatisticViewActivity extends AppCompatActivity {
         });
         ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, breakdownlist);
         BreakDownList.setAdapter(adapter);
+
+        BreakDownList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(StatisticViewActivity.this, SingleStatisticViewActivity.class);
+                intent.putExtra("Profile", user);
+                intent.putExtra("HabitID", user.getHabitsInCategory(type).get(i).getId());
+                startActivity(intent);
+            }
+        });
+
         //data for pie chart
         yData = new int[]{missCounter, user.getHabitHistory().size()};
         xData = new String[]{"Total","Complete"};
