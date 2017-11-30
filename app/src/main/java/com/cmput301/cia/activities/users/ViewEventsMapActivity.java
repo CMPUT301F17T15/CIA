@@ -7,23 +7,16 @@ package com.cmput301.cia.activities.users;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Pair;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.CompletedEventDisplay;
-import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DeviceUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;

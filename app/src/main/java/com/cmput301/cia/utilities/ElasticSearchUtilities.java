@@ -32,8 +32,10 @@ import io.searchbox.core.SearchResult;
 
 /**
  * @author Adil Malik
- * @version 4
+ * @version 4.1
  * Date: Nov 24 2017
+ *
+ * Modified: Nov 28, 2017 by Jessica Prieto
  *
  * Contains utilities for searching for, inserting into, and deleting from the ElasticSearch database
  */

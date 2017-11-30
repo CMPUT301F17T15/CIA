@@ -25,8 +25,10 @@ import java.util.Set;
 
 /**
  * @author Adil Malik
- * @version 8
+ * @version 8.1
+ *
  * Date: Nov 27 2017
+ * Modified: Nov 28 2017 by Jessica Prieto
  *
  * This class represents all the information about a user of the application.
  * It keeps track of their habits and personal information.
@@ -48,12 +50,6 @@ public class Profile extends ElasticSearchable {
 
     // The user's list of created habits
     private List<Habit> habits;
-
-//    // List of the unique IDs of all users this user is following (all elements are unique)
-//    private List<String> following;
-//
-//    // IDs of the users that have requested to follow this user (all elements are unique)
-//    private List<String> followRequests;
 
     // Points received for consecutively completing habits
     private int powerPoints;
@@ -83,9 +79,6 @@ public class Profile extends ElasticSearchable {
     public Profile(String name) {
         this.name = name;
         habits = new ArrayList<>();
-//        following = new ArrayList<>();
-//        followRequests = new ArrayList<>();
-//        follow = new Follow();
         powerPoints = 0;
         habitPoints = 0;
         creationDate = new Date();
@@ -117,24 +110,6 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * @return list of all users this user is following
-     */
-//    public List<Profile> getFollowing() {
-//        return ElasticSearchUtilities.getListOf(getTypeId(), Profile.class, following);
-//    }
-
-    /**
-     * @return list of all IDs of users this user is following
-     */
-//    public List<String> getFollowingIds() {
-//        return following;
-//    }
-
-//    public List<String> getFollowRequests() {
-//        return followRequests;
-//    }
-
-    /**
      * Add a new habit to the user's list of habits
      * @param habit the habit to add
      */
@@ -149,81 +124,6 @@ public class Profile extends ElasticSearchable {
     public void removeHabit(Habit habit){
         habits.remove(habit);
     }
-
-    /**
-     * Add the specified user to the list of people this user is following
-     * @param profile the user to follow
-     */
-//    public void follow(Profile profile){
-//        following.add(profile.getId());
-//    }
-
-    /**
-     * Add a follow request from the specified user
-     * @param profile the user sending the request
-     */
-//    public void addFollowRequest(Profile profile){
-//
-//        // the requester is already following this user
-//        if (profile.isFollowing(this))
-//            return;
-//
-//        if (!hasFollowRequest(profile))
-//            followRequests.add(profile.getId());
-//    }
-
-    /**
-     * @param profile the user to check if they sent a follow request
-     * @return whether the specified user has requested to follow this user
-     */
-//    public boolean hasFollowRequest(Profile profile){
-//
-//        for (String id : followRequests){
-//            if (id.equals(profile.getId()))
-//                return true;
-//        }
-//
-//        return false;
-//    }
-
-    /**
-     * Remove the follow request from the specified user
-     * @param profile the user to remove a request from
-     */
-//    public void removeFollowRequest(Profile profile){
-//
-//        Iterator<String> it = followRequests.iterator();
-//        while (it.hasNext()){
-//            if (it.next().equals(profile.getId())){
-//                it.remove();
-//                return;
-//            }
-//        }
-//    }
-
-    /**
-     * Accept a follow request from the specified user
-     * @param profile the user to accept a request from
-     */
-    /*public void acceptFollowRequest(String id){
-
-        Pair<Profile, Boolean> result = ElasticSearchUtilities.getObject(getTypeId(), Profile.class, id);
-        if (result.first != null){
-            result.first.follow(this);
-            result.first.save();
-        }
-
-        removeFollowRequest(id);
-    }*/
-
-    /**
-     * Accept a follow request from the specified user
-     * @param profile the user to accept a request from
-     */
-//    public void acceptFollowRequest(Profile profile){
-//        profile.follow(this);
-//        removeFollowRequest(profile);
-//    }
 
     /**
      * @return a list of habits that need to be done today
@@ -411,20 +311,6 @@ public class Profile extends ElasticSearchable {
             save();
         }
     }
-
-    /**
-     * @param profile the user that is being checked to see if this user follows
-     * @return whether this user is following the specified profile
-     */
-//    public boolean isFollowing(Profile profile){
-//
-//        for (String id : following){
-//            if (id.equals(profile.getId()))
-//                return true;
-//        }
-//
-//        return false;
-//    }
 
     /**
      * @return the object's template type id
@@ -635,8 +521,6 @@ public class Profile extends ElasticSearchable {
     public void copyFrom(Profile other, boolean copyPendingEvents){
         name = other.name;
         habits = other.habits;
-//        following = other.following;
-//        followRequests = other.followRequests;
         powerPoints = other.powerPoints;
         habitPoints = other.habitPoints;
         creationDate = other.creationDate;
@@ -648,34 +532,12 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
-     * Set the users this user is following
-     * @param following the list of users this user is following (non-null)
-     */
-//    public void setFollowing(List<String> following) {
-//        this.following = following;
-//    }
-
-    /**
      * @return the profile's name
      */
     @Override
     public String toString(){
         return name;
     }
-
-    /**
-     * Unfollow the specified user
-     * @param followed the user to unfollow
-     */
-//    public void unfollow(Profile followed){
-//        Iterator<String> profile = following.iterator();
-//        while (profile.hasNext()){
-//            if (profile.next().equals(followed.getId())){
-//                profile.remove();
-//                return;
-//            }
-//        }
-//    }
 
     /**
      *
@@ -691,6 +553,14 @@ public class Profile extends ElasticSearchable {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+    /**
+     * Get's the ID's of the users that the current user is following
+     * @return a List of Stings containing ID's
+     */
+    public List<String> getFollowing() {
+        return Follow.getFollowing(getId());
     }
 
 
