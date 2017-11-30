@@ -26,8 +26,8 @@ import java.util.List;
 
 /**
  * @author Adil Malik
- * @version 1
- * Date: Nov 13 2017
+ * @version 2
+ * Date: Nov 30 2017
  *
  * This activity displays all of the people a viewer is following
  */
@@ -183,13 +183,19 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         followedListAdapter.notifyDataSetChanged();
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        followed = ElasticSearchUtilities.getListOf(Profile.TYPE_ID, Profile.class, followingIds);
-//        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
-//        followedList.setAdapter(followedListAdapter);
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        followed = displayed.getFollowing();
+        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
+        followedList.setAdapter(followedListAdapter);
+
+        habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabits());
+        habitsList.setAdapter(habitsListAdapter);
+
+        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
+        eventsList.setAdapter(eventsListAdapter);
+    }
 
     /**
      * Handle the results of an activity that has finished
@@ -219,11 +225,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getChildCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0)
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getChildCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0)
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -236,7 +242,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         profileImage.setVisibility(View.INVISIBLE);
         profileHistorySwitcher.showNext();
 
-        if (followedList.getChildCount() == 0)
+        if (followedList.getAdapter().getCount() == 0)
             Toast.makeText(this, "You are not following anyone.", Toast.LENGTH_SHORT).show();
     }
 
@@ -256,11 +262,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getChildCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0)
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getChildCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0)
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
