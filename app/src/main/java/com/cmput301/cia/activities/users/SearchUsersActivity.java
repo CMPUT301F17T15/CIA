@@ -5,9 +5,12 @@
 package com.cmput301.cia.activities.users;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * @author Adil Malik
@@ -35,7 +40,7 @@ import java.util.Set;
  * This activity allows the user to search for other users
  */
 
-public class SearchUsersActivity extends AppCompatActivity {
+public class SearchUsersActivity extends Fragment {
 
     // Intent identifiers for passed in data
     public static final String ID_USER = "User";
@@ -56,22 +61,34 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     private EditText nameEditText;
 
+    public static SearchUsersActivity create(Profile currentUser) {
+        SearchUsersActivity searchUsersActivity = new SearchUsersActivity();
+        Bundle args = new Bundle();
+        args.putSerializable(ID_USER, currentUser);
+        searchUsersActivity.setArguments(args);
+        return searchUsersActivity;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_users);
+    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        // Defines the xml file for the fragment
+        return inflater.inflate(R.layout.activity_search_users, parent, false);
+    }
 
-        user = (Profile) getIntent().getSerializableExtra(ID_USER);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        userList = (ListView)findViewById(R.id.searchUsersList);
-        nameEditText = (EditText)findViewById(R.id.searchNameDynamicText);
+        user = (Profile) getArguments().getSerializable(ID_USER);
 
-        Button search = (Button)findViewById(R.id.searchSearchButton);
+        userList = (ListView) view.findViewById(R.id.searchUsersList);
+        nameEditText = (EditText) view.findViewById(R.id.searchNameDynamicText);
+
+        Button search = (Button) view.findViewById(R.id.searchSearchButton);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 searchForProfiles();
-                listAdapter = new ArrayAdapter<>(SearchUsersActivity.this, R.layout.list_item, users);
+                listAdapter = new ArrayAdapter<>(getContext(), R.layout.list_item, users);
                 userList.setAdapter(listAdapter);
             }
         });
@@ -80,7 +97,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent profileIntent = new Intent(SearchUsersActivity.this, UserProfileActivity.class);
+                Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
                 profileIntent.putExtra(UserProfileActivity.PROFILE_ID, users.get(position));
                 profileIntent.putExtra(UserProfileActivity.USER_ID, user);
                 startActivityForResult(profileIntent, VIEW_PROFILE);
@@ -90,22 +107,22 @@ public class SearchUsersActivity extends AppCompatActivity {
         users = new ArrayList<>();
     }
 
-    /**
-     * Handle the back button being pressed
-     */
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putExtra(RETURNED_PROFILE, user);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
+//    /**
+//     * Handle the back button being pressed
+//     */
+//    @Override
+//    public void onBackPressed() {
+//        Intent intent = new Intent();
+//        intent.putExtra(RETURNED_PROFILE, user);
+//        setResult(RESULT_OK, intent);
+//        finish();
+//    }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         searchForProfiles();
-        listAdapter = new ArrayAdapter<>(this, R.layout.list_item, users);
+        listAdapter = new ArrayAdapter<>(getContext(), R.layout.list_item, users);
         userList.setAdapter(listAdapter);
     }
 
@@ -115,17 +132,17 @@ public class SearchUsersActivity extends AppCompatActivity {
      * @param resultCode the result status of the finished activity
      * @param data the activity's returned intent information
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        // When a new habit event is created
-        if (requestCode == VIEW_PROFILE) {
-            if (resultCode == RESULT_OK) {
-                Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(newProfile, false);
-            }
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//
+//        // When a new habit event is created
+//        if (requestCode == VIEW_PROFILE) {
+//            if (resultCode == RESULT_OK) {
+//                Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
+//                user.copyFrom(newProfile, false);
+//            }
+//        }
+//    }
 
     /**
      * Update the list of profiles that will be displayed on the screen

@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.roughike.bottombar.BottomBar;
@@ -114,6 +116,13 @@ public class HomeTabbedActivity extends AppCompatActivity {
     }
 
     private void onSearchClicked() {
+        // Begin the transaction
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // Replace the contents of the container with the new fragment
+        ft.replace(R.id.homeFragmentContainer, SearchUsersActivity.create(user));
+        // or ft.add(R.id.your_placeholder, new FooFragment());
+        // Complete the changes added above
+        ft.commit();
 
     }
 
