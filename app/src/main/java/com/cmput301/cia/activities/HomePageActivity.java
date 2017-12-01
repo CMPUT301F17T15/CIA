@@ -5,6 +5,7 @@
 package com.cmput301.cia.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +25,12 @@ import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
+import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.FollowRequestsActivity;
 import com.cmput301.cia.activities.users.RankingsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.controller.ButtonClickListener;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
@@ -40,9 +43,11 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.DeviceUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,7 +64,7 @@ import java.util.List;
  * from other activities
  */
 
-public class HomePageActivity extends AppCompatActivity {
+public class HomePageActivity extends LocationRequestingActivity {
 
     // Codes to keep track of other activities
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
@@ -210,6 +215,20 @@ public class HomePageActivity extends AppCompatActivity {
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
     }
 
+    /**
+     * Handle the results of the request location permission being granted
+     */
+    @Override
+    protected void handleLocationGranted() {
+        Location location = DeviceUtilities.getLocation(this);
+        if (location == null)
+            return;
+
+        Intent intent = new Intent(this, ViewEventsMapActivity.class);
+        intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) user.getNearbyEvents(location));
+        startActivity(intent);
+    }
+
     //Create the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -273,6 +292,9 @@ public class HomePageActivity extends AppCompatActivity {
                 Intent requests = new Intent(this, FollowRequestsActivity.class);
                 requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
                 startActivityForResult(requests, FOLLOW_REQUESTS);
+                return true;
+            case R.id.menu_button_nearbyEvents:
+                requestLocationPermissions();
                 return true;
         }
         return super.onOptionsItemSelected(item);
