@@ -149,6 +149,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         // do this because calling showProfiles() for the first time results in switching to history
         profileHistorySwitcher.showNext();
         showProfiles();
+        habitsList.setVisibility(View.INVISIBLE);
     }
 
     /**

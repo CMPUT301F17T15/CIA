@@ -117,12 +117,14 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
             @Override
             public void handleClick() {
                 followee.acceptFollowRequest(follower);
-                if (follower.isFollowing(followee)){
+                followRequests.remove(position);
+                notifyItemRemoved(position);
+                /*if (follower.isFollowing(followee)){
                     followRequests.remove(position);
                     notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 
@@ -133,12 +135,14 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
             @Override
             public void handleClick() {
                 followee.removeFollowRequest(follower);
-                if (!follower.isFollowing(followee)){
+                followRequests.remove(position);
+                notifyItemRemoved(position);
+                /*if (!follower.isFollowing(followee)){
                     followRequests.remove(position);
                     notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
     }
