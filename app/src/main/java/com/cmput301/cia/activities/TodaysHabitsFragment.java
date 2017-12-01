@@ -4,7 +4,6 @@
 
 package com.cmput301.cia.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,13 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
-import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -5,14 +5,14 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_button_My_Profile"
-        android:title="@string/menu_My_Profile"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/menu_button_Add_New_Habit"
-        android:title="@string/menu_AddNewHabit"
-        />
+    <!--<item-->
+        <!--android:id="@+id/menu_button_My_Profile"-->
+        <!--android:title="@string/menu_My_Profile"-->
+        <!--app:showAsAction="never" />-->
+    <!--<item-->
+        <!--android:id="@+id/menu_button_Add_New_Habit"-->
+        <!--android:title="@string/menu_AddNewHabit"-->
+        <!--/>-->
     <item
         android:id="@+id/menu_button_Statistic"
         android:title="@string/menu_Statistic"
@@ -24,10 +24,10 @@
     <item
         android:id="@+id/menu_button_My_Following"
         android:title="@string/menu_MyFollowing" />
-    <item
-        android:id="@+id/menu_button_FollowRequests"
-        android:checkable="false"
-        android:title="@string/menu_FollowRequests" />
+    <!--<item-->
+        <!--android:id="@+id/menu_button_FollowRequests"-->
+        <!--android:checkable="false"-->
+        <!--android:title="@string/menu_FollowRequests" />-->
     <item
         android:id="@+id/menu_button_PowerRankings"
         android:checkable="false"
@@ -36,14 +36,20 @@
         android:id="@+id/menu_button_OverallRankings"
         android:checkable="false"
         android:title="@string/menu_HabitRankings" />
-    <item
-        android:id="@+id/menu_button_searchUsers"
-        android:checkable="false"
-        android:title="@string/menu_searchUsers" />
+    <!--<item-->
+        <!--android:id="@+id/menu_button_searchUsers"-->
+        <!--android:checkable="false"-->
+        <!--android:title="@string/menu_searchUsers" />-->
     <item
         android:id="@+id/menu_button_nearbyEvents"
         android:checkable="false"
         android:title="@string/menu_nearbyEvents" />
+    <!--<item-->
+        <!--android:id="@+id/action_search"-->
+        <!--android:icon="@drawable/ic_search_black_24px"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/abc_search_hint"-->
+        <!--app:showAsAction="always" />-->
 
 
 </menu>

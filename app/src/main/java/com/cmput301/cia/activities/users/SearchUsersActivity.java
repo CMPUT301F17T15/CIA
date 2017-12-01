@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.ListView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,6 +63,8 @@ public class SearchUsersActivity extends Fragment {
 
     private EditText nameEditText;
 
+    MaterialSearchView searchView;
+
     public static SearchUsersActivity create(Profile currentUser) {
         SearchUsersActivity searchUsersActivity = new SearchUsersActivity();
         Bundle args = new Bundle();
@@ -75,9 +79,13 @@ public class SearchUsersActivity extends Fragment {
         return inflater.inflate(R.layout.activity_search_users, parent, false);
     }
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().setTitle("Search");
+
+        searchView = (MaterialSearchView) view.findViewById(R.id.search_view);
+
         user = (Profile) getArguments().getSerializable(ID_USER);
 
         userList = (ListView) view.findViewById(R.id.searchUsersList);
@@ -105,6 +113,17 @@ public class SearchUsersActivity extends Fragment {
         });
 
         users = new ArrayList<>();
+    }
+
+    private void setupSearchBar() {
+        View toolbarContainer =  LayoutInflater
+                .from(getContext())
+                .inflate(R.layout.activity_search_users, (ViewGroup) getView(), false);
+
+//        Toolbar toolbar = toolbarContainer.findViewById(R.id.toolbar);
+//        getActivity().setActionBar(toolbar);
+//                setA(toolbar);
+
     }
 
     @Override
