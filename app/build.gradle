@@ -36,6 +36,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.android.support:support-v4:26.+'
+    compile 'com.roughike:bottom-bar:2.3.1'
     testCompile 'org.testng:testng:6.9.6'
     androidTestCompile 'junit:junit:4.12'
 }
