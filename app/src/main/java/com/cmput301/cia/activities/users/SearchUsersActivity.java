@@ -77,7 +77,7 @@ public class SearchUsersActivity extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
+        getActivity().setTitle("Search");
         user = (Profile) getArguments().getSerializable(ID_USER);
 
         userList = (ListView) view.findViewById(R.id.searchUsersList);

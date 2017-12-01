@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.users.FollowRequestsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -137,7 +138,9 @@ public class HomeTabbedActivity extends AppCompatActivity {
     }
 
     private void onFollowRequestClicked() {
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.homeFragmentContainer, FollowRequestsActivity.create(user));
+        ft.commit();
     }
 
     private void onProfileClicked() {
