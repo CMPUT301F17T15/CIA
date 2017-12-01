@@ -610,7 +610,7 @@ public class ElasticSearchUtilities {
     private static String getCompleteQuery(String parameters){
         StringBuilder builder = new StringBuilder();
 
-        boolean multiField = StringUtils.countMatches(parameters, "}},") > 0;
+        boolean multiField = StringUtils.countMatches(parameters, "}},") > 0 && StringUtils.countMatches(parameters, "\n{\"match\": {\"") > 1;
 
         // TODO: handle case when there is more than max results
         builder.append("{\"size\": " + MAX_RESULTS + ",");
