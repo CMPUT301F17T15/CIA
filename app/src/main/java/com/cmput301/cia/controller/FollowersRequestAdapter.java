@@ -134,13 +134,12 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
 
             @Override
             public void onClick(View view) {
-
-
-                // TODO: shouldn't this remove as well?
                 followee.removeFollowRequest(follower);
+                followRequests.remove(position);
+                notifyItemRemoved(position);
                 if (!follower.isFollowing(followee)){
-                    //followRequests.remove(position);
-                    //notifyItemRemoved(position);
+//                    followRequests.remove(position);
+//                    notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
                 }
