@@ -94,6 +94,7 @@ public class HomePageActivity extends LocationRequestingActivity {
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
+
         if (user.hasValidId())
             user.load();
 

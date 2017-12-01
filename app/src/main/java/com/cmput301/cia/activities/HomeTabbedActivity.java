@@ -47,8 +47,8 @@ public class HomeTabbedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_tabbed);
 
-        initializeBottomBar();
         loadCurrentUser();
+        initializeBottomBar();
     }
 
     private void loadCurrentUser() {

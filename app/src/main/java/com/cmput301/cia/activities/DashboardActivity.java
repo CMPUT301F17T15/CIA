@@ -22,6 +22,8 @@ public class DashboardActivity extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    private Profile user;
+
     public static final String ID_PROFILE = "User";
 
     private DashboardTabsAdapter dashboardTabsAdapter;
@@ -34,6 +36,8 @@ public class DashboardActivity extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Habits");
+
+        user = (Profile) getArguments().getSerializable(ID_PROFILE);
 
         viewPager = (ViewPager) view.findViewById(R.id.container);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -62,8 +66,8 @@ public class DashboardActivity extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return HabitsFragment.create();
-                case 1: return TodaysHabitsFragment.create();
+                case 0: return HabitsFragment.create(user);
+                case 1: return TodaysHabitsFragment.create(user);
                 default: return null;
             }
         }

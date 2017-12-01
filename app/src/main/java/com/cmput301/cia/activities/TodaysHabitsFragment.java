@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.Profile;
 
 /**
  * Created by Jessica on 2017-12-01.
  */
 
 public class TodaysHabitsFragment extends Fragment {
+    public static final String ID_PROFILE = "User";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -27,8 +29,12 @@ public class TodaysHabitsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
     }
-    public static Fragment create() {
+    public static Fragment create(Profile user) {
         TodaysHabitsFragment todaysHabitsFragment = new TodaysHabitsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ID_PROFILE, user);
+        todaysHabitsFragment.setArguments(args);
+
         return todaysHabitsFragment;
     }
 }
