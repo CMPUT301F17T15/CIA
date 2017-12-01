@@ -22,7 +22,10 @@ import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Adil Malik
@@ -51,11 +54,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     private ArrayAdapter<Profile> followedListAdapter;
     private List<Profile> followed;
 
-    // list of followed viewer's habits
+    // list of followed users' habits
     private ListView habitsList;
-    private ArrayAdapter<Habit> habitsListAdapter;
+    private ArrayAdapter<String> habitsListAdapter;
 
-    // list of followed viewer's events
+    // list of followed users' events
     private ListView eventsList;
     private ArrayAdapter<CompletedEventDisplay> eventsListAdapter;
 
@@ -89,8 +92,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         habitsList = (ListView)findViewById(R.id.vfuHabitsList);
-        habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabits());
-        habitsList.setAdapter(habitsListAdapter);
+        updateHabitsAdapter();
         habitsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -187,8 +189,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(followedListAdapter);
 
-        habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabits());
-        habitsList.setAdapter(habitsListAdapter);
+        updateHabitsAdapter();
 
         eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
@@ -267,4 +268,36 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Get a string representation of the specified habit to display in a list
+     * @param habit the habit to get a representation of
+     * @param creator the user who created the habit
+     * @return string representation of the habit
+     */
+    public static String getHabitDisplayText(Habit habit, Profile creator){
+        return creator.getName() + " created " + habit.getTitle() + " (" + habit.getCompletionPercent() + " completion rate)";
+    }
+
+    /**
+     * Update the adapter for the ListView displaying details about followed user's habits
+     */
+    private void updateHabitsAdapter(){
+        // map each habit's id to their creator
+        Map<String, Profile> habitCreatorMap = new HashMap<>();
+        for (Profile profile : followed){
+            for (Habit habit : profile.getHabits()){
+                habitCreatorMap.put(habit.getId(), profile);
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+        for (Habit habit : displayed.getFollowedHabits()){
+            list.add(getHabitDisplayText(habit, habitCreatorMap.get(habit.getId())));
+        }
+
+        habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, list);
+        habitsList.setAdapter(habitsListAdapter);
+    }
+
 }

@@ -299,4 +299,22 @@ public class HabitUnitTests {
         assertEquals(habit.getReason(), comment1);
     }
 
+    @Test
+    public void testCompletionRate(){
+        String type = "type1";
+        String title = "Habit1";
+        String reason = "Reason1";
+        Date date = new Date();
+        List<Integer> days = Arrays.asList(1,2,3);
+        Habit habit = new Habit(title, reason, date, days, type);
+
+        assertTrue(habit.getCompletionPercent().equals("0.00%"));
+        habit.miss(new Date());
+        assertTrue(habit.getCompletionPercent().equals("0.00%"));
+        habit.addHabitEvent(new HabitEvent(""));
+        assertTrue(habit.getCompletionPercent().equals("50.00%"));
+        habit.miss(new Date());
+        assertTrue(habit.getCompletionPercent().equals("33.33%"));
+    }
+
 }

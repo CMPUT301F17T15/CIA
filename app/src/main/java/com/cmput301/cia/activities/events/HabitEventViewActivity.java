@@ -108,45 +108,46 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
             }
         });
 
+        findViewById(R.id.vheDeleteButton).setOnClickListener(new TimedClickListener() {
+            @Override
+            public void handleClick() {
+
+                /**
+                 * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+                 */
+                // Ask the user for confirmation before a habit event is deleted
+                AlertDialog.Builder dialog = new AlertDialog.Builder(HabitEventViewActivity.this);
+                dialog.setTitle("Are you sure you want to delete this event?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishActivity(true);       // delete the event
+                    }
+                });
+                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        findViewById(R.id.vheSaveButton).setOnClickListener(new TimedClickListener() {
+            @Override
+            public void handleClick() {
+                finishActivity(false);
+            }
+        });
+
         updateImage();
         habitEventComment.setText(event.getComment());
         setDateText();
+
+        if (isFinishing())
+            return;
+
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
-    }
-
-    /**
-     * the following three function basic on createhabitEventActivity.
-     * Handles the save button being clicked
-     * @param view
-     */
-    public void onSaveClicked(View view){
-        finishActivity(false);
-    }
-
-    /**
-     * Handles the delete button being clicked
-     * @param view
-     */
-    public void onDeleteClicked(View view){
-
-        /**
-         * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
-         */
-        // Ask the user for confirmation before a habit event is deleted
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Are you sure you want to delete this event?");
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finishActivity(true);       // delete the event
-            }
-        });
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-        dialog.show();
     }
 
     /**
@@ -155,6 +156,10 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
      * @param deleted whether the Delete button was clicked or not
      */
     private void finishActivity(boolean deleted){
+
+        if (isFinishing())
+            return;
+
         Intent intent = new Intent();
         String comment = habitEventComment.getText().toString();
 
@@ -172,17 +177,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
     }
 
     /**
-     * The following 2 functions are based on Benjamin's answer from
-     * https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
-     *
-     * Permalink to specific comment:
-     * https://stackoverflow.com/a/5309965
-     */
-    public void onImageClicked(View view) {
-
-    }
-
-    /**
      * Handle the results of the image selection activity
      * @param requestCode id of the finished activity
      * @param resultCode code representing whether that activity was successful or not
@@ -193,6 +187,14 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
 
         if (requestCode == SELECT_IMAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
             try {
+
+                /*
+                 * Based on Benjamin's answer from
+                 * https://stackoverflow.com/questions/5309190/android-pick-images-from-gallery
+                 *
+                 * Permalink to specific comment:
+                 * https://stackoverflow.com/a/5309965
+                 */
 
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 Bitmap chosenImage = BitmapFactory.decodeStream(inputStream);

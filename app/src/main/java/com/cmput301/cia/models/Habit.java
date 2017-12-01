@@ -7,6 +7,8 @@ package com.cmput301.cia.models;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -313,6 +315,21 @@ public class Habit extends ElasticSearchable {
             if (habitEvent.equals(event)){
                 habitEvent.copyFrom(event);
             }
+        }
+    }
+
+    /**
+     * @return what percentage of the time this habit is being successfully completed as a string in the form (X.YZ%)
+     */
+    public String getCompletionPercent(){
+        int success = events.size();
+        int misses = missedDates.size();
+        if (misses == 0 && success == 0){
+            return "0.00%";
+        } else {
+            double ratio = ((double) success) / ((double) (misses + success)) * 100;
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            return formatter.format(ratio) + "%";
         }
     }
 

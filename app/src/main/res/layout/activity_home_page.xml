@@ -13,18 +13,6 @@
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
 
-    <include
-        android:id="@+id/app_toolbar"
-        layout="@layout/app_toolbar"
-        android:layout_width="367dp"
-        android:layout_height="58dp"
-        android:layout_marginRight="5dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"></include>
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
