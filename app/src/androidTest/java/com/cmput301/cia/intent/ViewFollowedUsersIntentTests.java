@@ -224,14 +224,13 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
         solo.clickOnView(solo.getView(R.id.vfuHistoryEventsSwitch));
         solo.sleep(600);
 
-        // TODO change to string equals
         ListAdapter adapter = ((ListView)solo.getView(R.id.vfuHabitsList)).getAdapter();
         for (Profile followed : profile.getFollowing()){
             for (Habit habit : followed.getHabits()) {
 
                 boolean found = false;
                 for (int i = 0; i < adapter.getCount(); ++i) {
-                    if (adapter.getItem(i).equals(habit)) {
+                    if (adapter.getItem(i).equals(ViewFollowedUsersActivity.getHabitDisplayText(habit, followed))) {
                         found = true;
                         break;
                     }
