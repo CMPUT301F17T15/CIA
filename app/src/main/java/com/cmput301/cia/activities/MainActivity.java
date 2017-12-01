@@ -9,26 +9,21 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.util.Pair;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.SerializableUtilities;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button login = (Button)findViewById(R.id.loginButton);
-        login.setOnClickListener(new ButtonClickListener() {
+        login.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 String name = userName.getText().toString().toLowerCase();
@@ -90,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button register = (Button)findViewById(R.id.newProfileButton);
-        register.setOnClickListener(new ButtonClickListener() {
+        register.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 String name = userName.getText().toString().toLowerCase();

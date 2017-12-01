@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -91,7 +91,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                     mBuilder.setView(mview);
                     final AlertDialog dialog = mBuilder.create();
                     dialog.show();
-                    okButton.setOnClickListener(new ButtonClickListener() {
+                    okButton.setOnClickListener(new TimedClickListener() {
                         @Override
                         public void handleClick() {
                             if (!minput.getText().toString().isEmpty()){

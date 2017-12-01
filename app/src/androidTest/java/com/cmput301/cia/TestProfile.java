@@ -6,6 +6,9 @@ package com.cmput301.cia;
 
 import com.cmput301.cia.models.Profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Adil Malik
