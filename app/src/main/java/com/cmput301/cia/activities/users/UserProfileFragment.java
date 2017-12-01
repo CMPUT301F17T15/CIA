@@ -10,10 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +92,7 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
-        return inflater.inflate(R.layout.activity_user_profile, parent, false);
+        return inflater.inflate(R.layout.fragment_user_profile, parent, false);
     }
 
     @Override
@@ -130,6 +127,7 @@ public class UserProfileFragment extends Fragment {
             saveButton.setVisibility(View.INVISIBLE);
             commentText.setEnabled(false);
             imageView.setClickable(false);
+            uploadIcon.setVisibility(View.GONE);
 
             if (viewer.isFollowing(displayed))
                 followButton.setVisibility(View.INVISIBLE);

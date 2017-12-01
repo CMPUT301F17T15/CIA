@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
+  -->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cmput301.cia.activities.users.UserProfileActivity">
+
+    <Button
+        android:id="@+id/profileUnfollowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Unfollow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/profileDateDynamicText"
+        android:layout_width="169dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="16dp"
+        android:text="Registered On"
+        android:textAlignment="viewStart"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/profileImageViewFrame" />
+
+    <TextView
+        android:id="@+id/profileCommentStaticText"
+        android:layout_width="127dp"
+        android:layout_height="26dp"
+        android:text="COMMENT"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@+id/profileDateDynamicText" />
+
+    <EditText
+        android:id="@+id/profileCommentDynamicText"
+        android:layout_width="182dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:elevation="7dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:maxLength="70"
+        app:layout_constraintHorizontal_bias="0.074"
+        app:layout_constraintLeft_toRightOf="@+id/profileCommentStaticText"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileDateDynamicText" />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/profileImageViewFrame"
+        android:layout_width="fill_parent"
+        android:layout_height="170dp">
+
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="384dp"
+            android:layout_height="170dp"
+            android:layout_marginBottom="78dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="upload image"
+            android:elevation="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="23dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_add_a_photo_black_24px"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/profileFollowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Follow"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/profileSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="257dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <!--<Button-->
+        <!--android:id="@+id/profileSendButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="64dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:text="Send Message"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/editText" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/editText"-->
+        <!--android:layout_width="127dp"-->
+        <!--android:layout_height="78dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:hint="enter message"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginBottom="195dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/profileImageText" />-->
+</android.support.constraint.ConstraintLayout>
