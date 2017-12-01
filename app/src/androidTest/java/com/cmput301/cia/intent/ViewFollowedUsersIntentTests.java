@@ -155,8 +155,8 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
         assertTrue(solo.getView(R.id.vfuEventsList).getVisibility() == View.VISIBLE);
         assertTrue(solo.getView(R.id.vfuUsersIcon).getVisibility() == View.INVISIBLE);
         assertTrue(solo.getView(R.id.vfuHistoryIcon).getVisibility() == View.VISIBLE);
-        assertTrue(solo.getView(R.id.vfuHistoryEventsSwitch).getVisibility() == View.INVISIBLE);
-        assertTrue(solo.getView(R.id.vfuMapView).getVisibility() == View.INVISIBLE);
+        assertTrue(solo.getView(R.id.vfuHistoryEventsSwitch).getVisibility() == View.VISIBLE);
+        assertTrue(solo.getView(R.id.vfuMapView).getVisibility() == View.VISIBLE);
 
         // switch to history view
         solo.clickOnView(solo.getView(R.id.vfuHistoryIcon));
@@ -184,12 +184,10 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
         solo.clickOnView(solo.getView(R.id.vfuUsersIcon));
         solo.sleep(600);
 
-        assertTrue(solo.getView(R.id.vfuHabitsList).getVisibility() == View.INVISIBLE);
-        assertTrue(solo.getView(R.id.vfuEventsList).getVisibility() == View.INVISIBLE);
         assertTrue(solo.getView(R.id.vfuUsersIcon).getVisibility() == View.INVISIBLE);
         assertTrue(solo.getView(R.id.vfuHistoryIcon).getVisibility() == View.VISIBLE);
-        assertTrue(solo.getView(R.id.vfuHistoryEventsSwitch).getVisibility() == View.INVISIBLE);
-        assertTrue(solo.getView(R.id.vfuMapView).getVisibility() == View.INVISIBLE);
+        assertTrue(solo.getView(R.id.vfuHistoryEventsSwitch).getVisibility() == View.VISIBLE);
+        assertTrue(solo.getView(R.id.vfuMapView).getVisibility() == View.VISIBLE);
     }
 
     /**
@@ -226,6 +224,7 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
         solo.clickOnView(solo.getView(R.id.vfuHistoryEventsSwitch));
         solo.sleep(600);
 
+        // TODO change to string equals
         ListAdapter adapter = ((ListView)solo.getView(R.id.vfuHabitsList)).getAdapter();
         for (Profile followed : profile.getFollowing()){
             for (Habit habit : followed.getHabits()) {
