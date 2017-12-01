@@ -71,6 +71,9 @@ public class Profile extends ElasticSearchable {
     // Events that will be synchronized with the server when the user regains internet connectivity
     private List<OfflineEvent> pendingEvents;
 
+    //First time use boolean, used to display app tour for first time use.
+    private boolean firstTimeUse;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -84,8 +87,22 @@ public class Profile extends ElasticSearchable {
         comment = new String();
         lastLogin = new Date();
         image = new String();
+        firstTimeUse = true;
     }
 
+    /**
+     * getter for firstTimeUse boolean, used to display app tour
+     * @return
+     */
+
+    public boolean getFirstTimeUse(){return firstTimeUse;}
+
+    /**
+     * setter for firstTimeUse boolean, used to display app tour.
+     * @param firstTimeUse
+     */
+
+    public void setFirstTimeUse(boolean firstTimeUse){this.firstTimeUse = firstTimeUse;}
     /**
      * @return the profile's unique name
      */

@@ -105,10 +105,8 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
-
         List<String> xAxis = new ArrayList<>();
 
-        habit.setStartDate(new Date(117, 10, 25));
         weekdays = habit.getDaysOfWeek();
         startDate = habit.getStartDate();
 
