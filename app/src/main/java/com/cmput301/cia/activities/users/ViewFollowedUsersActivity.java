@@ -16,7 +16,7 @@ import android.widget.ViewSwitcher;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
@@ -34,19 +34,17 @@ import java.util.List;
 
 public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
-    // Intent identifiers for passed in profiles
-    public static final String ID_VIEWED = "Profile", ID_USER = "User";
+    // Intent identifiers for passed in profile
+    public static final String ID_VIEWED = "Profile";
 
     // Return identifiers for the activity result
-    public static final String RETURNED_FOLLOWED = "Followed", RETURNED_ISUSER = "User";
+    public static final String RETURNED_FOLLOWED = "Followed";
 
     // Activity result codes
     private static final int VIEW_PROFILE = 0;
 
-    // the displayed being displayed
+    // the profile being displayed
     private Profile displayed;
-    // the currently signed in viewer
-    private Profile viewer;
 
     // list of followed users
     private ListView followedList;
@@ -72,7 +70,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         Intent intent = getIntent();
         displayed = (Profile) intent.getSerializableExtra(ID_VIEWED);
-        viewer = (Profile) intent.getSerializableExtra(ID_USER);
 
         followedList = (ListView)findViewById(R.id.vfuProfilesList);
 
@@ -86,7 +83,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent profileIntent = new Intent(ViewFollowedUsersActivity.this, UserProfileActivity.class);
                 profileIntent.putExtra(UserProfileActivity.PROFILE_ID, followed.get(position));
-                profileIntent.putExtra(UserProfileActivity.USER_ID, viewer);
+                profileIntent.putExtra(UserProfileActivity.USER_ID, displayed);
                 startActivityForResult(profileIntent, VIEW_PROFILE);
             }
         });
@@ -113,7 +110,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         historyImage = (ImageView)findViewById(R.id.vfuHistoryIcon);
         // switch to history mode
-        historyImage.setOnClickListener(new ButtonClickListener() {
+        historyImage.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 showHistory();
@@ -122,7 +119,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         profileImage = (ImageView)findViewById(R.id.vfuUsersIcon);
         // switch to user mode
-        profileImage.setOnClickListener(new ButtonClickListener() {
+        profileImage.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 showProfiles();
@@ -130,7 +127,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         // switch to map activity when the map image is clicked
-        findViewById(R.id.vfuMapView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.vfuMapView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 requestLocationPermissions();
@@ -170,7 +167,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         Intent returnIntent = new Intent();
         // TODO: return displayed for simplicity
         returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followed);
-        returnIntent.putExtra(RETURNED_ISUSER, displayed.equals(viewer));
         setResult(RESULT_OK, returnIntent);
         finish();
     }

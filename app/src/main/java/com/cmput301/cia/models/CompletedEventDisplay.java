@@ -116,4 +116,17 @@ public class CompletedEventDisplay implements Serializable {
         return habitName;
     }
 
+    /**
+     * @param other the object to compare this object with
+     * @return whether this object equals another object
+     */
+    public boolean equals(Object other){
+        if (other instanceof CompletedEventDisplay){
+            CompletedEventDisplay cedOther = (CompletedEventDisplay)other;
+            return event.equals(cedOther.event) && habitName.equals(cedOther.habitName) && userName.equals(cedOther.userName);
+        }
+
+        return false;
+    }
+
 }

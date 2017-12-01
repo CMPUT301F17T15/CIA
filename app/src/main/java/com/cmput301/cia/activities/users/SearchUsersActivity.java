@@ -142,7 +142,8 @@ public class SearchUsersActivity extends AppCompatActivity {
         for (Profile profile : profiles) {
 
             // note: this is only for removing invalid profiles, ignore it
-            /*if (profile.getName() == null || includedNames.contains(profile.getName()) || !profile.getName().equals(profile.getName().toLowerCase())){
+            /*if (profile.getName() == null || includedNames.contains(profile.getName()) || !profile.getName().equals(profile.getName().toLowerCase())
+                    || profile.getName().contains(".") || profile.getName().equals("aas")){
                 ElasticSearchUtilities.delete(profile);
                 continue;
             }*/

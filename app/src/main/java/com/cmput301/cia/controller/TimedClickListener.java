@@ -11,11 +11,11 @@ import android.view.View;
  * @version 1
  * Date: Nov 27, 2017
  *
- * This class represents a listener that prevents buttons from being clicked multiple times within a short
+ * This class represents a listener that prevents views from being clicked multiple times within a short
  * period of time. Exact same as View.OnClickListener besides this.
  */
 
-public abstract class ButtonClickListener implements View.OnClickListener {
+public abstract class TimedClickListener implements View.OnClickListener {
 
     // minimum time in milliseconds that must separate clicks
     private static final long MIN_CLICK_INTERVAL = 2500;
@@ -23,7 +23,7 @@ public abstract class ButtonClickListener implements View.OnClickListener {
     // the time in milliseconds since the epoch the last successful click occurred at
     private long lastClick;
 
-    public ButtonClickListener(){
+    public TimedClickListener(){
         lastClick = 0;
     }
 

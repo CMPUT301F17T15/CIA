@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.DeleteHabitEvent;
 import com.cmput301.cia.models.EditHabitEvent;
@@ -85,7 +85,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         Button filter = (Button) findViewById(R.id.historyFilterButton);
 
         // allow the user to pick a filter habit
-        eventButton.setOnClickListener(new ButtonClickListener() {
+        eventButton.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent(HistoryActivity.this, FilterHabitsActivity.class);

@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -103,7 +103,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
 
         // handle the save button being clicked
-        findViewById(R.id.cheSaveButton).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.cheSaveButton).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 finishActivity(false);
@@ -111,7 +111,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         });
 
         // handle the image being clicked
-        imageView.setOnClickListener(new ButtonClickListener() {
+        imageView.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

@@ -21,14 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.controller.ButtonClickListener;
-import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -102,7 +99,7 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
             image = null;
 
         // handle the image being clicked
-        habitEventPhoto.setOnClickListener(new ButtonClickListener() {
+        habitEventPhoto.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

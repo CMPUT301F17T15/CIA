@@ -6,7 +6,6 @@ package com.cmput301.cia.activities;
 
 import android.content.Intent;
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,11 +31,10 @@ import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.controller.ExpandableListViewAdapter;
 import com.cmput301.cia.models.AddHabitEvent;
-import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
@@ -152,7 +150,7 @@ public class HomePageActivity extends LocationRequestingActivity {
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
 
-        findViewById(R.id.homeAddHabitButton).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeAddHabitButton).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitActivity.class);
@@ -165,7 +163,7 @@ public class HomePageActivity extends LocationRequestingActivity {
             }
         });
 
-        findViewById(R.id.homeHistoryImageView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeHistoryImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent_Habit_History = new Intent(HomePageActivity.this, HistoryActivity.class);
@@ -174,7 +172,7 @@ public class HomePageActivity extends LocationRequestingActivity {
             }
         });
 
-        findViewById(R.id.homeProfileImageView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeProfileImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent_My_Profile = new Intent(HomePageActivity.this, UserProfileActivity.class);
@@ -184,17 +182,16 @@ public class HomePageActivity extends LocationRequestingActivity {
             }
         });
 
-        findViewById(R.id.homeFollowedImageView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeFollowedImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent_My_Following = new Intent(HomePageActivity.this, ViewFollowedUsersActivity.class);
                 intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_VIEWED, user);
-                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_USER, user);
                 startActivityForResult(intent_My_Following, FOLLOWED_USERS);
             }
         });
 
-        findViewById(R.id.homeRequestsImageView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeRequestsImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent requests = new Intent(HomePageActivity.this, FollowRequestsActivity.class);
@@ -203,7 +200,7 @@ public class HomePageActivity extends LocationRequestingActivity {
             }
         });
 
-        findViewById(R.id.homeSearchImageView).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.homeSearchImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent search = new Intent(HomePageActivity.this, SearchUsersActivity.class);
@@ -270,7 +267,6 @@ public class HomePageActivity extends LocationRequestingActivity {
             case R.id.menu_button_My_Following:
                 Intent intent_My_Following = new Intent(this, ViewFollowedUsersActivity.class);
                 intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_VIEWED, user);
-                intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_USER, user);
                 startActivityForResult(intent_My_Following, FOLLOWED_USERS);
                 return true;
             case R.id.menu_button_PowerRankings:

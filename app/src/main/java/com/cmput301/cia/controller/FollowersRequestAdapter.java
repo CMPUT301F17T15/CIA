@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 
 import java.util.List;
@@ -113,7 +111,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         /**
          * sets up a listener for the "Accept" button to accept the request
          */
-        approveButton.setOnClickListener(new ButtonClickListener() {
+        approveButton.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 followee.acceptFollowRequest(follower);
@@ -131,7 +129,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         /**
          * sets up a listener for the "Decline" button to ignore requests
          */
-        declineButton.setOnClickListener(new ButtonClickListener() {
+        declineButton.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 followee.removeFollowRequest(follower);

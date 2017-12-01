@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.controller.ButtonClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.FontUtilities;
 
@@ -62,7 +62,7 @@ public class FilterHabitsActivity extends AppCompatActivity {
         });
 
         // handle the finish button being clicked
-        findViewById(R.id.filterFinishButton).setOnClickListener(new ButtonClickListener() {
+        findViewById(R.id.filterFinishButton).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent();
