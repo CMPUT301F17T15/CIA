@@ -102,6 +102,10 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
         locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
 
+        if (isFinishing())
+            return;
+        Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
+
         // handle the save button being clicked
         findViewById(R.id.cheSaveButton).setOnClickListener(new TimedClickListener() {
             @Override
@@ -120,10 +124,6 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             }
         });
 
-        if (isFinishing())
-            return;
-
-        Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
 

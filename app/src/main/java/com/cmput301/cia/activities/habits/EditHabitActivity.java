@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -90,7 +91,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
                 if (i == type.size() - 1){
                     final AlertDialog.Builder mBuilder = new AlertDialog.Builder(EditHabitActivity.this);
                     View mview = getLayoutInflater().inflate(R.layout.dialog_input,null);
@@ -99,14 +100,14 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
                     mBuilder.setView(mview);
                     final AlertDialog dialog = mBuilder.create();
                     dialog.show();
-                    okButton.setOnClickListener(new View.OnClickListener(){
+                    okButton.setOnClickListener(new TimedClickListener(){
                         @Override
-                        public void onClick(View view){
+                        public void handleClick(){
                             if (!minput.getText().toString().isEmpty()){
                                 type.add(0, minput.getText().toString());
                                 dialog.dismiss();
-                            }else{
-                                Toast.makeText(EditHabitActivity.this, "Please enter the type name", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(EditHabitActivity.this, "The type name can not be empty", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

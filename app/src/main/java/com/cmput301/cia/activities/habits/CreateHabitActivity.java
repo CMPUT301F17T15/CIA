@@ -84,7 +84,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
                 if (i == type.size() - 1){
                     final AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateHabitActivity.this);
                     View mview = getLayoutInflater().inflate(R.layout.dialog_input,null);
