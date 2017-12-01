@@ -139,7 +139,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
                 notifyItemRemoved(position);
                 /*if (!follower.isFollowing(followee)){
                     followRequests.remove(position);
-                    notifyItemRemoved(position);    
+                    notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
                 }*/
