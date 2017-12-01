@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Profile found -> sign in
                 if (profile.first != null && profile.second){
-                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+//                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, HomeTabbedActivity.class);
                     intent.putExtra(HomePageActivity.ID_PROFILE, profile.first);
                     startActivity(intent);
                 } else if (!profile.second){
