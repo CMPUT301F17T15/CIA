@@ -18,6 +18,8 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.users.FollowRequestsActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
+import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.roughike.bottombar.BottomBar;
@@ -144,7 +146,9 @@ public class HomeTabbedActivity extends AppCompatActivity {
     }
 
     private void onProfileClicked() {
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.homeFragmentContainer, UserProfileFragment.create(user,user));
+        ft.commit();
     }
 
 }

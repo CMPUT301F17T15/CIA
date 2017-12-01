@@ -107,17 +107,6 @@ public class SearchUsersActivity extends Fragment {
         users = new ArrayList<>();
     }
 
-//    /**
-//     * Handle the back button being pressed
-//     */
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent();
-//        intent.putExtra(RETURNED_PROFILE, user);
-//        setResult(RESULT_OK, intent);
-//        finish();
-//    }
-
     @Override
     public void onStart() {
         super.onStart();
