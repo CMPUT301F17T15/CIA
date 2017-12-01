@@ -99,7 +99,8 @@
         <activity android:name=".activities.users.SendMessageActivity" />
         <activity
             android:name=".activities.HomeTabbedActivity"
-            android:label="@string/title_activity_home_tabbed"></activity>
+            android:label="@string/title_activity_home_tabbed" />
+        <activity android:name=".activities.DashboardActivity"></activity>
     </application>
 
 </manifest>

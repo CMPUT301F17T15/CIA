@@ -115,7 +115,9 @@ public class HomeTabbedActivity extends AppCompatActivity {
     }
 
     private void onDashboardClicked() {
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.homeFragmentContainer, DashboardActivity.create(user));
+        ft.commit();
     }
 
     private void onSearchClicked() {

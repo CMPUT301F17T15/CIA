@@ -44,4 +44,6 @@
     <string name="title_newHabit">Add Habit</string>
     <string name="title_followRequests">Follow Requests</string>
     <string name="title_profile">Profile</string>
+    <string name="habits">Habits</string>
+    <string name="todays_task">Today\'s Tasks</string>
 </resources>
