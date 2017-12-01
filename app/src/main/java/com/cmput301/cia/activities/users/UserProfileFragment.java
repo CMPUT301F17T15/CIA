@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,10 +65,12 @@ public class UserProfileFragment extends Fragment {
 
     // the displayed's comment
     private EditText commentText;
-    private EditText sendMessage;
+//    private EditText sendMessage;
 
     // the displayed's photo
     private ImageView imageView;
+    private FrameLayout imageViewFrame;
+    private ImageView uploadIcon;
 
     // the image attached to the viewed displayed
     private Bitmap image;
@@ -97,24 +100,27 @@ public class UserProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-//        getActivity().setTitle("Profile");
         displayed = (Profile) getArguments().getSerializable(PROFILE_ID);
         viewer = (Profile) getArguments().getSerializable(USER_ID);
 
+        getActivity().setTitle(displayed.getName());
+
         // initialize view member variables
-        TextView nameText = (TextView) view.findViewById(R.id.profileNameText);
-        sendMessage = (EditText) view.findViewById(R.id.editText);
-        sendMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        sendMessage.setGravity(Gravity.TOP);
-        sendMessage.setSingleLine(false);
-        sendMessage.setHorizontallyScrolling(false);
+//        TextView nameText = (TextView) view.findViewById(R.id.profileNameText);
+//        sendMessage = (EditText) view.findViewById(R.id.editText);
+//        sendMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+//        sendMessage.setGravity(Gravity.TOP);
+//        sendMessage.setSingleLine(false);
+//        sendMessage.setHorizontallyScrolling(false);
 
         commentText = (EditText) view.findViewById(R.id.profileCommentDynamicText);
         followButton = (Button) view.findViewById(R.id.profileFollowButton);
         unfollowButton = (Button) view.findViewById(R.id.profileUnfollowButton);
-        sendButton = (Button) view.findViewById(R.id.profileSendButton);
+//        sendButton = (Button) view.findViewById(R.id.profileSendButton);
         Button saveButton = (Button) view.findViewById(R.id.profileSaveButton);
         imageView = (ImageView) view.findViewById(R.id.profileImageView);
+        imageViewFrame = (FrameLayout) view.findViewById(R.id.profileImageViewFrame);
+        uploadIcon = (ImageView) view.findViewById(R.id.uploadImage);
 
         // if viewer is viewing their own displayed
         if (viewer.equals(displayed)){
@@ -132,9 +138,9 @@ public class UserProfileFragment extends Fragment {
         }
 
         commentText.setText(displayed.getComment());
-        nameText.setText(displayed.getName());
+//        nameText.setText(displayed.getName());
 
-        ((TextView) view.findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(displayed.getCreationDate()));
+        ((TextView) view.findViewById(R.id.profileDateDynamicText)).setText("Registered on: " + DateUtilities.formatDate(displayed.getCreationDate()));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +156,9 @@ public class UserProfileFragment extends Fragment {
                     if (image != null)
                         displayed.setImage(ImageUtilities.imageToBase64(image));
 
-                    intent.putExtra(RESULT_PROFILE_ID, displayed);
+                    displayed.save();
+
+//                    intent.putExtra(RESULT_PROFILE_ID, displayed);
                 }
 //                setResult(RESULT_OK, intent);
 //                finish();
@@ -201,17 +209,17 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = sendMessage.getText().toString();
-                displayed.sendMessage(message);
-                displayed.save();
-            }
-        });
+//        sendButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String message = sendMessage.getText().toString();
+//                displayed.sendMessage(message);
+//                displayed.save();
+//            }
+//        });
 
 
-        imageView.setOnClickListener(new View.OnClickListener() {
+        imageViewFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -229,6 +237,7 @@ public class UserProfileFragment extends Fragment {
             image = null;
         else
             image = ImageUtilities.base64ToImage(displayed.getImage());
+
         updateImage();
     }
 
@@ -269,13 +278,14 @@ public class UserProfileFragment extends Fragment {
      */
     private void updateImage(){
         if (image != null) {
+            uploadIcon.setVisibility(View.GONE);
             imageView.clearColorFilter();
             imageView.setBackgroundColor(Color.rgb(255, 255, 255));
             imageView.setImageBitmap(image);
         }
         else {
-            imageView.setColorFilter(Color.rgb(0, 0, 0));
-            imageView.setBackgroundColor(Color.rgb(0, 0, 0));
+//            imageView.setColorFilter(Color.rgb(0, 0, 0));
+//            imageView.setBackgroundColor(Color.rgb(0, 0, 0));
         }
     }
 }

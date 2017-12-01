@@ -88,8 +88,8 @@ public class UserProfileActivity extends AppCompatActivity {
         viewer = (Profile) intent.getSerializableExtra(USER_ID);
 
         // initialize view member variables
-        TextView nameText = (TextView)findViewById(R.id.profileNameText);
-        sendMessage = (EditText)findViewById(R.id.editText);
+//        TextView nameText = (TextView)findViewById(R.id.profileNameText);
+//        sendMessage = (EditText)findViewById(R.id.editText);
         sendMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         sendMessage.setGravity(Gravity.TOP);
         sendMessage.setSingleLine(false);
@@ -98,7 +98,7 @@ public class UserProfileActivity extends AppCompatActivity {
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
-        sendButton = (Button)findViewById(R.id.profileSendButton);
+//        sendButton = (Button)findViewById(R.id.profileSendButton);
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
@@ -118,7 +118,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         commentText.setText(displayed.getComment());
-        nameText.setText(displayed.getName());
+//        nameText.setText(displayed.getName());
 
         ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(displayed.getCreationDate()));
 
