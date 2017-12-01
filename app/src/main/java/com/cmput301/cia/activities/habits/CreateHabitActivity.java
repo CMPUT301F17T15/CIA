@@ -36,7 +36,9 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  * @author Shipin Guan
  * @version 2
  *
- * activity for creating a new habit by letting the user input:
+ * version 1 creted by Jessica Priero
+ *
+ * This activity is for creating a new habit by letting the user input:
  *      - habit name
  *      - reason
  *      - start date
