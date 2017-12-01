@@ -120,6 +120,9 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             }
         });
 
+        if (isFinishing())
+            return;
+
         Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
@@ -265,6 +268,10 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      * @param cancelled whether the cancel button was clicked or not
      */
     private void finishActivity(boolean cancelled){
+
+        if (isFinishing())
+            return;
+
         Intent intent = new Intent();
         if (cancelled) {
             setResult(Activity.RESULT_CANCELED, intent);

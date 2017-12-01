@@ -16,13 +16,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
+import com.cmput301.cia.activities.users.FollowRequestsActivity;
+import com.cmput301.cia.activities.users.RankingsActivity;
+import com.cmput301.cia.activities.users.SearchUsersActivity;
+import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Shipin Guan
@@ -63,9 +72,9 @@ public class HabitViewActivity extends AppCompatActivity {
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
         refreshPage();
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        deleteButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
 
                 /**
                  * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
@@ -76,6 +85,10 @@ public class HabitViewActivity extends AppCompatActivity {
                 dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
+                        if (isFinishing())
+                            return;
+
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("Deleted", true);
                         returnIntent.putExtra("HabitID", habit.getId());
@@ -88,13 +101,15 @@ public class HabitViewActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
-                dialog.show();
+
+                if (!isFinishing())
+                    dialog.show();
             }
         });
 
-        editButton.setOnClickListener(new View.OnClickListener(){
+        editButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view){
+            public void handleClick() {
                 Intent editIntent = new Intent(HabitViewActivity.this, EditHabitActivity.class);
                 editIntent.putExtra("Habit", habit);
                 editIntent.putExtra("Categories", categories);
@@ -142,14 +157,6 @@ public class HabitViewActivity extends AppCompatActivity {
             temp = temp + days[i - 1];
         }
         habitFrequency.setText(temp);
-    }
-
-    //Crate the menu object
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }

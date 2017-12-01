@@ -31,6 +31,7 @@ import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.controller.ExpandableListViewAdapter;
@@ -68,6 +69,9 @@ public class HomePageActivity extends LocationRequestingActivity {
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
         FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
 
+    // maximum number of habits and habit events a user can have
+    private static final int MAX_HABIT_HISTORY_SIZE = 2000000000;
+
     // Intent extra data identifier for the profile of the signed in user
     public static final String ID_PROFILE = "User";
 
@@ -87,10 +91,6 @@ public class HomePageActivity extends LocationRequestingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-
-        //Create custom tool bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
@@ -153,6 +153,12 @@ public class HomePageActivity extends LocationRequestingActivity {
         findViewById(R.id.homeAddHabitButton).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
+
+                if (user.getHabitsCount() >= MAX_HABIT_HISTORY_SIZE){
+                    Toast.makeText(HomePageActivity.this, "You've reached the maximum number of habits (" + MAX_HABIT_HISTORY_SIZE + ")", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitActivity.class);
                 if (user.getHabitCategories() != null) {
                     List<String> types = new ArrayList<>();
@@ -246,6 +252,12 @@ public class HomePageActivity extends LocationRequestingActivity {
                 startActivityForResult(intent_My_Profile, VIEW_PROFILE);
                 return true;
             case R.id.menu_button_Add_New_Habit:
+
+                if (user.getHabitsCount() >= MAX_HABIT_HISTORY_SIZE){
+                    Toast.makeText(HomePageActivity.this, "You've reached the maximum number of habits (" + MAX_HABIT_HISTORY_SIZE + ")", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
                 Intent intent = new Intent(this, CreateHabitActivity.class);
                 if (user.getHabitCategories() != null) {
                     List<String> types = new ArrayList<>();
@@ -324,6 +336,15 @@ public class HomePageActivity extends LocationRequestingActivity {
                 // successful event creation
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
+                Habit habit = user.getHabitById(habitId);
+                if (habit == null)
+                    return;
+
+                // fix double-clicking an item in the today's task list creating 2 events at once
+                // TODO
+                if (DateUtilities.isSameDay(habit.getLastCompletionDate(), event.getDate()))
+                    return;
+
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
@@ -440,12 +461,18 @@ public class HomePageActivity extends LocationRequestingActivity {
         }
 
         // set the listener to handle event completions
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        checkable.setOnItemClickListener(new /*AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {*/
+         TimedAdapterViewClickListener() {
+             @Override
+             public void handleClick(View view, int i) {
 
-                // This item is already clicked, prevent it from being disabled
-                if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                if (user.getHabitHistory().size() >= MAX_HABIT_HISTORY_SIZE){
+                    // refresh the list to undo the item being selected
+                    resetCheckableListAdapter();
+                    checkCompletedEvents();
+                    Toast.makeText(HomePageActivity.this, "You've reached the maximum number of habit events (" + MAX_HABIT_HISTORY_SIZE + ")", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
