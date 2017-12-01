@@ -34,13 +34,14 @@ public class DashboardActivity extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Habits");
-        
+
         viewPager = (ViewPager) view.findViewById(R.id.container);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        setUpViewPager();
     }
 
     private void setUpViewPager() {
-        dashboardTabsAdapter = new DashboardTabsAdapter(getFragmentManager());
+        dashboardTabsAdapter = new DashboardTabsAdapter(getChildFragmentManager());
         viewPager.setAdapter(dashboardTabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
