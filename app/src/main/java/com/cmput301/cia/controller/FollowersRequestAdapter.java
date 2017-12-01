@@ -113,36 +113,36 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
         /**
          * sets up a listener for the "Accept" button to accept the request
          */
-        approveButton.setOnClickListener(new View.OnClickListener(){
-
+        approveButton.setOnClickListener(new ButtonClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
                 followee.acceptFollowRequest(follower);
-                if (follower.isFollowing(followee)){
+                followRequests.remove(position);
+                notifyItemRemoved(position);
+                /*if (follower.isFollowing(followee)){
                     followRequests.remove(position);
                     notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 
         /**
          * sets up a listener for the "Decline" button to ignore requests
          */
-        declineButton.setOnClickListener(new View.OnClickListener() {
-
+        declineButton.setOnClickListener(new ButtonClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
                 followee.removeFollowRequest(follower);
                 followRequests.remove(position);
                 notifyItemRemoved(position);
-                if (!follower.isFollowing(followee)){
-//                    followRequests.remove(position);
-//                    notifyItemRemoved(position);
+                /*if (!follower.isFollowing(followee)){
+                    followRequests.remove(position);
+                    notifyItemRemoved(position);    
                 } else {
                     Toast.makeText(context, "Error connecting to the database", Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
     }

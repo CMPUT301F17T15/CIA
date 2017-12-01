@@ -8,8 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:theme="@style/CustomToolbar"
-    app:popupTheme="@style/PopupToolBar"
-    >
+    app:popupTheme="@style/Platform.ThemeOverlay.AppCompat.Dark"
+    app:theme="@style/CustomToolbar">
 
 </android.support.v7.widget.Toolbar>

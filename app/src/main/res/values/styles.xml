@@ -4,8 +4,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         </style>
     <!-- Customize your theme here. -->
-    <style name="CustomToolbar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CustomToolbar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:background">@color/colorToolBarBackground</item>
+        <item name="android:actionMenuTextColor">@color/colorMenuText</item>
+        <item name="android:textColor">@color/colorMenuText</item>
+        <item name="android:textColorPrimary">@color/colorMenuText</item>
     </style>
         <!-- Customize popup style. -->
     <style name="PopupToolBar" parent="Theme.AppCompat.Light.NoActionBar">

@@ -18,44 +18,41 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IMAGE_SIZE;
 
 /**
  * @author Adil Malik, Shipin Guan, Jessica Prieto
- * @version 2.1
- * Date: Nov 13 2017
+ * @version 3
+ * Date: Nov 30 2017
  *
- * This activity displays the information about a viewer's displayed
+ * This activity displays the information about a user's profile
  */
 
-// TODO: following/unfollowing, messages
+// TODO: messages
 
 public class UserProfileActivity extends AppCompatActivity {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";
     public static final String RESULT_PROFILE_ID = "Profile";
 
-    private final String followButtonMessage_follow = "FOLLOW";
-    private final String followButtonMessage_pending = "PENDING";
+    private static final String FOLLOW_BUTTON_MESSAGE_FOLLOW = "FOLLOW";
+    private static final String FOLLOW_BUTTON_MESSAGE_PENDING = "PENDING";
 
     // Result code for selecting an image from gallery
     public static final int SELECT_IMAGE_CODE = 1;
 
-    // the displayed being displayed
+    // the profile being displayed
     private Profile displayed;
-    // the currently signed in viewer
+    // the currently signed in user
     private Profile viewer;
 
     private Button followButton;
@@ -110,8 +107,7 @@ public class UserProfileActivity extends AppCompatActivity {
             followButton.setVisibility(View.INVISIBLE);
             unfollowButton.setVisibility(View.INVISIBLE);
         } else {
-            saveButton.setText("Return");
-            //saveButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
             commentText.setEnabled(false);
             imageView.setClickable(false);
 
@@ -148,7 +144,7 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
         if (displayed.hasFollowRequest(viewer)) {
-            followButton.setText(followButtonMessage_pending);
+            followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
         }
 
         followButton.setOnClickListener(new View.OnClickListener() {
@@ -158,18 +154,19 @@ public class UserProfileActivity extends AppCompatActivity {
                 // send follow request if one is not sent
                 if (!displayed.hasFollowRequest(viewer)) {
                     displayed.addFollowRequest(viewer);
-                    if (displayed.hasFollowRequest(viewer))
-                        followButton.setText(followButtonMessage_pending);
+                    followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
+                    /*if (displayed.hasFollowRequest(viewer))
                     else
-                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
                 } else {
                     // since a request has already been sent, remove it
 
                     displayed.removeFollowRequest(viewer);
-                    if (!displayed.hasFollowRequest(viewer))
-                        followButton.setText(followButtonMessage_follow);
+                    followButton.setText(FOLLOW_BUTTON_MESSAGE_FOLLOW);
+                    /*if (!displayed.hasFollowRequest(viewer))
+                        followButton.setText(FOLLOW_BUTTON_MESSAGE_FOLLOW);
                     else
-                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
                 }
             }
         });
@@ -179,12 +176,14 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 viewer.unfollow(displayed);
-                if (viewer.isFollowing(displayed))
+                /*if (viewer.isFollowing(displayed))
                     Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();
                 else {
                     unfollowButton.setVisibility(View.INVISIBLE);
                     followButton.setVisibility(View.VISIBLE);
-                }
+                }*/
+                unfollowButton.setVisibility(View.INVISIBLE);
+                followButton.setVisibility(View.VISIBLE);
             }
         });
 
