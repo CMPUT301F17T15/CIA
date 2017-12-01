@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
@@ -27,7 +29,7 @@ import java.util.Date;
  * Author: Adil Malik
  * Date: Nov 30 2017
  *
- * This class tests the UI for searching for user's profiles
+ * This class tests the UI for searching for user profiles
  * NOTE: These tests require an internet connection
  */
 
@@ -56,21 +58,23 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Sea
      * @throws IllegalAccessException
      */
     public void testFilter() throws NoSuchFieldException, IllegalAccessException {
+        solo.enterText(0, "vfutest");
+        solo.sleep(600);
+        solo.clickOnButton("Search");
+        solo.sleep(2500);
+        ListAdapter adapter = ((ListView)solo.getView(R.id.searchUsersList)).getAdapter();
+        for (int i = 0; i < adapter.getCount(); ++i){
+            assertTrue(((Profile)adapter.getItem(i)).getName().contains("vfutest"));
+        }
+    }
 
-        solo.clickOnActionBarItem(R.id.menu_button_My_Profile);
-        solo.clickOnMenuItem("My Profile");
-        solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
-
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
-        field.setAccessible(true);
-        Profile viewed = (Profile)field.get(solo.getCurrentActivity());
-
-        Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("viewer");
-        field2.setAccessible(true);
-        Profile user = (Profile)field.get(solo.getCurrentActivity());
-
-        assertTrue(viewed.equals(user));
+    public void testSelectUser(){
+        ListAdapter adapter = ((ListView)solo.getView(R.id.searchUsersList)).getAdapter();
+        if (adapter.getCount() > 0) {
+            solo.clickInList(1, 0);
+            solo.sleep(2000);
+            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+        }
     }
 
     @Override
