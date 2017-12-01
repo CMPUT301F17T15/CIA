@@ -8,7 +8,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
     app:popupTheme="@style/Platform.ThemeOverlay.AppCompat.Dark"
     app:theme="@style/CustomToolbar">
 
