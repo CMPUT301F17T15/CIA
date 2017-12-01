@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
@@ -57,16 +58,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private Button followButton;
     private Button unfollowButton;
-    private Button sendButton;
 
-    // the displayed's comment
+    // the user's comment
     private EditText commentText;
-    private EditText sendMessage;
 
-    // the displayed's photo
+    // the user's photo
     private ImageView imageView;
 
-    // the image attached to the viewed displayed
+    // the image attached to the viewed user
     private Bitmap image;
 
     @Override
@@ -87,18 +86,9 @@ public class UserProfileActivity extends AppCompatActivity {
         displayed = (Profile) intent.getSerializableExtra(PROFILE_ID);
         viewer = (Profile) intent.getSerializableExtra(USER_ID);
 
-        // initialize view member variables
-        TextView nameText = (TextView)findViewById(R.id.profileNameText);
-        sendMessage = (EditText)findViewById(R.id.editText);
-        sendMessage.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        sendMessage.setGravity(Gravity.TOP);
-        sendMessage.setSingleLine(false);
-        sendMessage.setHorizontallyScrolling(false);
-
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
-        sendButton = (Button)findViewById(R.id.profileSendButton);
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
@@ -118,13 +108,13 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
         commentText.setText(displayed.getComment());
-        nameText.setText(displayed.getName());
-
+        ((TextView)findViewById(R.id.profileNameText)).setText(displayed.getName());
         ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(displayed.getCreationDate()));
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
+
                 Intent intent = new Intent();
 
                 // return the viewer
@@ -147,10 +137,9 @@ public class UserProfileActivity extends AppCompatActivity {
             followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
         }
 
-        followButton.setOnClickListener(new View.OnClickListener() {
+        followButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void handleClick() {
                 // send follow request if one is not sent
                 if (!displayed.hasFollowRequest(viewer)) {
                     displayed.addFollowRequest(viewer);
@@ -171,9 +160,9 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        unfollowButton.setOnClickListener(new View.OnClickListener() {
+        unfollowButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
 
                 viewer.unfollow(displayed);
                 /*if (viewer.isFollowing(displayed))
@@ -187,19 +176,9 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
-                String message = sendMessage.getText().toString();
-                displayed.sendMessage(message);
-                displayed.save();
-            }
-        });
-
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            public void handleClick() {
 
                 // only the viewer can change their displayed's image
                 if (!displayed.equals(viewer))

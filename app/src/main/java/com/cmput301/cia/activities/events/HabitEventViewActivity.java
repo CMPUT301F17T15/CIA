@@ -98,6 +98,10 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         } else
             image = null;
 
+        if (isFinishing())
+            return;
+        Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
+
         // handle the image being clicked
         habitEventPhoto.setOnClickListener(new TimedClickListener() {
             @Override
@@ -143,11 +147,6 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
         updateImage();
         habitEventComment.setText(event.getComment());
         setDateText();
-
-        if (isFinishing())
-            return;
-
-        Toast.makeText(this, "Select the image to pick one to attach", Toast.LENGTH_LONG).show();
     }
 
     /**
