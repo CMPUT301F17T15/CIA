@@ -34,7 +34,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by gsp on 2017/11/29.
+ * @author Shipin Guan
+ * @version 2
+ * Created on 2017/11/29.
+ *
+ * Display details of selected habit.
  */
 
 public class SingleStatisticViewActivity extends AppCompatActivity {
@@ -54,20 +58,21 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_habit_statistic);
-
+        //Date format for consistency
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //Initial line Chart for visualization of statistic
         lineChart = (LineChart) findViewById(R.id.LineChart);
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(false);
         lineChart.getAxisRight().setEnabled(false);
-
+        //LimitLine for confusing?
         LimitLine complete_limit = new LimitLine(1.05f, "Completed");
         complete_limit.setLineWidth(4f);
         complete_limit.enableDashedLine(10f, 10f, 0f);
         complete_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
         complete_limit.setTextSize(15f);
         complete_limit.setTextColor(Color.BLUE);
-
+        //LimitLine for confusing?
         LimitLine missed_limit = new LimitLine(-1.05f, "Missed");
         missed_limit.setLineWidth(4f);
         missed_limit.enableDashedLine(10f, 10f, 0f);
@@ -84,7 +89,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         leftAxis.enableGridDashedLine(10f, 10f, 0f);
         leftAxis.setDrawLimitLinesBehindData(true);
 
-
+        //Information receiving from previous activity
         user = (Profile) getIntent().getSerializableExtra("Profile");
         habitID = getIntent().getStringExtra("HabitID");
         habit = user.getHabitById(habitID);
@@ -105,13 +110,10 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
-
+        //Data processing for line chart
         List<String> xAxis = new ArrayList<>();
-
-        habit.setStartDate(new Date(117, 10, 25));
         weekdays = habit.getDaysOfWeek();
         startDate = habit.getStartDate();
-
         ArrayList<String> missed = new ArrayList<>();
         getMissedDates = habit.getMissedDates();
         for (Date date : getMissedDates) {
@@ -159,14 +161,15 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         lineDataSet.setValueTextSize(15f);
         lineDataSet.setValueTextColor(Color.RED);
 
-
         dataSets.add(lineDataSet);
         lineChart.setData(new LineData(dataSets));
         lineChart.setVisibleXRangeMaximum(30);
 
     }
 
-
+    /**
+     * helper for data processing for line chart
+     */
     public class XValueFormatter implements IAxisValueFormatter {
         private String[] mvalues;
 

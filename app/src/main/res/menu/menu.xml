@@ -4,8 +4,8 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu_button">
     <item
         android:id="@+id/menu_button_My_Profile"
         android:title="@string/menu_My_Profile"

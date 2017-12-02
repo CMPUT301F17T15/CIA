@@ -114,4 +114,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <Button
+        android:id="@+id/MessageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="371dp" />
+
 </android.support.constraint.ConstraintLayout>

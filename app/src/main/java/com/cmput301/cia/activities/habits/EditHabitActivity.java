@@ -35,8 +35,9 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
 /**
  * @author Shipin Guan
  * @version 2
+ * Created on 2017/11/12.
  *
- * Created by gsp on 2017/11/12.
+ * Edit existing habit
  */
 
 public class EditHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -46,10 +47,15 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
     private EditText reason;
     private TextView startDate;
     private MaterialDayPicker dayPicker;
+    //spinner for habit type
     private Spinner spinner;
-
+    //the habit is editing
     private Habit target;
 
+    /**
+     * Initializing/editing all the existing information of specific habit
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +131,7 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         //spinner finished
 
     }
-
+    //saving
     public void saveChange(View view){
         List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
         if (daysSelected.size() == 0) {
