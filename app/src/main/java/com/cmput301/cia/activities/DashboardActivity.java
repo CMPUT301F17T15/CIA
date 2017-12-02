@@ -60,6 +60,7 @@ public class DashboardActivity extends Fragment {
         Fragment todaysHabitsFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 1);
         if (todaysHabitsFragment instanceof TodaysHabitsFragment) {
             ((TodaysHabitsFragment) todaysHabitsFragment).updateTodaysList();
+            ((TodaysHabitsFragment) todaysHabitsFragment).checkCompletedEvents();
         }
 
     }

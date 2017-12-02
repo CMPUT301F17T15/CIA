@@ -185,6 +185,13 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         ft.commit();
     }
 
+    public void onHabitClicked(String completions, String habitId) {
+        Intent intent = new Intent(this, CreateHabitEventActivity.class);
+        intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, completions);
+        intent.putExtra(CreateHabitEventActivity.ID_HABIT_HASH, habitId);
+        startActivityForResult(intent, CREATE_EVENT);
+    }
+
     //Create the menu object
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,7 +221,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.save();
 
                 // update the today's tasks list
-//                checkCompletedEvents();
+                updateAllHabits();
             }
         }
         //Read result from create habit activity
