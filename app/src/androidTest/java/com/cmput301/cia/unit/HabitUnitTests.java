@@ -11,8 +11,11 @@ import com.cmput301.cia.models.HabitEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -22,9 +25,9 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Shipin1 on 2017-10-20.
- * Version 1.1
- * Last Modified on 2017-10-21
+ * @author Shipin
+ * @version 2
+ * Date: Dec 02, 2017
  *
  * This is the unit testing class for class Habit.
  * All the methods and constructor implemented in class Habit has been tested here.
@@ -195,14 +198,33 @@ public class HabitUnitTests {
         String title = "Habit1";
         String reason = "Reason1";
         Date date = new Date();
-        Date missDate = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
+        List<Integer> days = Arrays.asList(1,2,3, 4, 5, 6, 7);
         Habit habit = new Habit(title, reason, date, days, "");
-        assertTrue(habit.getTimesMissed() == 0);
-        assertNotSame(date, missDate);
-        habit.miss(missDate);
-        habit.miss(date);
-        assertTrue(habit.getTimesMissed() == 2);
+        assertTrue(habit.getMissedDates().size() == 0);
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        // missed the first day after setting new date
+        calendar.add(Calendar.DATE, -1);
+        habit.setStartDate(calendar.getTime());
+        assertTrue(habit.getMissedDates().size() == 1);
+
+        // miss 2 more days
+        calendar.add(Calendar.DATE, -2);
+        habit.setStartDate(calendar.getTime());
+        assertTrue(habit.getMissedDates().size() == 3);
+
+        // today was not counted in the missed part since it isn't over yet, so still at 3
+        habit.addHabitEvent(new HabitEvent("", new Date()));
+        assertTrue(habit.getMissedDates().size() == 3);
+
+        // completed on one of the missed dates, so decrease missed amount
+        habit.addHabitEvent(new HabitEvent("", calendar.getTime()));
+        assertTrue(habit.getMissedDates().size() == 2);
+
+        // no days the habit will occur on, so missed dates should always be 0
+        habit.setDaysOfWeek(new ArrayList<Integer>());
+        assertTrue(habit.getMissedDates().size() == 0);
     }
 
     @Test
@@ -277,43 +299,26 @@ public class HabitUnitTests {
     }
 
     @Test
-    public void testGetComment(){
-        String type = "type1";
-        String title = "Habit1";
-        String reason = "Reason1";
-        Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type);
-    }
-
-    @Test
-    public void testSetComment(){
-        String type = "type1";
-        String title = "Habit1";
-        String reason = "Reason1";
-        String comment1 = "Habit comment1";
-        Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, type);
-        habit.setReason(comment1);
-        assertEquals(habit.getReason(), comment1);
-    }
-
-    @Test
     public void testCompletionRate(){
         String type = "type1";
         String title = "Habit1";
         String reason = "Reason1";
         Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
+        List<Integer> days = Arrays.asList(1,2,3,4,5,6,7);
         Habit habit = new Habit(title, reason, date, days, type);
 
         assertTrue(habit.getCompletionPercent().equals("0.00%"));
-        habit.miss(new Date());
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        // missed the first day after setting new date
+        calendar.add(Calendar.DATE, -1);
+        habit.setStartDate(calendar.getTime());
         assertTrue(habit.getCompletionPercent().equals("0.00%"));
-        habit.addHabitEvent(new HabitEvent(""));
+        habit.addHabitEvent(new HabitEvent("", calendar.getTime()));
         assertTrue(habit.getCompletionPercent().equals("50.00%"));
-        habit.miss(new Date());
+
+        calendar.add(Calendar.DATE, -1);
+        habit.setStartDate(calendar.getTime());
         assertTrue(habit.getCompletionPercent().equals("33.33%"));
     }
 

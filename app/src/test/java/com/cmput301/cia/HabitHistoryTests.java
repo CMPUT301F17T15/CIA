@@ -25,9 +25,9 @@ import static org.junit.Assert.assertTrue;
 
 /**
  *
- * @author Guanfang, Adil Malik
- * @version 2
- * Date: Dec 02, 2017
+ * @author Guanfang
+ * @version 1
+ * Date: Oct 21, 2017
  *
  * Unit tests for the habit history aspect of profiles
  */
@@ -73,44 +73,6 @@ public class HabitHistoryTests {
         // We see there is any habits,
         List<Habit>habitList=profile.getHabits();
         assertNotNull(habitList);
-    }
-
-    /** testing method(s): Part of ViewHabitHistory(), It will
-     * test can we find the missing date?
-     */
-    @Test
-    public void testFindMissing(){
-        //We create a new habit.
-        String title = "Habit1";
-        String reason = "Reason1";
-        Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3,4,5,6,7);
-        Habit habit = new Habit(title, reason, date, days, "");
-        assertTrue(habit.getMissedDates().size() == 0);
-
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        // missed the first day after setting new date
-        calendar.add(Calendar.DATE, -1);
-        habit.setStartDate(calendar.getTime());
-        assertTrue(habit.getMissedDates().size() == 1);
-
-        // miss 2 more days
-        calendar.add(Calendar.DATE, -2);
-        habit.setStartDate(calendar.getTime());
-        assertTrue(habit.getMissedDates().size() == 3);
-
-        // today was not counted in the missed part since it isn't over yet, so still at 3
-        habit.addHabitEvent(new HabitEvent("", new Date()));
-        assertTrue(habit.getMissedDates().size() == 3);
-
-        // completed on one of the missed dates, so decrease missed amount
-        habit.addHabitEvent(new HabitEvent("", calendar.getTime()));
-        assertTrue(habit.getMissedDates().size() == 2);
-
-        // no days the habit will occur on, so missed dates should always be 0
-        habit.setDaysOfWeek(new ArrayList<Integer>());
-        assertTrue(habit.getMissedDates().size() == 0);
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
