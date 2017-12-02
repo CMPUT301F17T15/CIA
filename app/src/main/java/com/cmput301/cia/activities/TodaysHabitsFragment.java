@@ -78,7 +78,7 @@ public class TodaysHabitsFragment extends Fragment {
     /**
      * Update the checkable list view adapter for the "today's tasks" list
      */
-    private void resetCheckableListAdapter(){
+    public void resetCheckableListAdapter(){
         checkableAdapter = new CheckableListViewAdapter(getContext(), R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(checkableAdapter);
     }
@@ -96,7 +96,8 @@ public class TodaysHabitsFragment extends Fragment {
 
         // automatically check the events that have already been completed today
         for (int index = 0; index < todaysHabits.size(); ++index) {
-            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date())) {
+            if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()) &&
+                    !checkable.isItemChecked(index)) {
                 checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
             }
         }
