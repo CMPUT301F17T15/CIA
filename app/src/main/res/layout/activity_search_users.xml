@@ -39,7 +39,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
+            android:maxLength="15"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="37dp" />

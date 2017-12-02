@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<color name="colorPrimary">#3F51B5</color>-->
-    <!--<color name="colorPrimaryDark">#303F9F</color>-->
-    <!--<color name="colorAccent">#ffffff</color>-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#cb0e0e</color>
     <color name="colorToolBarBackground">#2e2e2e</color>
     <color name="colorMenuBackground">#aaaac2ea</color>
     <color name="colorMenuText">#ffffff</color>
     <color name="colorDelete">#B22222</color>
-    
-    <color name="colorPrimary">#283665</color>
-    <color name="colorPrimaryDark">#1E1F26</color>
-    <color name="colorAccent">#4D648D</color>
-    <color name="periwinkle">#D0E1F9</color>
 </resources>

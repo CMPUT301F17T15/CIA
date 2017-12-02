@@ -35,7 +35,9 @@ import java.util.Map;
  * @author Shipin Guan
  * @version 2
  *
- * Created by gsp on 2017/11/13.
+ * Created on 2017/11/13.
+ * Part of the habit statistic
+ * Display details of selected habit type/category
  */
 
 public class StatisticViewActivity extends AppCompatActivity {

@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support:support-v4:26.+'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     compile 'com.roughike:bottom-bar:2.3.1'
+    compile 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
     testCompile 'org.testng:testng:6.9.6'
     androidTestCompile 'junit:junit:4.12'
 }

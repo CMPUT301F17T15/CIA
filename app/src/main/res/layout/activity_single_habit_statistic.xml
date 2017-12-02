@@ -52,15 +52,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
+        android:textAllCaps="true"
         android:textColor="@color/colorAccent"
-        android:textAllCaps="false"
         android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintLeft_toRightOf="@+id/FromTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="7dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/LineChart"

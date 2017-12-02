@@ -111,6 +111,14 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <Button
+        android:id="@+id/MessageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="371dp" />
+
     <!--<Button-->
         <!--android:id="@+id/profileSendButton"-->
         <!--android:layout_width="wrap_content"-->

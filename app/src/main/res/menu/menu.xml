@@ -13,6 +13,7 @@
         <!--android:id="@+id/menu_button_Add_New_Habit"-->
         <!--android:title="@string/menu_AddNewHabit"-->
         <!--/>-->
+
     <item
         android:id="@+id/menu_button_Statistic"
         android:title="@string/menu_Statistic"

@@ -23,6 +23,9 @@ public abstract class TimedClickListener implements View.OnClickListener {
     // the time in milliseconds since the epoch the last successful click occurred at
     private long lastClick;
 
+    /**
+     * Construct a new TimedClickListener object
+     */
     public TimedClickListener(){
         lastClick = 0;
     }
@@ -37,7 +40,7 @@ public abstract class TimedClickListener implements View.OnClickListener {
     }
 
     /**
-     * Handle the unique logic for this button being clicked
+     * Handle the unique logic for this view being clicked
      */
     public abstract void handleClick();
 

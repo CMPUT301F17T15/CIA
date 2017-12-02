@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +32,7 @@ import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
 import com.cmput301.cia.controller.ExpandableListViewAdapter;
@@ -52,6 +54,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
+import me.toptas.fancyshowcase.OnCompleteListener;
+
 /**
  * @author Adil Malik, Shipin Guan
  * @version 6
@@ -67,6 +74,9 @@ public class HomePageActivity extends LocationRequestingActivity {
     // Codes to keep track of other activities
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
         FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
+
+    // maximum number of habits and habit events a user can have
+    private static final int MAX_HABIT_HISTORY_SIZE = 2000000000;
 
     // Intent extra data identifier for the profile of the signed in user
     public static final String ID_PROFILE = "User";
@@ -88,10 +98,6 @@ public class HomePageActivity extends LocationRequestingActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        //Create custom tool bar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        setSupportActionBar(toolbar);
-
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
 
@@ -99,6 +105,11 @@ public class HomePageActivity extends LocationRequestingActivity {
             user.load();
 
         user.synchronize();
+
+        //user app tour if first time login
+        if (user.getFirstTimeUse() == true){
+            userAppTour();
+        }
 
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
@@ -154,6 +165,12 @@ public class HomePageActivity extends LocationRequestingActivity {
         findViewById(R.id.homeAddHabitButton).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
+
+                if (user.getHabitsCount() >= MAX_HABIT_HISTORY_SIZE){
+                    Toast.makeText(HomePageActivity.this, "You've reached the maximum number of habits (" + MAX_HABIT_HISTORY_SIZE + ")", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent intent = new Intent(HomePageActivity.this, CreateHabitActivity.class);
                 if (user.getHabitCategories() != null) {
                     List<String> types = new ArrayList<>();
@@ -163,7 +180,7 @@ public class HomePageActivity extends LocationRequestingActivity {
                 startActivityForResult(intent, CREATE_HABIT);
             }
         });
-
+        //Buttons on the bottom of homepage
         findViewById(R.id.homeHistoryImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
@@ -214,6 +231,84 @@ public class HomePageActivity extends LocationRequestingActivity {
     }
 
     /**
+     * Home page functionality showcasing
+     * For first time user only
+     * Disabled after complete showcasing
+     */
+    private void userAppTour() {
+        FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
+
+        final FancyShowCaseView showCaseDaily = new FancyShowCaseView.Builder(this)
+                .titleStyle(0, Gravity.CENTER)
+                .title("Your daily task will be showing here")
+                .focusOn(findViewById(R.id.TodayToDoListView))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseExpandable = new FancyShowCaseView.Builder(this)
+                .titleStyle(0, Gravity.AXIS_PULL_AFTER)
+                .title("Habit will be sorted by type/category here")
+                .focusOn(findViewById(R.id.HabitTypeExpandableListView))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseSearch = new FancyShowCaseView.Builder(this)
+                .title("Want more friends?\nFind them all here")
+                .focusOn(findViewById(R.id.homeSearchImageView))
+                .build();
+
+        final FancyShowCaseView showCaseFollow = new FancyShowCaseView.Builder(this)
+                .title("You can find all the users that you are following here")
+                .focusOn(findViewById(R.id.homeFollowedImageView))
+                .build();
+
+        final FancyShowCaseView showCaseRequest = new FancyShowCaseView.Builder(this)
+                .title("The follow-requests from your fans will be showing here")
+                .focusOn(findViewById(R.id.homeRequestsImageView))
+                .build();
+
+        final FancyShowCaseView showCaseProfile = new FancyShowCaseView.Builder(this)
+                .title("This is your profile.")
+                .focusOn(findViewById(R.id.homeProfileImageView))
+                .build();
+
+        final FancyShowCaseView showCaseHistory = new FancyShowCaseView.Builder(this)
+                .title("You can find your passed habit history here")
+                .focusOn(findViewById(R.id.homeHistoryImageView))
+                .build();
+
+        final FancyShowCaseView showCaseMenu = new FancyShowCaseView.Builder(this)
+                .title("More navigation here ---->")
+                .titleStyle(0, Gravity.TOP)
+                .titleStyle(0, Gravity.LEFT)
+                .build();
+
+        final FancyShowCaseView showCaseHabit = new FancyShowCaseView.Builder(this)
+                .title("Now, you can create your first habit here")
+                .focusOn(findViewById(R.id.homeAddHabitButton))
+                .build();
+
+        showCaseQueue.add(showCaseExpandable);
+        showCaseQueue.add(showCaseDaily);
+        showCaseQueue.add(showCaseHistory);
+        showCaseQueue.add(showCaseProfile);
+        showCaseQueue.add(showCaseRequest);
+        showCaseQueue.add(showCaseFollow);
+        showCaseQueue.add(showCaseSearch);
+        showCaseQueue.add(showCaseMenu);
+        showCaseQueue.add(showCaseHabit);
+        showCaseQueue.show();
+
+        showCaseQueue.setCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete() {
+                user.setFirstTimeUse(false);
+                user.save();
+            }
+        });
+    }
+
+    /**
      * Handle the results of the request location permission being granted
      */
     @Override
@@ -227,7 +322,11 @@ public class HomePageActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
-    //Create the menu object
+    /**
+     * Create the menu object
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -235,8 +334,12 @@ public class HomePageActivity extends LocationRequestingActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //Menu item onclick bridge to specific activity.
-    //use startActivityForResult instead of startActivity for return value or refresh home page.
+    /**
+     * Menu item onclick bridge to specific activity.
+     * Use startActivityForResult instead of startActivity for return value or refresh home page.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -297,6 +400,9 @@ public class HomePageActivity extends LocationRequestingActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * onStart refresh the main page
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -325,6 +431,15 @@ public class HomePageActivity extends LocationRequestingActivity {
                 // successful event creation
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
+                Habit habit = user.getHabitById(habitId);
+                if (habit == null)
+                    return;
+
+                // fix double-clicking an item in the today's task list creating 2 events at once
+                // TODO
+                if (DateUtilities.isSameDay(habit.getLastCompletionDate(), event.getDate()))
+                    return;
+
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
@@ -441,12 +556,18 @@ public class HomePageActivity extends LocationRequestingActivity {
         }
 
         // set the listener to handle event completions
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        checkable.setOnItemClickListener(new /*AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {*/
+         TimedAdapterViewClickListener() {
+             @Override
+             public void handleClick(View view, int i) {
 
-                // This item is already clicked, prevent it from being disabled
-                if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                if (user.getHabitHistory().size() >= MAX_HABIT_HISTORY_SIZE){
+                    // refresh the list to undo the item being selected
+                    resetCheckableListAdapter();
+                    checkCompletedEvents();
+                    Toast.makeText(HomePageActivity.this, "You've reached the maximum number of habit events (" + MAX_HABIT_HISTORY_SIZE + ")", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
