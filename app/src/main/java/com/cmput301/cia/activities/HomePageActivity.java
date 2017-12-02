@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,6 +53,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
+import me.toptas.fancyshowcase.OnCompleteListener;
 
 /**
  * @author Adil Malik, Shipin Guan
@@ -98,6 +104,11 @@ public class HomePageActivity extends LocationRequestingActivity {
             user.load();
 
         user.synchronize();
+
+        //user app tour if first time login
+        if (user.getFirstTimeUse() == true){
+            userAppTour();
+        }
 
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
@@ -216,6 +227,82 @@ public class HomePageActivity extends LocationRequestingActivity {
         });
 
         FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.homePageLayout));
+    }
+
+    /**
+     * Home page functionality showcasing
+     */
+    private void userAppTour() {
+        FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
+
+        final FancyShowCaseView showCaseDaily = new FancyShowCaseView.Builder(this)
+                .titleStyle(0, Gravity.CENTER)
+                .title("Your daily task will be showing here")
+                .focusOn(findViewById(R.id.TodayToDoListView))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseExpandable = new FancyShowCaseView.Builder(this)
+                .titleStyle(0, Gravity.AXIS_PULL_AFTER)
+                .title("Habit will be sorted by type/category here")
+                .focusOn(findViewById(R.id.HabitTypeExpandableListView))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseSearch = new FancyShowCaseView.Builder(this)
+                .title("Want more friends?\nFind them all here")
+                .focusOn(findViewById(R.id.homeSearchImageView))
+                .build();
+
+        final FancyShowCaseView showCaseFollow = new FancyShowCaseView.Builder(this)
+                .title("You can find all the users that you are following here")
+                .focusOn(findViewById(R.id.homeFollowedImageView))
+                .build();
+
+        final FancyShowCaseView showCaseRequest = new FancyShowCaseView.Builder(this)
+                .title("The follow-requests from your fans will be showing here")
+                .focusOn(findViewById(R.id.homeRequestsImageView))
+                .build();
+
+        final FancyShowCaseView showCaseProfile = new FancyShowCaseView.Builder(this)
+                .title("This is your profile.")
+                .focusOn(findViewById(R.id.homeProfileImageView))
+                .build();
+
+        final FancyShowCaseView showCaseHistory = new FancyShowCaseView.Builder(this)
+                .title("You can find your passed habit history here")
+                .focusOn(findViewById(R.id.homeHistoryImageView))
+                .build();
+
+        final FancyShowCaseView showCaseMenu = new FancyShowCaseView.Builder(this)
+                .title("More navigation here ---->")
+                .titleStyle(0, Gravity.TOP)
+                .titleStyle(0, Gravity.LEFT)
+                .build();
+
+        final FancyShowCaseView showCaseHabit = new FancyShowCaseView.Builder(this)
+                .title("Now, you can create your first habit here")
+                .focusOn(findViewById(R.id.homeAddHabitButton))
+                .build();
+
+        showCaseQueue.add(showCaseExpandable);
+        showCaseQueue.add(showCaseDaily);
+        showCaseQueue.add(showCaseHistory);
+        showCaseQueue.add(showCaseProfile);
+        showCaseQueue.add(showCaseRequest);
+        showCaseQueue.add(showCaseFollow);
+        showCaseQueue.add(showCaseSearch);
+        showCaseQueue.add(showCaseMenu);
+        showCaseQueue.add(showCaseHabit);
+        showCaseQueue.show();
+
+        showCaseQueue.setCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete() {
+                user.setFirstTimeUse(false);
+                user.save();
+            }
+        });
     }
 
     /**
