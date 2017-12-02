@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else {
                     // No profile found, sign the user in with their new account
-                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
+                    Intent intent = new Intent(MainActivity.this, HomeTabbedActivity.class);
                     intent.putExtra(HomePageActivity.ID_PROFILE, new Profile(name));
                     startActivity(intent);
                 }

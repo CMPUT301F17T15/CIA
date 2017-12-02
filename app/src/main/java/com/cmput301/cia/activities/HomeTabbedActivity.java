@@ -16,6 +16,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,6 +57,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.FocusShape;
+import me.toptas.fancyshowcase.OnCompleteListener;
+
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
@@ -64,6 +72,8 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     // Profile of the signed in user
     private Profile user;
 
+    BottomBar bottomBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +81,98 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
         loadCurrentUser();
         initializeBottomBar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //user app tour if first time login
+        if (user.getFirstTimeUse()){
+            userAppTour();
+        }
+    }
+
+    private void userAppTour() {
+        FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
+
+
+        final FancyShowCaseView showCaseExpandable = new FancyShowCaseView.Builder(this)
+                .title("Habit will be sorted by type/category here")
+                .focusOn(getDashboardFragment().getTabView(0))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseDaily = new FancyShowCaseView.Builder(this)
+                .title("Your daily task will be showing here")
+                .focusOn(getDashboardFragment().getTabView(1))
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .build();
+
+        final FancyShowCaseView showCaseSearch = new FancyShowCaseView.Builder(this)
+                .title("Want more friends?\nFind them all here")
+                .focusOn(bottomBar.getTabWithId(R.id.tab_search))
+                .build();
+
+//        final FancyShowCaseView showCaseFollow = new FancyShowCaseView.Builder(this)
+//                .title("You can find all the users that you are following here")
+//                .focusOn(findViewById(R.id.homeFollowedImageView))
+//                .build();
+
+        final FancyShowCaseView showCaseRequest = new FancyShowCaseView.Builder(this)
+                .title("The follow-requests from your fans will be showing here")
+                .focusOn(bottomBar.getTabWithId(R.id.tab_followRequests))
+                .build();
+
+        final FancyShowCaseView showCaseProfile = new FancyShowCaseView.Builder(this)
+                .title("This is your profile.")
+                .focusOn(bottomBar.getTabWithId(R.id.tab_profile))
+                .build();
+
+//        final FancyShowCaseView showCaseHistory = new FancyShowCaseView.Builder(this)
+//                .title("You can find your passed habit history here")
+//                .focusOn(findViewById(R.id.homeHistoryImageView))
+//                .build();
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int phoneWidth = displayMetrics.widthPixels;
+
+        int offsetX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+        int offsetY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 26, getResources().getDisplayMetrics());
+        int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics());
+
+        final FancyShowCaseView showCaseMenu = new FancyShowCaseView.Builder(this)
+                .title("More navigation here")
+                .focusCircleAtPosition(phoneWidth - offsetX, offsetY, radius)
+                .build();
+
+
+
+        final FancyShowCaseView showCaseHabit = new FancyShowCaseView.Builder(this)
+                .title("Now, you can create your first habit here")
+                .focusOn(bottomBar.getTabWithId(R.id.tab_addHabit))
+                .build();
+
+        showCaseQueue.add(showCaseExpandable);
+        showCaseQueue.add(showCaseDaily);
+//        showCaseQueue.add(showCaseHistory);
+        showCaseQueue.add(showCaseProfile);
+        showCaseQueue.add(showCaseRequest);
+//        showCaseQueue.add(showCaseFollow);
+        showCaseQueue.add(showCaseSearch);
+        showCaseQueue.add(showCaseMenu);
+        showCaseQueue.add(showCaseHabit);
+        showCaseQueue.show();
+
+        showCaseQueue.setCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete() {
+                user.setFirstTimeUse(false);
+                user.save();
+            }
+        });
     }
 
     @Override
@@ -124,7 +226,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
      *      profile
      */
     private void initializeBottomBar() {
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
@@ -216,6 +318,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -325,6 +428,14 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         if (f instanceof DashboardActivity) {
             ((DashboardActivity) f).updateHabits();
         }
+    }
+
+    public DashboardActivity getDashboardFragment() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.homeFragmentContainer);
+        if (f instanceof DashboardActivity) {
+            return ((DashboardActivity) f);
+        }
+        return null;
     }
 
     //Menu item onclick bridge to specific activity.

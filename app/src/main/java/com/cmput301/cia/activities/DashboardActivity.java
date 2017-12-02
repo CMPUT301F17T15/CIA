@@ -65,6 +65,10 @@ public class DashboardActivity extends Fragment {
 
     }
 
+    public View getTabView(int index) {
+        return ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(index);
+    }
+
     public static DashboardActivity create(Profile user) {
         DashboardActivity dashboardActivity = new DashboardActivity();
         Bundle args = new Bundle();
