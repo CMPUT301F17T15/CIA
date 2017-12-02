@@ -305,7 +305,6 @@ public class Profile extends ElasticSearchable {
         for (Habit habit : toComplete){
             Date date = habit.getLastCompletionDate();
             if (date == null || DateUtilities.isBefore(date, endingDay)){
-                habit.miss(endingDay);
                 powerPoints = 0;
             }
         }

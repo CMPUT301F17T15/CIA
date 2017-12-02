@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -23,9 +24,9 @@ import static org.junit.Assert.assertTrue;
 
 /**
  *
- * @author: Guanfang
- * @version 1
- * Date: Oct 21, 2017
+ * @author Guanfang, Adil Malik
+ * @version 2
+ * Date: Dec 02, 2017
  *
  * Unit tests for the habit history aspect of profiles
  */
@@ -82,18 +83,29 @@ public class HabitHistoryTests {
         String title = "Habit1";
         String reason = "Reason1";
         Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
+        List<Integer> days = Arrays.asList(1,2,3,4,5,6,7);
         Habit habit = new Habit(title, reason, date, days, "");
-        // We give it a missing date.
-        habit.miss(date);
-        String name = "Test1";
-        Profile profile = new Profile(name);
-        // We add to the new profile.
-        profile.addHabit(habit);
-        // We find the missing days.
-        List<Date> missDates= habit.getMissedDates();
-        // We compared to say there is any missing dates.
-        assert(missDates.size() > 0);
+        assertTrue(habit.getMissedDates().size() == 0);
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        // missed the first day after setting new date
+        calendar.add(Calendar.DATE, -1);
+        habit.setStartDate(calendar.getTime());
+        assertTrue(habit.getMissedDates().size() == 1);
+
+        // miss 2 more days
+        calendar.add(Calendar.DATE, -2);
+        habit.setStartDate(calendar.getTime());
+        assertTrue(habit.getMissedDates().size() == 3);
+
+        // today was not counted in the missed part since it isn't over yet, so still at 3
+        habit.addHabitEvent(new HabitEvent("", new Date()));
+        assertTrue(habit.getMissedDates().size() == 3);
+
+        // completed on one of the missed dates, so decrease missed amount
+        habit.addHabitEvent(new HabitEvent("", calendar.getTime()));
+        assertTrue(habit.getMissedDates().size() == 2);
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
