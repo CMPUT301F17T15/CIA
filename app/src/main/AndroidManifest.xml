@@ -38,8 +38,7 @@
         <activity
             android:name=".activities.habits.StatisticActivity"
             android:label="Habit Statistics"
-            android:parentActivityName=".activities.HomePageActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:parentActivityName=".activities.HomePageActivity" />
         <activity
             android:name=".activities.habits.CreateHabitActivity"
             android:label="Create Habit" />

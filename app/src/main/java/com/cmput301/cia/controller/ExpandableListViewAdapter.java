@@ -19,7 +19,9 @@ import java.util.Set;
 
 /**
  * @author Shipin Guan
- * @version 2
+ * @version 2.1
+ *
+ * Modified by Jessica Prieto on 2017/12/01
  *
  * Created by gsp on 2017/11/6.
  * Adapter for expandable list view for habit type
