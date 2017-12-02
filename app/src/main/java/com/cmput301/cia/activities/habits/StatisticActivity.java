@@ -30,7 +30,10 @@ import java.util.Map;
  * @author Shipin Guan
  * @version 2
  *
- * Created by gsp on 2017/11/7.
+ * Created on 2017/11/7.
+ * Main page for habit statistic
+ * Habit sorted by Category
+ *
  */
 
 public class StatisticActivity extends AppCompatActivity {

@@ -179,7 +179,7 @@ public class HomePageActivity extends LocationRequestingActivity {
                 startActivityForResult(intent, CREATE_HABIT);
             }
         });
-
+        //Buttons on the bottom of homepage
         findViewById(R.id.homeHistoryImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
@@ -231,6 +231,8 @@ public class HomePageActivity extends LocationRequestingActivity {
 
     /**
      * Home page functionality showcasing
+     * For first time user only
+     * Disabled after complete showcasing
      */
     private void userAppTour() {
         FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
@@ -319,7 +321,11 @@ public class HomePageActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
-    //Create the menu object
+    /**
+     * Create the menu object
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -327,8 +333,12 @@ public class HomePageActivity extends LocationRequestingActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //Menu item onclick bridge to specific activity.
-    //use startActivityForResult instead of startActivity for return value or refresh home page.
+    /**
+     * Menu item onclick bridge to specific activity.
+     * Use startActivityForResult instead of startActivity for return value or refresh home page.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -395,6 +405,9 @@ public class HomePageActivity extends LocationRequestingActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * onStart refresh the main page
+     */
     @Override
     protected void onStart() {
         super.onStart();
