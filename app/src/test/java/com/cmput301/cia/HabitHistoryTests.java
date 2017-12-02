@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -23,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  *
- * @author: Guanfang
+ * @author Guanfang
  * @version 1
  * Date: Oct 21, 2017
  *
@@ -71,29 +73,6 @@ public class HabitHistoryTests {
         // We see there is any habits,
         List<Habit>habitList=profile.getHabits();
         assertNotNull(habitList);
-    }
-
-    /** testing method(s): Part of ViewHabitHistory(), It will
-     * test can we find the missing date?
-     */
-    @Test
-    public void testFindMissing(){
-        //We create a new habit.
-        String title = "Habit1";
-        String reason = "Reason1";
-        Date date = new Date();
-        List<Integer> days = Arrays.asList(1,2,3);
-        Habit habit = new Habit(title, reason, date, days, "");
-        // We give it a missing date.
-        habit.miss(date);
-        String name = "Test1";
-        Profile profile = new Profile(name);
-        // We add to the new profile.
-        profile.addHabit(habit);
-        // We find the missing days.
-        List<Date> missDates= habit.getMissedDates();
-        // We compared to say there is any missing dates.
-        assert(missDates.size() > 0);
     }
 
     /** testing method(s): part of HabitFilterByType(), It will

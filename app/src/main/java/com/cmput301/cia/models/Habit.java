@@ -4,13 +4,18 @@
 
 package com.cmput301.cia.models;
 
+import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +48,6 @@ public class Habit extends ElasticSearchable {
     // The days of the week this habit should occur on
     private List<Integer> daysOfWeek;
 
-    // The dates this event was missed on
-    private List<Date> missedDates;
-
     /**
 
      * Construct a new habit object
@@ -62,7 +64,6 @@ public class Habit extends ElasticSearchable {
         this.startDate = startDate;
         events = new ArrayList<>();
         daysOfWeek = days;
-        missedDates = new ArrayList<>();
     }
 
     /**
@@ -165,7 +166,7 @@ public class Habit extends ElasticSearchable {
      * @return the number of times this habit was missed
      */
     public int getTimesMissed() {
-        return missedDates.size();
+        return getMissedDates().size();
     }
 
     /**
@@ -173,14 +174,6 @@ public class Habit extends ElasticSearchable {
      */
     public int getTimesCompleted() {
         return events.size();
-    }
-
-    /**
-     * Increase the number of times this habit was missed
-     * @param date is the date the event was missed on
-     */
-    public void miss(Date date){
-        missedDates.add(date);
     }
 
     /**
@@ -196,6 +189,31 @@ public class Habit extends ElasticSearchable {
      * @return the dates that this habit was missed
      */
     public List<Date> getMissedDates(){
+
+        List<Date> missedDates = new ArrayList<>();
+        Date current = startDate;
+        Date today = new Date();
+
+        // the habit has not started yet
+        if (DateUtilities.isBefore(today, current))
+            return missedDates;
+
+        List<Date> completedDates = new ArrayList<>();
+        for (HabitEvent event : events)
+            completedDates.add(event.getDate());
+
+        Collections.sort(completedDates);
+
+        Calendar calendar = new GregorianCalendar();
+        // go through each day this habit was meant to be completed, and see if it was on that day
+        while (!DateUtilities.isSameDay(current, today)){
+            calendar.setTime(current);
+            if (occursOn(calendar.get(Calendar.DAY_OF_WEEK)) && Collections.binarySearch(completedDates, current) < 0){
+                missedDates.add(current);
+            }
+            calendar.add(Calendar.DATE, 1);
+            current = calendar.getTime();
+        }
         return missedDates;
     }
 
@@ -291,7 +309,6 @@ public class Habit extends ElasticSearchable {
         startDate = other.startDate;
         events = other.events;
         daysOfWeek = other.daysOfWeek;
-        missedDates = other.missedDates;
     }
 
     /**
@@ -323,7 +340,7 @@ public class Habit extends ElasticSearchable {
      */
     public String getCompletionPercent(){
         int success = events.size();
-        int misses = missedDates.size();
+        int misses = getTimesMissed();
         if (misses == 0 && success == 0){
             return "0.00%";
         } else {
