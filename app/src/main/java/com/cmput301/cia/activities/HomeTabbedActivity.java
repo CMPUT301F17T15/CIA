@@ -70,7 +70,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         Location location = DeviceUtilities.getLocation(this);
         if (location == null)
             return;
-  
+
         Intent intent = new Intent(this, ViewEventsMapActivity.class);
         intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) user.getNearbyEvents(location));
         startActivity(intent);

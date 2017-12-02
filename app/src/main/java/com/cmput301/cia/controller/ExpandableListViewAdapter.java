@@ -6,6 +6,7 @@ package com.cmput301.cia.controller;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -130,9 +131,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View view, ViewGroup parent) {
         TextView textView = new TextView(context);
         textView.setText((String)getGroup(i));
-        textView.setPadding(100, 0, 0, 0);
+        textView.setPadding(100, 36, 10, 36);
         textView.setTextColor(Color.BLACK);
-        textView.setTextSize(30);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         return textView;
     }
 
@@ -149,9 +150,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         final TextView textView = new TextView(context);
         textView.setText((String)getChild(i, i1));
-        textView.setPadding(200, 30, 30, 0);
+        textView.setPadding(200, 24, 0, 24);
         textView.setTextColor(Color.DKGRAY);
-        textView.setTextSize(20);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
         return textView;
     }
 
