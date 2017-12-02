@@ -34,7 +34,7 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
  * @author Shipin Guan
- * @version 2
+ * @version 2.1
  *
  * version 1 creted by Jessica Priero
  *
