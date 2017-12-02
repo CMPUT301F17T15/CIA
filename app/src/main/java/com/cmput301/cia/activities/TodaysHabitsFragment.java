@@ -54,6 +54,13 @@ public class TodaysHabitsFragment extends Fragment {
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        checkCompletedEvents();
+    }
+
     public static Fragment create(Profile user) {
         TodaysHabitsFragment todaysHabitsFragment = new TodaysHabitsFragment();
         Bundle args = new Bundle();
