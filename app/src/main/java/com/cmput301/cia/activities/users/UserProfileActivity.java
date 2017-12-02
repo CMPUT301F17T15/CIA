@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.Gravity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private Button followButton;
     private Button unfollowButton;
+    private Button messageButton;
 
     // the user's comment
     private EditText commentText;
@@ -89,6 +88,8 @@ public class UserProfileActivity extends AppCompatActivity {
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
+        messageButton = (Button) findViewById(R.id.MessageButton);
+
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
@@ -96,6 +97,7 @@ public class UserProfileActivity extends AppCompatActivity {
         if (viewer.equals(displayed)){
             followButton.setVisibility(View.INVISIBLE);
             unfollowButton.setVisibility(View.INVISIBLE);
+            messageButton.setVisibility(View.INVISIBLE);
         } else {
             saveButton.setVisibility(View.INVISIBLE);
             commentText.setEnabled(false);
@@ -175,6 +177,14 @@ public class UserProfileActivity extends AppCompatActivity {
                 followButton.setVisibility(View.VISIBLE);
             }
         });
+
+        messageButton.setOnClickListener(new TimedClickListener() {
+            @Override
+            public void handleClick() {
+
+            }
+
+            });
 
         imageView.setOnClickListener(new TimedClickListener() {
             @Override
