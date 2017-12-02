@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 
 public class DashboardActivity extends Fragment {
@@ -48,6 +49,15 @@ public class DashboardActivity extends Fragment {
         dashboardTabsAdapter = new DashboardTabsAdapter(getChildFragmentManager());
         viewPager.setAdapter(dashboardTabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public void updateHabits() {
+        Fragment f = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + viewPager.getCurrentItem());
+        if (f instanceof HabitsFragment) {
+            ((HabitsFragment) f).updateAllHabits();
+        } else if (f instanceof TodaysHabitsFragment) {
+            ((TodaysHabitsFragment) f).updateTodaysList();
+        }
     }
 
     public static DashboardActivity create(Profile user) {

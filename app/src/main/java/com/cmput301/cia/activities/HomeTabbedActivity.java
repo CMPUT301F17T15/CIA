@@ -13,14 +13,17 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
@@ -32,6 +35,11 @@ import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
+import com.cmput301.cia.controller.ExpandableListViewAdapter;
+import com.cmput301.cia.models.AddHabitEvent;
+import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
+import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
@@ -153,7 +161,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         // or ft.add(R.id.your_placeholder, new FooFragment());
         // Complete the changes added above
         ft.commit();
-
     }
 
     private void onAddHabitClicked() {
@@ -184,6 +191,114 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * Handle the results of an activity that has finished
+     * @param requestCode the activity's identifying code
+     * @param resultCode the result status of the finished activity
+     * @param data the activity's returned intent information
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // When a new habit event is created
+        if (requestCode == CREATE_EVENT) {
+            if (resultCode == RESULT_OK) {
+
+                // successful event creation
+                HabitEvent event = (HabitEvent) data.getSerializableExtra(CreateHabitEventActivity.RETURNED_HABIT);
+                String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
+                OfflineEvent addEvent = new AddHabitEvent(habitId, event);
+                user.tryHabitEvent(addEvent);
+                user.save();
+
+                // update the today's tasks list
+//                checkCompletedEvents();
+            }
+        }
+        //Read result from create habit activity
+        else if(requestCode == CREATE_HABIT) {
+            if(resultCode == RESULT_OK) {
+                // add a new habit
+                Habit habit = (Habit) data.getSerializableExtra("Habit");
+
+                // save the habit so that it has a valid ID
+                // this is necessary for habit events, since they need to refer to the habit's ID
+                if (habit.save()){
+                    user.addHabit(habit);
+                    user.save();
+                    updateAllHabits();
+                } else {
+                    Toast.makeText(this, "There was an error connecting to the database. Habit was not saved.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+        //result from delete habit button
+        else if (requestCode == VIEW_HABIT){
+            if (resultCode == RESULT_OK){
+
+                // whether the habit was deleted or updated
+                boolean deleted = data.getBooleanExtra("Deleted", false);
+                if (deleted) {
+                    String id = data.getStringExtra("HabitID");
+                    user.removeHabit(user.getHabitById(id));
+                } else {
+                    // update the habit
+                    Habit habit = (Habit) data.getSerializableExtra("Habit");
+                    for (Habit h : user.getHabits()){
+                        if (h.equals(habit)){
+                            h.copyFrom(habit);
+                            break;
+                        }
+                    }
+                }
+
+                updateAllHabits();
+                user.save();
+            }
+
+        } else if (requestCode == VIEW_HABIT_HISTORY){
+            if (resultCode == RESULT_OK) {
+                user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
+                user.save();
+
+                updateAllHabits();
+            }
+        } else if (requestCode == VIEW_PROFILE){
+            if (resultCode == RESULT_OK){
+                user.copyFrom((Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID), false);
+                user.save();
+            }
+        } else if (requestCode == FOLLOWED_USERS){
+            if (resultCode == RESULT_OK){
+                List<Profile> followed = (List<Profile>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
+                for (Profile toFollow : followed) {
+                    user.follow(toFollow);
+                }
+            }
+        } else if (requestCode == SEARCH_USERS){
+            if (resultCode == RESULT_OK){
+                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE), false);
+                user.save();
+            }
+        } else if (requestCode == FOLLOW_REQUESTS){
+            if (resultCode == RESULT_OK){
+                // TODO
+                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
+                user.copyFrom(result);
+                user.save();*/
+            }
+        }
+
+    }
+
+    public void updateAllHabits() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.homeFragmentContainer);
+        if (f instanceof DashboardActivity) {
+            ((DashboardActivity) f).updateHabits();
+        }
     }
 
     //Menu item onclick bridge to specific activity.

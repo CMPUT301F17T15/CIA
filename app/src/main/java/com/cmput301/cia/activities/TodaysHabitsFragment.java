@@ -56,6 +56,11 @@ public class TodaysHabitsFragment extends Fragment {
         return todaysHabitsFragment;
     }
 
+    public void updateTodaysList() {
+        todaysHabits = user.getTodaysHabits();
+        resetCheckableListAdapter();
+    }
+
     /**
      * Update the checkable list view adapter for the "today's tasks" list
      */

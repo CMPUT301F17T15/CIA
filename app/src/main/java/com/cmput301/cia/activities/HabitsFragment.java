@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created by Jessica on 2017-12-01.
@@ -104,5 +105,11 @@ public class HabitsFragment extends Fragment {
             }
         });
 
+    }
+
+    public void updateAllHabits() {
+        adapter = new ExpandableListViewAdapter(getContext(), user);
+        expandableListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }
