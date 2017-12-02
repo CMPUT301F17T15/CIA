@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -106,6 +107,10 @@ public class HabitHistoryTests {
         // completed on one of the missed dates, so decrease missed amount
         habit.addHabitEvent(new HabitEvent("", calendar.getTime()));
         assertTrue(habit.getMissedDates().size() == 2);
+
+        // no days the habit will occur on, so missed dates should always be 0
+        habit.setDaysOfWeek(new ArrayList<Integer>());
+        assertTrue(habit.getMissedDates().size() == 0);
     }
 
     /** testing method(s): part of HabitFilterByType(), It will
