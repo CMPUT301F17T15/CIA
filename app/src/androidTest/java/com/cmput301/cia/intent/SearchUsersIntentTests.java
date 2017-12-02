@@ -7,22 +7,15 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
-import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
-
-import java.lang.reflect.Field;
-import java.util.Date;
 
 /**
  * Version 1

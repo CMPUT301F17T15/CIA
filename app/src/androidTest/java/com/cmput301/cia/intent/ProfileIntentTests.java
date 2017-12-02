@@ -8,18 +8,18 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
-import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 /**
  * Version 1
@@ -29,8 +29,6 @@ import java.util.Date;
  * This class tests the UI for viewing a user's profile
  * NOTE: These tests require an internet connection
  */
-
-// TODO: viewing other people's profiles, following/saving
 
 public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
 
@@ -109,6 +107,67 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
 
         assertTrue(user.getComment().equals(newComment));
+    }
+
+    /**
+     * test viewing other people's profiles, along with following + unfollowing
+     */
+    public void testOtherProfile() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickOnActionBarItem(R.id.menu_button_searchUsers);
+        solo.clickOnMenuItem("Search Users");
+        solo.sleep(2500);
+        solo.assertCurrentActivity("wrong activity", SearchUsersActivity.class);
+
+        solo.enterText(0, "vfutest13");
+        solo.sleep(1000);
+        solo.clickOnButton("Search");
+        solo.sleep(2500);
+
+        ListAdapter adapter = ((ListView) solo.getView(R.id.searchUsersList)).getAdapter();
+        if (adapter.getCount() > 0) {
+            solo.clickInList(1, 0);
+            solo.sleep(2000);
+            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+
+            // the profile being displayed
+            Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
+            field.setAccessible(true);
+            Profile viewed = (Profile)field.get(solo.getCurrentActivity());
+
+            // the profile of the signed in user
+            Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("viewer");
+            field2.setAccessible(true);
+            Profile viewer = (Profile)field2.get(solo.getCurrentActivity());
+
+            assertTrue(!viewer.isFollowing(viewed));
+            assertTrue(!viewed.hasFollowRequest(viewer));
+
+            solo.clickOnButton("Follow");
+            solo.sleep(1500);
+            assertTrue("database error", viewed.hasFollowRequest(viewer));
+            solo.sleep(1500);
+
+            viewed.acceptFollowRequest(viewer);
+            solo.sleep(1500);
+            assertFalse("database error", viewed.hasFollowRequest(viewer));
+            assertTrue("database error", viewer.isFollowing(viewed));
+
+            solo.goBack();
+            solo.sleep(3000);
+            solo.assertCurrentActivity("wrong activity", SearchUsersActivity.class);
+
+            solo.clickInList(1, 0);
+            solo.sleep(2000);
+            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+
+            solo.clickOnButton("Unfollow");
+            solo.sleep(1500);
+            assertFalse("database error", viewed.hasFollowRequest(viewer));
+            assertFalse("database error", viewer.isFollowing(viewed));
+            solo.sleep(1500);
+
+            // TODO: cancel pending request
+        }
     }
 
     @Override
