@@ -84,6 +84,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
+    /**
+     * loads the current user that just logged in
+     */
     private void loadCurrentUser() {
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
@@ -111,6 +114,15 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         user.save();
     }
 
+    /**
+     * set up the navigation tabs at the bottom of the screen
+     * navigation items:
+     *      dashboard
+     *      search
+     *      add new habit
+     *      follow requests
+     *      profile
+     */
     private void initializeBottomBar() {
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -147,18 +159,25 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         });
     }
 
+    /**
+     * goes to the Dashboard fragment and loads it in the activity
+     */
     private void onDashboardClicked() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.homeFragmentContainer, DashboardActivity.create(user));
         ft.commit();
     }
 
+    /**
+     * goes to the SearchActivity fragment and loads it in this activity
+     */
     private void onSearchClicked() {
         // Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         // Replace the contents of the container with the new fragment
         ft.replace(R.id.homeFragmentContainer, SearchUsersActivity.create(user));
-        // or ft.add(R.id.your_placeholder, new FooFragment());
+
         // Complete the changes added above
         ft.commit();
     }

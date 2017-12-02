@@ -72,14 +72,6 @@ public class UserProfileFragment extends Fragment {
     // the image attached to the viewed displayed
     private Bitmap image;
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent();
-//        setResult(RESULT_CANCELED, intent);
-//        finish();
-//        super.onBackPressed();
-//    }
-
     public static Fragment create(Profile profile, Profile user) {
         UserProfileFragment userProfileFragment = new UserProfileFragment();
         Bundle args = new Bundle();

@@ -115,17 +115,6 @@ public class SearchUsersActivity extends Fragment {
         users = new ArrayList<>();
     }
 
-    private void setupSearchBar() {
-        View toolbarContainer =  LayoutInflater
-                .from(getContext())
-                .inflate(R.layout.activity_search_users, (ViewGroup) getView(), false);
-
-//        Toolbar toolbar = toolbarContainer.findViewById(R.id.toolbar);
-//        getActivity().setActionBar(toolbar);
-//                setA(toolbar);
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -140,17 +129,17 @@ public class SearchUsersActivity extends Fragment {
      * @param resultCode the result status of the finished activity
      * @param data the activity's returned intent information
      */
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-//        // When a new habit event is created
-//        if (requestCode == VIEW_PROFILE) {
-//            if (resultCode == RESULT_OK) {
-//                Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-//                user.copyFrom(newProfile, false);
-//            }
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // When a new habit event is created
+        if (requestCode == VIEW_PROFILE) {
+            if (resultCode == RESULT_OK) {
+                Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
+                user.copyFrom(newProfile, false);
+            }
+        }
+    }
 
     /**
      * Update the list of profiles that will be displayed on the screen

@@ -41,13 +41,6 @@ public class FollowRequestsActivity extends Fragment {
     private List<Profile> followRequests;
     private FollowersRequestAdapter adapter;
 
-//    @Override
-//    public void onPostResume() {
-//        super.onPostResume();
-//        followRequests = user.getFollowRequests();
-//        adapter.setFollowRequests(followRequests);
-//    }
-
     public static FollowRequestsActivity create(Profile currentUser) {
         FollowRequestsActivity followRequestsActivity = new FollowRequestsActivity();
         Bundle args = new Bundle();
@@ -84,5 +77,12 @@ public class FollowRequestsActivity extends Fragment {
 
         rvFollowerRequests.setAdapter(adapter);
         rvFollowerRequests.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        followRequests = user.getFollowRequests();
+        adapter.setFollowRequests(followRequests);
     }
 }
