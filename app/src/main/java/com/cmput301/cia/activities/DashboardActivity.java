@@ -52,12 +52,16 @@ public class DashboardActivity extends Fragment {
     }
 
     public void updateHabits() {
-        Fragment f = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + viewPager.getCurrentItem());
-        if (f instanceof HabitsFragment) {
-            ((HabitsFragment) f).updateAllHabits();
-        } else if (f instanceof TodaysHabitsFragment) {
-            ((TodaysHabitsFragment) f).updateTodaysList();
+        Fragment habitsFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 0);
+        if (habitsFragment instanceof HabitsFragment) {
+            ((HabitsFragment) habitsFragment).updateAllHabits();
         }
+
+        Fragment todaysHabitsFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 1);
+        if (todaysHabitsFragment instanceof TodaysHabitsFragment) {
+            ((TodaysHabitsFragment) todaysHabitsFragment).updateTodaysList();
+        }
+
     }
 
     public static DashboardActivity create(Profile user) {
