@@ -65,15 +65,16 @@ public class GeolocationUnitTests {
         user.unfollow(followee);
         followee.setHabits(new ArrayList<Habit>());
         user.setHabits(new ArrayList<Habit>());
+        Thread.sleep(3000);
 
         user.addHabit(habit);
         followee.addHabit(habit2);
         followee.addHabit(habit3);
 
         followee.addFollowRequest(user);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         followee.acceptFollowRequest(user);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // location of both profiles
         Location location = new Location(LocationManager.GPS_PROVIDER);
@@ -81,7 +82,7 @@ public class GeolocationUnitTests {
         location.setLongitude(10.0);
 
         assertTrue(followee.save());
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         // no events for either user
         assertTrue(user.getNearbyEvents(location).size() == 0);

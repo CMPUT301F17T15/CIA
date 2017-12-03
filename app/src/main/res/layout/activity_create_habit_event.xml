@@ -137,7 +137,6 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
-
     <Button
         android:id="@+id/cheResetImageButton"
         android:layout_width="wrap_content"

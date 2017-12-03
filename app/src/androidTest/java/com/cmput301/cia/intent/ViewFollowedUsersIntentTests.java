@@ -120,7 +120,7 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
                 }
             }
 
-            // make all profiles follow the first one
+            // make the first profile follow all the other ones
             for (int i = 1; i < profiles.size(); ++i) {
                 profiles.get(i).addFollowRequest(profiles.get(0));
                 Thread.sleep(200);
@@ -128,6 +128,7 @@ public class ViewFollowedUsersIntentTests extends ActivityInstrumentationTestCas
             }
 
             // save all profiles due to how follow information is stored
+            // necessary for added habits and events to be visible when followed profiles are requested
             for (int i = 0; i < profiles.size(); ++i)
                 assertTrue("database error", profiles.get(i).save());
             Thread.sleep(1000);

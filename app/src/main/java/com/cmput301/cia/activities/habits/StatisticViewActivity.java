@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -67,7 +68,7 @@ public class StatisticViewActivity extends AppCompatActivity {
         int completeCounter = 0;
         int missCounter = 0;
         int largestMiss = 0;
-        final List<String> breakdownlist = new ArrayList<String>();
+        final List<String> breakdownlist = new ArrayList<>();
 
         mostMissed = (TextView) findViewById(R.id.missedMost);
         for (Habit h : user.getHabitsInCategory(type)){
@@ -85,7 +86,7 @@ public class StatisticViewActivity extends AppCompatActivity {
         totalNumber = (TextView) findViewById(R.id.TotalNumber);
         totalNumber.setText(String.valueOf(missCounter));
         if(missCounter == 0) {
-            Toast.makeText(StatisticViewActivity.this, "WOW you haven't missed any habits yet!\nKeep up the good work!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(StatisticViewActivity.this, "You haven't missed any habits yet!\n", Toast.LENGTH_LONG).show();
             mostMissed.setText("Nothing Missed");
         }
         //Break down list view for each habit
@@ -97,16 +98,15 @@ public class StatisticViewActivity extends AppCompatActivity {
                 return false;
             }
         });
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, breakdownlist);
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, breakdownlist);
         BreakDownList.setAdapter(adapter);
 
-        BreakDownList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        BreakDownList.setOnItemClickListener(new TimedAdapterViewClickListener(){
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void handleClick(View view, int i) {
                 Intent intent = new Intent(StatisticViewActivity.this, SingleStatisticViewActivity.class);
-                intent.putExtra("Profile", user);
-                intent.putExtra("HabitID", user.getHabitsInCategory(type).get(i).getId());
+                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, user.getHabitsInCategory(type).get(i));
                 startActivity(intent);
             }
         });
