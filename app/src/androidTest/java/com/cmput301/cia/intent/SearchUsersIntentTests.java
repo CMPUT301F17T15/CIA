@@ -12,8 +12,8 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
-import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.HomeTabbedActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
@@ -26,19 +26,20 @@ import com.robotium.solo.Solo;
  * NOTE: These tests require an internet connection
  */
 
-public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<SearchUsersActivity> {
+public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
 
     private Solo solo;
 
     public SearchUsersIntentTests() {
-        super(com.cmput301.cia.activities.users.SearchUsersActivity.class);
+        super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
     public void setUp() throws Exception{
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(SearchUsersActivity.ID_USER, profile);
+        intent.putExtra(SearchUsersFragment.ID_USER, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
@@ -51,6 +52,9 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Sea
      * @throws IllegalAccessException
      */
     public void testFilter() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
+        solo.sleep(1000);
+
         solo.enterText(0, "vfutest");
         solo.sleep(600);
         solo.clickOnButton("Search");
@@ -62,11 +66,14 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Sea
     }
 
     public void testSelectUser(){
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
+        solo.sleep(1000);
+
         ListAdapter adapter = ((ListView)solo.getView(R.id.searchUsersList)).getAdapter();
         if (adapter.getCount() > 0) {
             solo.clickInList(1, 0);
             solo.sleep(2000);
-            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+            assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
         }
     }
 

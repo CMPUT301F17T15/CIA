@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.activities.users.SearchUsersActivity">
+    tools:context="com.cmput301.cia.activities.users.SearchUsersFragment">
 
     <Button
         android:id="@+id/searchSearchButton"

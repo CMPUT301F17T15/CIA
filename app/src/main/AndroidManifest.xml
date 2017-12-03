@@ -21,8 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.events.HistoryActivity"
-            android:label="Habit History"/>
+        <activity
+            android:name=".activities.events.HistoryActivity"
+            android:label="Habit History" />
         <activity
             android:name=".activities.events.FilterHabitsActivity"
             android:label="@string/title_activity_filter_events" />
@@ -32,37 +33,43 @@
             android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.habits.HabitViewActivity"
-            android:label="Habit Details"
-            />
+            android:label="Habit Details" />
         <activity
             android:name=".activities.habits.StatisticActivity"
             android:label="Habit Statistics"/>
         <activity
             android:name=".activities.habits.CreateHabitActivity"
-            android:label="Create Habit"
-            />
-        <activity android:name=".activities.habits.StatisticViewActivity"
-            android:label="Statistics"/>
-        <activity android:name=".activities.habits.SingleStatisticViewActivity"
-            android:label="Statistics"/>
-        <activity android:name=".activities.events.CreateHabitEventActivity"
-            android:label="Create Habit Event"/>
-        <activity android:name=".activities.events.HabitEventViewActivity"
-            android:label="Habit Event"/>
-        <activity android:name=".activities.habits.EditHabitActivity"
-            android:label="Edit Habit"/>
-        <activity android:name=".activities.users.UserProfileActivity"
-            android:label="Profile"/>
-        <activity android:name=".activities.users.RankingsActivity"
-            android:label="Rankings"/>
+            android:label="Create Habit" />
+        <activity
+            android:name=".activities.habits.StatisticViewActivity"
+            android:label="Statistics" />
+        <activity
+            android:name=".activities.habits.SingleStatisticViewActivity"
+            android:label="Statistics" />
+        <activity
+            android:name=".activities.events.CreateHabitEventActivity"
+            android:label="Create Habit Event" />
+        <activity
+            android:name=".activities.events.HabitEventViewActivity"
+            android:label="Habit Event" />
+        <activity
+            android:name=".activities.habits.EditHabitActivity"
+            android:label="Edit Habit" />
+        <activity
+            android:name=".activities.users.UserProfileActivity"
+            android:label="Profile" />
+        <activity
+            android:name=".activities.users.RankingsActivity"
+            android:label="Rankings" />
         <activity
             android:name=".activities.users.ViewFollowedUsersActivity"
-            android:label="Followed Users"
-            />
-        <activity android:name=".activities.users.SearchUsersActivity"
-            android:label="Search Users"/>
-        <activity android:name=".activities.users.FollowRequestsActivity"
-            android:label="Follow Requests"/>
+            android:label="Followed Users" />
+        <activity
+            android:name=".activities.users.SearchUsersFragment"
+            android:label="Search Users" />
+        <activity
+            android:name=".activities.users.FollowRequestsFragment"
+            android:label="Follow Requests" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -85,8 +92,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".activities.templates.LocationRequestingActivity" />-->
-        <activity android:name=".activities.users.SendMessageActivity"></activity>
+        <!-- <activity android:name=".activities.templates.LocationRequestingActivity" /> -->
+        <activity android:name=".activities.users.SendMessageActivity" />
+        <activity
+            android:name=".activities.HomeTabbedActivity"
+            android:label="@string/title_activity_home_tabbed" />
+        <activity android:name=".activities.DashboardFragment"></activity>
     </application>
 
 </manifest>
