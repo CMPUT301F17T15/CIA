@@ -64,7 +64,7 @@
 
     <TextView
         android:id="@+id/profileCommentStaticText"
-        android:layout_width="127dp"
+        android:layout_width="107dp"
         android:layout_height="26dp"
         android:text="COMMENT"
         android:layout_marginLeft="26dp"
@@ -79,7 +79,7 @@
         android:ems="10"
         android:inputType="textMultiLine"
         android:maxLength="70"
-        android:layout_marginRight="3dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="132dp" />
@@ -91,8 +91,11 @@
         app:srcCompat="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="78dp"
-        android:layout_marginLeft="164dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginLeft="126dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="1.0" />
 
     <Button
         android:id="@+id/profileFollowButton"
