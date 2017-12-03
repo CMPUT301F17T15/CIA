@@ -426,6 +426,19 @@ public class Profile extends ElasticSearchable {
      * @return the points representing the user's power ranking score
      */
     public int getPowerPoints() {
+
+        // TODO: account for missed events without user signing in
+        /*Date lastCompletionDate = null;
+        for (Habit habit : habits){
+            Date habitDate = habit.getLastCompletionDate();
+            if (habitDate == null)
+                continue;
+
+            // if the habit completion date was after the current last completion date
+            if (lastCompletionDate == null || habitDate.compareTo(lastCompletionDate) > 0)
+                lastCompletionDate = habitDate;
+        }*/
+
         return powerPoints;
     }
 

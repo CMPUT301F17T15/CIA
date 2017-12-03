@@ -284,15 +284,7 @@ public class ProfileTests {
             }
         }
 
-        // started today, but today is not over. Should not count as missed
-        assertTrue(habits.get(0).getTimesMissed() == 0);
-
-        // miss it on the 7th, 8th, 9th, 10th
-        assertTrue(habits.get(1).getTimesMissed() == 4);
-
-        // miss it on the 7th, 8th, 10th
-        assertTrue(habits.get(2).getTimesMissed() == 3);
-
+        assertTrue(profile.getPowerPoints() == 0);
     }
 
     @Test
