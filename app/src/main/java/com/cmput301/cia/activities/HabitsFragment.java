@@ -106,8 +106,6 @@ public class HabitsFragment extends Fragment {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                //Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(getContext(), HabitViewActivity.class);
                 intent.putExtra("Habit", habit);
 
