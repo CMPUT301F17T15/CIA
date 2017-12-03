@@ -15,6 +15,7 @@
         <!--/>-->
 
     <item
+        android:icon="@drawable/ic_account_circle_black_24px"
         android:id="@+id/menu_button_Statistic"
         android:title="@string/menu_Statistic"
         />
