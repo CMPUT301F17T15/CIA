@@ -100,6 +100,7 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
                                 type.add(0, minput.getText().toString());
                                 spinnerAdapter.notifyDataSetChanged();
                                 dialog.dismiss();
+                                spinner.setSelection(0);
                             }else{
                                 Toast.makeText(CreateHabitActivity.this, "The type name can not be empty", Toast.LENGTH_SHORT).show();
                             }
