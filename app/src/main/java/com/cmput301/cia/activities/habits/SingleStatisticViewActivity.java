@@ -95,7 +95,10 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         completed.setText("" + habit.getTimesCompleted());
 
         lastComplete = (TextView) findViewById(R.id.LastCompleteTextView);
-        lastComplete.setText(formatter.format(habit.getLastCompletionDate()).toString());
+        if (habit.getLastCompletionDate() != null)
+            lastComplete.setText(formatter.format(habit.getLastCompletionDate()).toString());
+        else
+            lastComplete.setText("Never");
 
         miss = (TextView) findViewById(R.id.MissedTextView);
         miss.setText("" + habit.getTimesMissed());

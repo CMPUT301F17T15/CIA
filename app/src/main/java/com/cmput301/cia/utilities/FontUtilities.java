@@ -38,8 +38,8 @@ public class FontUtilities {
      * @param view the view to apply the font to
      */
     private static void setFont(Button view){
-        view.setTypeface(FONT);
-        view.setTypeface(FONT, Typeface.BOLD);
+        //view.setTypeface(FONT);
+        //view.setTypeface(FONT, Typeface.BOLD);
     }
 
     /**
@@ -47,8 +47,8 @@ public class FontUtilities {
      * @param view the view to apply the font to
      */
     private static void setFont(TextView view){
-        view.setTypeface(FONT);
-        view.setTypeface(FONT, Typeface.BOLD);
+        //view.setTypeface(FONT);
+        //view.setTypeface(FONT, Typeface.BOLD);
     }
 
     /**

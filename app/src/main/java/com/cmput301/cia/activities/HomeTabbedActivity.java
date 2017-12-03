@@ -36,7 +36,7 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -176,7 +176,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
     @Override
     protected void handleLocationGranted() {
-        Location location = DeviceUtilities.getLocation(this);
+        Location location = LocationUtilities.getLocation(this);
         if (location == null)
             return;
 
