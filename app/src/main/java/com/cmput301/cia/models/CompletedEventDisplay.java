@@ -7,7 +7,7 @@ package com.cmput301.cia.models;
 import android.app.Activity;
 import android.location.Location;
 
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -76,8 +76,8 @@ public class CompletedEventDisplay implements Serializable {
      */
     public String getDescriptionWithLocation(Activity activity){
         Location location = getLocation();
-        String locationName = DeviceUtilities.getLocationName(activity, getLocation());
-        if (location.equals(DeviceUtilities.NO_LOCATION_NAME)){
+        String locationName = LocationUtilities.getLocationName(activity, getLocation());
+        if (location.equals(LocationUtilities.NO_LOCATION_NAME)){
             return toString();
         } else {
             if (userName.equals("")){

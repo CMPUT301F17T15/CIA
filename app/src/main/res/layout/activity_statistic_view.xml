@@ -184,8 +184,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="The habit that missed most: "
-                android:textColor="@color/colorPrimary"
+                android:text="MOST MISSED HABIT"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="17sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pieChart" />
@@ -197,9 +197,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="BreakDown"
-                android:textSize="30sp"
-                android:textStyle="bold"
+                android:text="BREAKDOWN"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="17sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/missedMost" />
 

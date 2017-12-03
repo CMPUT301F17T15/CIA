@@ -39,13 +39,13 @@ import java.util.List;
  */
 
 public class TodaysHabitsFragment extends Fragment {
+
     public static final String ID_PROFILE = "User";
     // the habits the user must do today
     private List<Habit> todaysHabits;
     private Profile user;
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -62,6 +62,26 @@ public class TodaysHabitsFragment extends Fragment {
         checkable = (ListView) view.findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
+    }
+
+
+    @Override
+    public void onResume() {
+        refreshDisplay();
+        super.onResume();
+    }
+
+    /**
+     * Update the elements in both ListViews
+     */
+    private void refreshDisplay(){
+        // update the habits list display
+        //adapter.refresh();
+        //adapter.notifyDataSetChanged();
+
+        // update the today's task list
+        resetCheckableListAdapter();
+        checkCompletedEvents();
     }
 
     @Override
