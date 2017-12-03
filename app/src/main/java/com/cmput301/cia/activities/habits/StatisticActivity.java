@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.HistoryActivity;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
@@ -59,14 +60,13 @@ public class StatisticActivity extends AppCompatActivity {
                 types.add(t);
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_statistic, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_statistic, types);
         typeList.setAdapter(adapter);
 
-        typeList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        typeList.setOnItemClickListener(new TimedAdapterViewClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void handleClick(View view, int i) {
                 Intent intent = new Intent(StatisticActivity.this, StatisticViewActivity.class);
-                // TODO: just pass in the habits
                 intent.putExtra("Profile", user);
                 intent.putExtra("type",types.get(i));
                 startActivity(intent);
