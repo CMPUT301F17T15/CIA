@@ -12,11 +12,9 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
-import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -25,13 +23,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -62,6 +55,8 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
 
         //Information receiving from previous activity
         Habit habit = (Habit)getIntent().getSerializableExtra(ID_HABIT);
+        this.setTitle(habit.getTitle());
+
         TextView completed = (TextView) findViewById(R.id.CompletedTextView);
         int completions = habit.getTimesCompleted();
         completed.setText("" + completions);
@@ -76,10 +71,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         TextView miss = (TextView) findViewById(R.id.MissedTextView);
         int misses = habit.getTimesMissed();
         miss.setText("" + misses);
-
-        TextView title = (TextView) findViewById(R.id.HabitNameTextView);
-        title.setText(habit.getTitle());
-
+        
         initChartData(habit);
     }
 

@@ -28,6 +28,7 @@ import com.cmput301.cia.utilities.DateUtilities;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
@@ -45,6 +46,15 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  *      - frequency (days of the week to do the habit)
  */
 public class CreateHabitActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+
+    // the earliest date a habit's start date can be
+    public static final Date EARLIEST_DATE;
+
+    static {
+        Calendar cal = new GregorianCalendar();
+        cal.set(2016, 10, 10);
+        EARLIEST_DATE = cal.getTime();
+    }
 
     private Date chooseStartDate;
     private EditText habitName;
@@ -191,7 +201,10 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        chooseStartDate = calendar.getTime();
+        if (calendar.getTime().before(EARLIEST_DATE))
+            chooseStartDate = EARLIEST_DATE;
+        else
+            chooseStartDate = calendar.getTime();
         startDate.setText(DateUtilities.formatDate(chooseStartDate));
     }
 }
