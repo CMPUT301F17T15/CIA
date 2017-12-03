@@ -30,6 +30,7 @@ import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
+import com.cmput301.cia.views.ClickableEditItem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,10 +63,12 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     private ImageView imageView;
 
     // The view displaying the event date in text format
-    private TextView dateText;
+    private ClickableEditItem date;
 
     // The view displaying the location's name
-    private TextView locationText;
+    private ClickableEditItem locationItem;
+
+    private ClickableEditItem comment;
 
     // The button that resets the selected image when clicked
     private Button resetImageButton;
@@ -99,10 +102,12 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         this.setTitle(habitName);
 
         imageView = (ImageView)findViewById(R.id.cheImageView);
-        dateText = (TextView) findViewById(R.id.cheDateTextView);
+        date = (ClickableEditItem) findViewById(R.id.editableDate);
+        locationItem = (ClickableEditItem) findViewById(R.id.editableLocation);
+        comment = (ClickableEditItem) findViewById(R.id.editableComment);
+
         setDateText();
-        resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
-        locationText = (TextView)findViewById(R.id.cheLocationDynamicText);
+//        resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
 
         if (isFinishing())
             return;
@@ -243,8 +248,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     /**
      * Update the view displaying the event's date in text form
      */
-    private void setDateText(){
-        dateText.setText(DateUtilities.formatDate(eventDate));
+    private void setDateText() {
+        date.setItemDynamicText(DateUtilities.formatDate(eventDate));
     }
 
     /**
@@ -281,8 +286,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             return;
         }
 
-        String comment = ((EditText)findViewById(R.id.cheCommentEditText)).getText().toString();
-        HabitEvent event = new HabitEvent(comment);
+        HabitEvent event = new HabitEvent(comment.getDynamicText());
 
         event.setDate(eventDate);
         event.setLocation(location);
@@ -302,7 +306,6 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     @Override
     protected void handleLocationGranted() {
         location = LocationUtilities.getLocation(this);
-        locationText.setText(LocationUtilities.getLocationName(this, location));
     }
 
 }

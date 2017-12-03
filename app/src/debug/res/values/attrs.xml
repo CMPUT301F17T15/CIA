@@ -5,7 +5,7 @@
 
 <resources>
     <declare-styleable name="ClickableEditItem">
-        <attr name="itemIcon" format="integer"/>
+        <attr name="itemIcon" format="reference"/>
         <attr name="itemStaticText" format="string"/>
         <attr name="itemDynamicText" format="string"/>
     </declare-styleable>

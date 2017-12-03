@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -49,6 +50,10 @@ public class ClickableEditItem extends LinearLayout {
         String dynamicText = typedArray.getString(R.styleable.ClickableEditItem_itemDynamicText);
         Drawable drawable = typedArray.getDrawable(R.styleable.ClickableEditItem_itemIcon);
 
+        if (TextUtils.isEmpty(staticText)) staticText = "Title";
+        if (TextUtils.isEmpty(dynamicText)) dynamicText = "Description";
+        if (drawable == null) drawable = getResources().getDrawable(R.drawable.googleg_standard_color_18);
+
         setItemStaticText(staticText);
         setItemDynamicText(dynamicText);
         setItemIcon(drawable);
@@ -68,4 +73,7 @@ public class ClickableEditItem extends LinearLayout {
         itemIcon.setImageDrawable(drawable);
     }
 
+    public String getDynamicText() {
+        return itemDynamicText.getText().toString();
+    }
 }

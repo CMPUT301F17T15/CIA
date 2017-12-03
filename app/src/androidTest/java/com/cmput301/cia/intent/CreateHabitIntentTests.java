@@ -37,7 +37,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         Profile profile = new TestProfile("xyz");
         profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(HomeTabbed.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
