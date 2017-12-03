@@ -32,26 +32,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Type: "
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp"
-                android:textStyle="italic"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_constraintLeft_creator="1"
-                tools:layout_constraintRight_creator="1"
-                tools:layout_constraintTop_creator="1" />
-
-            <TextView
                 android:id="@+id/Type_Name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -60,12 +40,13 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:text="TextView"
+                android:textAlignment="center"
                 android:textSize="35sp"
                 android:textStyle="bold"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                tools:layout_editor_absoluteY="16dp" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -73,10 +54,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:text="Number of habits belong to this category: "
-                android:textColor="@color/colorPrimary"
+                android:text="HABITS IN CATEGORY"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="15sp"
-                android:textStyle="italic"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Type_Name" />
 
@@ -106,10 +86,9 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Number of habits completed in this type: "
-                android:textColor="@color/colorPrimary"
+                android:text="TIMES COMPLETED"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="15sp"
-                android:textStyle="italic"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/habitsNumber" />
@@ -129,13 +108,13 @@
 
             <TextView
                 android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="113dp"
+                android:layout_height="19dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Number of habits missed in this type: "
-                android:textColor="@color/colorPrimary"
+                android:text="TIMES MISSED"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="15sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/completeNumber" />
