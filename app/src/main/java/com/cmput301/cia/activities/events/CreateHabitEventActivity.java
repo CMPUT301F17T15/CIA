@@ -22,11 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.DialogUtils;
 import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
@@ -130,6 +132,13 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
                 startActivityForResult(intent, CreateHabitEventActivity.SELECT_IMAGE_CODE);
             }
         });
+
+//        DialogUtils.createEditDialog(CreateHabitEventActivity.this, new DialogUtils.OnOkClickedListener() {
+//            @Override
+//            public void onOkClicked(String editString) {
+//                comment.setItemDynamicText(editString);
+//            }
+//        });
 
 //        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }

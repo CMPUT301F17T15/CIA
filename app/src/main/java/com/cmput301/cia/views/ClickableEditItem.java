@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -70,6 +71,7 @@ public class ClickableEditItem extends LinearLayout {
     }
 
     public void setItemIcon(Drawable drawable) {
+        drawable.setTint(ContextCompat.getColor(getContext(), R.color.colorAccent));
         itemIcon.setImageDrawable(drawable);
     }
 

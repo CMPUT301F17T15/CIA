@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        app:itemIcon="@drawable/ic_date_range_black_24px"
+        app:itemIcon="@android:drawable/ic_menu_mylocation"
         app:itemStaticText="Location"
         app:itemDynamicText="add location"
         app:layout_constraintTop_toBottomOf="@+id/editableDate" />
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        app:itemIcon="@drawable/ic_date_range_black_24px"
+        app:itemIcon="@drawable/ic_chat_black_24dp"
         app:itemStaticText="Comment"
         app:itemDynamicText="add comment"
         app:layout_constraintTop_toBottomOf="@+id/editableLocation" />

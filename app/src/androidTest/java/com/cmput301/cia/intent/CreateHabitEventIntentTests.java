@@ -65,18 +65,18 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 
     }
 
-    public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
-        solo.clickOnView(getActivity().getDashboardFragment().getTabView(1));
-
-        solo.clickInList(1, 1);
-        solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-
-        solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
-        // max length = 20
-        assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
-        assertTrue(((EditText) solo.getView(R.id.cheCommentEditText)).getText().toString().length() == 20);
-    }
+//    public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
+//        solo.clickOnView(getActivity().getDashboardFragment().getTabView(1));
+//
+//        solo.clickInList(1, 1);
+//        solo.sleep(3000);
+//        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
+//
+//        solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
+//        // max length = 20
+//        assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
+//        assertTrue(((EditText) solo.getView(R.id.cheCommentEditText)).getText().toString().length() == 20);
+//    }
 
     public void testFinish() throws NoSuchFieldException, IllegalAccessException {
 
