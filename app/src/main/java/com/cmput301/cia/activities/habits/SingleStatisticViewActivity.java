@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
+import com.cmput301.cia.utilities.DateUtilities;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.LimitLine;
@@ -57,8 +58,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_habit_statistic);
-        //Date format for consistency
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
         //Initial line Chart for visualization of statistic
         lineChart = (LineChart) findViewById(R.id.LineChart);
         lineChart.setDragEnabled(true);
@@ -96,7 +96,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
 
         lastComplete = (TextView) findViewById(R.id.LastCompleteTextView);
         if (habit.getLastCompletionDate() != null)
-            lastComplete.setText(formatter.format(habit.getLastCompletionDate()).toString());
+            lastComplete.setText(DateUtilities.formatDate(habit.getLastCompletionDate()));
         else
             lastComplete.setText("Never");
 
@@ -106,17 +106,19 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+
         //Data processing for line chart
         List<String> xAxis = new ArrayList<>();
         ArrayList<String> missed = new ArrayList<>();
         for (Date date : habit.getMissedDates()) {
-            missed.add((new DateTime(formatter.format(date)).toString("MMM-dd")));
+            missed.add(formatter.format(date));
         }
 
         DateTime start = new DateTime(formatter.format(habit.getStartDate()));
         DateTime end = new DateTime(formatter.format(new Date()));
         for (DateTime d = start; d.isBefore(end) || d.isEqual(end); d = d.plusDays(1)) {
-            xAxis.add(d.toString("MMM-dd"));
+            xAxis.add(formatter.format(d));
         }
         int numDataPoints = xAxis.size();
         ArrayList<Entry> yxexs = new ArrayList<>();
