@@ -80,9 +80,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
-        // error if there is no data whatsoever for the chart
-        if (completions + misses >= 2)
-            initChartData(habit);
+        initChartData(habit);
     }
 
     /**
@@ -137,6 +135,8 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         List<Date> dates = new ArrayList<>();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(habit.getStartDate());
+        // start 2 days before, because the linechart crashes without atleast 2 points of data on it
+        calendar.add(Calendar.DATE, -2);
         Date end = new Date();
 
         while (!DateUtilities.isSameDay(calendar.getTime(), end) && DateUtilities.isBefore(calendar.getTime(), end)){
