@@ -35,8 +35,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Adil Malik
- * @version 3
+ * @author Adil Malik, Jessica Prieto
+ * @version 4
  * Date: Nov 23 2017
  *
  * This activity allows the user to view all of their completed habit events in a list.

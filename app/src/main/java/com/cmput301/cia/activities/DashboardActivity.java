@@ -19,15 +19,22 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 
+
+/**
+ * @author Jessica Prieto
+ *
+ * version 1
+ *
+ * This is a fragment that displayes a tabbed activity: one tab for all habits and one tab
+ * for viewing today's tasks
+ */
 public class DashboardActivity extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
-
     private Profile user;
-
     public static final String ID_PROFILE = "User";
-
     private DashboardTabsAdapter dashboardTabsAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_dashboard, parent, false);
@@ -45,12 +52,18 @@ public class DashboardActivity extends Fragment {
         setUpViewPager();
     }
 
+    /**
+     * sets up the adapter to properly display the tabs fragment: habits list and today's habit tasks
+     */
     private void setUpViewPager() {
         dashboardTabsAdapter = new DashboardTabsAdapter(getChildFragmentManager());
         viewPager.setAdapter(dashboardTabsAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    /**
+     * updates the data changes in the habits so that the data changes is reflected on the dashboard activity
+     */
     public void updateHabits() {
         Fragment habitsFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 0);
         if (habitsFragment instanceof HabitsFragment) {
@@ -65,10 +78,21 @@ public class DashboardActivity extends Fragment {
 
     }
 
+    /**
+     * chooses between the two tab views:
+     *
+     * @param index 0: habits list, 1: today's tasks
+     * @return the chosen view depending on the index
+     */
     public View getTabView(int index) {
         return ((ViewGroup) tabLayout.getChildAt(0)).getChildAt(index);
     }
 
+    /**
+     * fetches the dashboard activity of the current user logged in
+     * @param user the user logged in
+     * @return the dashboard activity of the current user
+     */
     public static DashboardActivity create(Profile user) {
         DashboardActivity dashboardActivity = new DashboardActivity();
         Bundle args = new Bundle();
@@ -77,6 +101,9 @@ public class DashboardActivity extends Fragment {
         return dashboardActivity;
     }
 
+    /**
+     * class for selecting the Fragment to be displayed
+     */
     public class DashboardTabsAdapter extends FragmentPagerAdapter {
 
         public DashboardTabsAdapter(FragmentManager fragmentManager) {

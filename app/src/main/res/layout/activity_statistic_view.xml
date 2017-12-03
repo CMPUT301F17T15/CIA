@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:text="HABITS IN CATEGORY"
                 android:textColor="@color/common_google_signin_btn_text_dark_focused"
                 android:textSize="15sp"
