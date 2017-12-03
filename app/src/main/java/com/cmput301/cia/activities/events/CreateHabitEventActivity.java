@@ -36,6 +36,7 @@ import com.cmput301.cia.views.ClickableEditItem;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -99,7 +100,6 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
-//        ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
         this.setTitle(habitName);
 
@@ -107,6 +107,13 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         date = (ClickableEditItem) findViewById(R.id.editableDate);
         locationItem = (ClickableEditItem) findViewById(R.id.editableLocation);
         comment = (ClickableEditItem) findViewById(R.id.editableComment);
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog(view);
+            }
+        });
 
         setDateText();
 //        resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
