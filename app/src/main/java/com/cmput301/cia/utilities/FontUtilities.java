@@ -9,16 +9,15 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cmput301.cia.controller.ExpandableListViewAdapter;
-
 /**
- * Created by Adil on Nov 27 2017.
+ * @author Adil Malik
+ * @version 1
+ * Date: Nov 27, 2017
+ *
+ * These utilities are used to change the font of TextView and Button objects to an application
+ * wide font for consistency
  */
 
 public class FontUtilities {

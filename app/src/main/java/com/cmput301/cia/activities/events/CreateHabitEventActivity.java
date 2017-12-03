@@ -27,7 +27,7 @@ import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
@@ -299,8 +299,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      */
     @Override
     protected void handleLocationGranted() {
-        location = DeviceUtilities.getLocation(this);
-        locationText.setText(DeviceUtilities.getLocationName(this, location));
+        location = LocationUtilities.getLocation(this);
+        locationText.setText(LocationUtilities.getLocationName(this, location));
     }
 
 }

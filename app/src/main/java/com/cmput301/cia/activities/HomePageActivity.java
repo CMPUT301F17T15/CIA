@@ -7,7 +7,6 @@ package com.cmput301.cia.activities;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +42,7 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.R;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.SetUtilities;
 
@@ -312,7 +311,7 @@ public class HomePageActivity extends LocationRequestingActivity {
      */
     @Override
     protected void handleLocationGranted() {
-        Location location = DeviceUtilities.getLocation(this);
+        Location location = LocationUtilities.getLocation(this);
         if (location == null)
             return;
 
@@ -441,9 +440,8 @@ public class HomePageActivity extends LocationRequestingActivity {
                     return;
 
                 // fix double-clicking an item in the today's task list creating 2 events at once
-                // TODO
-                if (DateUtilities.isSameDay(habit.getLastCompletionDate(), event.getDate()))
-                    return;
+                //if (DateUtilities.isSameDay(habit.getLastCompletionDate(), event.getDate()))
+                //    return;
 
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);

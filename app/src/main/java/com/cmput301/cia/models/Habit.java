@@ -224,9 +224,6 @@ public class Habit extends ElasticSearchable {
         if (events.size() == 0)
             return null;
 
-        // TODO: if events can have date set use the below line, otherwise looping is necessary
-        //return events.get(events.size() - 1).getDate();
-
         Date lastCompletion = null;
         for (HabitEvent event : events){
             if (lastCompletion == null || lastCompletion.before(event.getDate()))
