@@ -38,6 +38,7 @@ import java.util.List;
  */
 
 public class StatisticViewActivity extends AppCompatActivity {
+
     private Profile user;
     private TextView typeName;
     private TextView typeNumber;
@@ -48,6 +49,7 @@ public class StatisticViewActivity extends AppCompatActivity {
     private PieChart pieChart;
     private int[] yData;
     private String[] xData;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
