@@ -11,51 +11,37 @@
     tools:context="com.cmput301.cia.activities.users.SendMessageActivity">
 
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="395dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="47dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="RETURN"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <Button
-        android:id="@+id/send"
-        android:layout_width="395dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="105dp"
-        android:text="Send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="8dp" />
-
-
     <TextView
-        android:id="@+id/name"
-        android:layout_width="0dp"
-        android:layout_height="44dp"
-        android:layout_marginBottom="543dp"
-        android:text="SEND MESSAGE"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:id="@+id/ViewMessage"
+        android:layout_width="368dp"
+        android:layout_height="350dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <EditText
-        android:id="@+id/body1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="463dp"
-        android:hint="enter message here"
-        android:scrollbars="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:id="@+id/editText"
+        android:layout_width="368dp"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Enter the message"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="374dp" />
 
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="125dp"
+        android:layout_height="53dp"
+        android:text="SEND"
+        tools:layout_editor_absoluteX="41dp"
+        tools:layout_editor_absoluteY="442dp" />
+
+    <Button
+        android:id="@+id/returnButton"
+        android:layout_width="125dp"
+        android:layout_height="53dp"
+        android:text="RETURN"
+        tools:layout_editor_absoluteX="208dp"
+        tools:layout_editor_absoluteY="442dp" />
 </android.support.constraint.ConstraintLayout>

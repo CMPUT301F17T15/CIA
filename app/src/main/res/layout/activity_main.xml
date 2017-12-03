@@ -8,14 +8,14 @@
     tools:context="com.cmput301.cia.activities.MainActivity">
 
 
-    <VideoView
-        android:id="@+id/backGround"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<VideoView-->
+        <!--android:id="@+id/backGround"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="213dp"
@@ -39,9 +39,9 @@
             android:layout_marginRight="34dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="63dp"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
             android:ems="10"
             android:hint="name"
-            android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
             android:maxLength="15"
             android:textAlignment="center"
             app:layout_constraintHorizontal_bias="0.754"

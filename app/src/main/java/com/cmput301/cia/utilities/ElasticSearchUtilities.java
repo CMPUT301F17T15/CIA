@@ -51,7 +51,7 @@ public class ElasticSearchUtilities {
     private static final int MAX_RESULTS = 10000;
 
     // The maximum time in milliseconds before a query is cancelled
-    private static final long MAX_QUERY_TIME = 5000;
+    private static final long MAX_QUERY_TIME = 10000;
 
     private static JestDroidClient client;
 

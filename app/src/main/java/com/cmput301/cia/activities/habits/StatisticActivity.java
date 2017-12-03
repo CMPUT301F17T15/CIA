@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.HistoryActivity;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
@@ -40,17 +41,12 @@ public class StatisticActivity extends AppCompatActivity {
 
     public static final String ID_USER = "Profile";
 
-    private Profile user;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_statistic);
-        setSupportActionBar(toolbar);
-
-        user = (Profile) getIntent().getSerializableExtra(ID_USER);
+        final Profile user = (Profile) getIntent().getSerializableExtra(ID_USER);
 
         ListView typeList = (ListView)findViewById(R.id.Type_List_View);
         final List<String> types = new ArrayList<>();
@@ -62,12 +58,12 @@ public class StatisticActivity extends AppCompatActivity {
                 types.add(t);
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_statistic, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_statistic, types);
         typeList.setAdapter(adapter);
 
-        typeList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        typeList.setOnItemClickListener(new TimedAdapterViewClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void handleClick(View view, int i) {
                 Intent intent = new Intent(StatisticActivity.this, StatisticViewActivity.class);
                 intent.putExtra("Profile", user);
                 intent.putExtra("type",types.get(i));

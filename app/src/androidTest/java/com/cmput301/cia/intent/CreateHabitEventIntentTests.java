@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Habit;
@@ -31,12 +32,12 @@ import java.util.List;
  * NOTE: These tests require an internet connection
  */
 
-public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
 
     private Solo solo;
 
     public CreateHabitEventIntentTests() {
-        super(com.cmput301.cia.activities.HomePageActivity.class);
+        super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
     public void setUp() throws Exception{
@@ -49,6 +50,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         Profile profile = new TestProfile("xyz");
         Habit habit = new Habit("T1", "", new Date(), allDays, "");
         habit.setId("one");
+        profile.setFirstTimeUse(false);
         profile.addHabit(habit);
 
         Habit habit2 = new Habit("T55", "", new Date(), allDays, "");
@@ -65,6 +67,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
     }
 
     public void testCommentLength() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickOnView(getActivity().getDashboardFragment().getTabView(1));
 
         solo.clickInList(1, 1);
         solo.sleep(3000);
@@ -84,6 +87,8 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         int habitEvents = user.getHabitHistory().size();
 
         // Select the 1st option in the second list (the "today's tasks" list)
+
+        solo.clickOnView(getActivity().getDashboardFragment().getTabView(1));
         solo.clickInList(1, 1);
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
@@ -91,18 +96,19 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         solo.clickOnButton("Save");
 
         solo.sleep(6000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure no new event activity is started
         solo.clickInList(1, 1);
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // assert that a new event was added
         assertTrue(user.getHabitHistory().size() == habitEvents + 1);
     }
 
     public void testCancel() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickOnView(getActivity().getDashboardFragment().getTabView(1));
         solo.clickInList(1, 1);
         solo.sleep(3000);
         solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
@@ -110,7 +116,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         //solo.clickOnButton("Cancel");
         solo.sleep(3000);
 
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
         Field field = solo.getCurrentActivity().getClass().getDeclaredField("user");
         field.setAccessible(true);
         Profile user = (Profile) field.get(solo.getCurrentActivity());

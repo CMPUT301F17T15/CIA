@@ -39,7 +39,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
     private Context context;
 
     /**
-     * Constructs a new adapter to be used in the recycler view for FollowRequestsActivity
+     * Constructs a new adapter to be used in the recycler view for FollowRequestsFragment
      * @param context the RecyclerView context
      * @param followRequests the list of follow requests
      * @param followee the current user that has the requests

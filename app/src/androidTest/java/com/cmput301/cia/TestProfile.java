@@ -23,11 +23,13 @@ public class TestProfile extends Profile {
     public TestProfile(){
         super("xyz");
         setId("A");
+        setFirstTimeUse(false);
     }
 
     public TestProfile(String id){
         super("xyz");
         setId(id);
+        setFirstTimeUse(false);
     }
 
     /**
