@@ -21,6 +21,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.FollowRequestsFragment;
@@ -390,6 +391,30 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             }
 
         }
+        else if (requestCode == HomeTabbedActivity.VIEW_HABIT) {
+            if (resultCode == RESULT_OK){
+
+                // whether the habit was deleted or updated
+                boolean deleted = data.getBooleanExtra("Deleted", false);
+                if (deleted) {
+                    String id = data.getStringExtra("HabitID");
+                    user.removeHabit(user.getHabitById(id));
+                } else {
+                    // update the habit
+                    Habit habit = (Habit) data.getSerializableExtra("Habit");
+                    for (Habit h : user.getHabits()){
+                        if (h.equals(habit)){
+                            h.copyFrom(habit);
+                            break;
+                        }
+                    }
+                }
+
+                updateAllHabits();
+                user.save();
+            }
+
+        }
         else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
                 user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
@@ -515,5 +540,13 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onStartHabitDetails(Habit habit, ArrayList<String> types) {
+        Intent intent = new Intent(this, HabitViewActivity.class);
+        intent.putExtra("Habit", habit);
+        intent.putExtra("Categories", types);
+
+        startActivityForResult(intent, HomeTabbedActivity.VIEW_HABIT);
     }
 }

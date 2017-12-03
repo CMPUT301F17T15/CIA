@@ -4,6 +4,7 @@
 
 package com.cmput301.cia.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -108,49 +109,16 @@ public class HabitsFragment extends Fragment {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                Intent intent = new Intent(getContext(), HabitViewActivity.class);
-                intent.putExtra("Habit", habit);
 
                 ArrayList<String> types = new ArrayList<>();
                 types.addAll(user.getHabitCategories());
-                intent.putExtra("Categories", types);
 
-                startActivityForResult(intent, HomeTabbedActivity.VIEW_HABIT);
+                startDetailsActivity(habit, types);
 
                 return false;
             }
         });
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == HomeTabbedActivity.VIEW_HABIT) {
-            if (resultCode == RESULT_OK){
-
-                // whether the habit was deleted or updated
-                boolean deleted = data.getBooleanExtra("Deleted", false);
-                if (deleted) {
-                    String id = data.getStringExtra("HabitID");
-                    user.removeHabit(user.getHabitById(id));
-                } else {
-                    // update the habit
-                    Habit habit = (Habit) data.getSerializableExtra("Habit");
-                    for (Habit h : user.getHabits()){
-                        if (h.equals(habit)){
-                            h.copyFrom(habit);
-                            break;
-                        }
-                    }
-                }
-
-                updateAllHabits();
-                user.save();
-            }
-
-        }
     }
 
     /**
@@ -160,5 +128,17 @@ public class HabitsFragment extends Fragment {
         adapter = new ExpandableListViewAdapter(getContext(), user);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * starts CreateHabitEvent whenever a user completes a task
+     * @param completion the name of the habit that's completed
+     * @param habitId the habit id
+     */
+    public void startDetailsActivity(Habit habit, ArrayList<String> categories) {
+        Activity activity = getActivity();
+        if (activity instanceof HomeTabbedActivity) {
+            ((HomeTabbedActivity) activity).onStartHabitDetails(habit, categories);
+        }
     }
 }
