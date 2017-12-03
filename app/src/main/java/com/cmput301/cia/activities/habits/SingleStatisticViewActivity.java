@@ -81,7 +81,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         title.setText(habit.getTitle());
 
         // error if there is no data whatsoever for the chart
-        if (completions + misses != 0)
+        if (misses != 0)
             initChartData(habit);
     }
 
@@ -173,7 +173,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
                 ++completions;
             }
 
-            float percentage = 0.0f;
+            float percentage = (float)completions;
             // prevent division by 0 error
             if (completions + misses != 0)
                 percentage = (completions / (float)(completions + misses)) * 100;
@@ -199,7 +199,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         xax.setTextSize(10f);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        LineDataSet lineDataSet = new LineDataSet(yxexs, "Progress(1=completed, -1=missed)");
+        LineDataSet lineDataSet = new LineDataSet(yxexs, "Completion Rate");
         lineDataSet.setDrawCircles(false);
         lineDataSet.setColor(Color.BLUE);
         lineDataSet.setLineWidth(3f);
