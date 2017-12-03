@@ -26,7 +26,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Jessica on 2017-12-01.
+ * @author Jessica Prieto
+ * Created on 2017-12-01.
+ *
+ * with content originally from
+ * HomePageActivity
+ * @author Adil Malik, Shipin Guan
+ * @version 6
+ * Date: Nov 12 2017
+ *
+ * This fragment displays the user's list of today's tasks
  */
 
 public class TodaysHabitsFragment extends Fragment {
@@ -61,6 +70,12 @@ public class TodaysHabitsFragment extends Fragment {
         checkCompletedEvents();
     }
 
+    /**
+     * a helper for starting the fragment (similar to starting a new Intent)
+     *
+     * @param user the current user logged-in
+     * @return TodaysHabitsFragment
+     */
     public static Fragment create(Profile user) {
         TodaysHabitsFragment todaysHabitsFragment = new TodaysHabitsFragment();
         Bundle args = new Bundle();
@@ -70,6 +85,9 @@ public class TodaysHabitsFragment extends Fragment {
         return todaysHabitsFragment;
     }
 
+    /**
+     * updates the view on data changes
+     */
     public void updateTodaysList() {
         todaysHabits = user.getTodaysHabits();
         resetCheckableListAdapter();
@@ -121,6 +139,11 @@ public class TodaysHabitsFragment extends Fragment {
         });
     }
 
+    /**
+     * starts CreateHabitEvent whenever a user completes a task
+     * @param completion the name of the habit that's completed
+     * @param habitId the habit id
+     */
     public void startCreateEventActivity(String completion, String habitId) {
         Activity activity = getActivity();
         if (activity instanceof HomeTabbedActivity) {

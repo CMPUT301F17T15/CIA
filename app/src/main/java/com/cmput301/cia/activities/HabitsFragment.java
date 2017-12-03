@@ -27,7 +27,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Created by Jessica on 2017-12-01.
+ * @author Jessica Prieto
+ * Created on 2017-12-01
+ *
+ * originally from HomePageActivity
+ * @author Adil Malik, Shipin Guan
+ * @version 6
+ * Date: Nov 12 2017
+ *
+ * version 1
+ *
+ * This fragment displays an extendable list of habits
  */
 
 public class HabitsFragment extends Fragment {
@@ -37,6 +47,12 @@ public class HabitsFragment extends Fragment {
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter adapter;
 
+    /**
+     * a helper for starting the fragment (similar to starting a new Intent)
+     *
+     * @param user the current user logged-in
+     * @return HabitsFragment
+     */
     public static Fragment create(Profile user) {
         HabitsFragment habitsFragment = new HabitsFragment();
         Bundle args = new Bundle();
@@ -99,14 +115,15 @@ public class HabitsFragment extends Fragment {
                 types.addAll(user.getHabitCategories());
                 intent.putExtra("Categories", types);
 
-//                startActivityForResult(intent, VIEW_HABIT);
-
                 return false;
             }
         });
 
     }
 
+    /**
+     * updates the view on data changes
+     */
     public void updateAllHabits() {
         adapter = new ExpandableListViewAdapter(getContext(), user);
         expandableListView.setAdapter(adapter);

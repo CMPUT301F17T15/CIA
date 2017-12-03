@@ -54,6 +54,19 @@ import me.toptas.fancyshowcase.FancyShowCaseView;
 import me.toptas.fancyshowcase.FocusShape;
 import me.toptas.fancyshowcase.OnCompleteListener;
 
+/**
+ * @author Jessica Prieto
+ * version 1
+ *
+ * with content taken originally from
+ * HomePageActivity
+ * @author Adil Malik, Shipin Guan
+ * @version 6
+ * Date: Nov 12 2017
+ *
+ * The landing activity after the user logs in to the app
+ */
+
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
     private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
@@ -85,6 +98,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         }
     }
 
+    /**
+     * provides a tutorial for the user (for first time use of the app)
+     */
     private void userAppTour() {
         FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
 
@@ -106,11 +122,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 .focusOn(bottomBar.getTabWithId(R.id.tab_search))
                 .build();
 
-//        final FancyShowCaseView showCaseFollow = new FancyShowCaseView.Builder(this)
-//                .title("You can find all the users that you are following here")
-//                .focusOn(findViewById(R.id.homeFollowedImageView))
-//                .build();
-
         final FancyShowCaseView showCaseRequest = new FancyShowCaseView.Builder(this)
                 .title("The follow-requests from your fans will be showing here")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_followRequests))
@@ -120,11 +131,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 .title("This is your profile.")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_profile))
                 .build();
-
-//        final FancyShowCaseView showCaseHistory = new FancyShowCaseView.Builder(this)
-//                .title("You can find your passed habit history here")
-//                .focusOn(findViewById(R.id.homeHistoryImageView))
-//                .build();
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -179,6 +185,11 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
+    /**
+     * returns the BottomBar
+     * @param id
+     * @return BottomBar
+     */
     public BottomBarTab getBottomBarTabFromId(@IdRes int id) {
         return bottomBar.getTabWithId(id);
     }
@@ -281,6 +292,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         ft.commit();
     }
 
+    /**
+     * goes to the CreateHabitActivity
+     */
     private void onAddHabitClicked() {
         Intent intent = new Intent(this, CreateHabitActivity.class);
         if (user.getHabitCategories() != null) {
@@ -291,18 +305,31 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         startActivityForResult(intent, CREATE_HABIT);
     }
 
+    /**
+     * goes to the FollowRequestActivity fragment and loads it in this activity
+     */
     private void onFollowRequestClicked() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.homeFragmentContainer, FollowRequestsActivity.create(user));
         ft.commit();
     }
 
+    /**
+     * goes to the UserProfileFragment and loads it in this activity
+     */
     private void onProfileClicked() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.homeFragmentContainer, UserProfileFragment.create(user,user));
         ft.commit();
     }
 
+    /**
+     *  this method is for when a task is marked completed;
+     *  it launches CreateHabitEventActivity
+     *
+     *  @param completions the name of the habit
+     *  @param habitId the ID of the habit
+     */
     public void onHabitClicked(String completions, String habitId) {
         Intent intent = new Intent(this, CreateHabitEventActivity.class);
         intent.putExtra(CreateHabitEventActivity.ID_HABIT_NAME, completions);
@@ -420,6 +447,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
     }
 
+    /**
+     * a helper method to make sure that the habits data is up to date in the dashboard activity
+     */
     public void updateAllHabits() {
         Fragment f = getFragmentForCurrentTab();
         if (f instanceof DashboardActivity) {
@@ -427,10 +457,16 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         }
     }
 
+    /**
+     * @return the active fragment that's currently displayed in the screen
+     */
     public Fragment getFragmentForCurrentTab() {
         return getSupportFragmentManager().findFragmentById(R.id.homeFragmentContainer);
     }
 
+    /**
+     * @return the dashboard fragment
+     */
     public DashboardActivity getDashboardFragment() {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.homeFragmentContainer);
         if (f instanceof DashboardActivity) {
