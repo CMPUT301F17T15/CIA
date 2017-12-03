@@ -41,14 +41,12 @@ public class StatisticActivity extends AppCompatActivity {
 
     public static final String ID_USER = "Profile";
 
-    private Profile user;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
-        user = (Profile) getIntent().getSerializableExtra(ID_USER);
+        final Profile user = (Profile) getIntent().getSerializableExtra(ID_USER);
 
         ListView typeList = (ListView)findViewById(R.id.Type_List_View);
         final List<String> types = new ArrayList<>();
