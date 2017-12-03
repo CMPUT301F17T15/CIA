@@ -42,15 +42,14 @@ import java.util.List;
  */
 
 public class SingleStatisticViewActivity extends AppCompatActivity {
-    private Profile user;
-    private TextView title;
-    private String habitID;
-    private TextView userName;
+
+    // Intent identifier for the viewed habit
+    public static final String ID_HABIT = "Habit";
+
     private Habit habit;
+
+    private TextView title;
     private LineChart lineChart;
-    private Date startDate;
-    private List<Date> getMissedDates;
-    private List<Integer> weekdays;
     private TextView completed;
     private TextView miss;
     private TextView lastComplete;
@@ -90,37 +89,28 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         leftAxis.setDrawLimitLinesBehindData(true);
 
         //Information receiving from previous activity
-        user = (Profile) getIntent().getSerializableExtra("Profile");
-        habitID = getIntent().getStringExtra("HabitID");
-        habit = user.getHabitById(habitID);
+        habit = (Habit)getIntent().getSerializableExtra(ID_HABIT);
 
         completed = (TextView) findViewById(R.id.CompletedTextView);
         completed.setText("" + habit.getTimesCompleted());
 
         lastComplete = (TextView) findViewById(R.id.LastCompleteTextView);
-
         lastComplete.setText(formatter.format(habit.getLastCompletionDate()).toString());
 
         miss = (TextView) findViewById(R.id.MissedTextView);
         miss.setText("" + habit.getTimesMissed());
-
-        userName = (TextView) findViewById(R.id.UserNameTextView);
-        userName.setText(user.getName());
 
         title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
         //Data processing for line chart
         List<String> xAxis = new ArrayList<>();
-        weekdays = habit.getDaysOfWeek();
-        startDate = habit.getStartDate();
         ArrayList<String> missed = new ArrayList<>();
-        getMissedDates = habit.getMissedDates();
-        for (Date date : getMissedDates) {
+        for (Date date : habit.getMissedDates()) {
             missed.add((new DateTime(formatter.format(date)).toString("MMM-dd")));
         }
 
-        DateTime start = new DateTime(formatter.format(startDate));
+        DateTime start = new DateTime(formatter.format(habit.getStartDate()));
         DateTime end = new DateTime(formatter.format(new Date()));
         for (DateTime d = start; d.isBefore(end) || d.isEqual(end); d = d.plusDays(1)) {
             xAxis.add(d.toString("MMM-dd"));
