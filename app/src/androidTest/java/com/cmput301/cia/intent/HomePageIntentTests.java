@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
@@ -32,12 +33,12 @@ import java.util.Date;
  * This class tests the UI for the features on the home page of the activity
  */
 
-public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
 
     private Solo solo;
 
     public HomePageIntentTests() {
-        super(com.cmput301.cia.activities.HomePageActivity.class);
+        super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
     public void setUp() throws Exception{
@@ -53,22 +54,20 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomePa
 
     public void testNavigation(){
         // select profile option in menu
-        solo.clickOnActionBarItem(R.id.menu_button_My_Profile);
-        solo.clickOnMenuItem("My Profile");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
         solo.goBackToActivity("HomePageActivity");
         solo.sleep(300);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // select add new habit
-        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
-        solo.clickOnMenuItem("Add New Habit");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
         solo.goBackToActivity("HomePageActivity");
         solo.sleep(300);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // select habit history
         solo.clickOnActionBarItem(R.id.menu_button_Habit_History);
@@ -77,7 +76,7 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomePa
         solo.assertCurrentActivity("wrong activity", HistoryActivity.class);
         solo.goBack();
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // TODO: power rankings
 

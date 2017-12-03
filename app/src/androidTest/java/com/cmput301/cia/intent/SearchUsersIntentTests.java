@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
@@ -33,12 +34,12 @@ import java.util.Date;
  * NOTE: These tests require an internet connection
  */
 
-public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<SearchUsersActivity> {
+public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
 
     private Solo solo;
 
     public SearchUsersIntentTests() {
-        super(com.cmput301.cia.activities.users.SearchUsersActivity.class);
+        super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
     public void setUp() throws Exception{

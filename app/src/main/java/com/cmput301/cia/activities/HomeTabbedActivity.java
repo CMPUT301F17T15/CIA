@@ -47,6 +47,7 @@ import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.DeviceUtilities;
 import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.roughike.bottombar.TabSelectionInterceptor;
 
@@ -157,13 +158,14 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
         showCaseQueue.add(showCaseExpandable);
         showCaseQueue.add(showCaseDaily);
-//        showCaseQueue.add(showCaseHistory);
-        showCaseQueue.add(showCaseProfile);
-        showCaseQueue.add(showCaseRequest);
-//        showCaseQueue.add(showCaseFollow);
+
+
         showCaseQueue.add(showCaseSearch);
-        showCaseQueue.add(showCaseMenu);
         showCaseQueue.add(showCaseHabit);
+        showCaseQueue.add(showCaseRequest);
+        showCaseQueue.add(showCaseProfile);
+        showCaseQueue.add(showCaseMenu);
+
         showCaseQueue.show();
 
         showCaseQueue.setCompleteListener(new OnCompleteListener() {
@@ -184,6 +186,10 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         Intent intent = new Intent(this, ViewEventsMapActivity.class);
         intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) user.getNearbyEvents(location));
         startActivity(intent);
+    }
+
+    public BottomBarTab getBottomBarTabFromId(@IdRes int id) {
+        return bottomBar.getTabWithId(id);
     }
 
     /**

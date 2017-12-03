@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.MainActivity;
@@ -32,14 +33,15 @@ import java.util.List;
  * NOTE: These tests require an internet connection
  */
 
-public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
     private Solo solo;
 
-    public CreateHabitIntentTests(){super(HomePageActivity.class);}
+    public CreateHabitIntentTests(){super(HomeTabbedActivity.class);}
 
     public void setUp() throws Exception {
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
         intent.putExtra(HomePageActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
@@ -49,8 +51,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
     }
 
     public void testClear(){
-        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
-        solo.clickOnMenuItem("Add New Habit");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_addHabit));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
@@ -77,8 +78,8 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         field.setAccessible(true);
         int count = ((Profile)field.get(solo.getCurrentActivity())).getHabitsCount();
 
-        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
-        solo.clickOnMenuItem("Add New Habit");
+
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_addHabit));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
@@ -116,17 +117,21 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
 
         solo.clickOnButton("Save");
         solo.sleep(4000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure a new habit was added to the user
         assertTrue(((Profile)field.get(solo.getCurrentActivity())).getHabitsCount() == count+1);
     }
 
     public void testLength(){
-        solo.clickOnActionBarItem(R.id.menu_button_Add_New_Habit);
-        solo.clickOnMenuItem("Add New Habit");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_addHabit));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
+
+        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.sleep(600);
+        solo.clickOnView(solo.getView(R.id.Ok_Button));
+        solo.sleep(1000);
 
         // max reason length = 30
         solo.enterText((EditText)solo.getView(R.id.reason), "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");

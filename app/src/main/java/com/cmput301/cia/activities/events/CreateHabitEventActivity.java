@@ -96,6 +96,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         habitId = intent.getStringExtra(ID_HABIT_HASH);
         ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
+        this.setTitle(habitName);
+
         imageView = (ImageView)findViewById(R.id.cheImageView);
         dateText = (TextView) findViewById(R.id.cheDateTextView);
         setDateText();
