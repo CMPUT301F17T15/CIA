@@ -7,25 +7,20 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.events.HistoryActivity;
-import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.habits.EditHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -38,10 +33,10 @@ import java.util.Date;
  * NOTE: These tests require an internet connection
  */
 
-public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
     private Solo solo;
 
-    public ViewHabitIntentTests(){super(com.cmput301.cia.activities.HomePageActivity.class);}
+    public ViewHabitIntentTests(){super(com.cmput301.cia.activities.HomeTabbedActivity.class);}
 
     public void setUp() throws Exception {
 
@@ -57,7 +52,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeP
         profile.addHabit(habit2);
 
         Intent intent = new Intent();
-        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
@@ -103,7 +98,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeP
         // confirm deletion dialog
         solo.clickOnView(solo.getView(android.R.id.button1));
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure habit was removed
         assertTrue(((Profile)field.get(solo.getCurrentActivity())).getHabitsCount() == count-1);
@@ -153,7 +148,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeP
         // return to home page
         solo.goBack();
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure changes took effect in the home page
         String name = loadHabit();

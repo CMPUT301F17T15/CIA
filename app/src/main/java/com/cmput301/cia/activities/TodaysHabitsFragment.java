@@ -39,13 +39,14 @@ import java.util.List;
  */
 
 public class TodaysHabitsFragment extends Fragment {
+
     public static final String ID_PROFILE = "User";
     // the habits the user must do today
     private List<Habit> todaysHabits;
     private Profile user;
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
-
+    private TextView noTasks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -57,11 +58,36 @@ public class TodaysHabitsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         user = (Profile) getArguments().getSerializable(ID_PROFILE);
         todaysHabits = user.getTodaysHabits();
+        noTasks = (TextView) view.findViewById(R.id.noTasks);
+
+        if (todaysHabits.size() > 0) {
+            noTasks.setVisibility(View.GONE);
+        }
 
         // today's tasks listview (checkable)
         checkable = (ListView) view.findViewById(R.id.TodayToDoListView);
         checkable.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         resetCheckableListAdapter();
+    }
+
+
+    @Override
+    public void onResume() {
+        refreshDisplay();
+        super.onResume();
+    }
+
+    /**
+     * Update the elements in both ListViews
+     */
+    private void refreshDisplay(){
+        // update the habits list display
+        //adapter.refresh();
+        //adapter.notifyDataSetChanged();
+
+        // update the today's task list
+        resetCheckableListAdapter();
+        checkCompletedEvents();
     }
 
     @Override
@@ -116,6 +142,9 @@ public class TodaysHabitsFragment extends Fragment {
         for (int index = 0; index < todaysHabits.size(); ++index) {
             if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()) &&
                     !checkable.isItemChecked(index)) {
+                checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
+            } else if (!DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()) &&
+                    checkable.isItemChecked(index)) {
                 checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
             }
         }

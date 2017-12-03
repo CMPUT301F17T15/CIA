@@ -30,7 +30,9 @@ import com.cmput301.cia.models.Profile;
  * @version 4
  * Date: Nov 30 2017
  *
- * This activity displays the information about a user's profile
+ * This activity gets the fragment from UserProfileFragment and is used when viewing other
+ * user's profiles
+ *
  */
 
 

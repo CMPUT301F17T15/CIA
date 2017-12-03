@@ -9,14 +9,10 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.events.CreateHabitEventActivity;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.models.CompletedEventDisplay;
@@ -27,13 +23,11 @@ import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.robotium.solo.Solo;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Version 3

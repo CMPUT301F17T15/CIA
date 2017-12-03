@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Profile;
@@ -135,21 +136,23 @@ public class UserProfileFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
+            Intent intent = new Intent();
 
-                // return the viewer
-                if (!viewer.equals(displayed))
-                    intent.putExtra(RESULT_PROFILE_ID, viewer);
-                else {
-                    // modify and return the viewer's displayed
-                    displayed.setComment(commentText.getText().toString());
-                    if (image != null)
-                        displayed.setImage(ImageUtilities.imageToBase64(image));
+            // return the viewer
+            if (!viewer.equals(displayed))
+                intent.putExtra(RESULT_PROFILE_ID, viewer);
+            else {
+                // modify and return the viewer's displayed
+                displayed.setComment(commentText.getText().toString());
+                if (image != null)
+                    displayed.setImage(ImageUtilities.imageToBase64(image));
 
-                    displayed.save();
+                displayed.save();
 
 //                    intent.putExtra(RESULT_PROFILE_ID, displayed);
-                }
+            }
+
+            Toast.makeText(getContext(), "changes saved", Toast.LENGTH_SHORT).show();
 //                setResult(RESULT_OK, intent);
 //                finish();
             }

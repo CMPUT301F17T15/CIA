@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.FollowersRequestAdapter;
@@ -37,6 +38,8 @@ public class FollowRequestsFragment extends Fragment {
     private List<Profile> followRequests;
     private FollowersRequestAdapter adapter;
 
+    TextView noRequests;
+
     public static FollowRequestsFragment create(Profile currentUser) {
         FollowRequestsFragment followRequestsFragment = new FollowRequestsFragment();
         Bundle args = new Bundle();
@@ -55,10 +58,14 @@ public class FollowRequestsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().setTitle("Follow Requests");
         user = (Profile) getArguments().getSerializable(SearchUsersFragment.ID_USER);
-
+        noRequests = (TextView) view.findViewById(R.id.noFollowRequests);
         RecyclerView rvFollowerRequests = (RecyclerView) view.findViewById(R.id.rvFollowerRequests);
 
         followRequests = user.getFollowRequests();
+
+        if (followRequests.size() > 0) {
+            noRequests.setVisibility(View.GONE);
+        }
         adapter = new FollowersRequestAdapter(getContext(), followRequests, user);
 
         adapter.setOnItemClickListener(new FollowersRequestAdapter.OnItemClickListener() {
@@ -73,6 +80,7 @@ public class FollowRequestsFragment extends Fragment {
 
         rvFollowerRequests.setAdapter(adapter);
         rvFollowerRequests.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     @Override

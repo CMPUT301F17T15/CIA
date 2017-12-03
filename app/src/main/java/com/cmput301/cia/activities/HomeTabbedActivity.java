@@ -21,6 +21,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.FollowRequestsFragment;
@@ -36,7 +37,7 @@ import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -69,7 +70,7 @@ import me.toptas.fancyshowcase.OnCompleteListener;
 
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
-    private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
+    public static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
             FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
 
     public static final String ID_PROFILE = "User";
@@ -99,7 +100,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     }
 
     /**
-     * provides a tutorial for the user (for first time use of the app)
+     * Home page functionality showcasing
+     * For first time user only
+     * Disabled after complete showcasing
      */
     private void userAppTour() {
         FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();
@@ -176,7 +179,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
     @Override
     protected void handleLocationGranted() {
-        Location location = DeviceUtilities.getLocation(this);
+        Location location = LocationUtilities.getLocation(this);
         if (location == null)
             return;
 
@@ -388,8 +391,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             }
 
         }
-        //result from delete habit button
-        else if (requestCode == VIEW_HABIT){
+        else if (requestCode == HomeTabbedActivity.VIEW_HABIT) {
             if (resultCode == RESULT_OK){
 
                 // whether the habit was deleted or updated
@@ -412,7 +414,8 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.save();
             }
 
-        } else if (requestCode == VIEW_HABIT_HISTORY){
+        }
+        else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
                 user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
                 user.save();
@@ -436,13 +439,15 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
                 user.save();
             }
-        } else if (requestCode == FOLLOW_REQUESTS){
-            if (resultCode == RESULT_OK){
+        } else if (requestCode == FOLLOW_REQUESTS) {
+            if (resultCode == RESULT_OK) {
                 // TODO
                 /*Profile result = (Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE);
                 user.copyFrom(result);
                 user.save();*/
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
 
     }
@@ -535,5 +540,13 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onStartHabitDetails(Habit habit, ArrayList<String> types) {
+        Intent intent = new Intent(this, HabitViewActivity.class);
+        intent.putExtra("Habit", habit);
+        intent.putExtra("Categories", types);
+
+        startActivityForResult(intent, HomeTabbedActivity.VIEW_HABIT);
     }
 }
