@@ -61,18 +61,21 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
      */
     public void testViewedProfile() throws NoSuchFieldException, IllegalAccessException {
 
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
+        solo.sleep(1000);
 
         solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
         solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+        assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof UserProfileFragment);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
+        Field field = UserProfileFragment.class.getDeclaredField("displayed");
         field.setAccessible(true);
-        Profile viewed = (Profile)field.get(solo.getCurrentActivity());
+        Profile viewed = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
-        Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("viewer");
+        Field field2 = UserProfileFragment.class.getDeclaredField("viewer");
         field2.setAccessible(true);
-        Profile user = (Profile)field.get(solo.getCurrentActivity());
+
+        Profile user = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
         assertTrue(viewed.equals(user));
     }
