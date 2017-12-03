@@ -10,27 +10,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Shipin Guan
@@ -120,7 +116,6 @@ public class StatisticViewActivity extends AppCompatActivity {
         pieChart.setHoleRadius(5f);
 
         addData();
-
     }
 
     private void addData() {
@@ -131,7 +126,7 @@ public class StatisticViewActivity extends AppCompatActivity {
             yEntrys.add(new PieEntry(yData[i] , i));
             xEntrys.add(xData[i]);
         }
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Number habits");
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Category History");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
         pieDataSet.setValueTextColor(Color.WHITE);
@@ -140,9 +135,22 @@ public class StatisticViewActivity extends AppCompatActivity {
         colors.add(Color.BLUE);
         pieDataSet.setColors(colors);
         Legend legend = pieChart.getLegend();
+
+        List<LegendEntry> legends = new ArrayList<>();
+        LegendEntry red = new LegendEntry();
+        red.label = "Missed";
+        red.formColor = Color.RED;
+        legends.add(red);
+        LegendEntry blue = new LegendEntry();
+        blue.label = "Completed";
+        blue.formColor = Color.BLUE;
+        legends.add(blue);
+        pieChart.getLegend().setCustom(legends);
         legend.setForm(Legend.LegendForm.CIRCLE);
+
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
         pieChart.invalidate();
+        pieChart.getDescription().setEnabled(false);
     }
 }

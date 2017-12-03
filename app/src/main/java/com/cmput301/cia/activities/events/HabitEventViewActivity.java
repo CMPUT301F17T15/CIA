@@ -25,7 +25,7 @@ import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
 
         location = event.getLocation();
         if (location != null)
-            habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+            habitEventLocation.setText(LocationUtilities.getLocationName(this, location));
 
         // display the image if one is selected
         if (!event.getBase64EncodedPhoto().equals("")){
@@ -261,8 +261,8 @@ public class HabitEventViewActivity extends LocationRequestingActivity {
      */
     @Override
     protected void handleLocationGranted() {
-        location = DeviceUtilities.getLocation(this);
-        habitEventLocation.setText(DeviceUtilities.getLocationName(this, location));
+        location = LocationUtilities.getLocation(this);
+        habitEventLocation.setText(LocationUtilities.getLocationName(this, location));
     }
 
     /**

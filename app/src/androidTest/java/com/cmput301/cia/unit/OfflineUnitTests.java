@@ -32,13 +32,13 @@ import static org.junit.Assert.assertTrue;
  *
  * Tests the offline events that will be synchronized with the database when the user
  * regains connectivity.
+ * NOTE: could not find a way to disable data, which gets used when WifiManager is used to disable wifi. Manual
+ * testing was done to verify that offline deletion, addition, editing all work
  */
 
 @RunWith(AndroidJUnit4.class)
 public class OfflineUnitTests {
 
-    // TODO: find way to force device offline and then integrate ElasticSearch
-    // ex: WifiManager
     @Test
     public void testOfflineEditEvent(){
         Profile profile = new TestProfile();
