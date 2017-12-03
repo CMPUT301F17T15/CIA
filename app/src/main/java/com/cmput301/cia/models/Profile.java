@@ -74,6 +74,8 @@ public class Profile extends ElasticSearchable {
     //First time use boolean, used to display app tour for first time use.
     private boolean firstTimeUse;
 
+    private List<Message> allMessage;
+
     /**
      * Construct a new user profile object
      * @param name the name of the user (not null)
@@ -691,4 +693,17 @@ public class Profile extends ElasticSearchable {
     public List<Profile> getFollowRequests() {
         return Follow.getPendingFollows(getId());
     }
+
+
+    public void addNewMessage(Message newMessage){
+        this.allMessage.add(newMessage);
+    }
+
+    public List<Message> getAllMessage(){
+        return allMessage;
+    }
 }
+
+
+
+

@@ -58,6 +58,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private Button followButton;
     private Button unfollowButton;
+    private Button sendButton;
 
     // the user's comment
     private EditText commentText;
@@ -89,6 +90,7 @@ public class UserProfileActivity extends AppCompatActivity {
         commentText = (EditText)findViewById(R.id.profileCommentDynamicText);
         followButton = (Button)findViewById(R.id.profileFollowButton);
         unfollowButton = (Button)findViewById(R.id.profileUnfollowButton);
+        sendButton = (Button)findViewById(R.id.send);
         Button saveButton = (Button)findViewById(R.id.profileSaveButton);
         imageView = (ImageView)findViewById(R.id.profileImageView);
 
@@ -110,6 +112,17 @@ public class UserProfileActivity extends AppCompatActivity {
         commentText.setText(displayed.getComment());
         ((TextView)findViewById(R.id.profileNameText)).setText(displayed.getName());
         ((TextView)findViewById(R.id.profileDateDynamicText)).setText(DateUtilities.formatDate(displayed.getCreationDate()));
+
+        sendButton.setOnClickListener(new TimedClickListener() {
+            @Override
+            public void handleClick() {
+                Intent profileIntent = new Intent(UserProfileActivity.this, SendMessageActivity.class);
+                profileIntent.putExtra(UserProfileActivity.PROFILE_ID, displayed);
+                profileIntent.putExtra(UserProfileActivity.USER_ID, viewer);
+                startActivity(profileIntent);
+
+            }
+        });
 
         saveButton.setOnClickListener(new TimedClickListener() {
             @Override

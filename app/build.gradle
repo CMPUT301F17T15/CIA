@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('src/include/jest-droid-2.0.1-SNAPSHOT.jar')
+
     compile 'net.danlew:android.joda:2.9.9.1'
     compile 'ca.antonious:materialdaypicker:0.2.1'
     compile 'com.android.support:appcompat-v7:26.+'
@@ -37,5 +38,4 @@ dependencies {
     compile 'com.android.support:support-v4:26.+'
     testCompile 'org.testng:testng:6.9.6'
     androidTestCompile 'junit:junit:4.12'
-
 }
