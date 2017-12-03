@@ -15,6 +15,7 @@ import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
@@ -44,6 +45,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
     public void setUp() throws Exception{
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
         intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
@@ -95,9 +97,9 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
         solo.sleep(1000);
 //        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
+        Field field = UserProfileFragment.class.getDeclaredField("displayed");
         field.setAccessible(true);
-        Profile viewed = (Profile)field.get(solo.getCurrentActivity());
+        Profile viewed = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
         viewed.setComment("");
         assertFalse(viewed.getComment().equals(newComment));

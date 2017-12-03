@@ -45,20 +45,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        backGround = (VideoView) findViewById(R.id.backGround);
+//        backGround = (VideoView) findViewById(R.id.backGround);
         userName = (EditText) findViewById(R.id.loginNameEdit);
         SerializableUtilities.initializeFilesDir(getFilesDir().getPath());
 
         //setting the video in raw as background.
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cia);
-        backGround.setVideoURI(uri);
-        backGround.start();
-        backGround.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setLooping(true);
-            }
-        });
+//        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cia);
+//        backGround.setVideoURI(uri);
+//        backGround.start();
+//        backGround.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mediaPlayer) {
+//                mediaPlayer.setLooping(true);
+//            }
+//        });
 
         Button login = (Button)findViewById(R.id.loginButton);
         login.setOnClickListener(new TimedClickListener() {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        backGround.start();
+//        backGround.start();
     }
 
     @Override

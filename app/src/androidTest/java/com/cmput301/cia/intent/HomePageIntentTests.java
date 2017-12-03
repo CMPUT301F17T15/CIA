@@ -7,7 +7,6 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
@@ -16,14 +15,11 @@ import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
-import com.cmput301.cia.activities.users.UserProfileActivity;
-import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 /**
  * Version 2
@@ -44,6 +40,7 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomeTa
     public void setUp() throws Exception{
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
         intent.putExtra(HomePageActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
@@ -56,16 +53,13 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomeTa
         // select profile option in menu
         solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
         solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
-        solo.goBackToActivity("HomePageActivity");
-        solo.sleep(300);
-        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
+        assertTrue(getActivity().getFragmentForCurrentTab() instanceof UserProfileFragment);
 
         // select add new habit
-        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_addHabit));
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
-        solo.goBackToActivity("HomePageActivity");
+        solo.goBackToActivity("HomeTabbedActivity");
         solo.sleep(300);
         solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
