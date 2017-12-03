@@ -119,11 +119,11 @@ public class StatisticViewActivity extends AppCompatActivity {
         pieChart.setTransparentCircleAlpha(0);
         pieChart.setHoleRadius(5f);
 
-        addData(pieChart);
+        addData();
 
     }
 
-    private void addData(PieChart chart) {
+    private void addData() {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
         ArrayList<String> xEntrys = new ArrayList<>();
 
