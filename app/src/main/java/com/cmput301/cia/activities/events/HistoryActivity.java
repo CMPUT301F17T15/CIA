@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
+import com.cmput301.cia.controller.HistoryAdapter;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.DeleteHabitEvent;
@@ -117,7 +118,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         });
 
         convertEventsToString();
-        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.historyLayout));
+//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.historyLayout));
     }
 
     @Override
@@ -144,7 +145,7 @@ public class HistoryActivity extends LocationRequestingActivity {
      */
     private void convertEventsToString(){
         List<CompletedEventDisplay> events = getDisplayedEvents();
-        ArrayAdapter<CompletedEventDisplay> adapter = new ArrayAdapter<>(this, R.layout.list_item, events);
+        HistoryAdapter adapter = new HistoryAdapter(this, R.layout.list_item, events);
         historyList.setAdapter(adapter);
     }
 
