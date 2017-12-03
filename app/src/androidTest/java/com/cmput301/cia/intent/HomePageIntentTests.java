@@ -12,9 +12,8 @@ import android.widget.ListView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomeTabbedActivity;
-import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.events.HistoryActivity;
-import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
@@ -42,7 +41,7 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomeTa
         Profile profile = new TestProfile("xyz");
         profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbed.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());

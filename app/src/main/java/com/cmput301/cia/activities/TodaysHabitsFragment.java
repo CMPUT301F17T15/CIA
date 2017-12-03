@@ -137,6 +137,9 @@ public class TodaysHabitsFragment extends Fragment {
             if (DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()) &&
                     !checkable.isItemChecked(index)) {
                 checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
+            } else if (!DateUtilities.isSameDay(todaysHabits.get(index).getLastCompletionDate(), new Date()) &&
+                    checkable.isItemChecked(index)) {
+                checkable.performItemClick(checkableAdapter.getView(index, null, null), index, checkableAdapter.getItemId(index));
             }
         }
 

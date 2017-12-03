@@ -7,4 +7,7 @@
     <color name="colorMenuBackground">#aaaac2ea</color>
     <color name="colorMenuText">#ffffff</color>
     <color name="colorDelete">#B22222</color>
+
+    <color name="dayPressed">@color/colorAccent</color>
+    <color name="daySelected">@color/colorAccent</color>
 </resources>

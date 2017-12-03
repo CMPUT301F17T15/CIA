@@ -13,7 +13,6 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.events.CreateHabitEventActivity;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
@@ -58,7 +57,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         profile.addHabit(habit2);
 
         Intent intent = new Intent();
-        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());

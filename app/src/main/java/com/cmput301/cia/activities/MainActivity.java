@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         SerializableUtilities.initializeFilesDir(getFilesDir().getPath());
 
         //setting the video in raw as background.
-//        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cia);
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.cia);
 //        backGround.setVideoURI(uri);
 //        backGround.start();
 //        backGround.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -73,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Profile found -> sign in
                 if (profile.first != null && profile.second){
-//                    Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
                     Intent intent = new Intent(MainActivity.this, HomeTabbedActivity.class);
-                    intent.putExtra(HomePageActivity.ID_PROFILE, profile.first);
+                    intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile.first);
                     startActivity(intent);
                 } else if (!profile.second){
                     Toast.makeText(MainActivity.this, "Could not connect to the database.", Toast.LENGTH_SHORT).show();
@@ -109,13 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     // No profile found, sign the user in with their new account
                     Intent intent = new Intent(MainActivity.this, HomeTabbedActivity.class);
-                    intent.putExtra(HomePageActivity.ID_PROFILE, new Profile(name));
+                    intent.putExtra(HomeTabbedActivity.ID_PROFILE, new Profile(name));
                     startActivity(intent);
                 }
             }
         });
 
-        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.loginPageLayout));
+//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.loginPageLayout));
     }
 
     //play video when back to login page.

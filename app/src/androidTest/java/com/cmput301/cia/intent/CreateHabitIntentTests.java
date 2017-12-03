@@ -13,16 +13,10 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
-import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Version 1
@@ -43,7 +37,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         Profile profile = new TestProfile("xyz");
         profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbed.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
