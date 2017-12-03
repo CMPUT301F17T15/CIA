@@ -38,6 +38,7 @@ public class Follow extends ElasticSearchable {
     private String followeeId;
 
     // whether this object represents a pending (requested) or accepted sendFollowRequest
+    // TODO: change to boolean if it doesn't break elasticsearch
     private String accepted;
 
     /**
