@@ -56,6 +56,7 @@ public class HistoryActivity extends LocationRequestingActivity {
     private EditText filterEditText;
     private CheckBox useHabit;
     private TextView filterHabitText;
+    private TextView noHabitHistory;
 
     // The user who is viewing their habit history
     private Profile user;
@@ -84,6 +85,12 @@ public class HistoryActivity extends LocationRequestingActivity {
 
         Button eventButton = (Button) findViewById(R.id.historyEventButton);
         Button filter = (Button) findViewById(R.id.historyFilterButton);
+
+
+        noHabitHistory = (TextView) findViewById(R.id.noHabitHistory);
+        if (user.getHabits().size() > 0) {
+            noHabitHistory.setVisibility(View.GONE);
+        }
 
         // allow the user to pick a filter habit
         eventButton.setOnClickListener(new TimedClickListener() {
