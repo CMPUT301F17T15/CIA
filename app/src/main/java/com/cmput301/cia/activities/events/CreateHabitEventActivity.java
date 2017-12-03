@@ -94,7 +94,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
-        ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
+//        ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
         this.setTitle(habitName);
 
@@ -126,7 +126,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             }
         });
 
-        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
+//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
 
     @Override
