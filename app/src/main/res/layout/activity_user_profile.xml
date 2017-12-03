@@ -3,126 +3,100 @@
   ~ Copyright (c) 2017 CMPUT301F17T15. This project is distributed under the MIT license.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.cmput301.cia.activities.users.UserProfileActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/profileUnfollowButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="126dp"
-        android:text="Unfollow"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    <FrameLayout
+        android:id="@+id/profileFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/profileImageText"
-        android:layout_width="76dp"
-        android:layout_height="27dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginTop="201dp"
-        android:text="IMAGE"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/profileNameText"
-        android:layout_width="338dp"
-        android:layout_height="62dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+</LinearLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/profileDateStaticText"-->
+        <!--android:layout_width="129dp"-->
+        <!--android:layout_height="23dp"-->
+        <!--android:text="REGISTERED ON"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:layout_marginTop="96dp"-->
+        <!--android:layout_marginLeft="26dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent" />-->
 
-    <TextView
-        android:id="@+id/profileDateStaticText"
-        android:layout_width="129dp"
-        android:layout_height="23dp"
-        android:text="REGISTERED ON"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="96dp"
-        android:layout_marginLeft="26dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/profileDateDynamicText"-->
+        <!--android:layout_width="169dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_marginLeft="164dp"-->
+        <!--android:layout_marginTop="96dp"-->
+        <!--android:textAlignment="center"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-    <TextView
-        android:id="@+id/profileDateDynamicText"
-        android:layout_width="169dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="164dp"
-        android:layout_marginTop="96dp"
-        android:textAlignment="center"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/profileCommentStaticText"-->
+        <!--android:layout_width="107dp"-->
+        <!--android:layout_height="26dp"-->
+        <!--android:text="COMMENT"-->
+        <!--android:layout_marginLeft="26dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:layout_marginTop="132dp" />-->
 
-    <TextView
-        android:id="@+id/profileCommentStaticText"
-        android:layout_width="107dp"
-        android:layout_height="26dp"
-        android:text="COMMENT"
-        android:layout_marginLeft="26dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="132dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/profileCommentDynamicText"-->
+        <!--android:layout_width="224dp"-->
+        <!--android:layout_height="39dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginTop="121dp"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:maxLength="20"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-    <EditText
-        android:id="@+id/profileCommentDynamicText"
-        android:layout_width="224dp"
-        android:layout_height="39dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="121dp"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:maxLength="20"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<ImageView-->
+        <!--android:id="@+id/profileImageView"-->
+        <!--android:layout_width="217dp"-->
+        <!--android:layout_height="147dp"-->
+        <!--app:srcCompat="@android:color/black"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--android:layout_marginBottom="163dp"-->
+        <!--android:layout_marginLeft="126dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="1.0" />-->
 
-    <ImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="217dp"
-        android:layout_height="147dp"
-        app:srcCompat="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="163dp"
-        android:layout_marginLeft="126dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="1.0" />
+    <!--<Button-->
+        <!--android:id="@+id/profileFollowButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Follow"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--android:layout_marginBottom="16dp" />-->
 
-    <Button
-        android:id="@+id/profileFollowButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Follow"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+    <!--<Button-->
+        <!--android:id="@+id/profileSaveButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginLeft="257dp"-->
+        <!--android:text="Save"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent" />-->
 
-    <Button
-        android:id="@+id/profileSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="257dp"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    <!--<Button-->
+        <!--android:id="@+id/MessageButton"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Message"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="392dp" />-->
 
-    <Button
-        android:id="@+id/MessageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="392dp" />
-
-</android.support.constraint.ConstraintLayout>
+<!--</android.support.constraint.ConstraintLayout>-->

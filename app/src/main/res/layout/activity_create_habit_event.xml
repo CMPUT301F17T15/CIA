@@ -13,100 +13,95 @@
 
     <Button
         android:id="@+id/cheCalendarButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="79dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ic_date_range_black_24px"
         android:onClick="datePickerDialog"
-        app:layout_constraintHorizontal_bias="0.283"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cheHabitNameText" />
 
     <TextView
         android:id="@+id/cheCommentStaticText"
         android:layout_width="88dp"
         android:layout_height="25dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="227dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:text="Comment"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cheLocationStaticText" />
 
     <TextView
         android:id="@+id/chePhotoText"
         android:layout_width="62dp"
         android:layout_height="23dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="285dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:text="Photo"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cheCommentStaticText" />
 
     <TextView
         android:id="@+id/cheLocationDynamicText"
-        android:layout_width="227dp"
-        android:layout_height="84dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="124dp"
-        android:text="NONE"
+        android:layout_width="221dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:text="add location"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="149dp" />
+        app:layout_constraintStart_toEndOf="@+id/cheLocationStaticText"
+        app:layout_constraintTop_toBottomOf="@+id/cheDateTextView" />
 
     <TextView
         android:id="@+id/cheLocationStaticText"
         android:layout_width="73dp"
         android:layout_height="26dp"
         android:layout_marginLeft="37dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Location"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cheDateTextView" />
 
     <TextView
         android:id="@+id/cheHabitNameText"
         android:layout_width="130dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="124dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="127dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/cheDateStaticText"
-        android:layout_width="59dp"
+        android:layout_width="wrap_content"
         android:layout_height="26dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         android:text="Date"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cheHabitNameText" />
 
     <ImageButton
         android:id="@+id/cheAttachLocationButton"
-        android:layout_width="27dp"
-        android:layout_height="27dp"
-        android:layout_marginLeft="118dp"
-        android:layout_marginTop="124dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:onClick="onAttachLocationClicked"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cheCalendarButton"
         app:srcCompat="@android:drawable/ic_menu_mylocation" />
 
     <EditText
@@ -114,46 +109,40 @@
         android:layout_width="220dp"
         android:layout_height="38dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:maxLength="20"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="214dp" />
+        app:layout_constraintStart_toEndOf="@+id/cheCommentStaticText"
+        app:layout_constraintTop_toBottomOf="@+id/cheLocationDynamicText" />
 
     <ImageView
         android:id="@+id/cheImageView"
         android:layout_width="194dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="101dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:onClick="onImageClicked"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@android:color/black"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chePhotoText"
+        app:srcCompat="@android:color/black" />
 
     <Button
         android:id="@+id/cheSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="231dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.315" />
-
+        app:layout_constraintLeft_toLeftOf="parent" />
     <Button
         android:id="@+id/cheResetImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="101dp"
-        android:layout_marginLeft="32dp"
+        android:layout_marginBottom="72dp"
+        android:layout_marginLeft="16dp"
         android:onClick="onResetImageClicked"
         android:text="Reset Image"
         android:visibility="invisible"
@@ -165,11 +154,13 @@
         android:layout_width="163dp"
         android:layout_height="37dp"
         android:layout_marginLeft="174dp"
-        android:layout_marginTop="79dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/cheDateStaticText"
+        app:layout_constraintTop_toBottomOf="@+id/cheHabitNameText" />
 
 </android.support.constraint.ConstraintLayout>

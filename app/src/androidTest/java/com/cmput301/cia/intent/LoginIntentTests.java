@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.HomePageActivity;
+import com.cmput301.cia.activities.HomeTabbedActivity;
 import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
@@ -71,7 +72,7 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clickOnButton("Register");         // register new profile
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure previously created profiles can not be recreated
         solo.goBackToActivity("MainActivity");
@@ -88,7 +89,7 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         // login again
         solo.clickOnButton("Login");
         solo.sleep(3000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
     }
 
     @Override

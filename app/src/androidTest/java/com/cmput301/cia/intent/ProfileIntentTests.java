@@ -13,9 +13,10 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
+import com.cmput301.cia.activities.HomeTabbedActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
@@ -30,19 +31,22 @@ import java.lang.reflect.Field;
  * NOTE: These tests require an internet connection
  */
 
-public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePageActivity> {
+
+public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTabbedActivity> {
+
 
     private Solo solo;
 
     public ProfileIntentTests() {
-        super(com.cmput301.cia.activities.HomePageActivity.class);
+        super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
     public void setUp() throws Exception{
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(HomePageActivity.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
@@ -56,18 +60,21 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
      */
     public void testViewedProfile() throws NoSuchFieldException, IllegalAccessException {
 
-        solo.clickOnActionBarItem(R.id.menu_button_My_Profile);
-        solo.clickOnMenuItem("My Profile");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
         solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
+        solo.sleep(1000);
+        assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof UserProfileFragment);
+
+        Field field = UserProfileFragment.class.getDeclaredField("displayed");
         field.setAccessible(true);
-        Profile viewed = (Profile)field.get(solo.getCurrentActivity());
+        Profile viewed = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
-        Field field2 = solo.getCurrentActivity().getClass().getDeclaredField("viewer");
+        Field field2 = UserProfileFragment.class.getDeclaredField("viewer");
         field2.setAccessible(true);
-        Profile user = (Profile)field.get(solo.getCurrentActivity());
+
+        Profile user = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
         assertTrue(viewed.equals(user));
     }
@@ -87,14 +94,14 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         user.setComment("");
         assertFalse(user.getComment().equals(newComment));
 
-        solo.clickOnActionBarItem(R.id.menu_button_My_Profile);
-        solo.clickOnMenuItem("My Profile");
-        solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
 
-        Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_profile));
+        solo.sleep(1000);
+//        solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+
+        Field field = UserProfileFragment.class.getDeclaredField("displayed");
         field.setAccessible(true);
-        Profile viewed = (Profile)field.get(solo.getCurrentActivity());
+        Profile viewed = (Profile)field.get(getActivity().getFragmentForCurrentTab());
 
         viewed.setComment("");
         assertFalse(viewed.getComment().equals(newComment));
@@ -104,7 +111,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         solo.enterText((EditText)solo.getView(R.id.profileCommentDynamicText), newComment);
         solo.clickOnButton("Save");
         solo.sleep(4000);
-        solo.assertCurrentActivity("wrong activity", HomePageActivity.class);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         assertTrue(user.getComment().equals(newComment));
     }
@@ -113,10 +120,9 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
      * test viewing other people's profiles, along with following + unfollowing
      */
     public void testOtherProfile() throws NoSuchFieldException, IllegalAccessException {
-        solo.clickOnActionBarItem(R.id.menu_button_searchUsers);
-        solo.clickOnMenuItem("Search Users");
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
         solo.sleep(2500);
-        solo.assertCurrentActivity("wrong activity", SearchUsersActivity.class);
+        assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
 
         solo.enterText(0, "vfutest13");
         solo.sleep(1000);
@@ -127,7 +133,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
         if (adapter.getCount() > 0) {
             solo.clickInList(1, 0);
             solo.sleep(2000);
-            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+            assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
 
             // the profile being displayed
             Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
@@ -154,7 +160,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomePag
 
             solo.goBack();
             solo.sleep(3000);
-            solo.assertCurrentActivity("wrong activity", SearchUsersActivity.class);
+            solo.assertCurrentActivity("wrong activity", SearchUsersFragment.class);
 
             solo.clickInList(1, 0);
             solo.sleep(2000);

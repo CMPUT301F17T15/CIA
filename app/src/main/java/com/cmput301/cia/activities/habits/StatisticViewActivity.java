@@ -56,8 +56,9 @@ public class StatisticViewActivity extends AppCompatActivity {
         user = (Profile) getIntent().getSerializableExtra("Profile");
 
         final String type = getIntent().getStringExtra("type");
-        typeName = (TextView) findViewById(R.id.Type_Name);
-        typeName.setText(type);
+//        typeName = (TextView) findViewById(R.id.Type_Name);
+        this.setTitle(type);
+//        typeName.setText(type);
         typeNumber = (TextView) findViewById(R.id.habitsNumber);
         typeNumber.setText(String.valueOf(user.getHabitsInCategory(type).size()));
         int completeCounter = 0;

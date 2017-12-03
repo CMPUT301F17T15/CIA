@@ -60,7 +60,7 @@ public class CompletedEventDisplay implements Serializable {
      */
     @Override
     public String toString(){
-        DateFormat df = new SimpleDateFormat("EEEE MMMM dd YYYY h:mm a");
+        DateFormat df = SimpleDateFormat.getDateInstance();
         if (userName.equals("")){
             return "Completed " + habitName + " on " + df.format(getCompletionDate());
         } else {

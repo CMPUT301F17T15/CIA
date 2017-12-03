@@ -1,0 +1,23 @@
+<tabs>
+    <tab
+        id="@+id/tab_dashboard"
+        icon="@drawable/ic_book_black_24px"
+        title="Dashboard" />
+    <tab
+        id="@+id/tab_search"
+        icon="@drawable/ic_search_black_24px"
+        title="Search" />
+    <tab
+        id="@+id/tab_addHabit"
+        icon="@drawable/ic_add_box_black_24px"
+        title="Add Habit" />
+    <tab
+        id="@+id/tab_followRequests"
+        icon="@drawable/ic_group_add_black_24px"
+        title="Requests" />
+    <tab
+        id="@+id/tab_profile"
+        icon="@drawable/ic_account_circle_black_24px"
+        title="Profile" />
+
+</tabs>

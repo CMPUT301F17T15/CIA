@@ -7,8 +7,8 @@
 
     <TextView
         android:id="@+id/followRequesteeName"
-        android:layout_width="168dp"
-        android:layout_height="wrap_content"
+        android:layout_width="156dp"
+        android:layout_height="17dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="25dp"
         android:text="TextView"
@@ -35,6 +35,7 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
