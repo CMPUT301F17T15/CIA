@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.events.HistoryActivity;
@@ -40,13 +41,23 @@ import java.util.Map;
 public class StatisticActivity extends AppCompatActivity {
 
     public static final String ID_USER = "Profile";
+    private TextView noStatistics;
+    private TextView statisticsActivityTitile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
+        noStatistics = (TextView) findViewById(R.id.noStatistics);
+        statisticsActivityTitile = (TextView) findViewById(R.id.statisticChooseText);
+
         final Profile user = (Profile) getIntent().getSerializableExtra(ID_USER);
+        if (user.getHabits().size() > 0) {
+            noStatistics.setVisibility(View.GONE);
+        } else {
+            statisticsActivityTitile.setVisibility(View.GONE);
+        }
 
         ListView typeList = (ListView)findViewById(R.id.Type_List_View);
         final List<String> types = new ArrayList<>();

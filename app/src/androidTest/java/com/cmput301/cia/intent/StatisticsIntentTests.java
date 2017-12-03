@@ -7,14 +7,9 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.habits.CreateHabitActivity;
-import com.cmput301.cia.activities.HomePageActivity;
-import com.cmput301.cia.activities.MainActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.habits.StatisticViewActivity;
 import com.cmput301.cia.models.Habit;

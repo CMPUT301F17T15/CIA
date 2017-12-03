@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.CompletedEventDisplay;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,8 +39,6 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
     // the list of events that could be displayed on the map
     private List<CompletedEventDisplay> events;
 
-    private LatLngBounds.Builder builder;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +58,7 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        builder = new LatLngBounds.Builder();
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         // whether there is atleast one event with a location to be displayed on the map or not
         boolean atleastOneEvent = false;
@@ -82,15 +80,14 @@ public class ViewEventsMapActivity extends FragmentActivity implements OnMapRead
          * The width, height, padding aspects of newLatLngBounds() is from:
          * https://github.com/OneBusAway/onebusaway-android/issues/581
          */
-        // TODO: test on other devices to make sure diff sizes work, test with different markers far away
         if (atleastOneEvent) {
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), getResources().getDisplayMetrics().widthPixels,
                     getResources().getDisplayMetrics().heightPixels, (int) Math.ceil(0.12 * getResources().getDisplayMetrics().widthPixels)));
         } else {
             // move the map to the device's current location
-            Location deviceLoc = DeviceUtilities.getLocation(this);
+            Location deviceLoc = LocationUtilities.getLocation(this);
             if (deviceLoc != null)
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(deviceLoc.getLatitude(), deviceLoc.getLongitude()), 50));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(deviceLoc.getLatitude(), deviceLoc.getLongitude()), 30));
         }
     }
 }

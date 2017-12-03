@@ -27,7 +27,7 @@ import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.utilities.DateUtilities;
-import com.cmput301.cia.utilities.DeviceUtilities;
+import com.cmput301.cia.utilities.LocationUtilities;
 import com.cmput301.cia.utilities.FontUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
 
@@ -94,7 +94,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         Intent intent = getIntent();
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
-        ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
+//        ((TextView)findViewById(R.id.cheHabitNameText)).setText(habitName);
 
         this.setTitle(habitName);
 
@@ -126,7 +126,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             }
         });
 
-        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
+//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
 
     @Override
@@ -301,8 +301,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      */
     @Override
     protected void handleLocationGranted() {
-        location = DeviceUtilities.getLocation(this);
-        locationText.setText(DeviceUtilities.getLocationName(this, location));
+        location = LocationUtilities.getLocation(this);
+        locationText.setText(LocationUtilities.getLocationName(this, location));
     }
 
 }

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -66,6 +67,8 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     private ImageView profileImage;
     private ViewSwitcher profileHistorySwitcher;
 
+    private TextView noFollowing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +79,14 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         followedList = (ListView)findViewById(R.id.vfuProfilesList);
 
+        noFollowing = (TextView)findViewById(R.id.noFollowing);
+
         followed = displayed.getFollowing();
+
+        if (followed.size() > 0) {
+            noFollowing.setVisibility(View.GONE);
+        }
+
         followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(followedListAdapter);
 

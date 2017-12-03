@@ -28,10 +28,6 @@
             android:name=".activities.events.FilterHabitsActivity"
             android:label="@string/title_activity_filter_events" />
         <activity
-            android:name=".activities.HomePageActivity"
-            android:label="Habits"
-            android:parentActivityName=".activities.MainActivity"/>
-        <activity
             android:name=".activities.habits.HabitViewActivity"
             android:label="Habit Details" />
         <activity
@@ -64,13 +60,6 @@
         <activity
             android:name=".activities.users.ViewFollowedUsersActivity"
             android:label="Followed Users" />
-        <activity
-            android:name=".activities.users.SearchUsersFragment"
-            android:label="Search Users" />
-        <activity
-            android:name=".activities.users.FollowRequestsFragment"
-            android:label="Follow Requests" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -97,7 +86,6 @@
         <activity
             android:name=".activities.HomeTabbedActivity"
             android:label="@string/title_activity_home_tabbed" />
-        <activity android:name=".activities.DashboardFragment"></activity>
     </application>
 
 </manifest>

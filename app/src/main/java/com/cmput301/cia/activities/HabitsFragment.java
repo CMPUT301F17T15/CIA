@@ -4,6 +4,7 @@
 
 package com.cmput301.cia.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
@@ -25,6 +27,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * @author Jessica Prieto
@@ -46,6 +50,7 @@ public class HabitsFragment extends Fragment {
 
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter adapter;
+    private TextView noHabits;
 
     /**
      * a helper for starting the fragment (similar to starting a new Intent)
@@ -71,9 +76,13 @@ public class HabitsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         user = (Profile) getArguments().getSerializable(ID_PROFILE);
-
+        noHabits = (TextView) view.findViewById(R.id.noHabits);
         if (user.hasValidId())
             user.load();
+
+        if (user.getHabits().size() > 0) {
+            noHabits.setVisibility(View.GONE);
+        }
 
         user.synchronize();
 
@@ -106,14 +115,11 @@ public class HabitsFragment extends Fragment {
 
                 String category = SetUtilities.getItemAtIndex(user.getHabitCategories(), group);
                 Habit habit = user.getHabitsInCategory(category).get(child);
-                //Toast.makeText(HomePageActivity.this, " Viewing Habit: " + adapter.getChild(group, child) + "'s detail. ", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(getContext(), HabitViewActivity.class);
-                intent.putExtra("Habit", habit);
 
                 ArrayList<String> types = new ArrayList<>();
                 types.addAll(user.getHabitCategories());
-                intent.putExtra("Categories", types);
+
+                startDetailsActivity(habit, types);
 
                 return false;
             }
@@ -128,5 +134,17 @@ public class HabitsFragment extends Fragment {
         adapter = new ExpandableListViewAdapter(getContext(), user);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * starts CreateHabitEvent whenever a user completes a task
+     * @param habit
+     * @param categories
+     */
+    public void startDetailsActivity(Habit habit, ArrayList<String> categories) {
+        Activity activity = getActivity();
+        if (activity instanceof HomeTabbedActivity) {
+            ((HomeTabbedActivity) activity).onStartHabitDetails(habit, categories);
+        }
     }
 }
