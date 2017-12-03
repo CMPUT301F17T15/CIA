@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * @author Jessica Prieto
  * Created on 2017-12-01
@@ -113,12 +115,42 @@ public class HabitsFragment extends Fragment {
                 types.addAll(user.getHabitCategories());
                 intent.putExtra("Categories", types);
 
-                startActivity(intent);
+                startActivityForResult(intent, HomeTabbedActivity.VIEW_HABIT);
 
                 return false;
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == HomeTabbedActivity.VIEW_HABIT) {
+            if (resultCode == RESULT_OK){
+
+                // whether the habit was deleted or updated
+                boolean deleted = data.getBooleanExtra("Deleted", false);
+                if (deleted) {
+                    String id = data.getStringExtra("HabitID");
+                    user.removeHabit(user.getHabitById(id));
+                } else {
+                    // update the habit
+                    Habit habit = (Habit) data.getSerializableExtra("Habit");
+                    for (Habit h : user.getHabits()){
+                        if (h.equals(habit)){
+                            h.copyFrom(habit);
+                            break;
+                        }
+                    }
+                }
+
+                updateAllHabits();
+                user.save();
+            }
+
+        }
     }
 
     /**

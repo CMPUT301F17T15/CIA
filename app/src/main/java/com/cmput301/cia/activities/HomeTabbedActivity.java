@@ -69,7 +69,7 @@ import me.toptas.fancyshowcase.OnCompleteListener;
 
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
-    private static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
+    public static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
             FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
 
     public static final String ID_PROFILE = "User";
@@ -390,31 +390,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             }
 
         }
-        //result from delete habit button
-        else if (requestCode == VIEW_HABIT){
-            if (resultCode == RESULT_OK){
-
-                // whether the habit was deleted or updated
-                boolean deleted = data.getBooleanExtra("Deleted", false);
-                if (deleted) {
-                    String id = data.getStringExtra("HabitID");
-                    user.removeHabit(user.getHabitById(id));
-                } else {
-                    // update the habit
-                    Habit habit = (Habit) data.getSerializableExtra("Habit");
-                    for (Habit h : user.getHabits()){
-                        if (h.equals(habit)){
-                            h.copyFrom(habit);
-                            break;
-                        }
-                    }
-                }
-
-                updateAllHabits();
-                user.save();
-            }
-
-        } else if (requestCode == VIEW_HABIT_HISTORY){
+        else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
                 user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
                 user.save();
@@ -438,13 +414,15 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
                 user.save();
             }
-        } else if (requestCode == FOLLOW_REQUESTS){
-            if (resultCode == RESULT_OK){
+        } else if (requestCode == FOLLOW_REQUESTS) {
+            if (resultCode == RESULT_OK) {
                 // TODO
                 /*Profile result = (Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE);
                 user.copyFrom(result);
                 user.save();*/
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
 
     }
