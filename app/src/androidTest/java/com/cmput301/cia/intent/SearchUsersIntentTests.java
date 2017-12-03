@@ -45,6 +45,7 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Hom
     public void setUp() throws Exception{
 
         Profile profile = new TestProfile("xyz");
+        profile.setFirstTimeUse(false);
         Intent intent = new Intent();
         intent.putExtra(SearchUsersActivity.ID_USER, profile);
         setActivityIntent(intent);
@@ -59,6 +60,9 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Hom
      * @throws IllegalAccessException
      */
     public void testFilter() throws NoSuchFieldException, IllegalAccessException {
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
+        solo.sleep(1000);
+
         solo.enterText(0, "vfutest");
         solo.sleep(600);
         solo.clickOnButton("Search");
@@ -70,11 +74,14 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Hom
     }
 
     public void testSelectUser(){
+        solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
+        solo.sleep(1000);
+
         ListAdapter adapter = ((ListView)solo.getView(R.id.searchUsersList)).getAdapter();
         if (adapter.getCount() > 0) {
             solo.clickInList(1, 0);
             solo.sleep(2000);
-            solo.assertCurrentActivity("wrong activity", UserProfileActivity.class);
+            assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof SearchUsersActivity);
         }
     }
 
