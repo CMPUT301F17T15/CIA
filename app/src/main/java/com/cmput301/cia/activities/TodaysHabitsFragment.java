@@ -46,6 +46,7 @@ public class TodaysHabitsFragment extends Fragment {
     private Profile user;
     private ListView checkable;
     private CheckableListViewAdapter checkableAdapter;
+    private TextView noTasks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -57,6 +58,11 @@ public class TodaysHabitsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         user = (Profile) getArguments().getSerializable(ID_PROFILE);
         todaysHabits = user.getTodaysHabits();
+        noTasks = (TextView) view.findViewById(R.id.noTasks);
+
+        if (todaysHabits.size() > 0) {
+            noTasks.setVisibility(View.GONE);
+        }
 
         // today's tasks listview (checkable)
         checkable = (ListView) view.findViewById(R.id.TodayToDoListView);

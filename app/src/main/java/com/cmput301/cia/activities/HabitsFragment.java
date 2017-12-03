@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
@@ -49,6 +50,7 @@ public class HabitsFragment extends Fragment {
 
     private ExpandableListView expandableListView;
     private ExpandableListViewAdapter adapter;
+    private TextView noHabits;
 
     /**
      * a helper for starting the fragment (similar to starting a new Intent)
@@ -74,9 +76,13 @@ public class HabitsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         user = (Profile) getArguments().getSerializable(ID_PROFILE);
-
+        noHabits = (TextView) view.findViewById(R.id.noHabits);
         if (user.hasValidId())
             user.load();
+
+        if (user.getHabits().size() > 0) {
+            noHabits.setVisibility(View.GONE);
+        }
 
         user.synchronize();
 
@@ -132,8 +138,8 @@ public class HabitsFragment extends Fragment {
 
     /**
      * starts CreateHabitEvent whenever a user completes a task
-     * @param completion the name of the habit that's completed
-     * @param habitId the habit id
+     * @param habit
+     * @param categories
      */
     public void startDetailsActivity(Habit habit, ArrayList<String> categories) {
         Activity activity = getActivity();
