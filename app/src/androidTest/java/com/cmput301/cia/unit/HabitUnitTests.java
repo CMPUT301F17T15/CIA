@@ -311,7 +311,7 @@ public class HabitUnitTests {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         // missed the first day after setting new date
-        calendar.add(Calendar.DATE, -1);
+        calendar.add(Calendar.DATE, -2);
         habit.setStartDate(calendar.getTime());
         assertTrue(habit.getCompletionPercent().equals("0.00%"));
         habit.addHabitEvent(new HabitEvent("", calendar.getTime()));

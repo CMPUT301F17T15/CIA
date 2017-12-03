@@ -47,9 +47,6 @@ public class StatisticActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_toolbar_statistic);
-        setSupportActionBar(toolbar);
-
         user = (Profile) getIntent().getSerializableExtra(ID_USER);
 
         ListView typeList = (ListView)findViewById(R.id.Type_List_View);
