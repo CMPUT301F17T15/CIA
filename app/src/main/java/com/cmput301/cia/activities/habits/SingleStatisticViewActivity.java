@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.github.mikephil.charting.charts.LineChart;
@@ -31,7 +32,10 @@ import org.joda.time.LocalDateTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -47,100 +51,90 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
     // Intent identifier for the viewed habit
     public static final String ID_HABIT = "Habit";
 
-    private Habit habit;
-
-    private TextView title;
     private LineChart lineChart;
-    private TextView completed;
-    private TextView miss;
     private TextView lastComplete;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_habit_statistic);
 
-        //Initial line Chart for visualization of statistic
-        lineChart = (LineChart) findViewById(R.id.LineChart);
-        lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(false);
-        lineChart.getAxisRight().setEnabled(false);
-        //LimitLine for confusing?
-        LimitLine complete_limit = new LimitLine(1.05f, "Completed");
-        complete_limit.setLineWidth(4f);
-        complete_limit.enableDashedLine(10f, 10f, 0f);
-        complete_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        complete_limit.setTextSize(15f);
-        complete_limit.setTextColor(Color.BLUE);
-        //LimitLine for confusing?
-        LimitLine missed_limit = new LimitLine(-1.05f, "Missed");
-        missed_limit.setLineWidth(4f);
-        missed_limit.enableDashedLine(10f, 10f, 0f);
-        missed_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        missed_limit.setTextSize(15f);
-        missed_limit.setTextColor(Color.BLUE);
-
-        YAxis leftAxis = lineChart.getAxisLeft();
-        leftAxis.removeAllLimitLines();
-        leftAxis.addLimitLine(complete_limit);
-        leftAxis.addLimitLine(missed_limit);
-        leftAxis.setAxisMaximum(2f);
-        leftAxis.setAxisMinimum(-2f);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setDrawLimitLinesBehindData(true);
+        initChart();
 
         //Information receiving from previous activity
-        habit = (Habit)getIntent().getSerializableExtra(ID_HABIT);
-
-        completed = (TextView) findViewById(R.id.CompletedTextView);
+        Habit habit = (Habit)getIntent().getSerializableExtra(ID_HABIT);
+        TextView completed = (TextView) findViewById(R.id.CompletedTextView);
         completed.setText("" + habit.getTimesCompleted());
 
         lastComplete = (TextView) findViewById(R.id.LastCompleteTextView);
+
         if (habit.getLastCompletionDate() != null)
             lastComplete.setText(DateUtilities.formatDate(habit.getLastCompletionDate()));
         else
             lastComplete.setText("Never");
 
-        miss = (TextView) findViewById(R.id.MissedTextView);
+        TextView miss = (TextView) findViewById(R.id.MissedTextView);
         miss.setText("" + habit.getTimesMissed());
 
-        title = (TextView) findViewById(R.id.HabitNameTextView);
+        TextView title = (TextView) findViewById(R.id.HabitNameTextView);
         title.setText(habit.getTitle());
 
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
 
+        List<String> missedHabitDates = new ArrayList<>();
+        List<String> completedHabitDates = new ArrayList<>();
+        for (HabitEvent event : habit.getEvents())
+            completedHabitDates.add(formatter.format(event.getDate()));
+        for (Date date : habit.getMissedDates())
+            missedHabitDates.add(formatter.format(date));
+
+        Collections.sort(missedHabitDates);
+        Collections.sort(completedHabitDates);
+
         //Data processing for line chart
         List<String> xAxis = new ArrayList<>();
-        ArrayList<String> missed = new ArrayList<>();
-        for (Date date : habit.getMissedDates()) {
-            missed.add(formatter.format(date));
+
+        List<Date> dates = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(2016, 10, 10);
+        habit.setStartDate(calendar.getTime());
+        calendar.setTime(habit.getStartDate());
+        Date end = new Date();
+        while (!DateUtilities.isSameDay(calendar.getTime(), end) && DateUtilities.isBefore(calendar.getTime(), end)){
+            dates.add(calendar.getTime());
+            xAxis.add(formatter.format(calendar.getTime()));
+            calendar.add(Calendar.DATE, 1);
         }
 
-        DateTime start = new DateTime(formatter.format(habit.getStartDate()));
-        DateTime end = new DateTime(formatter.format(new Date()));
-        for (DateTime d = start; d.isBefore(end) || d.isEqual(end); d = d.plusDays(1)) {
-            xAxis.add(formatter.format(d));
-        }
         int numDataPoints = xAxis.size();
         ArrayList<Entry> yxexs = new ArrayList<>();
-        Integer[] yAxis = new Integer[numDataPoints];
-        Arrays.fill(yAxis, new Integer(1));
+        Float[] yAxis = new Float[numDataPoints];
 
-        for (String dt : missed) {
-            if (xAxis.contains(dt)) {
-                yAxis[xAxis.indexOf(dt)] = -1;
+        int completions = 0;
+        int misses = 0;
+
+        for (int i = 0; i < dates.size(); ++i){
+            if (Collections.binarySearch(missedHabitDates, formatter.format(dates.get(i))) >= 0){
+                ++misses;
+            } else if (Collections.binarySearch(completedHabitDates, formatter.format(dates.get(i))) >= 0){
+                ++completions;
             }
+
+            float percentage = 0.0f;
+            if (completions + misses != 0)
+                percentage = (completions / (float)(completions + misses)) * 100;
+
+            yAxis[i] = percentage;
         }
+
         int pos = 0;
-        for (int i : yAxis) {
-            yxexs.add(new Entry(pos, (float) i));
-            System.out.println(pos + "" + i);
+        for (float i : yAxis) {
+            yxexs.add(new Entry(pos, i));
             pos = pos + 1;
         }
 
         String[] xaxes = new String[xAxis.size()];
         for (int i = 0; i < xAxis.size(); i++) {
             xaxes[i] = xAxis.get(i).toString();
-            System.out.println(xaxes[i]);
         }
         XAxis xax = lineChart.getXAxis();
         xax.setValueFormatter(new XValueFormatter(xaxes));
@@ -159,7 +153,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         dataSets.add(lineDataSet);
         lineChart.setData(new LineData(dataSets));
         lineChart.setVisibleXRangeMaximum(30);
-
+        lineChart.getLineData().setDrawValues(false);
     }
 
     /**
@@ -176,5 +170,22 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         public String getFormattedValue(float value, AxisBase axis) {
             return mvalues[(int)value];
         }
+    }
+
+    private void initChart(){
+
+        //Initial line Chart for visualization of statistic
+        lineChart = (LineChart) findViewById(R.id.LineChart);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getDescription().setEnabled(false);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(0.0f);
+        leftAxis.enableGridDashedLine(10f, 10f, 0f);
+        leftAxis.setDrawLimitLinesBehindData(true);
     }
 }

@@ -198,9 +198,9 @@ public class Habit extends ElasticSearchable {
         if (DateUtilities.isBefore(today, current))
             return missedDates;
 
-        List<Date> completedDates = new ArrayList<>();
+        List<String> completedDates = new ArrayList<>();
         for (HabitEvent event : events)
-            completedDates.add(event.getDate());
+            completedDates.add(DateUtilities.formatDate(event.getDate()));
 
         Collections.sort(completedDates);
 
@@ -208,7 +208,7 @@ public class Habit extends ElasticSearchable {
         // go through each day this habit was meant to be completed, and see if it was on that day
         while (!DateUtilities.isSameDay(current, today)){
             calendar.setTime(current);
-            if (occursOn(calendar.get(Calendar.DAY_OF_WEEK)) && Collections.binarySearch(completedDates, current) < 0){
+            if (occursOn(calendar.get(Calendar.DAY_OF_WEEK)) && Collections.binarySearch(completedDates, DateUtilities.formatDate(current)) < 0){
                 missedDates.add(current);
             }
             calendar.add(Calendar.DATE, 1);
