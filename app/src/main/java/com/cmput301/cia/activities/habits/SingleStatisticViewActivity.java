@@ -81,7 +81,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         title.setText(habit.getTitle());
 
         // error if there is no data whatsoever for the chart
-        if (misses != 0)
+        if (completions + misses >= 2)
             initChartData(habit);
     }
 
@@ -138,11 +138,15 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(habit.getStartDate());
         Date end = new Date();
+
         while (!DateUtilities.isSameDay(calendar.getTime(), end) && DateUtilities.isBefore(calendar.getTime(), end)){
             dates.add(calendar.getTime());
             xAxis.add(formatter.format(calendar.getTime()));
             calendar.add(Calendar.DATE, 1);
         }
+
+        dates.add(end);
+        xAxis.add(formatter.format(end));
 
         int numDataPoints = xAxis.size();
         ArrayList<Entry> yxexs = new ArrayList<>();
