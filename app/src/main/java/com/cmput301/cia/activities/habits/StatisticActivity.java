@@ -66,6 +66,7 @@ public class StatisticActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(StatisticActivity.this, StatisticViewActivity.class);
+                // TODO: just pass in the habits
                 intent.putExtra("Profile", user);
                 intent.putExtra("type",types.get(i));
                 startActivity(intent);
