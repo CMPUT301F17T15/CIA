@@ -11,7 +11,7 @@
 //import android.util.Pair;
 //
 //import com.cmput301.cia.R;
-//import com.cmput301.cia.activities.users.FollowRequestsActivity;
+//import com.cmput301.cia.activities.users.FollowRequestsFragment;
 //import com.cmput301.cia.controller.FollowersRequestAdapter;
 //import com.cmput301.cia.models.Follow;
 //import com.cmput301.cia.models.Profile;
@@ -33,12 +33,12 @@
 // * NOTE: These tests require an internet connection
 // */
 //
-//public class FollowRequestsIntentTests extends ActivityInstrumentationTestCase2<FollowRequestsActivity> {
+//public class FollowRequestsIntentTests extends ActivityInstrumentationTestCase2<FollowRequestsFragment> {
 //
 //    private Solo solo;
 //
 //    public FollowRequestsIntentTests() {
-//        super(FollowRequestsActivity.class);
+//        super(FollowRequestsFragment.class);
 //    }
 //
 //    public void setUp() throws Exception{
@@ -93,10 +93,10 @@
 //        }
 //
 //        Intent intent = new Intent();
-//        intent.putExtra(FollowRequestsActivity.ID_PROFILE, profiles.get(0));
+//        intent.putExtra(FollowRequestsFragment.ID_PROFILE, profiles.get(0));
 //        setActivityIntent(intent);
 //
-//        solo = new Solo(getInstrumentation(), FollowRequestsActivity.getActivity());
+//        solo = new Solo(getInstrumentation(), FollowRequestsFragment.getActivity());
 //        Log.d("SETUP", "setUp()");
 //    }
 //

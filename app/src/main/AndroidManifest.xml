@@ -65,10 +65,10 @@
             android:name=".activities.users.ViewFollowedUsersActivity"
             android:label="Followed Users" />
         <activity
-            android:name=".activities.users.SearchUsersActivity"
+            android:name=".activities.users.SearchUsersFragment"
             android:label="Search Users" />
         <activity
-            android:name=".activities.users.FollowRequestsActivity"
+            android:name=".activities.users.FollowRequestsFragment"
             android:label="Follow Requests" />
 
         <!--
@@ -97,7 +97,7 @@
         <activity
             android:name=".activities.HomeTabbedActivity"
             android:label="@string/title_activity_home_tabbed" />
-        <activity android:name=".activities.DashboardActivity"></activity>
+        <activity android:name=".activities.DashboardFragment"></activity>
     </application>
 
 </manifest>

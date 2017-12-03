@@ -7,7 +7,6 @@ package com.cmput301.cia.activities;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +25,9 @@ import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.activities.users.FollowRequestsActivity;
+import com.cmput301.cia.activities.users.FollowRequestsFragment;
 import com.cmput301.cia.activities.users.RankingsActivity;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
@@ -212,8 +211,8 @@ public class HomePageActivity extends LocationRequestingActivity {
         findViewById(R.id.homeRequestsImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
-                Intent requests = new Intent(HomePageActivity.this, FollowRequestsActivity.class);
-                requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
+                Intent requests = new Intent(HomePageActivity.this, FollowRequestsFragment.class);
+                requests.putExtra(FollowRequestsFragment.ID_PROFILE, user);
                 startActivityForResult(requests, FOLLOW_REQUESTS);
             }
         });
@@ -221,8 +220,8 @@ public class HomePageActivity extends LocationRequestingActivity {
         findViewById(R.id.homeSearchImageView).setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
-                Intent search = new Intent(HomePageActivity.this, SearchUsersActivity.class);
-                search.putExtra(SearchUsersActivity.ID_USER, user);
+                Intent search = new Intent(HomePageActivity.this, SearchUsersFragment.class);
+                search.putExtra(SearchUsersFragment.ID_USER, user);
                 startActivityForResult(search, SEARCH_USERS);
             }
         });
@@ -384,13 +383,13 @@ public class HomePageActivity extends LocationRequestingActivity {
                 startActivity(intentOR);
                 return true;
 //            case R.id.menu_button_searchUsers:
-//                Intent search = new Intent(this, SearchUsersActivity.class);
-//                search.putExtra(SearchUsersActivity.ID_USER, user);
+//                Intent search = new Intent(this, SearchUsersFragment.class);
+//                search.putExtra(SearchUsersFragment.ID_USER, user);
 //                startActivityForResult(search, SEARCH_USERS);
 //                return true;
 //            case R.id.menu_button_FollowRequests:
-//                Intent requests = new Intent(this, FollowRequestsActivity.class);
-//                requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
+//                Intent requests = new Intent(this, FollowRequestsFragment.class);
+//                requests.putExtra(FollowRequestsFragment.ID_PROFILE, user);
 //                startActivityForResult(requests, FOLLOW_REQUESTS);
 //                return true;
             case R.id.menu_button_nearbyEvents:
@@ -523,13 +522,13 @@ public class HomePageActivity extends LocationRequestingActivity {
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
-                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE), false);
+                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
                 user.save();
             }
         } else if (requestCode == FOLLOW_REQUESTS){
             if (resultCode == RESULT_OK){
                 // TODO
-                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
+                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE);
                 user.copyFrom(result);
                 user.save();*/
             }

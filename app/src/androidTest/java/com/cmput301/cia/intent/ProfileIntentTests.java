@@ -13,13 +13,10 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.HomeTabbedActivity;
-import com.cmput301.cia.activities.MainActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.UserProfileFragment;
-import com.cmput301.cia.models.Habit;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
@@ -125,7 +122,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
     public void testOtherProfile() throws NoSuchFieldException, IllegalAccessException {
         solo.clickOnView(getActivity().getBottomBarTabFromId(R.id.tab_search));
         solo.sleep(2500);
-        assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersActivity);
+        assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
 
         solo.enterText(0, "vfutest13");
         solo.sleep(1000);
@@ -136,7 +133,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
         if (adapter.getCount() > 0) {
             solo.clickInList(1, 0);
             solo.sleep(2000);
-            assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersActivity);
+            assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
 
             // the profile being displayed
             Field field = solo.getCurrentActivity().getClass().getDeclaredField("displayed");
@@ -163,7 +160,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
 
             solo.goBack();
             solo.sleep(3000);
-            solo.assertCurrentActivity("wrong activity", SearchUsersActivity.class);
+            solo.assertCurrentActivity("wrong activity", SearchUsersFragment.class);
 
             solo.clickInList(1, 0);
             solo.sleep(2000);

@@ -22,7 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
- * Created by George on 2017-12-02.
+ * @author Jessica Prieto
+ * Created on 2017-12-02.
  */
 
 public class HistoryAdapter extends ArrayAdapter<CompletedEventDisplay> {

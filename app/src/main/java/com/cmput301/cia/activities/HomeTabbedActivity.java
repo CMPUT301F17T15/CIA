@@ -23,9 +23,9 @@ import com.cmput301.cia.activities.events.HistoryActivity;
 import com.cmput301.cia.activities.habits.CreateHabitActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
-import com.cmput301.cia.activities.users.FollowRequestsActivity;
+import com.cmput301.cia.activities.users.FollowRequestsFragment;
 import com.cmput301.cia.activities.users.RankingsActivity;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.activities.users.UserProfileActivity;
 import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
@@ -274,7 +274,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
      */
     private void onDashboardClicked() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.homeFragmentContainer, DashboardActivity.create(user));
+        ft.replace(R.id.homeFragmentContainer, DashboardFragment.create(user));
         ft.commit();
     }
 
@@ -286,7 +286,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         // Replace the contents of the container with the new fragment
-        ft.replace(R.id.homeFragmentContainer, SearchUsersActivity.create(user));
+        ft.replace(R.id.homeFragmentContainer, SearchUsersFragment.create(user));
 
         // Complete the changes added above
         ft.commit();
@@ -310,7 +310,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
      */
     private void onFollowRequestClicked() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.homeFragmentContainer, FollowRequestsActivity.create(user));
+        ft.replace(R.id.homeFragmentContainer, FollowRequestsFragment.create(user));
         ft.commit();
     }
 
@@ -433,13 +433,13 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
-                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE), false);
+                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
                 user.save();
             }
         } else if (requestCode == FOLLOW_REQUESTS){
             if (resultCode == RESULT_OK){
                 // TODO
-                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersActivity.RETURNED_PROFILE);
+                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE);
                 user.copyFrom(result);
                 user.save();*/
             }
@@ -452,8 +452,8 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
      */
     public void updateAllHabits() {
         Fragment f = getFragmentForCurrentTab();
-        if (f instanceof DashboardActivity) {
-            ((DashboardActivity) f).updateHabits();
+        if (f instanceof DashboardFragment) {
+            ((DashboardFragment) f).updateHabits();
         }
     }
 
@@ -467,10 +467,10 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     /**
      * @return the dashboard fragment
      */
-    public DashboardActivity getDashboardFragment() {
+    public DashboardFragment getDashboardFragment() {
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.homeFragmentContainer);
-        if (f instanceof DashboardActivity) {
-            return ((DashboardActivity) f);
+        if (f instanceof DashboardFragment) {
+            return ((DashboardFragment) f);
         }
         return null;
     }
@@ -521,13 +521,13 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 startActivity(intentOR);
                 return true;
 //            case R.id.menu_button_searchUsers:
-//                Intent search = new Intent(this, SearchUsersActivity.class);
-//                search.putExtra(SearchUsersActivity.ID_USER, user);
+//                Intent search = new Intent(this, SearchUsersFragment.class);
+//                search.putExtra(SearchUsersFragment.ID_USER, user);
 //                startActivityForResult(search, SEARCH_USERS);
 //                return true;
 //            case R.id.menu_button_FollowRequests:
-//                Intent requests = new Intent(this, FollowRequestsActivity.class);
-//                requests.putExtra(FollowRequestsActivity.ID_PROFILE, user);
+//                Intent requests = new Intent(this, FollowRequestsFragment.class);
+//                requests.putExtra(FollowRequestsFragment.ID_PROFILE, user);
 //                startActivityForResult(requests, FOLLOW_REQUESTS);
 //                return true;
             case R.id.menu_button_nearbyEvents:

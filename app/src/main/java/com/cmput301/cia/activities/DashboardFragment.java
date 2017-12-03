@@ -9,14 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 
 
@@ -28,7 +26,7 @@ import com.cmput301.cia.models.Profile;
  * This is a fragment that displayes a tabbed activity: one tab for all habits and one tab
  * for viewing today's tasks
  */
-public class DashboardActivity extends Fragment {
+public class DashboardFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private Profile user;
@@ -93,12 +91,12 @@ public class DashboardActivity extends Fragment {
      * @param user the user logged in
      * @return the dashboard activity of the current user
      */
-    public static DashboardActivity create(Profile user) {
-        DashboardActivity dashboardActivity = new DashboardActivity();
+    public static DashboardFragment create(Profile user) {
+        DashboardFragment dashboardFragment = new DashboardFragment();
         Bundle args = new Bundle();
         args.putSerializable(ID_PROFILE, user);
-        dashboardActivity.setArguments(args);
-        return dashboardActivity;
+        dashboardFragment.setArguments(args);
+        return dashboardFragment;
     }
 
     /**

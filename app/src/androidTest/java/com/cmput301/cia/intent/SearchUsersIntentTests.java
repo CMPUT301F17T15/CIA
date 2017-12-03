@@ -12,11 +12,8 @@ import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
-import com.cmput301.cia.activities.HomePageActivity;
 import com.cmput301.cia.activities.HomeTabbedActivity;
-import com.cmput301.cia.activities.MainActivity;
-import com.cmput301.cia.activities.users.SearchUsersActivity;
-import com.cmput301.cia.activities.users.UserProfileActivity;
+import com.cmput301.cia.activities.users.SearchUsersFragment;
 import com.cmput301.cia.models.Profile;
 import com.robotium.solo.Solo;
 
@@ -42,7 +39,7 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Hom
         Profile profile = new TestProfile("xyz");
         profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(SearchUsersActivity.ID_USER, profile);
+        intent.putExtra(SearchUsersFragment.ID_USER, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
@@ -76,7 +73,7 @@ public class SearchUsersIntentTests extends ActivityInstrumentationTestCase2<Hom
         if (adapter.getCount() > 0) {
             solo.clickInList(1, 0);
             solo.sleep(2000);
-            assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof SearchUsersActivity);
+            assertTrue("wrong fragment", getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
         }
     }
 

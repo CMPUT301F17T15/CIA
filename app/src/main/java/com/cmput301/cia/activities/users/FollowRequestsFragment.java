@@ -6,7 +6,6 @@ package com.cmput301.cia.activities.users;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +15,8 @@ import android.view.ViewGroup;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.FollowersRequestAdapter;
-import com.cmput301.cia.models.Follow;
 import com.cmput301.cia.models.Profile;
-import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,7 +27,7 @@ import java.util.List;
  * This activity allows the user to see all the sendFollowRequest requests other users have sent them
  */
 
-public class FollowRequestsActivity extends Fragment {
+public class FollowRequestsFragment extends Fragment {
 
     public static final String ID_PROFILE = "User";
     public static final String PROFILE_ID = "FollowerRequest";
@@ -41,12 +37,12 @@ public class FollowRequestsActivity extends Fragment {
     private List<Profile> followRequests;
     private FollowersRequestAdapter adapter;
 
-    public static FollowRequestsActivity create(Profile currentUser) {
-        FollowRequestsActivity followRequestsActivity = new FollowRequestsActivity();
+    public static FollowRequestsFragment create(Profile currentUser) {
+        FollowRequestsFragment followRequestsFragment = new FollowRequestsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ID_PROFILE, currentUser);
-        followRequestsActivity.setArguments(args);
-        return followRequestsActivity;
+        followRequestsFragment.setArguments(args);
+        return followRequestsFragment;
     }
 
     @Override
@@ -58,7 +54,7 @@ public class FollowRequestsActivity extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getActivity().setTitle("Follow Requests");
-        user = (Profile) getArguments().getSerializable(SearchUsersActivity.ID_USER);
+        user = (Profile) getArguments().getSerializable(SearchUsersFragment.ID_USER);
 
         RecyclerView rvFollowerRequests = (RecyclerView) view.findViewById(R.id.rvFollowerRequests);
 

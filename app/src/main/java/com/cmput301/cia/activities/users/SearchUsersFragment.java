@@ -6,9 +6,7 @@ package com.cmput301.cia.activities.users;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +21,10 @@ import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -42,7 +37,7 @@ import static android.app.Activity.RESULT_OK;
  * This activity allows the user to search for other users
  */
 
-public class SearchUsersActivity extends Fragment {
+public class SearchUsersFragment extends Fragment {
 
     // Intent identifiers for passed in data
     public static final String ID_USER = "User";
@@ -65,12 +60,12 @@ public class SearchUsersActivity extends Fragment {
 
     MaterialSearchView searchView;
 
-    public static SearchUsersActivity create(Profile currentUser) {
-        SearchUsersActivity searchUsersActivity = new SearchUsersActivity();
+    public static SearchUsersFragment create(Profile currentUser) {
+        SearchUsersFragment searchUsersFragment = new SearchUsersFragment();
         Bundle args = new Bundle();
         args.putSerializable(ID_USER, currentUser);
-        searchUsersActivity.setArguments(args);
-        return searchUsersActivity;
+        searchUsersFragment.setArguments(args);
+        return searchUsersFragment;
     }
 
     @Override
