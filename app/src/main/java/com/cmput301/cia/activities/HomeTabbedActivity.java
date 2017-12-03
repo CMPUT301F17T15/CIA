@@ -99,7 +99,9 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     }
 
     /**
-     * provides a tutorial for the user (for first time use of the app)
+     * Home page functionality showcasing
+     * For first time user only
+     * Disabled after complete showcasing
      */
     private void userAppTour() {
         FancyShowCaseQueue showCaseQueue = new FancyShowCaseQueue();

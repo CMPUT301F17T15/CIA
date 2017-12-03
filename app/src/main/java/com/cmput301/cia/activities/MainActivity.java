@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.loginPageLayout));
+//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.loginPageLayout));
     }
 
     //play video when back to login page.

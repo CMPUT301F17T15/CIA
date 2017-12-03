@@ -113,6 +113,8 @@ public class HabitsFragment extends Fragment {
                 types.addAll(user.getHabitCategories());
                 intent.putExtra("Categories", types);
 
+                startActivity(intent);
+
                 return false;
             }
         });
