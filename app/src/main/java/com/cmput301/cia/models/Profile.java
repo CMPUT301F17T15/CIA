@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -616,17 +617,14 @@ public class Profile extends ElasticSearchable {
             loadOfflineEvents();
 
         List<OfflineEvent> pending = new ArrayList<>();
-        for (OfflineEvent event : pendingEvents){
-            if (!event.handle(this))
-                pending.add(event);
+        Iterator<OfflineEvent> it = pendingEvents.iterator();
+        while (it.hasNext()){
+            OfflineEvent next = it.next();
+            if (!next.handle(this))
+                pending.add(next);
         }
 
         pendingEvents = pending;
-    }
-
-    // TODO
-    public void sendMessage(String message){
-
     }
 
     /**

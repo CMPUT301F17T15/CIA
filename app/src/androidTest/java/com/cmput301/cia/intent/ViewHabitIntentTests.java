@@ -7,6 +7,7 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
@@ -108,6 +111,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
 
     public void testEdit(){
         loadHabit();
+
         // removed check for edit (since it uses the same activity now)
         // remove test being unable to save when no date is selected (date can now be chosen so it's not empty when clicked)
 
@@ -139,6 +143,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
         // make sure changes took effect in the home page
         String name = loadHabit();
         assertTrue(name.equals("newname"));
+
         assertTrue(((TextView)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
         assertTrue(((TextView)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
 
@@ -147,7 +152,6 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
                 MaterialDayPicker.Weekday.TUESDAY,
                 MaterialDayPicker.Weekday.WEDNESDAY);
         assertEquals("wrong days selected", selectedDays, ((MaterialDayPicker)solo.getView(R.id.day_picker)).getSelectedDays());
-
     }
 
 }

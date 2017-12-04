@@ -104,7 +104,7 @@ public class StatisticViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        
+
         //data for pie chart
         yData = new int[]{missCounter, completeCounter};
         xData = new String[]{"Total","Complete"};

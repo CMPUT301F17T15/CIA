@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.models;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import java.io.Serializable;
 
 import io.searchbox.annotations.JestId;
@@ -46,7 +48,7 @@ public abstract class ElasticSearchable implements Serializable {
      */
 
     public boolean hasValidId(){
-        return id != null;
+        return id != null && !NumberUtils.isNumber(id);
     }
 
     /**

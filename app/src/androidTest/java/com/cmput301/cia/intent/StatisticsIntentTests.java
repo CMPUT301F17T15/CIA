@@ -7,9 +7,11 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
+import com.cmput301.cia.activities.habits.SingleStatisticViewActivity;
 import com.cmput301.cia.activities.habits.StatisticActivity;
 import com.cmput301.cia.activities.habits.StatisticViewActivity;
 import com.cmput301.cia.models.Habit;
@@ -67,6 +69,10 @@ public class StatisticsIntentTests extends ActivityInstrumentationTestCase2<Stat
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", StatisticViewActivity.class);
 
+        ListView list = (ListView)solo.getView(R.id.BreakDownListView);
+        solo.clickOnView(list.getAdapter().getView(0, null, null));
+        solo.sleep(2000);
+        solo.assertCurrentActivity("wrong activity", SingleStatisticViewActivity.class);
     }
 
 }
