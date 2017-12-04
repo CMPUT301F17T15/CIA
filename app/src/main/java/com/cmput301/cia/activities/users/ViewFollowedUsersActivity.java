@@ -63,6 +63,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     // list of followed users' habits
     private ListView habitsList;
     private ArrayAdapter<String> habitsListAdapter;
+    private List<Habit> habitsDisplayed;
 
     // list of followed users' events
     private ListView eventsList;
@@ -86,7 +87,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         noFollowing = (TextView)findViewById(R.id.noFollowing);
 
-        followed = displayed.getFollowing();
+        followed = new ArrayList<>();//displayed.getFollowing();
 
         if (followed.size() > 0) {
             noFollowing.setVisibility(View.GONE);
@@ -107,19 +108,17 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         habitsList = (ListView)findViewById(R.id.vfuHabitsList);
-        updateHabitsAdapter();
+        //updateHabitsAdapter();
         habitsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
             public void handleClick(View view, int index) {
                 Intent intent = new Intent(ViewFollowedUsersActivity.this, SingleStatisticViewActivity.class);
-                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, displayed.getFollowedHabits().get(index));
+                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, habitsDisplayed.get(index));//displayed.getFollowedHabits().get(index));
                 startActivity(intent);
             }
         });
 
         eventsList = (ListView)findViewById(R.id.vfuEventsList);
-        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
-        eventsList.setAdapter(eventsListAdapter);
         /*eventsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
             public void handleClick(View view, int index) {
@@ -178,18 +177,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
-    /**
-     * Handle the back button being pressed
-     */
-    @Override
-    public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        // TODO: return displayed for simplicity
-        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followed);
-        setResult(RESULT_OK, returnIntent);
-        finish();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -201,19 +188,23 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             noFollowing.setVisibility(View.GONE);
         } else
             noFollowing.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        followed = displayed.getFollowing();
-        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
-        followedList.setAdapter(followedListAdapter);
 
         updateHabitsAdapter();
 
         eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        /*followed = displayed.getFollowing();
+        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
+        followedList.setAdapter(followedListAdapter);
+
+        updateHabitsAdapter();
+        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
+        eventsList.setAdapter(eventsListAdapter);*/
     }
 
     /**
@@ -309,9 +300,12 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             }
         }
 
+        habitsDisplayed = displayed.getFollowedHabits();
         List<String> list = new ArrayList<>();
-        for (Habit habit : displayed.getFollowedHabits()){
-            list.add(getHabitDisplayText(habit, habitCreatorMap.get(habit.getId())));
+        for (Habit habit : habitsDisplayed){
+            Profile creator = habitCreatorMap.get(habit.getId());
+            if (creator != null)
+                list.add(getHabitDisplayText(habit, creator));
         }
 
         habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, list);
