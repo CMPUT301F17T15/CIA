@@ -44,6 +44,7 @@ public class HabitViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_habit_detail);
 
+        Button toStatisticButton = (Button) findViewById(R.id.toStatistic);
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
         Button editButton = (Button) findViewById(R.id.EditHabitButton);
 
@@ -57,6 +58,15 @@ public class HabitViewActivity extends AppCompatActivity {
         habit = (Habit) getIntent().getSerializableExtra("Habit");
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
         refreshPage();
+
+        toStatisticButton.setOnClickListener(new TimedClickListener() {
+            @Override
+            public void handleClick() {
+                Intent intent = new Intent(HabitViewActivity.this, SingleStatisticViewActivity.class);
+                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, habit);
+                startActivity(intent);
+            }
+        });
 
         deleteButton.setOnClickListener(new TimedClickListener() {
             @Override
