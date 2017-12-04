@@ -55,7 +55,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.clickOnView(solo.getView(R.id.Ok_Button));
         solo.sleep(1000);
 
-        solo.enterText((EditText)solo.getView(R.id.reason), "reason");
+        solo.enterText((EditText)solo.getView(R.id.habitReason), "reason");
         solo.sleep(500);
         solo.enterText((EditText)solo.getView(R.id.habitName), "none");
         solo.sleep(500);
@@ -88,7 +88,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.clickOnView(solo.getView(R.id.Ok_Button));
         solo.sleep(1000);
 
-        solo.enterText((EditText)solo.getView(R.id.reason), "reason");
+        solo.enterText((EditText)solo.getView(R.id.habitReason), "reason");
         solo.sleep(500);
 
         solo.clickOnButton("Save");
@@ -128,9 +128,9 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.sleep(1000);
 
         // max reason length = 30
-        solo.enterText((EditText)solo.getView(R.id.reason), "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        solo.enterText((EditText)solo.getView(R.id.habitReason), "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         solo.sleep(500);
-        assertTrue(((EditText)solo.getView(R.id.reason)).getText().toString().length() == 30);
+        assertTrue(((EditText)solo.getView(R.id.habitReason)).getText().toString().length() == 30);
 
         // max name length = 20
         solo.enterText((EditText)solo.getView(R.id.habitName), "ffffffffffffffffffffffffffffffffffffffffffffffffff");
