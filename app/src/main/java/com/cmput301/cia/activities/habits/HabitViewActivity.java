@@ -55,14 +55,18 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
 
     private Habit habit;
 
+    protected Button toStatisticButton;
+    protected Button deleteButton;
+    protected Button saveButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_habit_detail);
 
-        Button toStatisticButton = (Button) findViewById(R.id.toStatistic);
-        Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
-        Button saveButton = (Button) findViewById(R.id.SaveHabitButton);
+        toStatisticButton = (Button) findViewById(R.id.toStatistic);
+        deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
+        saveButton = (Button) findViewById(R.id.SaveHabitButton);
 
         //Display habit detail
         habitName = (EditText) findViewById(R.id.habitName);
@@ -75,6 +79,11 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
 
         habit = (Habit) getIntent().getSerializableExtra("Habit");
+
+        if (habit == null) {
+            habit = new Habit("", "", new Date(), new ArrayList<Integer>(), "");
+        }
+
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
 
 

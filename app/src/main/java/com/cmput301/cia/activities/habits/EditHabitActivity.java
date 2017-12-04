@@ -177,10 +177,10 @@ public class EditHabitActivity extends AppCompatActivity implements DatePickerDi
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        if (calendar.getTime().before(CreateHabitActivity.EARLIEST_DATE))
-            chooseStartDate = CreateHabitActivity.EARLIEST_DATE;
-        else
-            chooseStartDate = calendar.getTime();
+//        if (calendar.getTime().before(CreateHabitActivity.EARLIEST_DATE))
+//            chooseStartDate = CreateHabitActivity.EARLIEST_DATE;
+//        else
+//            chooseStartDate = calendar.getTime();
 
         startDate.setText(DateUtilities.formatDate(chooseStartDate));
     }
