@@ -190,6 +190,10 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         followedListAdapter.clear();
         followedListAdapter.addAll(followed);
         followedListAdapter.notifyDataSetChanged();
+        if (followed.size() > 0) {
+            noFollowing.setVisibility(View.GONE);
+        } else
+            noFollowing.setVisibility(View.VISIBLE);
     }
 
     @Override
