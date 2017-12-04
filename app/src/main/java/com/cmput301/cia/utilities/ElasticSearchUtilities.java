@@ -449,6 +449,8 @@ public class ElasticSearchUtilities {
         Pair<SearchResult, Boolean> result = search(typeId, "", id);
         if (result.first != null && result.first.isSucceeded()) {
             T object = result.first.getSourceAsObject(tempClass);
+            if (object == null)
+                return new Pair<>(null, Boolean.FALSE);
             object.setId(id);
             return new Pair<>(object, Boolean.TRUE);
         }

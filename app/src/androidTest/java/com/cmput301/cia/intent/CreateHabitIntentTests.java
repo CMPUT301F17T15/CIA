@@ -50,7 +50,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
         // no types exist previously, so a dialog requesting input pops up
-        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.enterText(solo.getEditText("Enter new type here"), "Type");
         solo.sleep(600);
         solo.clickOnView(solo.getView(R.id.Ok_Button));
         solo.sleep(1000);
@@ -83,7 +83,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.sleep(1000);
         // dialog should not close because the new type was empty
         assertNotNull("Dialog was closed", solo.getView(R.id.Ok_Button));
-        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.enterText(solo.getEditText("Enter new type here"), "Type");
         solo.sleep(600);
         solo.clickOnView(solo.getView(R.id.Ok_Button));
         solo.sleep(1000);
@@ -122,7 +122,7 @@ public class CreateHabitIntentTests extends ActivityInstrumentationTestCase2<Hom
         solo.sleep(1000);
         solo.assertCurrentActivity("wrong activity", CreateHabitActivity.class);
 
-        solo.enterText(solo.getEditText("Enter new type here:"), "Type");
+        solo.enterText(solo.getEditText("Enter new type here"), "Type");
         solo.sleep(600);
         solo.clickOnView(solo.getView(R.id.Ok_Button));
         solo.sleep(1000);
