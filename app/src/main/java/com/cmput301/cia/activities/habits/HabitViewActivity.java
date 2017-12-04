@@ -9,15 +9,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.views.ClickableEditItem;
 
 import java.util.ArrayList;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
  * @author Shipin Guan
@@ -29,11 +34,14 @@ import java.util.ArrayList;
 
 public class HabitViewActivity extends AppCompatActivity {
 
-    private TextView habitName;
-    private TextView habitType;
-    private TextView habitReason;
-    private TextView habitStartDate;
-    private TextView habitFrequency;
+    private EditText habitName;
+    private EditText habitReason;
+    private Spinner habitTypeSpinner;
+
+    private ClickableEditItem dateItem;
+    private String StartDate;
+
+    private MaterialDayPicker dayPicker;
 
     private static final String[] days = {"Sunday\n", "Monday\n", "Tuesday\n", "Wednesday\n", "Thursday\n", "Friday\n", "Saturday\n"};
 
@@ -45,51 +53,61 @@ public class HabitViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_display_habit_detail);
 
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
-        Button editButton = (Button) findViewById(R.id.EditHabitButton);
+        Button editButton = (Button) findViewById(R.id.SaveHabitButton);
 
         //Display habit detail
-        habitName = (TextView) findViewById(R.id.EditHabitName);
-        habitType = (TextView) findViewById(R.id.EditHabitType);
-        habitReason = (TextView) findViewById(R.id.EditHabitReason);
-        habitStartDate = (TextView) findViewById(R.id.StartingDate);
-        habitFrequency = (TextView) findViewById(R.id.HabitFrequency);
+        habitName = (EditText) findViewById(R.id.habitName);
+        habitReason = (EditText) findViewById(R.id.habitReason);
+        habitTypeSpinner = (Spinner) findViewById(R.id.habitTypeSpinner);
+
+        dateItem = (ClickableEditItem) findViewById(R.id.habitDetailDate);
+        StartDate = dateItem.getDynamicText();
+
+        dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
 
         habit = (Habit) getIntent().getSerializableExtra("Habit");
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
+
+        // for the spinner
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        habitTypeSpinner.setAdapter(spinnerAdapter);
+
         refreshPage();
 
         deleteButton.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
 
-                /**
-                 * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
-                 */
-                // Ask the user for confirmation before a habit is deleted
-                AlertDialog.Builder dialog = new AlertDialog.Builder(HabitViewActivity.this);
-                dialog.setTitle("Are you sure you want to delete this habit?");
-                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+            /**
+             * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+             */
+            // Ask the user for confirmation before a habit is deleted
+            AlertDialog.Builder dialog = new AlertDialog.Builder(HabitViewActivity.this);
+            dialog.setTitle("Are you sure you want to delete this habit?");
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if (isFinishing())
-                            return;
+                if (isFinishing())
+                    return;
 
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra("Deleted", true);
-                        returnIntent.putExtra("HabitID", habit.getId());
-                        setResult(RESULT_OK, returnIntent);
-                        finish();
-                    }
-                });
-                dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("Deleted", true);
+                returnIntent.putExtra("HabitID", habit.getId());
+                setResult(RESULT_OK, returnIntent);
+                finish();
+                }
+            });
 
-                if (!isFinishing())
-                    dialog.show();
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+
+            if (!isFinishing())
+                dialog.show();
             }
         });
 
@@ -134,15 +152,17 @@ public class HabitViewActivity extends AppCompatActivity {
     }
 
     private void refreshPage() {
-        habitType.setText(habit.getType());
+//        habitTypeSpinner.setText(habit.getType());
+        // TODO: set spinner to type
+
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
-        habitStartDate.setText(DateUtilities.formatDate(habit.getStartDate()));
+        dateItem.setItemDynamicText(DateUtilities.formatDate(habit.getStartDate()));
+
         String temp = "";
         for (int i : habit.getDaysOfWeek()) {
-            temp = temp + days[i - 1];
+            dayPicker.selectDay(MaterialDayPicker.Weekday.values()[i-1]);
         }
-        habitFrequency.setText(temp);
     }
 
 }
