@@ -5,22 +5,30 @@
 package com.cmput301.cia.activities.habits;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.TimedClickListener;
+import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.views.ClickableEditItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
@@ -32,7 +40,7 @@ import ca.antonious.materialdaypicker.MaterialDayPicker;
  * This activity allows the user to view the details about one of their habits
  */
 
-public class HabitViewActivity extends AppCompatActivity {
+public class HabitViewActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private EditText habitName;
     private EditText habitReason;
@@ -54,7 +62,7 @@ public class HabitViewActivity extends AppCompatActivity {
 
         Button toStatisticButton = (Button) findViewById(R.id.toStatistic);
         Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
-        Button editButton = (Button) findViewById(R.id.SaveHabitButton);
+        Button saveButton = (Button) findViewById(R.id.SaveHabitButton);
 
         //Display habit detail
         habitName = (EditText) findViewById(R.id.habitName);
@@ -69,6 +77,7 @@ public class HabitViewActivity extends AppCompatActivity {
         habit = (Habit) getIntent().getSerializableExtra("Habit");
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
 
+
         // for the spinner
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -82,6 +91,13 @@ public class HabitViewActivity extends AppCompatActivity {
                 Intent intent = new Intent(HabitViewActivity.this, SingleStatisticViewActivity.class);
                 intent.putExtra(SingleStatisticViewActivity.ID_HABIT, habit);
                 startActivity(intent);
+            }
+        });
+
+        dateItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog(view);
             }
         });
 
@@ -121,13 +137,10 @@ public class HabitViewActivity extends AppCompatActivity {
             }
         });
 
-        editButton.setOnClickListener(new TimedClickListener() {
+        saveButton.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
-                Intent editIntent = new Intent(HabitViewActivity.this, EditHabitActivity.class);
-                editIntent.putExtra("Habit", habit);
-                editIntent.putExtra("Categories", categories);
-                startActivityForResult(editIntent, 1);
+                saveChange();
             }
         });
     }
@@ -197,6 +210,83 @@ public class HabitViewActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    /**
+     * Creates a dialog so that the user can choose a date instead of typing
+     * see: DatePickerFragment
+     * @param v: the layout that it's coming from
+     */
+    public void datePickerDialog(View v) {
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+
+
+    /** for the date selected
+     * @param datePicker : the widget object for selecting a date
+     * @param year : the year chosen
+     * @param month : the month chosen
+     * @param day : the day chosen
+     * see: DatePickerFragment
+     */
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        final Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        Date date = calendar.getTime();
+        Date currentDate = new Date();
+
+        // Prevent the event's date from being a date in the future
+        if (currentDate.before(date))
+            date = currentDate;
+
+        habit.setStartDate(date);
+
+        dateItem.setItemDynamicText(DateUtilities.formatDate(habit.getStartDate()));
+    }
+
+    public void saveChange(){
+        List<MaterialDayPicker.Weekday> daysSelected = dayPicker.getSelectedDays();
+        if (daysSelected.size() == 0) {
+            Toast.makeText(this, "Please select at least one day of notification frequency.", Toast.LENGTH_SHORT).show();
+        } else if (habitName.getText().toString().length() == 0){
+            Toast.makeText(this, "The habit title can not be left blank.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            //set changes on current habit.
+            habit.setTitle(habitName.getText().toString());
+            habit.setReason(habitReason.getText().toString());
+            habit.setDaysOfWeek(getPickedDates(daysSelected));
+            habit.setType(habitTypeSpinner.getSelectedItem().toString());
+
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("Habit", habit);
+            setResult(RESULT_OK, returnIntent);
+            finish();
+
+        }
+    }
+
+    /**
+     * converts the List<MaterialDayPicker.Weekday> the expected format for dates: LIst<Integer>
+     * MaterialDayPicker.Weekday has Monday = 1, ... so this method also fixes the offset
+     *
+     * @param pickedDates
+     * @return
+     */
+    public List<Integer> getPickedDates(List<MaterialDayPicker.Weekday> pickedDates) {
+        List<Integer> outputDatesList = new ArrayList<Integer>();
+        for (MaterialDayPicker.Weekday weekday : pickedDates) {
+            outputDatesList.add(weekday.ordinal() + 1);
+        }
+
+        return outputDatesList;
     }
 
 }
