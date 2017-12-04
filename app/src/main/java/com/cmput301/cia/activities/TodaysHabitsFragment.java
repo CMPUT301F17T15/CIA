@@ -125,6 +125,10 @@ public class TodaysHabitsFragment extends Fragment {
     public void resetCheckableListAdapter(){
         checkableAdapter = new CheckableListViewAdapter(getContext(), R.layout.checkable_list_view, R.id.CheckedTextView, todaysHabits);
         checkable.setAdapter(checkableAdapter);
+        if (todaysHabits.size() > 0) {
+            noTasks.setVisibility(View.GONE);
+        } else
+            noTasks.setVisibility(View.VISIBLE);
     }
 
     /**

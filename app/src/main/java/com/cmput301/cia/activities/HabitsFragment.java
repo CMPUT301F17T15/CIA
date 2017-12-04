@@ -134,6 +134,10 @@ public class HabitsFragment extends Fragment {
         adapter = new ExpandableListViewAdapter(getContext(), user);
         expandableListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        if (user.getHabits().size() > 0) {
+            noHabits.setVisibility(View.GONE);
+        } else
+            noHabits.setVisibility(View.VISIBLE);
     }
 
     /**
