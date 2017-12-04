@@ -439,13 +439,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
                 user.save();
             }
-        } else if (requestCode == FOLLOW_REQUESTS) {
-            if (resultCode == RESULT_OK) {
-                // TODO
-                /*Profile result = (Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE);
-                user.copyFrom(result);
-                user.save();*/
-            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -485,21 +478,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.menu_button_My_Profile:
-//                Intent intent_My_Profile = new Intent(this, UserProfileActivity.class);
-//                intent_My_Profile.putExtra(UserProfileActivity.PROFILE_ID, user);
-//                intent_My_Profile.putExtra(UserProfileActivity.USER_ID, user);
-//                startActivityForResult(intent_My_Profile, VIEW_PROFILE);
-//                return true;
-//            case R.id.menu_button_Add_New_Habit:
-//                Intent intent = new Intent(this, CreateHabitActivity.class);
-//                if (user.getHabitCategories() != null) {
-//                    List<String> types = new ArrayList<>();
-//                    types.addAll(user.getHabitCategories());
-//                    intent.putStringArrayListExtra("types", (ArrayList<String>) types);
-//                }
-//                startActivityForResult(intent, CREATE_HABIT);
-//                return true;
             case R.id.menu_button_Statistic:
                 Intent intent_Statistic = new Intent(this, StatisticActivity.class);
                 intent_Statistic.putExtra(StatisticActivity.ID_USER, user);
@@ -517,24 +495,8 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 return true;
             case R.id.menu_button_PowerRankings:
                 Intent intentPR = new Intent(this, RankingsActivity.class);
-                intentPR.putExtra(RankingsActivity.ID_ISPOWER, true);
                 startActivity(intentPR);
                 return true;
-            case R.id.menu_button_OverallRankings:
-                Intent intentOR = new Intent(this, RankingsActivity.class);
-                intentOR.putExtra(RankingsActivity.ID_ISPOWER, false);
-                startActivity(intentOR);
-                return true;
-//            case R.id.menu_button_searchUsers:
-//                Intent search = new Intent(this, SearchUsersFragment.class);
-//                search.putExtra(SearchUsersFragment.ID_USER, user);
-//                startActivityForResult(search, SEARCH_USERS);
-//                return true;
-//            case R.id.menu_button_FollowRequests:
-//                Intent requests = new Intent(this, FollowRequestsFragment.class);
-//                requests.putExtra(FollowRequestsFragment.ID_PROFILE, user);
-//                startActivityForResult(requests, FOLLOW_REQUESTS);
-//                return true;
             case R.id.menu_button_nearbyEvents:
                 requestLocationPermissions();
                 return true;
