@@ -53,4 +53,11 @@ public class CreateHabitActivity extends HabitViewActivity {
         deleteButton.setVisibility(View.GONE);
         setTitle("Create new Habit");
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent();
+        finish();
+    }
 }
