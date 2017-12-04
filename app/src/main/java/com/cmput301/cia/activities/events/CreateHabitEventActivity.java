@@ -98,7 +98,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         String habitName = intent.getStringExtra(ID_HABIT_NAME);
         habitId = intent.getStringExtra(ID_HABIT_HASH);
 
-        this.setTitle(habitName);
+        this.setTitle(habitName + " Completion");
 
         imageView = (ImageView)findViewById(R.id.cheImageView);
         date = (ClickableEditItem) findViewById(R.id.editableDate);
