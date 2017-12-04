@@ -243,11 +243,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getAdapter().getCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getAdapter().getCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -278,11 +278,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getAdapter().getCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getAdapter().getCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
