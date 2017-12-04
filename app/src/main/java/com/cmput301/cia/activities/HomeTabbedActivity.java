@@ -56,16 +56,12 @@ import me.toptas.fancyshowcase.FocusShape;
 import me.toptas.fancyshowcase.OnCompleteListener;
 
 /**
- * @author Jessica Prieto
- * version 1
- *
- * with content taken originally from
- * HomePageActivity
- * @author Adil Malik, Shipin Guan
- * @version 6
+ * @author Adil Malik, Shipin Guan, Jessica Prieto
+ * @version 7
  * Date: Nov 12 2017
  *
  * The landing activity after the user logs in to the app
+ * used to be HomePageActivity
  */
 
 public class HomeTabbedActivity extends LocationRequestingActivity {
