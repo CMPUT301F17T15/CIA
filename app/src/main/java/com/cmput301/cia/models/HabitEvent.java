@@ -9,9 +9,7 @@ import android.location.LocationManager;
 
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Adil Malik

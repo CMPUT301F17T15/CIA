@@ -32,6 +32,7 @@ import com.cmput301.cia.activities.users.UserProfileFragment;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.activities.users.ViewFollowedUsersActivity;
 import com.cmput301.cia.models.AddHabitEvent;
+import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.OfflineEvent;
@@ -364,6 +365,17 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
                 user.save();
+
+                // workaround for offline events not being assigned an ID, so that they can still be modified/deleted while offline
+                if (!event.hasValidId()){
+                    long temporaryId = 0;
+                    for (CompletedEventDisplay completedEventDisplay : user.getHabitHistory()){
+                        if (!completedEventDisplay.getEvent().hasValidId() && completedEventDisplay.getEvent().getId() != null){
+                            temporaryId = Long.valueOf(completedEventDisplay.getEvent().getId()) + 1;
+                        }
+                    }
+                    event.setId(String.valueOf(temporaryId));
+                }
 
                 // update the today's tasks list
                 updateAllHabits();
