@@ -73,9 +73,6 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
     private ClickableEditItem comment;
 
-    // The button that resets the selected image when clicked
-    private Button resetImageButton;
-
     // the location the event occurred at
     private Location location;
 
@@ -289,12 +286,10 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             imageView.clearColorFilter();
             imageView.setBackgroundColor(Color.rgb(255, 255, 255));
             imageView.setImageBitmap(image);
-            resetImageButton.setVisibility(View.VISIBLE);
         }
         else {
             imageView.setColorFilter(Color.rgb(0, 0, 0));
             imageView.setBackgroundColor(Color.rgb(0, 0, 0));
-            resetImageButton.setVisibility(View.INVISIBLE);
         }
     }
 
