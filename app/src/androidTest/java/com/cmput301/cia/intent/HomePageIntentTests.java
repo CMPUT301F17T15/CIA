@@ -41,7 +41,7 @@ public class HomePageIntentTests extends ActivityInstrumentationTestCase2<HomeTa
         Profile profile = new TestProfile("xyz");
         profile.setFirstTimeUse(false);
         Intent intent = new Intent();
-        intent.putExtra(HomeTabbed.ID_PROFILE, profile);
+        intent.putExtra(HomeTabbedActivity.ID_PROFILE, profile);
         setActivityIntent(intent);
 
         solo = new Solo(getInstrumentation(), getActivity());
