@@ -85,6 +85,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     // The date this event occurred on
     private Date eventDate;
 
+    private boolean isCommentChanged;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +107,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         locationItem = (ClickableEditItem) findViewById(R.id.editableLocation);
         comment = (ClickableEditItem) findViewById(R.id.editableComment);
 
+        //set on click listener to edit date
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +117,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
         setDateText();
 
+        // set on click listener to fetch location
         locationItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,6 +125,8 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             }
         });
 
+        // set on click listener to add comment
+        isCommentChanged = false;
         comment.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -130,6 +136,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
                 DialogUtils.createEditDialog(CreateHabitEventActivity.this, title, hint, new DialogUtils.OnOkClickedListener() {
                     @Override
                     public void onOkClicked(String editString) {
+                        isCommentChanged = true;
                         comment.setItemDynamicText(editString);
                     }
                 });
@@ -298,7 +305,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      * Adds data to the intent object if the user selects "Save"
      * @param cancelled whether the cancel button was clicked or not
      */
-    private void finishActivity(boolean cancelled){
+    private void finishActivity(boolean cancelled) {
 
         if (isFinishing())
             return;
@@ -310,7 +317,14 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
             return;
         }
 
-        HabitEvent event = new HabitEvent(comment.getDynamicText());
+        // check if comment is added or not and set it properly on the new habitevent
+        String commentString;
+        if (isCommentChanged)
+            commentString = comment.getDynamicText();
+        else
+            commentString = "";
+
+        HabitEvent event = new HabitEvent(commentString);
 
         event.setDate(eventDate);
         event.setLocation(location);
