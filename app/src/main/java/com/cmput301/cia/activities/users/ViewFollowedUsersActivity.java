@@ -16,7 +16,12 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.events.HabitEventViewActivity;
+import com.cmput301.cia.activities.events.HistoryActivity;
+import com.cmput301.cia.activities.habits.SingleStatisticViewActivity;
+import com.cmput301.cia.activities.habits.StatisticViewActivity;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.Habit;
@@ -90,12 +95,12 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
         followedList.setAdapter(followedListAdapter);
 
-        // view a displayed when it is clicked
-        followedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // view a profile when it is clicked
+        followedList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void handleClick(View view, int index) {
                 Intent profileIntent = new Intent(ViewFollowedUsersActivity.this, UserProfileActivity.class);
-                profileIntent.putExtra(UserProfileActivity.PROFILE_ID, followed.get(position));
+                profileIntent.putExtra(UserProfileActivity.PROFILE_ID, followed.get(index));
                 profileIntent.putExtra(UserProfileActivity.USER_ID, displayed);
                 startActivityForResult(profileIntent, VIEW_PROFILE);
             }
@@ -103,22 +108,24 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         habitsList = (ListView)findViewById(R.id.vfuHabitsList);
         updateHabitsAdapter();
-        habitsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        habitsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: display statistics
+            public void handleClick(View view, int index) {
+                Intent intent = new Intent(ViewFollowedUsersActivity.this, SingleStatisticViewActivity.class);
+                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, displayed.getFollowedHabits().get(index));
+                startActivity(intent);
             }
         });
 
         eventsList = (ListView)findViewById(R.id.vfuEventsList);
         eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
-        eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*eventsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: view event details
+            public void handleClick(View view, int index) {
+
             }
-        });
+        });*/
 
         historyImage = (ImageView)findViewById(R.id.vfuHistoryIcon);
         // switch to history mode

@@ -114,8 +114,8 @@ public class TodaysHabitsFragment extends Fragment {
     /**
      * updates the view on data changes
      */
-    public void updateTodaysList() {
-        todaysHabits = user.getTodaysHabits();
+    public void updateTodaysList(List<Habit> habits) {
+        todaysHabits = habits;
         resetCheckableListAdapter();
     }
 
