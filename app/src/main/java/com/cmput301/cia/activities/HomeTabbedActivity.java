@@ -67,14 +67,14 @@ import me.toptas.fancyshowcase.OnCompleteListener;
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
     public static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
-            FOLLOWED_USERS = 6, SEARCH_USERS = 7, FOLLOW_REQUESTS = 8;
+            SEARCH_USERS = 7;
 
     public static final String ID_PROFILE = "User";
 
     // Profile of the signed in user
     private Profile user;
 
-    BottomBar bottomBar;
+    private BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -423,13 +423,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 user.copyFrom((Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID), false);
                 user.save();
             }
-        } else if (requestCode == FOLLOWED_USERS){
-            if (resultCode == RESULT_OK){
-                List<Profile> followed = (List<Profile>) data.getSerializableExtra(ViewFollowedUsersActivity.RETURNED_FOLLOWED);
-                for (Profile toFollow : followed) {
-                    user.follow(toFollow);
-                }
-            }
         } else if (requestCode == SEARCH_USERS){
             if (resultCode == RESULT_OK){
                 user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
@@ -487,7 +480,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             case R.id.menu_button_My_Following:
                 Intent intent_My_Following = new Intent(this, ViewFollowedUsersActivity.class);
                 intent_My_Following.putExtra(ViewFollowedUsersActivity.ID_VIEWED, user);
-                startActivityForResult(intent_My_Following, FOLLOWED_USERS);
+                startActivity(intent_My_Following);
                 return true;
             case R.id.menu_button_PowerRankings:
                 Intent intentPR = new Intent(this, RankingsActivity.class);

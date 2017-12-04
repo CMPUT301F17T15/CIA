@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -46,9 +47,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     // Intent identifiers for passed in profile
     public static final String ID_VIEWED = "Profile";
 
-    // Return identifiers for the activity result
-    public static final String RETURNED_FOLLOWED = "Followed";
-
     // Activity result codes
     private static final int VIEW_PROFILE = 0;
 
@@ -63,6 +61,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     // list of followed users' habits
     private ListView habitsList;
     private ArrayAdapter<String> habitsListAdapter;
+    private List<Habit> habitsDisplayed;
 
     // list of followed users' events
     private ListView eventsList;
@@ -86,7 +85,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         noFollowing = (TextView)findViewById(R.id.noFollowing);
 
-        followed = displayed.getFollowing();
+        followed = new ArrayList<>();//displayed.getFollowing();
 
         if (followed.size() > 0) {
             noFollowing.setVisibility(View.GONE);
@@ -107,19 +106,17 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         });
 
         habitsList = (ListView)findViewById(R.id.vfuHabitsList);
-        updateHabitsAdapter();
+        //updateHabitsAdapter();
         habitsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
             public void handleClick(View view, int index) {
                 Intent intent = new Intent(ViewFollowedUsersActivity.this, SingleStatisticViewActivity.class);
-                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, displayed.getFollowedHabits().get(index));
+                intent.putExtra(SingleStatisticViewActivity.ID_HABIT, habitsDisplayed.get(index));//displayed.getFollowedHabits().get(index));
                 startActivity(intent);
             }
         });
 
         eventsList = (ListView)findViewById(R.id.vfuEventsList);
-        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
-        eventsList.setAdapter(eventsListAdapter);
         /*eventsList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
             public void handleClick(View view, int index) {
@@ -153,11 +150,18 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             }
         });
 
+        final Switch eventsHistorySwitch = (Switch) findViewById(R.id.vfuHistoryEventsSwitch);
+        eventsHistorySwitch.setText("Events");
         // toggle the history/habit view when the switch gets clicked
-        findViewById(R.id.vfuHistoryEventsSwitch).setOnClickListener(new View.OnClickListener() {
+        eventsHistorySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchHistoryView();
+                if (eventsHistorySwitch.getText().toString().equals("Events")){
+                    eventsHistorySwitch.setText("Habits");
+                } else {
+                    eventsHistorySwitch.setText("Events");
+                }
             }
         });
 
@@ -178,18 +182,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
         startActivity(intent);
     }
 
-    /**
-     * Handle the back button being pressed
-     */
-    @Override
-    public void onBackPressed() {
-        Intent returnIntent = new Intent();
-        // TODO: return displayed for simplicity
-        returnIntent.putExtra(RETURNED_FOLLOWED, (Serializable)followed);
-        setResult(RESULT_OK, returnIntent);
-        finish();
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -201,19 +193,23 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             noFollowing.setVisibility(View.GONE);
         } else
             noFollowing.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        followed = displayed.getFollowing();
-        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
-        followedList.setAdapter(followedListAdapter);
 
         updateHabitsAdapter();
 
         eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
         eventsList.setAdapter(eventsListAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        /*followed = displayed.getFollowing();
+        followedListAdapter = new ArrayAdapter<>(this, R.layout.list_item, followed);
+        followedList.setAdapter(followedListAdapter);
+
+        updateHabitsAdapter();
+        eventsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, displayed.getFollowedHabitHistory());
+        eventsList.setAdapter(eventsListAdapter);*/
     }
 
     /**
@@ -244,11 +240,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getAdapter().getCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getAdapter().getCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -270,6 +266,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             // switch to events view
             habitsList.setVisibility(View.INVISIBLE);
             eventsList.setVisibility(View.VISIBLE);
+
         } else {
             // switch to history view
             habitsList.setVisibility(View.VISIBLE);
@@ -278,11 +275,11 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
 
         // viewing habits list
         if (habitsList.getVisibility() == View.VISIBLE){
-            if (habitsList.getAdapter().getCount() == 0)
+            if (habitsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No habits found.", Toast.LENGTH_SHORT).show();
         } else {
             // viewing events list
-            if (eventsList.getAdapter().getCount() == 0)
+            if (eventsList.getAdapter().getCount() == 0 && !isFinishing())
                 Toast.makeText(this, "No events found.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -309,9 +306,12 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             }
         }
 
+        habitsDisplayed = displayed.getFollowedHabits();
         List<String> list = new ArrayList<>();
-        for (Habit habit : displayed.getFollowedHabits()){
-            list.add(getHabitDisplayText(habit, habitCreatorMap.get(habit.getId())));
+        for (Habit habit : habitsDisplayed){
+            Profile creator = habitCreatorMap.get(habit.getId());
+            if (creator != null)
+                list.add(getHabitDisplayText(habit, creator));
         }
 
         habitsListAdapter = new ArrayAdapter<>(this, R.layout.list_item, list);

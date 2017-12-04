@@ -26,7 +26,6 @@ import java.util.List;
  * Date: Nov 13 2017
  *
  * This class tests the UI for viewing statistics about habits
- * NOTE: These tests require an internet connection
  */
 
 public class StatisticsIntentTests extends ActivityInstrumentationTestCase2<StatisticActivity> {
