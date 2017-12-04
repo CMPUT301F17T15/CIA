@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
@@ -152,11 +153,18 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             }
         });
 
+        final Switch eventsHistorySwitch = (Switch) findViewById(R.id.vfuHistoryEventsSwitch);
+        eventsHistorySwitch.setText("Events");
         // toggle the history/habit view when the switch gets clicked
-        findViewById(R.id.vfuHistoryEventsSwitch).setOnClickListener(new View.OnClickListener() {
+        eventsHistorySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchHistoryView();
+                if (eventsHistorySwitch.getText().toString().equals("Events")){
+                    eventsHistorySwitch.setText("Habits");
+                } else {
+                    eventsHistorySwitch.setText("Events");
+                }
             }
         });
 
@@ -261,6 +269,7 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
             // switch to events view
             habitsList.setVisibility(View.INVISIBLE);
             eventsList.setVisibility(View.VISIBLE);
+
         } else {
             // switch to history view
             habitsList.setVisibility(View.VISIBLE);
