@@ -118,7 +118,7 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
     private void initChartData(Habit habit){
 
         // date formatter for values on the x-axis
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd YY");
+//        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd YY");
 
         //Data processing for line chart
         List<String> xAxis = new ArrayList<>();
@@ -133,12 +133,12 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
 
         while (!DateUtilities.isSameDay(calendar.getTime(), end) && DateUtilities.isBefore(calendar.getTime(), end)){
             dates.add(calendar.getTime());
-            xAxis.add(formatter.format(calendar.getTime()));
+            xAxis.add(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
             calendar.add(Calendar.DATE, 1);
         }
 
         dates.add(end);
-        xAxis.add(formatter.format(end));
+        xAxis.add(SimpleDateFormat.getDateInstance().format(end));
 
         int numDataPoints = xAxis.size();
         ArrayList<Entry> yxexs = new ArrayList<>();
@@ -148,9 +148,9 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
         List<String> missedHabitDates = new ArrayList<>();
         List<String> completedHabitDates = new ArrayList<>();
         for (HabitEvent event : habit.getEvents())
-            completedHabitDates.add(formatter.format(event.getDate()));
+            completedHabitDates.add(SimpleDateFormat.getDateInstance().format(event.getDate()));
         for (Date date : habit.getMissedDates())
-            missedHabitDates.add(formatter.format(date));
+            missedHabitDates.add(SimpleDateFormat.getDateInstance().format(date));
 
         // sort for binary search
         Collections.sort(missedHabitDates);
@@ -163,9 +163,9 @@ public class SingleStatisticViewActivity extends AppCompatActivity {
 
         // go through each date since the habit was started
         for (int i = 0; i < dates.size(); ++i){
-            if (Collections.binarySearch(missedHabitDates, formatter.format(dates.get(i))) >= 0){
+            if (Collections.binarySearch(missedHabitDates, SimpleDateFormat.getDateInstance().format(dates.get(i))) >= 0){
                 ++misses;
-            } else if (Collections.binarySearch(completedHabitDates, formatter.format(dates.get(i))) >= 0){
+            } else if (Collections.binarySearch(completedHabitDates, SimpleDateFormat.getDateInstance().format(dates.get(i))) >= 0){
                 ++completions;
             }
 
