@@ -297,12 +297,14 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
      */
     private void onAddHabitClicked() {
         Intent intent = new Intent(this, CreateHabitActivity.class);
+
         if (user.getHabitCategories() != null) {
             List<String> types = new ArrayList<>();
             types.addAll(user.getHabitCategories());
-            intent.putStringArrayListExtra("types", (ArrayList<String>) types);
+            intent.putStringArrayListExtra("Categories", (ArrayList<String>) types);
         }
-        startActivityForResult(intent, CREATE_HABIT);
+
+        startActivityForResult(intent, HomeTabbedActivity.VIEW_HABIT);
     }
 
     /**
@@ -410,12 +412,18 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 } else {
                     // update the habit
                     Habit habit = (Habit) data.getSerializableExtra("Habit");
-                    for (Habit h : user.getHabits()){
-                        if (h.equals(habit)){
-                            h.copyFrom(habit);
-                            break;
+
+                    if (user.getHabits().contains(habit)) {
+                        for (Habit h : user.getHabits()){
+                            if (h.equals(habit)){
+                                h.copyFrom(habit);
+                                break;
+                            }
                         }
+                    } else {
+                        user.addHabit(habit);
                     }
+
                 }
 
                 updateAllHabits();

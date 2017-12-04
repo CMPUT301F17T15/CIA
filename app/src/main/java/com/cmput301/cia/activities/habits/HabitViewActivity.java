@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,6 +24,7 @@ import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.DialogUtils;
 import com.cmput301.cia.views.ClickableEditItem;
 
 import java.util.ArrayList;
@@ -33,9 +35,9 @@ import java.util.List;
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
- * @author Shipin Guan
- * @version 2
- * Date: Nov 7, 2017
+ * @author Shipin Guan, Jessica Prieto
+ * @version 3
+ * Date: Dec 4, 2017
  *
  * This activity allows the user to view the details about one of their habits
  */
@@ -55,14 +57,18 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
 
     private Habit habit;
 
+    protected Button toStatisticButton;
+    protected Button deleteButton;
+    protected Button saveButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_habit_detail);
 
-        Button toStatisticButton = (Button) findViewById(R.id.toStatistic);
-        Button deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
-        Button saveButton = (Button) findViewById(R.id.SaveHabitButton);
+        toStatisticButton = (Button) findViewById(R.id.toStatistic);
+        deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
+        saveButton = (Button) findViewById(R.id.SaveHabitButton);
 
         //Display habit detail
         habitName = (EditText) findViewById(R.id.habitName);
@@ -75,13 +81,62 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
 
         habit = (Habit) getIntent().getSerializableExtra("Habit");
+
+        if (habit == null) {
+            habit = new Habit("", "", new Date(), new ArrayList<Integer>(), "");
+        }
+
         final ArrayList<String> categories = getIntent().getStringArrayListExtra("Categories");
 
 
-        // for the spinner
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        //spinner activity, could be placed in another activity file for better practice
+        habitTypeSpinner = (Spinner) findViewById(R.id.habitTypeSpinner);
+
+        if (getIntent().getStringArrayListExtra("types") == null){
+            categories.add("Create new type");
+        }
+        else {
+            for (String t : getIntent().getStringArrayListExtra("types")){
+                categories.add(t);
+            }
+            categories.add("Create new type");
+        }
+
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         habitTypeSpinner.setAdapter(spinnerAdapter);
+
+        final String newHabitTypeText = "Create New Habit Type";
+        final String hint = "Enter new type here";
+
+        habitTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
+                if (i == categories.size() - 1){
+                    DialogUtils.createEditDialog(HabitViewActivity.this, newHabitTypeText, hint, new DialogUtils.OnOkClickedListener() {
+                        @Override
+                        public void onOkClicked(String editString) {
+                            if (!editString.isEmpty()){
+                                categories.add(0, editString);
+                                spinnerAdapter.notifyDataSetChanged();
+                                habitTypeSpinner.setSelection(0);
+                            }else{
+                                Toast.makeText(HabitViewActivity.this, "The type name can not be empty", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        //spinner finished
+
 
         refreshPage();
 
