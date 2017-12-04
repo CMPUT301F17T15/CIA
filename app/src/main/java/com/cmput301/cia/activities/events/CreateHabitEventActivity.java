@@ -116,7 +116,29 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         });
 
         setDateText();
-//        resetImageButton = (Button)findViewById(R.id.cheResetImageButton);
+
+        locationItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAttachLocationClicked(view);
+            }
+        });
+
+        comment.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String title = "Add comment";
+                String hint = "Add comment to habit event";
+
+                DialogUtils.createEditDialog(CreateHabitEventActivity.this, title, hint, new DialogUtils.OnOkClickedListener() {
+                    @Override
+                    public void onOkClicked(String editString) {
+                        comment.setItemDynamicText(editString);
+                    }
+                });
+            }
+        });
+
 
         if (isFinishing())
             return;
@@ -139,15 +161,6 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
                 startActivityForResult(intent, CreateHabitEventActivity.SELECT_IMAGE_CODE);
             }
         });
-
-//        DialogUtils.createEditDialog(CreateHabitEventActivity.this, new DialogUtils.OnOkClickedListener() {
-//            @Override
-//            public void onOkClicked(String editString) {
-//                comment.setItemDynamicText(editString);
-//            }
-//        });
-
-//        FontUtilities.applyFontToViews(this, (ViewGroup)findViewById(R.id.cheLayout));
     }
 
     @Override
@@ -322,6 +335,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     @Override
     protected void handleLocationGranted() {
         location = LocationUtilities.getLocation(this);
+        locationItem.setItemDynamicText(LocationUtilities.getLocationName(this, location));
     }
 
 }
