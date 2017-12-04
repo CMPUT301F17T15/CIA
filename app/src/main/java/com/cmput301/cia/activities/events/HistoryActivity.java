@@ -21,6 +21,7 @@ import com.cmput301.cia.R;
 import com.cmput301.cia.activities.templates.LocationRequestingActivity;
 import com.cmput301.cia.activities.users.ViewEventsMapActivity;
 import com.cmput301.cia.controller.HistoryAdapter;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.CompletedEventDisplay;
 import com.cmput301.cia.models.DeleteHabitEvent;
@@ -67,6 +68,9 @@ public class HistoryActivity extends LocationRequestingActivity {
     // Text used for filtering by event comment
     private String filterText;
 
+    // index of the last clicked event in the user's habit history list
+    private int index;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +79,7 @@ public class HistoryActivity extends LocationRequestingActivity {
         user = (Profile) getIntent().getSerializableExtra(ID_PROFILE);
         filterHabit = null;
         filterText = "";
+        index = -1;
 
         findViewById(R.id.historyLayout).requestFocus();
 
@@ -114,12 +119,13 @@ public class HistoryActivity extends LocationRequestingActivity {
         });
 
         // view the details of a habit event
-        historyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        historyList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void handleClick(View view, int index) {
+                HistoryActivity.this.index = index;
                 Intent intent = new Intent(HistoryActivity.this, HabitEventViewActivity.class);
-                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(position).getEvent());
-                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, getDisplayedEvents().get(position).getHabitName());
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_EVENT, getDisplayedEvents().get(index).getEvent());
+                intent.putExtra(HabitEventViewActivity.ID_HABIT_NAME, getDisplayedEvents().get(index).getHabitName());
                 startActivityForResult(intent, EVENT_CODE);
             }
         });
@@ -178,13 +184,29 @@ public class HistoryActivity extends LocationRequestingActivity {
             if (resultCode == RESULT_OK) {
                 boolean isDeleted = data.getBooleanExtra(HabitEventViewActivity.RETURNED_DELETED, false);
                 HabitEvent event = (HabitEvent) data.getSerializableExtra(HabitEventViewActivity.RETURNED_EVENT);
-                OfflineEvent offlineEvent;
-                if (!isDeleted) {
-                    offlineEvent = new EditHabitEvent(event);
+                // change events that have not been saved yet right now
+                if (!event.hasValidId()){
+                    if (!isDeleted) {   // edit
+                        user.getHabitHistory().get(index).getEvent().copyFrom(event);
+                    } else {            // remove
+                        for (Habit habit : user.getHabits()){
+                            for (HabitEvent habitEvent : habit.getEvents()){
+                                if (habitEvent.getId().equals(event.getId())){
+                                    habit.removeHabitEvent(habitEvent);
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 } else {
-                    offlineEvent = new DeleteHabitEvent(event);
+                    OfflineEvent offlineEvent;
+                    if (!isDeleted) {
+                        offlineEvent = new EditHabitEvent(event);
+                    } else {
+                        offlineEvent = new DeleteHabitEvent(event);
+                    }
+                    user.tryHabitEvent(offlineEvent);
                 }
-                user.tryHabitEvent(offlineEvent);
             }
 
         }
