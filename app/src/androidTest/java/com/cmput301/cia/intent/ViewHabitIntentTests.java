@@ -7,13 +7,13 @@ package com.cmput301.cia.intent;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.TestProfile;
 import com.cmput301.cia.activities.HomeTabbedActivity;
-import com.cmput301.cia.activities.habits.EditHabitActivity;
 import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.HabitEvent;
@@ -23,6 +23,8 @@ import com.robotium.solo.Solo;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 /**
  * Version 1
@@ -82,7 +84,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
         String name = loadHabit();
 
         // make sure name is correct
-        assertTrue(((TextView)solo.getView(R.id.EditHabitName)).getText().toString().equals(name));
+        assertTrue(((TextView)solo.getView(R.id.habitName)).getText().toString().equals(name));
     }
 
     public void testDelete() throws NoSuchFieldException, IllegalAccessException {
@@ -106,14 +108,11 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
 
     public void testEdit(){
         loadHabit();
-        solo.clickOnButton("Edit");
-        solo.sleep(1000);
-        solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
 
         // should not save because no days of week selected
         solo.clickOnButton("Save");
         solo.sleep(600);
-        solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
+        solo.assertCurrentActivity("wrong activity", HabitViewActivity.class);
 
         // select wednesday
         solo.clickOnView(solo.getView(R.id.day_picker));
@@ -125,7 +124,7 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
         // should not save because no title
         solo.clickOnButton("Save");
         solo.sleep(600);
-        solo.assertCurrentActivity("wrong activity", EditHabitActivity.class);
+        solo.assertCurrentActivity("wrong activity", HabitViewActivity.class);
 
         solo.enterText(0, "newname");
         solo.sleep(600);
@@ -137,13 +136,17 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
 
         // successful save
         solo.clickOnButton("Save");
-        solo.sleep(1500);
-        solo.assertCurrentActivity("wrong activity", HabitViewActivity.class);
+        solo.sleep(4500);
+        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
+
+        loadHabit();
 
         // make sure changes took effect here
-        assertTrue(((TextView)solo.getView(R.id.EditHabitName)).getText().toString().equals("newname"));
-        assertTrue(((TextView)solo.getView(R.id.EditHabitReason)).getText().toString().equals("newreason"));
-        assertTrue(((TextView)solo.getView(R.id.HabitFrequency)).getText().toString().equals("Wednesday\n"));
+        assertTrue(((EditText)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
+        assertTrue(((EditText)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
+
+        // TODO: wednesday selected
+        assertTrue(((MaterialDayPicker)solo.getView(R.id.day_picker)).getText().toString().equals("Wednesday\n"));
 
         // return to home page
         solo.goBack();
@@ -153,9 +156,11 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
         // make sure changes took effect in the home page
         String name = loadHabit();
         assertTrue(name.equals("newname"));
-        assertTrue(((TextView)solo.getView(R.id.EditHabitName)).getText().toString().equals("newname"));
-        assertTrue(((TextView)solo.getView(R.id.EditHabitReason)).getText().toString().equals("newreason"));
-        assertTrue(((TextView)solo.getView(R.id.HabitFrequency)).getText().toString().equals("Wednesday\n"));
+        assertTrue(((EditText)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
+        assertTrue(((EditText)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
+
+        // TODO: wednesday selected
+        assertTrue(((MaterialDayPicker)solo.getView(R.id.day_picker)).getText().toString().equals("Wednesday\n"));
     }
 
 }
