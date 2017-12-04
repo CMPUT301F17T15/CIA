@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Habit;
+import com.cmput301.cia.models.HabitEvent;
 import com.cmput301.cia.models.Profile;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -40,12 +41,9 @@ import java.util.List;
 public class StatisticViewActivity extends AppCompatActivity {
 
     private Profile user;
-    private TextView typeName;
-    private TextView typeNumber;
-    private TextView completeNumber;
-    private TextView totalNumber;
-    private TextView mostMissed;
+
     private ListView BreakDownList;
+
     private PieChart pieChart;
     private int[] yData;
     private String[] xData;
@@ -58,33 +56,31 @@ public class StatisticViewActivity extends AppCompatActivity {
         user = (Profile) getIntent().getSerializableExtra("Profile");
 
         final String type = getIntent().getStringExtra("type");
-//        typeName = (TextView) findViewById(R.id.Type_Name);
         this.setTitle(type);
-//        typeName.setText(type);
-        typeNumber = (TextView) findViewById(R.id.habitsNumber);
+        TextView typeNumber = (TextView) findViewById(R.id.habitsNumber);
         typeNumber.setText(String.valueOf(user.getHabitsInCategory(type).size()));
         int completeCounter = 0;
         int missCounter = 0;
         int largestMiss = 0;
         final List<String> breakdownlist = new ArrayList<>();
 
-        mostMissed = (TextView) findViewById(R.id.missedMost);
-        for (Habit h : user.getHabitsInCategory(type)){
+        TextView mostMissed = (TextView) findViewById(R.id.missedMost);
+        List<Habit> habitsInCategory = user.getHabitsInCategory(type);
+        for (Habit h : habitsInCategory){
             completeCounter += h.getTimesCompleted();
             missCounter += h.getTimesMissed();
-            breakdownlist.add("Habit: " + h.getTitle() + "\nCompleted: " + h.getTimesCompleted() + ". \nMissed: " + h.getTimesMissed() + ".");
+            breakdownlist.add(h.getTitle() + "\nCompleted: " + h.getTimesCompleted() + " \nMissed: " + h.getTimesMissed());
             if(h.getTimesMissed() > largestMiss){
                 mostMissed.setText(h.getTitle());
                 largestMiss = h.getTimesMissed();
             }
         }
 
-        completeNumber = (TextView) findViewById(R.id.completeNumber);
+        TextView completeNumber = (TextView) findViewById(R.id.completeNumber);
         completeNumber.setText(String.valueOf(completeCounter));
-        totalNumber = (TextView) findViewById(R.id.TotalNumber);
+        TextView totalNumber = (TextView) findViewById(R.id.TotalNumber);
         totalNumber.setText(String.valueOf(missCounter));
-        if(missCounter == 0) {
-            //Toast.makeText(StatisticViewActivity.this, "You haven't missed any habits yet!\n", Toast.LENGTH_LONG).show();
+        if (missCounter == 0) {
             mostMissed.setText("Nothing Missed");
         }
         //Break down list view for each habit
@@ -108,9 +104,9 @@ public class StatisticViewActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        
         //data for pie chart
-        yData = new int[]{missCounter, user.getHabitHistory().size()};
+        yData = new int[]{missCounter, completeCounter};
         xData = new String[]{"Total","Complete"};
 
         pieChart = (PieChart) findViewById(R.id.pieChart);

@@ -47,9 +47,6 @@ public class ViewFollowedUsersActivity extends LocationRequestingActivity {
     // Intent identifiers for passed in profile
     public static final String ID_VIEWED = "Profile";
 
-    // Return identifiers for the activity result
-    public static final String RETURNED_FOLLOWED = "Followed";
-
     // Activity result codes
     private static final int VIEW_PROFILE = 0;
 
