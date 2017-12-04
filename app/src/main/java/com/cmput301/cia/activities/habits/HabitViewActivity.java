@@ -164,6 +164,7 @@ public class HabitViewActivity extends AppCompatActivity {
     private void refreshPage() {
 //        habitTypeSpinner.setText(habit.getType());
         // TODO: set spinner to type
+        selectSpinnerItemByValue(habitTypeSpinner, habit.getType());
 
         habitName.setText(habit.getTitle());
         habitReason.setText(habit.getReason());
@@ -172,6 +173,29 @@ public class HabitViewActivity extends AppCompatActivity {
         String temp = "";
         for (int i : habit.getDaysOfWeek()) {
             dayPicker.selectDay(MaterialDayPicker.Weekday.values()[i-1]);
+        }
+    }
+
+    /**
+     *
+     * @param spnr
+     * @param value
+     *
+     * solution based on an answer from stack overflow
+     * resource: https://stackoverflow.com/questions/11072576/set-selected-item-of-spinner-programmatically
+     *
+     */
+
+    public static void selectSpinnerItemByValue(Spinner spnr, String value) {
+        ArrayAdapter<String> adapter = (ArrayAdapter<String>) spnr.getAdapter();
+        String currentItem;
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            currentItem = adapter.getItem(i);
+            if(currentItem.equals(value)) {
+                spnr.setSelection(i);
+                return;
+            }
         }
     }
 

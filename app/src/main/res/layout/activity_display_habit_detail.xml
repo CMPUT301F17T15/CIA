@@ -336,10 +336,12 @@
         android:id="@+id/toStatistic"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
         android:text="Statistic"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="5dp"
         app:layout_constraintRight_toLeftOf="@+id/EditHabitButton"
-        android:layout_marginRight="16dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
