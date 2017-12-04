@@ -23,6 +23,9 @@ import com.robotium.solo.Solo;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+
+import ca.antonious.materialdaypicker.MaterialDayPicker;
 
 import ca.antonious.materialdaypicker.MaterialDayPicker;
 
@@ -109,10 +112,8 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
     public void testEdit(){
         loadHabit();
 
-        // should not save because no days of week selected
-        solo.clickOnButton("Save");
-        solo.sleep(600);
-        solo.assertCurrentActivity("wrong activity", HabitViewActivity.class);
+        // removed check for edit (since it uses the same activity now)
+        // remove test being unable to save when no date is selected (date can now be chosen so it's not empty when clicked)
 
         // select wednesday
         solo.clickOnView(solo.getView(R.id.day_picker));
@@ -136,31 +137,21 @@ public class ViewHabitIntentTests extends ActivityInstrumentationTestCase2<HomeT
 
         // successful save
         solo.clickOnButton("Save");
-        solo.sleep(4500);
-        solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
-
-        loadHabit();
-
-        // make sure changes took effect here
-        assertTrue(((EditText)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
-        assertTrue(((EditText)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
-
-        // TODO: wednesday selected
-        assertTrue(((MaterialDayPicker)solo.getView(R.id.day_picker)).getText().toString().equals("Wednesday\n"));
-
-        // return to home page
-        solo.goBack();
-        solo.sleep(3000);
+        solo.sleep(1500);
         solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure changes took effect in the home page
         String name = loadHabit();
         assertTrue(name.equals("newname"));
-        assertTrue(((EditText)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
-        assertTrue(((EditText)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
 
-        // TODO: wednesday selected
-        assertTrue(((MaterialDayPicker)solo.getView(R.id.day_picker)).getText().toString().equals("Wednesday\n"));
+        assertTrue(((TextView)solo.getView(R.id.habitName)).getText().toString().equals("newname"));
+        assertTrue(((TextView)solo.getView(R.id.habitReason)).getText().toString().equals("newreason"));
+
+        List<MaterialDayPicker.Weekday> selectedDays = Arrays.asList(MaterialDayPicker.Weekday.SUNDAY,
+                MaterialDayPicker.Weekday.MONDAY,
+                MaterialDayPicker.Weekday.TUESDAY,
+                MaterialDayPicker.Weekday.WEDNESDAY);
+        assertEquals("wrong days selected", selectedDays, ((MaterialDayPicker)solo.getView(R.id.day_picker)).getSelectedDays());
     }
 
 }

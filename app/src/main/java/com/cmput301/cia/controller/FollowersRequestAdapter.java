@@ -116,7 +116,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
             public void handleClick() {
                 followee.acceptFollowRequest(follower);
                 followRequests.remove(position);
-                notifyItemRemoved(position);
+                notifyDataSetChanged();
                 /*if (follower.isFollowing(followee)){
                     followRequests.remove(position);
                     notifyItemRemoved(position);
@@ -134,7 +134,7 @@ public class FollowersRequestAdapter extends RecyclerView.Adapter<FollowersReque
             public void handleClick() {
                 followee.removeFollowRequest(follower);
                 followRequests.remove(position);
-                notifyItemRemoved(position);
+                notifyDataSetChanged();
                 /*if (!follower.isFollowing(followee)){
                     followRequests.remove(position);
                     notifyItemRemoved(position);

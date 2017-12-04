@@ -14,12 +14,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity
+            android:name=".views.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.MainActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".activities.events.HistoryActivity"
@@ -32,7 +41,7 @@
             android:label="Habit Details" />
         <activity
             android:name=".activities.habits.StatisticActivity"
-            android:label="Habit Statistics"/>
+            android:label="Habit Statistics" />
         <activity
             android:name=".activities.habits.CreateHabitActivity"
             android:label="Create Habit" />
@@ -48,9 +57,6 @@
         <activity
             android:name=".activities.events.HabitEventViewActivity"
             android:label="Habit Event" />
-        <activity
-            android:name=".activities.habits.EditHabitActivity"
-            android:label="Edit Habit" />
         <activity
             android:name=".activities.users.UserProfileActivity"
             android:label="Profile" />
