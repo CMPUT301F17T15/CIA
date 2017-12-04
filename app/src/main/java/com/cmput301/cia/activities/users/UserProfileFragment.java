@@ -39,8 +39,6 @@ import static com.cmput301.cia.activities.events.CreateHabitEventActivity.MAX_IM
  * This activity displays the information about a user's profile
  */
 
-// TODO: messages
-
 public class UserProfileFragment extends Fragment {
 
     public static final String PROFILE_ID = "Profile", USER_ID = "User";

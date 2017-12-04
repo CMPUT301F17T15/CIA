@@ -31,14 +31,12 @@ import java.util.List;
 public class FollowRequestsFragment extends Fragment {
 
     public static final String ID_PROFILE = "User";
-    public static final String PROFILE_ID = "FollowerRequest";
 
     private Profile user;
-    private String name;
     private List<Profile> followRequests;
     private FollowersRequestAdapter adapter;
 
-    TextView noRequests;
+    private TextView noRequests;
 
     public static FollowRequestsFragment create(Profile currentUser) {
         FollowRequestsFragment followRequestsFragment = new FollowRequestsFragment();
