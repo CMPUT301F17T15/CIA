@@ -24,6 +24,7 @@ import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.fragments.DatePickerFragment;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.utilities.DateUtilities;
+import com.cmput301.cia.utilities.DialogUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -91,32 +92,26 @@ public class CreateHabitActivity extends AppCompatActivity implements DatePicker
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
 
+        final String newHabitTypeText = "Create New Habit Type";
+        final String hint = "Enter new type here";
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(adapterView.getContext(), "Selected " + adapterView.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
                 if (i == type.size() - 1){
-                    final AlertDialog.Builder mBuilder = new AlertDialog.Builder(CreateHabitActivity.this);
-                    View mview = getLayoutInflater().inflate(R.layout.dialog_input,null);
-                    final EditText minput = (EditText) mview.findViewById(R.id.edit_Type_Input);
-                    Button okButton = (Button) mview.findViewById(R.id.Ok_Button);
-                    mBuilder.setView(mview);
-                    final AlertDialog dialog = mBuilder.create();
-                    dialog.show();
-                    okButton.setOnClickListener(new TimedClickListener() {
+                    DialogUtils.createEditDialog(CreateHabitActivity.this, newHabitTypeText, hint, new DialogUtils.OnOkClickedListener() {
                         @Override
-                        public void handleClick() {
-                            if (!minput.getText().toString().isEmpty()){
-                                type.add(0, minput.getText().toString());
+                        public void onOkClicked(String editString) {
+                            if (!editString.isEmpty()){
+                                type.add(0, editString);
                                 spinnerAdapter.notifyDataSetChanged();
-                                dialog.dismiss();
+                                spinner.setSelection(0);
                             }else{
                                 Toast.makeText(CreateHabitActivity.this, "The type name can not be empty", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                    mBuilder.setView(mview);
-                    dialog.show();
 
                 }
             }

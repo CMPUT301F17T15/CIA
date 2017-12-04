@@ -11,108 +11,103 @@
     android:layout_height="match_parent"
     tools:context="com.cmput301.cia.activities.events.CreateHabitEventActivity">
 
-    <Button
-        android:id="@+id/cheCalendarButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ic_date_range_black_24px"
-        android:onClick="datePickerDialog"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/cheCommentStaticText"
-        android:layout_width="88dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Comment"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cheLocationDynamicText" />
-
-    <TextView
-        android:id="@+id/chePhotoText"
-        android:layout_width="62dp"
-        android:layout_height="23dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Photo"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cheCommentStaticText" />
-
-    <TextView
-        android:id="@+id/cheLocationDynamicText"
-        android:layout_width="221dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="add location"
-        android:textAlignment="viewStart"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cheLocationStaticText" />
-
-    <TextView
-        android:id="@+id/cheLocationStaticText"
-        android:layout_width="73dp"
-        android:layout_height="26dp"
-        android:layout_marginLeft="37dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Location"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cheDateStaticText" />
-
-    <TextView
-        android:id="@+id/cheDateStaticText"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Date"
-        android:textSize="18sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/cheAttachLocationButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="120dp"
-        android:onClick="onAttachLocationClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cheCalendarButton"
-        app:srcCompat="@android:drawable/ic_menu_mylocation" />
-
-    <EditText
-        android:id="@+id/cheCommentEditText"
-        android:layout_width="220dp"
+    <com.cmput301.cia.views.ClickableEditItem
+        android:id="@+id/editableDate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:textSize="16dp"
-        android:inputType="textPersonName"
-        android:maxLength="20"
+        android:layout_marginTop="0dp"
+        app:itemDynamicText="add date"
+        app:itemIcon="@drawable/ic_date_range_black_24px"
+        app:itemStaticText="Date"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cheCommentStaticText"
-        app:layout_constraintTop_toBottomOf="@+id/cheLocationDynamicText" />
+        app:layout_constraintTop_toBottomOf="@+id/cheImageView" />
+
+    <com.cmput301.cia.views.ClickableEditItem
+        android:id="@+id/editableLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:itemIcon="@android:drawable/ic_menu_mylocation"
+        app:itemStaticText="Location"
+        app:itemDynamicText="add location"
+        app:layout_constraintTop_toBottomOf="@+id/editableDate" />
+
+    <com.cmput301.cia.views.ClickableEditItem
+        android:id="@+id/editableComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:itemIcon="@drawable/ic_chat_black_24dp"
+        app:itemStaticText="Comment"
+        app:itemDynamicText="add comment"
+        app:layout_constraintTop_toBottomOf="@+id/editableLocation" />
+
+    <!--<Button-->
+        <!--android:id="@+id/cheCalendarButton"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_marginStart="120dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@drawable/ic_date_range_black_24px"-->
+        <!--android:onClick="datePickerDialog"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/cheLocationDynamicText"-->
+        <!--android:layout_width="221dp"-->
+        <!--android:layout_height="25dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="add location"-->
+        <!--android:textAlignment="viewStart"-->
+        <!--android:textSize="14sp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/cheLocationStaticText" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/cheLocationStaticText"-->
+        <!--android:layout_width="73dp"-->
+        <!--android:layout_height="26dp"-->
+        <!--android:layout_marginLeft="37dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Location"-->
+        <!--android:textSize="18sp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/cheDateStaticText" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/cheDateStaticText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="26dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Date"-->
+        <!--android:textSize="18sp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/cheAttachLocationButton"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_marginStart="120dp"-->
+        <!--android:onClick="onAttachLocationClicked"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="parent"-->
+        <!--app:srcCompat="@android:drawable/ic_menu_mylocation" />-->
 
     <ImageView
         android:id="@+id/cheImageView"
-        android:layout_width="194dp"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="0dp"
         android:onClick="onImageClicked"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chePhotoText"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/black" />
 
     <Button
@@ -124,30 +119,19 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
-    <Button
-        android:id="@+id/cheResetImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
-        android:layout_marginLeft="16dp"
-        android:onClick="onResetImageClicked"
-        android:text="Reset Image"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
-        android:id="@+id/cheDateTextView"
-        android:layout_width="163dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="174dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cheCalendarButton"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!--<TextView-->
+        <!--android:id="@+id/cheDateTextView"-->
+        <!--android:layout_width="163dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="174dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="TextView"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textSize="16sp"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/cheCalendarButton"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
 </android.support.constraint.ConstraintLayout>
