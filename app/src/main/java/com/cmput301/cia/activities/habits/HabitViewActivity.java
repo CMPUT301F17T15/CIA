@@ -60,6 +60,7 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
     protected Button toStatisticButton;
     protected Button deleteButton;
     protected Button saveButton;
+    protected Button clearButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -69,18 +70,19 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
         toStatisticButton = (Button) findViewById(R.id.toStatistic);
         deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
         saveButton = (Button) findViewById(R.id.SaveHabitButton);
+        clearButton = (Button) findViewById(R.id.ClearHabitButton);
 
         //Display habit detail
         habitName = (EditText) findViewById(R.id.habitName);
         habitReason = (EditText) findViewById(R.id.habitReason);
         habitTypeSpinner = (Spinner) findViewById(R.id.habitTypeSpinner);
-
         dateItem = (ClickableEditItem) findViewById(R.id.habitDetailDate);
         StartDate = dateItem.getDynamicText();
-
         dayPicker = (MaterialDayPicker) findViewById(R.id.day_picker);
 
         habit = (Habit) getIntent().getSerializableExtra("Habit");
+
+        clearButton.setVisibility(View.GONE);
 
         if (habit == null) {
             habit = new Habit("", "", new Date(), new ArrayList<Integer>(), "");
@@ -153,6 +155,16 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 datePickerDialog(view);
+            }
+        });
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                habitName.setText("");
+                habitReason.setText("");
+                dayPicker.clearSelection();
+
             }
         });
 

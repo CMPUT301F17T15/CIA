@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLength="20"
                     android:inputType="textPersonName"
                     android:text="Habit"
                     android:textSize="18sp" />
@@ -72,6 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:maxLength="30"
                     android:inputType="textPersonName"
                     android:text="Description"
                     android:textSize="18sp" />
@@ -177,117 +179,6 @@
 
     </android.support.v7.widget.CardView>
 
-    <!--<TextView-->
-    <!--android:id="@+id/EditHabitName"-->
-    <!--android:layout_width="360dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:fontFamily="sans-serif"-->
-    <!--android:textSize="16sp"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/HabitNameText"-->
-    <!--tools:text="@string/edit_habit" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/EditHabitType"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:text="habit type"-->
-    <!--android:textSize="16sp"-->
-    <!--app:layout_constraintHorizontal_bias="0.0"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/HabitTypeText" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/EditHabitReason"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:layout_marginStart="16dp"-->
-    <!--android:text="reason"-->
-    <!--android:textSize="16sp"-->
-    <!--app:layout_constraintHorizontal_bias="0.0"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/HabitReasonText" />-->
-
-    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/HabitNameText"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_marginLeft="16dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_marginStart="16dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_marginTop="200dp"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:text="@string/HabitNameText"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:textColor="@color/colorPrimaryDark"&ndash;&gt;-->
-    <!--&lt;!&ndash;app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/HabitTypeText"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:text="@string/HabitTypeText"-->
-    <!--android:textColor="@color/colorPrimaryDark"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/EditHabitName" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/HabitReasonText"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="16dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:text="@string/HabitReasonText"-->
-    <!--android:textColor="@color/colorPrimaryDark"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/EditHabitType" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/StartDateText"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:text="@string/StartDateText"-->
-    <!--android:textColor="@color/colorPrimaryDark"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/EditHabitReason"-->
-    <!--android:layout_marginStart="8dp" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/StartingDate"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:text="TextView"-->
-    <!--android:textAllCaps="true"-->
-    <!--android:textSize="24sp"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/StartDateText" />-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/FrequencyText"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:text="@string/FrequencyText"-->
-    <!--android:textColor="@color/colorPrimaryDark"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/StartingDate"-->
-    <!--android:layout_marginStart="8dp" />-->
-
     <Button
         android:id="@+id/SaveHabitButton"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -322,21 +213,21 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="8dp" />
 
-
-    <!--<TextView-->
-    <!--android:id="@+id/HabitFrequency"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginLeft="8dp"-->
-    <!--android:layout_marginRight="8dp"-->
-    <!--android:text="TextView"-->
-    <!--android:textSize="24sp"-->
-    <!--android:textStyle="bold|italic"-->
-    <!--app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--app:layout_constraintRight_toRightOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/FrequencyText"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginEnd="8dp" />-->
+    <Button
+        android:id="@+id/ClearHabitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/Clear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/SaveHabitButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp" />
 
     <Button
         android:id="@+id/toStatistic"

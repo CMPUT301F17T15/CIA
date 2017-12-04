@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.activities.habits.HabitViewActivity;
 import com.cmput301.cia.controller.TimedClickListener;
 
 /**
@@ -20,7 +22,7 @@ import com.cmput301.cia.controller.TimedClickListener;
  */
 
 public class DialogUtils {
-    public static void createEditDialog(Context context, String title, String hint, final OnOkClickedListener listener) {
+    public static void createEditDialog(final Context context, String title, String hint, final OnOkClickedListener listener) {
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
         View mview = LayoutInflater.from(context).inflate(R.layout.dialog_input,null);
 
@@ -40,7 +42,11 @@ public class DialogUtils {
             @Override
             public void handleClick() {
                 listener.onOkClicked(minput.getText().toString());
-                dialog.dismiss();
+                if (minput.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "The type name can not be empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialog.dismiss();
+                }
             }
         });
     }
