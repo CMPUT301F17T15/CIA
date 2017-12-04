@@ -131,7 +131,9 @@ public class FollowRequestsIntentTests extends ActivityInstrumentationTestCase2<
         }
         assertTrue("database error", profile.isFollowing(user));
         assertFalse("database error", user.hasFollowRequest(profile));
+
         profile.unfollow(user);
+
         solo.sleep(2000);
         assertFalse("database error", profile.isFollowing(user));
 
@@ -141,6 +143,7 @@ public class FollowRequestsIntentTests extends ActivityInstrumentationTestCase2<
         solo.sleep(1500);
         // remove item
         assertTrue("database error", size == adapter.getItemCount() + 2);
+
         // make sure the profile is no longer in the view
         for (int i = 0; i < adapter.getItemCount(); ++i){
             assertFalse(adapter.getProfile(i).equals(profile));
