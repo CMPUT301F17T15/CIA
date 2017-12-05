@@ -39,7 +39,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
         super(com.cmput301.cia.activities.HomeTabbedActivity.class);
     }
 
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
 
         List<Integer> allDays = new ArrayList<>();
         for (int i = 1; i <= 7; ++i){
@@ -71,8 +71,7 @@ public class CreateHabitEventIntentTests extends ActivityInstrumentationTestCase
 //        solo.clickInList(1, 1);
 //        solo.sleep(3000);
 //        solo.assertCurrentActivity("wrong activity", CreateHabitEventActivity.class);
-//
-//        solo.enterText((EditText)solo.getView(R.id.cheCommentEditText), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
+//        solo.enterText((EditText)solo.getView(R.id.habitReason), "@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD");
 //        // max length = 20
 //        assertFalse(solo.waitForText("@@@@@@@@@@@@@@@@@@Y@@WDALOAWDAOWD", 1, 2000));
 //        assertTrue(((EditText) solo.getView(R.id.cheCommentEditText)).getText().toString().length() == 20);
