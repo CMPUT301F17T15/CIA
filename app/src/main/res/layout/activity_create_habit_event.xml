@@ -26,6 +26,18 @@
         app:layout_constraintTop_toBottomOf="@+id/cheImageView"
         app:layout_constraintHorizontal_bias="0.0" />
 
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#DADADA"
+        app:layout_constraintTop_toBottomOf="@+id/editableDate"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp" />
+
     <com.cmput301.cia.views.ClickableEditItem
         android:id="@+id/editableLocation"
         android:layout_width="0dp"
@@ -41,6 +53,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintHorizontal_bias="0.0" />
 
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#DADADA"
+        app:layout_constraintTop_toBottomOf="@+id/editableLocation"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp" />
+
     <com.cmput301.cia.views.ClickableEditItem
         android:id="@+id/editableComment"
         android:layout_width="0dp"
@@ -55,76 +79,69 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editableLocation" />
 
-    <!--<Button-->
-        <!--android:id="@+id/cheCalendarButton"-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_marginStart="120dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:background="@drawable/ic_date_range_black_24px"-->
-        <!--android:onClick="datePickerDialog"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#DADADA"
+        app:layout_constraintTop_toBottomOf="@+id/editableComment"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/cheLocationDynamicText"-->
-        <!--android:layout_width="221dp"-->
-        <!--android:layout_height="25dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="add location"-->
-        <!--android:textAlignment="viewStart"-->
-        <!--android:textSize="14sp"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/cheLocationStaticText" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/cheLocationStaticText"-->
-        <!--android:layout_width="73dp"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:layout_marginLeft="37dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="Location"-->
-        <!--android:textSize="18sp"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/cheDateStaticText" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/cheDateStaticText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="26dp"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="Date"-->
-        <!--android:textSize="18sp"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--<ImageButton-->
-        <!--android:id="@+id/cheAttachLocationButton"-->
-        <!--android:layout_width="30dp"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:layout_marginStart="120dp"-->
-        <!--android:onClick="onAttachLocationClicked"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toBottomOf="parent"-->
-        <!--app:srcCompat="@android:drawable/ic_menu_mylocation" />-->
-
-    <ImageView
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cheImageView"
         android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:layout_marginLeft="0dp"
+        android:layout_height="170dp"
+        tools:layout_editor_absoluteY="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
-        android:onClick="onImageClicked"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/black" />
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:id="@+id/profileImageView"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_marginBottom="78dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="upload image"
+            android:elevation="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/uploadImage"
+            android:layout_width="23dp"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_add_a_photo_black_24px"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/cheImageView"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="150dp"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--android:layout_marginRight="0dp"-->
+        <!--android:layout_marginTop="0dp"-->
+        <!--android:onClick="onImageClicked"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:srcCompat="@android:color/black" />-->
 
     <Button
         android:id="@+id/cheSaveButton"

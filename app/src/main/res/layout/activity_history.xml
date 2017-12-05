@@ -11,30 +11,36 @@
 
     <Button
         android:id="@+id/historyFilterButton"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif"
         android:text="Filter"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp" />
 
 
     <ListView
         android:id="@+id/historyList"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="409dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/historyTypeCheckbox" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/historyTypeCheckbox"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteY="103dp" />
 
     <Button
         android:id="@+id/historyEventButton"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
         android:layout_marginLeft="281dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
@@ -43,7 +49,9 @@
         app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="281dp"
+        android:layout_marginEnd="16dp" />
 
     <CheckBox
         android:id="@+id/historyTypeCheckbox"
@@ -56,7 +64,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/historyFilterButton"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.023"
+        android:layout_marginStart="24dp" />
 
     <ImageView
         android:id="@+id/historyMapImage"
@@ -69,7 +78,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/historyEventButton"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/mapview" />
+        app:srcCompat="@mipmap/mapview"
+        android:layout_marginEnd="16dp" />
 
     <TextView
         android:id="@+id/historyFilterHabitText"
@@ -82,14 +92,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterEditText"
-        app:layout_constraintVertical_bias="0.014" />
+        app:layout_constraintVertical_bias="0.014"
+        android:layout_marginStart="100dp" />
 
     <EditText
         android:id="@+id/filterEditText"
-        android:layout_width="155dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginBottom="38dp"
-        android:layout_marginLeft="28dp"
+        android:layout_marginLeft="112dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -97,6 +109,7 @@
         android:maxLength="30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/historyEventButton"
         app:layout_constraintStart_toEndOf="@+id/historyFilterButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -105,17 +118,15 @@
         android:id="@+id/noHabitHistory"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="No habit history to show"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/historyList"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/historyList"
-        app:layout_constraintVertical_bias="0.36" />
+        app:layout_constraintVertical_bias="0.36"
+        tools:layout_editor_absoluteX="8dp" />
 
 </android.support.constraint.ConstraintLayout>

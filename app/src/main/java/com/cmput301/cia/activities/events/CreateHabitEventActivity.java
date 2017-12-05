@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -56,7 +57,9 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
     public static final int SELECT_IMAGE_CODE = 1;
 
     // The view displaying the image
+    private FrameLayout imageViewFrame;
     private ImageView imageView;
+    private ImageView uploadImage;
 
     // The view displaying the event date in text format
     private ClickableEditItem date;
@@ -95,7 +98,9 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
 
         this.setTitle(habitName + " Completion");
 
-        imageView = (ImageView)findViewById(R.id.cheImageView);
+        imageView = (ImageView) findViewById(R.id.profileImageView);
+        uploadImage = (ImageView) findViewById(R.id.uploadImage);
+        imageViewFrame = (FrameLayout)findViewById(R.id.cheImageView);
         date = (ClickableEditItem) findViewById(R.id.editableDate);
         locationItem = (ClickableEditItem) findViewById(R.id.editableLocation);
         comment = (ClickableEditItem) findViewById(R.id.editableComment);
@@ -150,7 +155,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
         });
 
         // handle the image being clicked
-        imageView.setOnClickListener(new TimedClickListener() {
+        imageViewFrame.setOnClickListener(new TimedClickListener() {
             @Override
             public void handleClick() {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -283,6 +288,7 @@ public class CreateHabitEventActivity extends LocationRequestingActivity impleme
      */
     private void updateImage(){
         if (image != null) {
+            uploadImage.setVisibility(View.GONE);
             imageView.clearColorFilter();
             imageView.setBackgroundColor(Color.rgb(255, 255, 255));
             imageView.setImageBitmap(image);
