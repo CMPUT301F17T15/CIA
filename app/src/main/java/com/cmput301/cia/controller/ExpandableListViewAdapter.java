@@ -135,7 +135,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         textView.setText((String)getGroup(i));
         textView.setPadding(100, 36, 10, 36);
         textView.setTextColor(Color.BLACK);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         return textView;
     }
 

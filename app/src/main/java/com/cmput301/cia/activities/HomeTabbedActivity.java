@@ -4,6 +4,8 @@
 
 package com.cmput301.cia.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -76,6 +78,11 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     private Profile user;
 
     private BottomBar bottomBar;
+
+    @Override
+    public void onBackPressed() {
+        confirmLogOut();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -528,8 +535,36 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             case R.id.menu_button_nearbyEvents:
                 requestLocationPermissions();
                 return true;
+            case R.id.menu_button_logOut:
+                confirmLogOut();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmLogOut() {
+        /**
+         * Reference: https://developer.android.com/guide/topics/ui/dialogs.html
+         */
+        // Ask the user for confirmation before a habit is deleted
+        AlertDialog.Builder dialog = new AlertDialog.Builder(HomeTabbedActivity.this);
+        dialog.setTitle("Log out " + user.getName() + "?");
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (isFinishing())
+                    return;
+                finish();
+            }
+        });
+
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+        if (!isFinishing())
+            dialog.show();
     }
 
     public void onStartHabitDetails(Habit habit, ArrayList<String> types) {
