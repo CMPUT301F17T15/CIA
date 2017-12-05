@@ -74,7 +74,9 @@ public class LoginIntentTests extends ActivityInstrumentationTestCase2<MainActiv
         solo.assertCurrentActivity("wrong activity", HomeTabbedActivity.class);
 
         // make sure previously created profiles can not be recreated
-        solo.goBackToActivity("MainActivity");
+        solo.goBack();          // sign out
+        solo.sleep(1000);
+        solo.clickOnButton("Yes");      // confirm sign out
         solo.sleep(2500);
         solo.assertCurrentActivity("wrong activity", MainActivity.class);
         solo.clearEditText(0);
