@@ -613,7 +613,8 @@ public class Profile extends ElasticSearchable {
      * Synchronize any pending offline events with the database if possible
      */
     public void synchronize(){
-        if (pendingEvents == null)
+
+        if (pendingEvents == null || pendingEvents.size() == 0)
             loadOfflineEvents();
 
         List<OfflineEvent> pending = new ArrayList<>();
@@ -625,6 +626,7 @@ public class Profile extends ElasticSearchable {
         }
 
         pendingEvents = pending;
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
     }
 
     /**
@@ -701,4 +703,13 @@ public class Profile extends ElasticSearchable {
     public List<Profile> getFollowRequests() {
         return Follow.getPendingFollows(getId());
     }
+
+
+    /**
+     * @return a list of the user's pending offline events that will be synchronized when they regain connectivity
+     */
+    public List<OfflineEvent> getPendingEvents() {
+        return pendingEvents;
+    }
+
 }

@@ -5,7 +5,6 @@
 package com.cmput301.cia.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,8 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.cmput301.cia.R;
-import com.cmput301.cia.activities.events.CreateHabitEventActivity;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
 import com.cmput301.cia.models.Habit;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
@@ -154,18 +153,18 @@ public class TodaysHabitsFragment extends Fragment {
         }
 
         // set the listener to handle event completions
-        checkable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        checkable.setOnItemClickListener(new TimedAdapterViewClickListener() {
+             @Override
+             public void handleClick(View view, int index) {
 
                 // This item is already clicked, prevent it from being disabled
-                if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                /*if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
                     return;
-                }
+                }*/
 
                 // start the activity to create a habit event for this completion
-                String checkedItems = ((TextView)view).getText().toString();
-                String habitId = todaysHabits.get(i).getId();
+                String checkedItems = ((TextView) view).getText().toString();
+                String habitId = todaysHabits.get(index).getId();
 
                 startCreateEventActivity(checkedItems, habitId);
             }
