@@ -160,7 +160,7 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
 
             solo.goBack();
             solo.sleep(3000);
-            solo.assertCurrentActivity("wrong activity", SearchUsersFragment.class);
+            assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
 
             solo.clickInList(1, 0);
             solo.sleep(2000);
@@ -172,7 +172,20 @@ public class ProfileIntentTests extends ActivityInstrumentationTestCase2<HomeTab
             assertFalse("database error", viewer.isFollowing(viewed));
             solo.sleep(1500);
 
-            // TODO: cancel pending request
+            // cancel pending request
+            solo.clickInList(1, 0);
+            solo.sleep(2000);
+            assertTrue(getActivity().getFragmentForCurrentTab() instanceof SearchUsersFragment);
+
+            solo.clickOnButton("Follow");
+            solo.sleep(1500);
+            assertTrue("database error", viewed.hasFollowRequest(viewer));
+            solo.sleep(1500);
+
+            solo.clickOnButton("Pending");
+            solo.sleep(1500);
+            assertTrue("database error", !viewed.hasFollowRequest(viewer));
+            solo.sleep(1500);
         }
     }
 
