@@ -65,7 +65,7 @@ public class HabitViewActivity extends AppCompatActivity implements DatePickerDi
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_display_habit_detail);
+        setContentView(R.layout.activity_habit);
 
         toStatisticButton = (Button) findViewById(R.id.toStatistic);
         deleteButton = (Button) findViewById(R.id.DeleteHabitButton);
