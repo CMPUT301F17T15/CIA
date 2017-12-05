@@ -176,6 +176,14 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
     @Override
     protected void handleLocationGranted() {
+
+        // give device some time to update when permission is first granted
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Location location = LocationUtilities.getLocation(this);
         if (location == null)
             return;
@@ -200,10 +208,12 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     private void loadCurrentUser() {
         Intent intent = getIntent();
         user = (Profile) intent.getSerializableExtra(ID_PROFILE);
-        if (user.hasValidId())
-            user.load();
+        //if (user.hasValidId())
+        //    user.load();
 
         user.synchronize();
+        System.out.println("EVENTS-> " + user.getHabits().get(0).getEvents().size());
+        updateAllHabits(user);
 
         // handle any habits that may have been missed since the user's last login
         Date currentDate = new Date();
@@ -452,6 +462,17 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    /**
+     * a helper method to make sure that the habits data is up to date in the dashboard activity
+     * @param newUser the user to set in the dashboard fragment
+     */
+    public void updateAllHabits(Profile newUser) {
+        Fragment f = getFragmentForCurrentTab();
+        if (f instanceof DashboardFragment) {
+            ((DashboardFragment) f).updateHabits(newUser);
+        }
     }
 
     /**

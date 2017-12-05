@@ -61,6 +61,15 @@ public class DashboardFragment extends Fragment {
 
     /**
      * updates the data changes in the habits so that the data changes is reflected on the dashboard activity
+     * @param newUser what to set the user of the dashboard to
+     */
+    public void updateHabits(Profile newUser) {
+        user = newUser;
+        updateHabits();
+    }
+
+    /**
+     * updates the data changes in the habits so that the data changes is reflected on the dashboard activity
      */
     public void updateHabits() {
         Fragment habitsFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + 0);
