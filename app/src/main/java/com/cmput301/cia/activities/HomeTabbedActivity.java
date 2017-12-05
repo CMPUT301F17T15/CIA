@@ -208,7 +208,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         //    user.load();
 
         user.synchronize();
-        System.out.println("EVENTS-> " + user.getHabits().get(0).getEvents().get(0).getComment());
+        //System.out.println("EVENTS-> " + user.getHabits().get(0).getEvents().get(0).getComment());
         updateAllHabits(user);
 
         // handle any habits that may have been missed since the user's last login
