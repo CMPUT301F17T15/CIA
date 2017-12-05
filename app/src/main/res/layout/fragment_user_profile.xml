@@ -12,7 +12,7 @@
 
     <Button
         android:id="@+id/profileUnfollowButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/profileDateDynamicText"
-        android:layout_width="368dp"
+        android:layout_width="0dp"
         android:layout_height="25dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="35dp"
@@ -33,7 +33,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImageViewFrame"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0" />
 
     <TextView
         android:id="@+id/profileCommentStaticText"
@@ -116,11 +119,11 @@
     <Button
         android:id="@+id/profileSaveButton"
         android:layout_width="0dp"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="257dp"
         android:layout_marginRight="16dp"
-        android:textColor="@color/colorAccent"
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
