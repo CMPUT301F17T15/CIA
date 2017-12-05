@@ -41,6 +41,7 @@ import com.cmput301.cia.models.OfflineEvent;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.LocationUtilities;
+import com.cmput301.cia.utilities.NetworkUtilities;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -69,8 +70,7 @@ import me.toptas.fancyshowcase.OnCompleteListener;
 
 public class HomeTabbedActivity extends LocationRequestingActivity {
 
-    public static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5,
-            SEARCH_USERS = 7;
+    public static final int CREATE_EVENT = 1, CREATE_HABIT = 2, VIEW_HABIT = 3, VIEW_HABIT_HISTORY = 4, VIEW_PROFILE = 5;
 
     public static final String ID_PROFILE = "User";
 
@@ -113,29 +113,29 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
 
         final FancyShowCaseView showCaseExpandable = new FancyShowCaseView.Builder(this)
-                .title("Habit will be sorted by type/category here")
+                .title("Habits will be sorted by their category here")
                 .focusOn(getDashboardFragment().getTabView(0))
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .build();
 
         final FancyShowCaseView showCaseDaily = new FancyShowCaseView.Builder(this)
-                .title("Your daily task will be showing here")
+                .title("Today's habits will be displayed here")
                 .focusOn(getDashboardFragment().getTabView(1))
                 .focusShape(FocusShape.ROUNDED_RECTANGLE)
                 .build();
 
         final FancyShowCaseView showCaseSearch = new FancyShowCaseView.Builder(this)
-                .title("Want more friends?\nFind them all here")
+                .title("Search for new users here")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_search))
                 .build();
 
         final FancyShowCaseView showCaseRequest = new FancyShowCaseView.Builder(this)
-                .title("The follow-requests from your fans will be showing here")
+                .title("View follow requests that you have received here")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_followRequests))
                 .build();
 
         final FancyShowCaseView showCaseProfile = new FancyShowCaseView.Builder(this)
-                .title("This is your profile.")
+                .title("Access your unique profile here")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_profile))
                 .build();
 
@@ -149,14 +149,14 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics());
 
         final FancyShowCaseView showCaseMenu = new FancyShowCaseView.Builder(this)
-                .title("More navigation here")
+                .title("More navigation is available here")
                 .focusCircleAtPosition(phoneWidth - offsetX, offsetY, radius)
                 .build();
 
 
 
         final FancyShowCaseView showCaseHabit = new FancyShowCaseView.Builder(this)
-                .title("Now, you can create your first habit here")
+                .title("Create your first habit here")
                 .focusOn(bottomBar.getTabWithId(R.id.tab_addHabit))
                 .build();
 
@@ -379,7 +379,6 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                 String habitId = data.getStringExtra(CreateHabitEventActivity.ID_HABIT_HASH);
                 OfflineEvent addEvent = new AddHabitEvent(habitId, event);
                 user.tryHabitEvent(addEvent);
-                user.save();
 
                 // workaround for offline events not being assigned an ID, so that they can still be modified/deleted while offline
                 if (!event.hasValidId()){
@@ -390,6 +389,10 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                         }
                     }
                     event.setId(String.valueOf(temporaryId));
+                }
+
+                if (NetworkUtilities.hasInternetConnection(getApplicationContext())) {
+                    user.save();
                 }
 
                 // update the today's tasks list
@@ -404,7 +407,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
 
                 // save the habit so that it has a valid ID
                 // this is necessary for habit events, since they need to refer to the habit's ID
-                if (habit.save()){
+                if (NetworkUtilities.hasInternetConnection(getApplicationContext()) && habit.save()){
                     user.addHabit(habit);
                     user.save();
                     updateAllHabits();
@@ -447,19 +450,18 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         else if (requestCode == VIEW_HABIT_HISTORY){
             if (resultCode == RESULT_OK) {
                 user.copyFrom((Profile) data.getSerializableExtra(HistoryActivity.ID_PROFILE), true);
-                user.save();
+                if (NetworkUtilities.hasInternetConnection(getApplicationContext()))
+                    user.save();
+                else
+                    user.savePendingEvents();
 
                 updateAllHabits();
             }
         } else if (requestCode == VIEW_PROFILE){
             if (resultCode == RESULT_OK){
                 user.copyFrom((Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID), false);
-                user.save();
-            }
-        } else if (requestCode == SEARCH_USERS){
-            if (resultCode == RESULT_OK){
-                user.copyFrom((Profile) data.getSerializableExtra(SearchUsersFragment.RETURNED_PROFILE), false);
-                user.save();
+                if (NetworkUtilities.hasInternetConnection(getApplicationContext()))
+                    user.save();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

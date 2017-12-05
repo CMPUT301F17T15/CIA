@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.TimedAdapterViewClickListener;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
@@ -25,9 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.app.Activity.RESULT_OK;
-
 
 /**
  * @author Adil Malik
@@ -42,12 +41,6 @@ public class SearchUsersFragment extends Fragment {
     // Intent identifiers for passed in data
     public static final String ID_USER = "User";
 
-    // Return identifiers for the activity result
-    public static final String RETURNED_PROFILE = "Followed";
-
-    // Result codes for other activities
-    private static final int VIEW_PROFILE = 0;
-
     // the currently signed in user
     private Profile user;
 
@@ -58,7 +51,7 @@ public class SearchUsersFragment extends Fragment {
 
     private EditText nameEditText;
 
-    MaterialSearchView searchView;
+    private MaterialSearchView searchView;
 
     public static SearchUsersFragment create(Profile currentUser) {
         SearchUsersFragment searchUsersFragment = new SearchUsersFragment();
@@ -87,9 +80,9 @@ public class SearchUsersFragment extends Fragment {
         nameEditText = (EditText) view.findViewById(R.id.searchNameDynamicText);
 
         Button search = (Button) view.findViewById(R.id.searchSearchButton);
-        search.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
                 searchForProfiles();
                 listAdapter = new ArrayAdapter<>(getContext(), R.layout.list_item, users);
                 userList.setAdapter(listAdapter);
@@ -97,13 +90,13 @@ public class SearchUsersFragment extends Fragment {
         });
 
         // view a profile when it is clicked
-        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        userList.setOnItemClickListener(new TimedAdapterViewClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void handleClick(View view, int index) {
                 Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
-                profileIntent.putExtra(UserProfileActivity.PROFILE_ID, users.get(position));
+                profileIntent.putExtra(UserProfileActivity.PROFILE_ID, users.get(index));
                 profileIntent.putExtra(UserProfileActivity.USER_ID, user);
-                startActivityForResult(profileIntent, VIEW_PROFILE);
+                startActivity(profileIntent);
             }
         });
 
@@ -116,24 +109,6 @@ public class SearchUsersFragment extends Fragment {
         searchForProfiles();
         listAdapter = new ArrayAdapter<>(getContext(), R.layout.list_item, users);
         userList.setAdapter(listAdapter);
-    }
-
-    /**
-     * Handle the results of an activity that has finished
-     * @param requestCode the activity's identifying code
-     * @param resultCode the result status of the finished activity
-     * @param data the activity's returned intent information
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        // When a new habit event is created
-        if (requestCode == VIEW_PROFILE) {
-            if (resultCode == RESULT_OK) {
-                Profile newProfile = (Profile) data.getSerializableExtra(UserProfileActivity.RESULT_PROFILE_ID);
-                user.copyFrom(newProfile, false);
-            }
-        }
     }
 
     /**

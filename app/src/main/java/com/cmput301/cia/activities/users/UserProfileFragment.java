@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmput301.cia.R;
+import com.cmput301.cia.controller.TimedClickListener;
 import com.cmput301.cia.models.Profile;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ImageUtilities;
@@ -57,7 +58,6 @@ public class UserProfileFragment extends Fragment {
 
     private Button followButton;
     private Button unfollowButton;
-    private Button sendButton;
 
     // the displayed's comment
     private EditText commentText;
@@ -131,62 +131,61 @@ public class UserProfileFragment extends Fragment {
 
         ((TextView) view.findViewById(R.id.profileDateDynamicText)).setText("Registered on: " + DateUtilities.formatDate(displayed.getCreationDate()));
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            Intent intent = new Intent();
+        saveButton.setOnClickListener(new TimedClickListener() {
+              @Override
+              public void handleClick() {
+                  Intent intent = new Intent();
 
-            // return the viewer
-            if (!viewer.equals(displayed))
-                intent.putExtra(RESULT_PROFILE_ID, viewer);
-            else {
-                // modify and return the viewer's displayed
-                displayed.setComment(commentText.getText().toString());
-                if (image != null)
-                    displayed.setImage(ImageUtilities.imageToBase64(image));
+                // return the viewer
+                if (!viewer.equals(displayed))
+                    intent.putExtra(RESULT_PROFILE_ID, viewer);
+                else {
+                    // modify and return the viewer's displayed
+                    displayed.setComment(commentText.getText().toString());
+                    if (image != null)
+                        displayed.setImage(ImageUtilities.imageToBase64(image));
 
-                displayed.save();
+                    displayed.save();
 
-//                    intent.putExtra(RESULT_PROFILE_ID, displayed);
-            }
+    //                    intent.putExtra(RESULT_PROFILE_ID, displayed);
+                }
 
-            Toast.makeText(getContext(), "changes saved", Toast.LENGTH_SHORT).show();
-//                setResult(RESULT_OK, intent);
-//                finish();
-            }
+                if (getActivity() != null && !getActivity().isFinishing())
+                    Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_SHORT).show();
+    //                setResult(RESULT_OK, intent);
+    //                finish();
+                }
         });
 
         if (displayed.hasFollowRequest(viewer)) {
             followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
         }
 
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        followButton.setOnClickListener(new TimedClickListener() {
+        @Override
+        public void handleClick() {
+            // send follow request if one is not sent
+            if (!displayed.hasFollowRequest(viewer)) {
+                displayed.addFollowRequest(viewer);
+                followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
+                /*if (displayed.hasFollowRequest(viewer))
+                else
+                    Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
+            } else {
+                // since a request has already been sent, remove it
 
-                // send follow request if one is not sent
-                if (!displayed.hasFollowRequest(viewer)) {
-                    displayed.addFollowRequest(viewer);
-                    followButton.setText(FOLLOW_BUTTON_MESSAGE_PENDING);
-                    /*if (displayed.hasFollowRequest(viewer))
-                    else
-                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
-                } else {
-                    // since a request has already been sent, remove it
-
-                    displayed.removeFollowRequest(viewer);
+                displayed.removeFollowRequest(viewer);
+                followButton.setText(FOLLOW_BUTTON_MESSAGE_FOLLOW);
+                /*if (!displayed.hasFollowRequest(viewer))
                     followButton.setText(FOLLOW_BUTTON_MESSAGE_FOLLOW);
-                    /*if (!displayed.hasFollowRequest(viewer))
-                        followButton.setText(FOLLOW_BUTTON_MESSAGE_FOLLOW);
-                    else
-                        Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
-                }
+                else
+                    Toast.makeText(UserProfileActivity.this, "Could not connect to the database", Toast.LENGTH_SHORT).show();*/
             }
-        });
+        }});
 
-        unfollowButton.setOnClickListener(new View.OnClickListener() {
+        unfollowButton.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
 
                 viewer.unfollow(displayed);
                 /*if (viewer.isFollowing(displayed))
@@ -210,9 +209,9 @@ public class UserProfileFragment extends Fragment {
 //        });
 
 
-        imageViewFrame.setOnClickListener(new View.OnClickListener() {
+        imageViewFrame.setOnClickListener(new TimedClickListener() {
             @Override
-            public void onClick(View view) {
+            public void handleClick() {
 
                 // only the viewer can change their displayed's image
                 if (!displayed.equals(viewer))
