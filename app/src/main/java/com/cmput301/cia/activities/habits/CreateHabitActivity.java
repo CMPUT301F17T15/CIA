@@ -52,13 +52,12 @@ public class CreateHabitActivity extends HabitViewActivity {
         toStatisticButton.setVisibility(View.GONE);
         deleteButton.setVisibility(View.GONE);
         clearButton.setVisibility(View.VISIBLE);
-        setTitle("Create new Habit");
+        setTitle("Create New Habit");
     }
 
     @Override
     public void onBackPressed()
     {
-        Intent intent = new Intent();
         finish();
     }
 }

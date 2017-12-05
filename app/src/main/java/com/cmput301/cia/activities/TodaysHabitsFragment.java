@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cmput301.cia.R;
 import com.cmput301.cia.controller.CheckableListViewAdapter;
@@ -38,6 +39,9 @@ import java.util.List;
  */
 
 public class TodaysHabitsFragment extends Fragment {
+
+    // max number of habit events
+    public static final int MAX_EVENTS = 2000000;
 
     public static final String ID_PROFILE = "User";
     // the habits the user must do today
@@ -157,10 +161,11 @@ public class TodaysHabitsFragment extends Fragment {
              @Override
              public void handleClick(View view, int index) {
 
-                // This item is already clicked, prevent it from being disabled
-                /*if (DateUtilities.isSameDay(todaysHabits.get(i).getLastCompletionDate(), new Date())){
+                if (user != null && user.getHabitHistory().size() >= MAX_EVENTS){
+                    if (getActivity() != null && !getActivity().isFinishing())
+                        Toast.makeText(TodaysHabitsFragment.this.getContext(), "You have reached the maximum number of habit events.", Toast.LENGTH_SHORT);
                     return;
-                }*/
+                }
 
                 // start the activity to create a habit event for this completion
                 String checkedItems = ((TextView) view).getText().toString();

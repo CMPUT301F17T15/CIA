@@ -436,10 +436,10 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
                                 break;
                             }
                         }
-                    } else {
+                        // only add it if it was saved successfully, because the ID of the habit is needed to refer to it
+                    } else if (habit.save()) {
                         user.addHabit(habit);
                     }
-
                 }
 
                 updateAllHabits();
