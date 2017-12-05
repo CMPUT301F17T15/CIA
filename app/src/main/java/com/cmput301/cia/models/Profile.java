@@ -120,6 +120,13 @@ public class Profile extends ElasticSearchable {
     }
 
     /**
+     * Save the pending events that this user has
+     */
+    public void savePendingEvents(){
+        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
+    }
+
+    /**
      * @return the user's list of habits
      */
     public List<Habit> getHabits() {
@@ -319,7 +326,7 @@ public class Profile extends ElasticSearchable {
     public void tryHabitEvent(OfflineEvent event){
         if (!event.handle(this)){
             pendingEvents.add(event);
-            save();
+            savePendingEvents();
         }
     }
 
@@ -354,7 +361,7 @@ public class Profile extends ElasticSearchable {
             pendingEvents = pending;
         }
 
-        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
+        savePendingEvents();
         return success;
     }
 
@@ -626,7 +633,7 @@ public class Profile extends ElasticSearchable {
         }
 
         pendingEvents = pending;
-        SerializableUtilities.save(getOfflineEventsFile(), pendingEvents);
+        savePendingEvents();
     }
 
     /**
@@ -702,14 +709,6 @@ public class Profile extends ElasticSearchable {
      */
     public List<Profile> getFollowRequests() {
         return Follow.getPendingFollows(getId());
-    }
-
-
-    /**
-     * @return a list of the user's pending offline events that will be synchronized when they regain connectivity
-     */
-    public List<OfflineEvent> getPendingEvents() {
-        return pendingEvents;
     }
 
 }
