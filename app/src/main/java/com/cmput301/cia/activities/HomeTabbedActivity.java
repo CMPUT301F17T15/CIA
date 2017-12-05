@@ -177,16 +177,12 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
     @Override
     protected void handleLocationGranted() {
 
-        // give device some time to update when permission is first granted
-        try {
-            Thread.sleep(600);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         Location location = LocationUtilities.getLocation(this);
-        if (location == null)
+        if (location == null) {
+            if (!isFinishing())
+                Toast.makeText(this, "Could not receive GPS location", Toast.LENGTH_SHORT).show();
             return;
+        }
 
         Intent intent = new Intent(this, ViewEventsMapActivity.class);
         intent.putExtra(ViewEventsMapActivity.ID_EVENTS, (Serializable) user.getNearbyEvents(location));
@@ -212,7 +208,7 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
         //    user.load();
 
         user.synchronize();
-        System.out.println("EVENTS-> " + user.getHabits().get(0).getEvents().size());
+        System.out.println("EVENTS-> " + user.getHabits().get(0).getEvents().get(0).getComment());
         updateAllHabits(user);
 
         // handle any habits that may have been missed since the user's last login
