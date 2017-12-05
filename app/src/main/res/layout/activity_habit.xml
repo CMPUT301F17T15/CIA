@@ -204,7 +204,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/Delete"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/SaveHabitButton"
         app:layout_constraintHorizontal_bias="1.0"
@@ -235,6 +235,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
         android:text="Statistic"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -526,6 +526,8 @@ public class HomeTabbedActivity extends LocationRequestingActivity {
             case R.id.menu_button_nearbyEvents:
                 requestLocationPermissions();
                 return true;
+            case R.id.menu_button_logOut:
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }
