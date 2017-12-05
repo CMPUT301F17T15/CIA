@@ -6,6 +6,8 @@ package com.cmput301.cia.models;
 
 import android.location.Location;
 
+import com.cmput301.cia.activities.HomeTabbedActivity;
+import com.cmput301.cia.activities.TodaysHabitsFragment;
 import com.cmput301.cia.utilities.DateUtilities;
 import com.cmput301.cia.utilities.ElasticSearchUtilities;
 import com.cmput301.cia.utilities.SerializableUtilities;
@@ -179,10 +181,21 @@ public class Profile extends ElasticSearchable {
      * @return the user's habit history, sorted in descending order based on date
      */
     public List<CompletedEventDisplay> getHabitHistory(){
+
+        final int MAX_SIZE = 2147483646;
+
         List<CompletedEventDisplay> list = new ArrayList<>();
         for (Habit habit : habits){
             for (HabitEvent event : habit.getEvents()){
                 list.add(new CompletedEventDisplay(event, habit.getTitle()));
+
+                if (list.size() >= MAX_SIZE){
+                    break;
+                }
+            }
+
+            if (list.size() >= MAX_SIZE){
+                break;
             }
         }
         Collections.sort(list, new Comparator<CompletedEventDisplay>() {
@@ -239,12 +252,18 @@ public class Profile extends ElasticSearchable {
      * order of date
      */
     public List<CompletedEventDisplay> getFollowedHabitHistory() {
+
+        final int MAX_SIZE = 2147483646;
+
         List<CompletedEventDisplay> list = new ArrayList<>();
         for (Profile followee : getFollowing()) {
             for (Habit habit : followee.getHabits()) {
                 HabitEvent event = habit.getMostRecentEvent();
-                if (event != null) {
+                if (event != null && list.size() < MAX_SIZE) {
                     list.add(new CompletedEventDisplay(event, habit.getTitle(), followee.getName()));
+                    if (list.size() == MAX_SIZE){
+                        break;
+                    }
                 }
             }
         }
@@ -264,6 +283,8 @@ public class Profile extends ElasticSearchable {
      */
     public List<Habit> getFollowedHabits(){
 
+        final int MAX_SIZE = 2147483646;
+
         // map (habit -> user name of creator)
         final Map<Habit, String> habitCreatorMap = new HashMap<>();
 
@@ -273,6 +294,14 @@ public class Profile extends ElasticSearchable {
             for (Habit habit : followee.getHabits()) {
                 list.add(habit);
                 habitCreatorMap.put(habit, followee.getName());
+
+                if (list.size() >= MAX_SIZE){
+                    break;
+                }
+            }
+
+            if (list.size() >= MAX_SIZE){
+                break;
             }
         }
 
@@ -424,6 +453,8 @@ public class Profile extends ElasticSearchable {
      */
     public Habit getHabitById(String habitId){
         for (Habit habit : habits){
+            if (habit.getId() == null)
+                continue;
             if (habit.getId().equals(habitId))
                 return habit;
         }
